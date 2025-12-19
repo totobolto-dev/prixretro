@@ -80,19 +80,21 @@ class EbayScraper:
         page = 1
         # SCRAPING STRATEGY:
         # - full_history=True: Try to get ALL history (may hit CAPTCHA frequently)
-        # - Realistic: 5 pages = 1000 items per session, run multiple times
+        # - Realistic: 5 pages = 300 items per session, run multiple times
         # - Aggressive: 20+ pages = complete history, but expect many CAPTCHA pauses
         max_pages = self.config.get('scraping', {}).get('max_pages_full_history', 999) if full_history else 1
-        items_per_page = 200  # eBay max
-        skip_count = 0
-        
+        items_per_page = 60  # eBay's standard items per page (NOT 200!)
+
+        # Track seen item IDs to prevent duplicates during pagination
+        seen_item_ids = set()
+
         while page <= max_pages:
             retry_same_page = False  # Flag for CAPTCHA retry
-            print(f"🔍 Searching: '{search_term}' (page {page}/{max_pages if full_history else 1}, skip={skip_count})")
-            
-            # eBay.fr sold items URL with SKIP COUNT PAGINATION
-            # _ipg: Items per page (200 max)
-            # _skc: Skip count (0, 200, 400, etc.)
+            print(f"🔍 Searching: '{search_term}' (page {page}/{max_pages if full_history else 1})")
+
+            # eBay.fr sold items URL with PAGE NUMBER PAGINATION
+            # _ipg: Items per page (60 is standard, eBay may ignore values > 60)
+            # _pgn: Page number (1, 2, 3, etc.) - PROPER pagination!
             encoded_term = quote_plus(search_term)
             url = (
                 f"https://www.ebay.fr/sch/i.html?"
@@ -104,7 +106,7 @@ class EbayScraper:
                 f"LH_Complete=1&"
                 f"_sop=13&"
                 f"_ipg={items_per_page}&"
-                f"_skc={skip_count}"
+                f"_pgn={page}"
             )
             
             # Add referer to look more legit
@@ -198,7 +200,13 @@ class EbayScraper:
                     try:
                         listing = self._parse_listing(item)
                         if listing and listing['price'] > 0:
-                            listings.append(listing)
+                            # Check for duplicates within this pagination session
+                            item_id = listing.get('item_id')
+                            if item_id and item_id not in seen_item_ids:
+                                listings.append(listing)
+                                seen_item_ids.add(item_id)
+                            elif item_id in seen_item_ids:
+                                print(f"      ⏭️  SKIP (duplicate): {listing['title'][:60]}")
                         elif listing is None:
                             # Item was filtered out
                             pass
@@ -209,9 +217,9 @@ class EbayScraper:
                         # Skip items that fail to parse
                         print(f"      ⚠️  Parse error: {str(e)[:50]}")
                         continue
-                
-                print(f"✅ Parsed {len(listings)} valid listings from page {page}")
-                
+
+                print(f"✅ Parsed {len(listings)} valid listings from page {page} ({len(seen_item_ids)} unique total)")
+
                 # Add to all_listings
                 all_listings.extend(listings)
                 
@@ -229,11 +237,10 @@ class EbayScraper:
                     wait_time = random.uniform(8, 15)  # Longer wait to avoid CAPTCHA
                     print(f"⏸️  Waiting {wait_time:.1f}s before next page...")
                     time.sleep(wait_time)
-                
+
                 # Only increment if not retrying same page
                 if not retry_same_page:
                     page += 1
-                    skip_count += items_per_page  # Skip to next batch
                 
             except requests.RequestException as e:
                 print(f"❌ Error fetching page {page}: {e}")
@@ -308,8 +315,8 @@ class EbayScraper:
             'boîte vide', 'boite vide',  # Empty box
             'sans console',  # Box without console
             'câble link', 'cable link', 'link cable',  # Link cable
-            'chargeur', 'adaptateur',  # Charger
-            'kit condensateur', 'kit réparation',  # Repair kits
+            'chargeur', 'adaptateur secteur',  # Charger (but allow "adaptateur" alone)
+            'kit condensateur', 'kit réparation', 'kit de réparation',  # Repair kits
             'pièce détachée', 'piece detachee', 'pièces détachées',
             'condensateur', 'capacitor',
             'nappe', 'ribbon cable',
@@ -324,13 +331,30 @@ class EbayScraper:
             'cartouche seule',  # Cartridge only
             'remplacement écran', 'replacement screen',
             'rubber pad', 'pad contact', 'caoutchouc',  # Rubber contacts
-            'lot de', 'bundle',  # Bundles/lots (often suspicious)
         ]
-        
+
         # Check for parts/accessories keywords
         for keyword in parts_keywords:
             if keyword in title_lower:
                 print(f"      ❌ REJECT (parts: '{keyword}'): {title[:60]}")
+                return None
+
+        # REJECT bundles - Smart detection of multiple consoles or games
+        bundle_patterns = [
+            r'lot de \d+',  # "lot de 3", "lot de 5"
+            r'\d+\s*consoles?',  # "3 consoles", "2 console"
+            r'\+ \d+\s*jeux',  # "+ 5 jeux", "+ 3 jeux"
+            r'avec \d+\s*jeux',  # "avec 5 jeux", "avec 3 jeux"
+            r'\+ \d+\s*games?',  # "+ 5 games", "+ 3 game"
+            r'with \d+\s*games?',  # "with 5 games"
+            r'\d+\s*games? included',  # "5 games included"
+            r'bundle.*jeux',  # "bundle 3 jeux"
+            r'bundle.*games?',  # "bundle 5 games"
+        ]
+
+        for pattern in bundle_patterns:
+            if re.search(pattern, title_lower):
+                print(f"      ❌ REJECT (bundle: matched '{pattern}'): {title[:60]}")
                 return None
         
         print(f"      ✅ ACCEPT: {title[:80]}")
@@ -399,25 +423,64 @@ class EbayScraper:
         # IMPORTANT: Only keep items that were actually SOLD
         date_sold = None
         has_vendu = False
-        
+
         for elem in item.find_all(['span', 'div']):
             text = elem.get_text(strip=True)
-            if 'Vendu le' in text or 'Vendu ' in text:
+            if 'Vendu le' in text or 'Vendu ' in text or 'Sold' in text:
                 has_vendu = True
-                # Try to extract the date part
+                # Try to extract the date part - support multiple formats
                 import re
-                date_match = re.search(r'(\d{1,2})\s+(\w+)\.?\s+(\d{4})', text)
+
+                # Comprehensive French month dictionary (all variations)
+                months_fr = {
+                    # Full names
+                    'janvier': '01', 'février': '02', 'fevrier': '02', 'mars': '03',
+                    'avril': '04', 'mai': '05', 'juin': '06', 'juillet': '07',
+                    'août': '08', 'aout': '08', 'septembre': '09', 'octobre': '10',
+                    'novembre': '11', 'décembre': '12', 'decembre': '12',
+                    # Common abbreviations with accents
+                    'janv': '01', 'févr': '02', 'mars': '03', 'avr': '04',
+                    'mai': '05', 'juin': '06', 'juil': '07', 'août': '08',
+                    'sept': '09', 'oct': '10', 'nov': '11', 'déc': '12',
+                    # Without accents
+                    'janv': '01', 'fevr': '02', 'avr': '04', 'juil': '07',
+                    'aout': '08', 'sept': '09', 'dec': '12',
+                    # Short forms
+                    'jan': '01', 'fev': '02', 'mar': '03', 'avr': '04',
+                    'jun': '06', 'jul': '07', 'aug': '08', 'sep': '09',
+                    'oct': '10', 'nov': '11', 'dec': '12',
+                    # English (in case eBay uses English)
+                    'january': '01', 'february': '02', 'march': '03', 'april': '04',
+                    'may': '05', 'june': '06', 'july': '07', 'august': '08',
+                    'september': '09', 'october': '10', 'november': '11', 'december': '12',
+                }
+
+                # Try format: "18 déc. 2025" or "18 décembre 2025"
+                date_match = re.search(r'(\d{1,2})\s+([a-zéèêû]+)\.?\s+(\d{4})', text, re.IGNORECASE)
                 if date_match:
-                    day, month_fr, year = date_match.groups()
-                    months_fr = {
-                        'janv': '01', 'févr': '02', 'mars': '03', 'avr': '04',
-                        'mai': '05', 'juin': '06', 'juil': '07', 'août': '08',
-                        'sept': '09', 'oct': '10', 'nov': '11', 'déc': '12'
-                    }
-                    month_num = months_fr.get(month_fr.lower(), '01')
-                    # Format: YYYY-MM-DD for easy sorting and grouping
-                    date_sold = f"{year}-{month_num}-{day.zfill(2)}"
-                break
+                    day, month_str, year = date_match.groups()
+                    month_num = months_fr.get(month_str.lower())
+                    if month_num:
+                        date_sold = f"{year}-{month_num}-{day.zfill(2)}"
+
+                # Try format: "18/12/2025" or "18-12-2025"
+                if not date_sold:
+                    date_match = re.search(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})', text)
+                    if date_match:
+                        day, month, year = date_match.groups()
+                        date_sold = f"{year}-{month.zfill(2)}-{day.zfill(2)}"
+
+                # Try format: "Dec 18, 2025" (English)
+                if not date_sold:
+                    date_match = re.search(r'([a-z]+)\s+(\d{1,2}),?\s+(\d{4})', text, re.IGNORECASE)
+                    if date_match:
+                        month_str, day, year = date_match.groups()
+                        month_num = months_fr.get(month_str.lower())
+                        if month_num:
+                            date_sold = f"{year}-{month_num}-{day.zfill(2)}"
+
+                if date_sold:
+                    break
         
         # CRITICAL: Skip items not actually sold
         if not has_vendu:
