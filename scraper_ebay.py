@@ -410,7 +410,6 @@ class EbayScraper:
         # Extract item ID from URL
         item_id = None
         if url and '/itm/' in url:
-            import re
             id_match = re.search(r'/itm/(\d+)', url)
             if id_match:
                 item_id = id_match.group(1)
@@ -429,7 +428,6 @@ class EbayScraper:
             if 'Vendu le' in text or 'Vendu ' in text or 'Sold' in text:
                 has_vendu = True
                 # Try to extract the date part - support multiple formats
-                import re
 
                 # Comprehensive French month dictionary (all variations)
                 months_fr = {
@@ -536,7 +534,6 @@ class EbayScraper:
             if 'Vendu le' in text or 'Vendu' in text:
                 # Try to extract the date part
                 # Format: "Vendu le 16 déc. 2025"
-                import re
                 date_match = re.search(r'(\d{1,2})\s+(\w+)\.?\s+(\d{4})', text)
                 if date_match:
                     day, month_fr, year = date_match.groups()
