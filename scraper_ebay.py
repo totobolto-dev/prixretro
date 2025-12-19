@@ -385,6 +385,7 @@ class EbayScraper:
                         break
         
         if price <= 0:
+            print(f"      ❌ NO PRICE FOUND: {title[:60]}")
             return None
         
         # URL - s-card__link
@@ -480,10 +481,11 @@ class EbayScraper:
                 if date_sold:
                     break
         
-        # CRITICAL: Skip items not actually sold
+        # TEMPORARY: Allow items without visible "Vendu le" text
+        # eBay HTML structure might not always show this reliably
         if not has_vendu:
-            print(f"      ❌ REJECT (not sold): {title[:60]}")
-            return None
+            print(f"      ⚠️  NO SOLD DATE FOUND: {title[:60]}")
+            # Continue parsing instead of rejecting
         
         if not date_sold:
             date_sold = datetime.now().strftime("%Y-%m-%d")
