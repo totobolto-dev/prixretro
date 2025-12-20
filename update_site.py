@@ -257,7 +257,14 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
     related_html = "\n                    ".join(related_variants[:8])
     
     # Replace placeholders in template
+    # Replace placeholders (Laravel-ready structure)
+    product_name = f"Game Boy Color {variant_name}"
     html = template.replace('{VARIANT_NAME}', variant_name)
+    html = html.replace('{PRODUCT_NAME}', product_name)
+    html = html.replace('{PRODUCT_SLUG}', f"game-boy-color-{variant_key}")
+    html = html.replace('{PRODUCT_DESCRIPTION}', description)
+    html = html.replace('{PRODUCT_CATEGORY}', "Console de jeu portable")
+    html = html.replace('{BRAND_NAME}', "Nintendo")
     html = html.replace('{LISTING_COUNT}', str(stats['listing_count']))
     html = html.replace('{AVG_PRICE}', str(stats['avg_price']))
     html = html.replace('{MIN_PRICE}', str(stats['min_price']))

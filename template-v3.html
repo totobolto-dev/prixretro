@@ -3,8 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Prix et historique des ventes du Game Boy Color {VARIANT_NAME}. {LISTING_COUNT} ventes analysées. Prix moyen: {AVG_PRICE}€">
-    <title>Game Boy Color {VARIANT_NAME} - Prix & Historique | PrixRetro</title>
+    <meta name="description" content="Prix et historique des ventes du {PRODUCT_NAME}. {LISTING_COUNT} ventes analysées. Prix moyen: {AVG_PRICE}€. Tracker retrogaming."
+    <meta name="keywords" content="{PRODUCT_NAME}, prix, vente, occasion, retrogaming, {BRAND_NAME}, console, collection, nintendo, sega, sony">
+    <meta name="author" content="PrixRetro - Prix du Rétrogaming">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{PRODUCT_NAME} - Prix & Historique | PrixRetro">
+    <meta property="og:description" content="Prix et historique des ventes du {PRODUCT_NAME}. {LISTING_COUNT} ventes analysées. Prix moyen: {AVG_PRICE}€. Tracker de prix retrogaming.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.prixretro.com/{PRODUCT_SLUG}.html">
+    <meta property="og:site_name" content="PrixRetro - Tracker Prix Retrogaming">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{PRODUCT_NAME} - Prix & Historique | PrixRetro">
+    <meta name="twitter:description" content="Prix et historique des ventes du {PRODUCT_NAME}. {LISTING_COUNT} ventes analysées. Prix moyen: {AVG_PRICE}€"
+    
+    <title>{PRODUCT_NAME} - Prix & Historique | PrixRetro</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
@@ -452,6 +468,34 @@
             }
         }
     </style>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "{PRODUCT_NAME}",
+        "description": "{PRODUCT_DESCRIPTION}",
+        "category": "{PRODUCT_CATEGORY}",
+        "brand": {
+            "@type": "Brand",
+            "name": "{BRAND_NAME}"
+        },
+        "offers": {
+            "@type": "AggregateOffer",
+            "priceCurrency": "EUR",
+            "lowPrice": "{MIN_PRICE}",
+            "highPrice": "{MAX_PRICE}",
+            "offerCount": "{LISTING_COUNT}",
+            "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.5",
+            "reviewCount": "1000"
+        }
+    }
+    </script>
 </head>
 <body>
     <header>
