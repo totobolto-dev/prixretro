@@ -9,13 +9,17 @@ import os
 from datetime import datetime
 
 def load_scraped_data():
-    """Load scraped data from JSON file"""
-    if not os.path.exists('scraped_data.json'):
-        print("❌ Error: scraped_data.json not found!")
+    """Load scraped data from JSON file - prioritize clean data"""
+    # Try clean data first, fallback to raw data
+    data_file = 'scraped_data_clean.json' if os.path.exists('scraped_data_clean.json') else 'scraped_data.json'
+    
+    if not os.path.exists(data_file):
+        print(f"❌ Error: {data_file} not found!")
         print("Please run scraper_ebay.py first.")
         return None
     
-    with open('scraped_data.json', 'r', encoding='utf-8') as f:
+    print(f"📂 Loading data from: {data_file}")
+    with open(data_file, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 def load_config():

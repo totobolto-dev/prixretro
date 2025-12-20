@@ -4,10 +4,10 @@
     "variant_name": "Violet",
     "description": "La Game Boy Color violette était l'une des couleurs de lancement les plus populaires en Europe. Facile à trouver sur le marché de l'occasion.",
     "stats": {
-      "avg_price": 81,
+      "avg_price": 75,
       "min_price": 46.07,
-      "max_price": 219.9,
-      "listing_count": 25,
+      "max_price": 169.0,
+      "listing_count": 21,
       "total_found": 28,
       "price_history": {
         "2025-12": 89,
@@ -122,14 +122,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "257262296749",
-        "title": "Nintendo Game Boy Color Grape Handheld System Box & Paperwork Only *No Console*",
-        "price": 51.13,
-        "url": "https://www.ebay.fr/itm/257262296749",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
-      },
-      {
         "item_id": "286925637628",
         "title": "Nintendo Game Boy Color Grape Purple Handheld System With Pocket Bomberman",
         "price": 76.78,
@@ -162,36 +154,12 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "234819672853",
-        "title": "Flashcart EverDrive - Go X3 Game Boy (couleur) par Krikzz",
-        "price": 99.9,
-        "url": "https://www.ebay.fr/itm/234819672853",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
-      },
-      {
-        "item_id": "235530922760",
-        "title": "Flashcart EverDrive - Go X7 Game Boy (couleur) par Krikzz",
-        "price": 219.9,
-        "url": "https://www.ebay.fr/itm/235530922760",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
-      },
-      {
         "item_id": "187805027125",
         "title": "Nintendo Gameboy Color *avec port USB C* écran OLED avec console tactile",
         "price": 169.0,
         "url": "https://www.ebay.fr/itm/187805027125",
         "sold_date": "2025-12-19",
         "condition": "Neuf"
-      },
-      {
-        "item_id": "156589348219",
-        "title": "Nintendo Game Boy Color Système  Installation d'un écran LCD",
-        "price": 90.0,
-        "url": "https://www.ebay.fr/itm/156589348219",
-        "sold_date": "2025-11-16",
-        "condition": "Occasion"
       },
       {
         "item_id": "406314735353",
@@ -940,10 +908,10 @@
     "variant_name": "Jaune",
     "description": "Le modèle jaune était l'une des couleurs de lancement. Populaire et facile à trouver sur le marché de l'occasion.",
     "stats": {
-      "avg_price": 178,
-      "min_price": 14.58,
+      "avg_price": 342,
+      "min_price": 342.46,
       "max_price": 342.46,
-      "listing_count": 2,
+      "listing_count": 1,
       "total_found": 44,
       "price_history": {
         "2025-12": 64,
@@ -960,14 +928,6 @@
         "url": "https://www.ebay.fr/itm/326895823969",
         "sold_date": "2025-12-19",
         "condition": "Occasion"
-      },
-      {
-        "item_id": "157542493698",
-        "title": "Vintage Nintendo Game Boy Printer Paper 3 Rolls Adhesive Backed Paper Retro",
-        "price": 14.58,
-        "url": "https://www.ebay.fr/itm/157542493698",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
       }
     ]
   },
@@ -976,10 +936,10 @@
     "variant_name": "Rouge",
     "description": "Le modèle rouge classique, l'une des couleurs originales du Game Boy Color lancées en Europe.",
     "stats": {
-      "avg_price": 77,
+      "avg_price": 82,
       "min_price": 3.99,
       "max_price": 225.22,
-      "listing_count": 48,
+      "listing_count": 44,
       "total_found": 72,
       "price_history": {
         "2025-12": 66,
@@ -1238,42 +1198,10 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "225341440846",
-        "title": "Game Boy Advance SP & 9 Game Cartridges Display- DISPLAY ONLY (Customize Colors)",
-        "price": 23.54,
-        "url": "https://www.ebay.fr/itm/225341440846",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
-      },
-      {
-        "item_id": "256438777761",
-        "title": "Nintendo Game Boy & Gameboy Color Authentic Cartridge Only Games Pick & Choose",
-        "price": 9.2,
-        "url": "https://www.ebay.fr/itm/256438777761",
-        "sold_date": "2025-12-19",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "168005405360",
-        "title": "Bomberman Max Red Challenger (Nintendo GameBoy Color, 2000) Cartridge Only",
-        "price": 15.3,
-        "url": "https://www.ebay.fr/itm/168005405360",
-        "sold_date": "2025-12-19",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "225491606713",
         "title": "Nintendo Game Boy Advanced SP Display/Stand - DISPLAY ONLY (Customize Colors)",
         "price": 15.35,
         "url": "https://www.ebay.fr/itm/225491606713",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
-      },
-      {
-        "item_id": "225466760461",
-        "title": "Gameboy Advance & 18 Game Cartridges - DISPLAY ONLY (Customize Colors)",
-        "price": 30.7,
-        "url": "https://www.ebay.fr/itm/225466760461",
         "sold_date": "2025-12-19",
         "condition": "Neuf"
       },
@@ -1380,10 +1308,10 @@
     "variant_name": "Bleu (Teal)",
     "description": "Le Game Boy Color bleu turquoise était une couleur de lancement très populaire en Europe.",
     "stats": {
-      "avg_price": 58,
+      "avg_price": 59,
       "min_price": 1.5,
       "max_price": 220.0,
-      "listing_count": 62,
+      "listing_count": 61,
       "total_found": 74,
       "price_history": {
         "2025-12": 52,
@@ -1722,14 +1650,6 @@
         "condition": "Neuf"
       },
       {
-        "item_id": "187759959452",
-        "title": "Monster Tamer Version Bleue – Jeu Game Boy Color – Avec boîte – Bon état",
-        "price": 3.0,
-        "url": "https://www.ebay.fr/itm/187759959452",
-        "sold_date": "2025-11-27",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "286955254465",
         "title": "Pokémon Trading Card Game 2  Team Gr Return Game Boy Color Japanese",
         "price": 51.0,
@@ -1896,10 +1816,10 @@
     "variant_name": "Vert Néon",
     "description": "Le modèle vert néon était une des couleurs de lancement, relativement facile à trouver.",
     "stats": {
-      "avg_price": 92,
+      "avg_price": 93,
       "min_price": 3.1,
       "max_price": 921.34,
-      "listing_count": 65,
+      "listing_count": 64,
       "total_found": 71,
       "price_history": {
         "2025-12": 77,
@@ -2294,14 +2214,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "136479387682",
-        "title": "CARTOUCHE MODULE WORMS ARMAGEDDON NINTENDO GAMEBOY COLOR PAL/NOE",
-        "price": 24.99,
-        "url": "https://www.ebay.fr/itm/136479387682",
-        "sold_date": "2025-12-19",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "185293107478",
         "title": "Authentic Nintendo Game Boy Color Manuals - Very Good, You Choose, B2G1",
         "price": 4.08,
@@ -2436,10 +2348,10 @@
     "variant_name": "Pikachu (Édition Pokémon)",
     "description": "Édition spéciale Pokémon avec un Pikachu imprimé sur le boîtier jaune et bleu. C'est l'une des variantes les plus recherchées et les plus chères.",
     "stats": {
-      "avg_price": 134,
+      "avg_price": 135,
       "min_price": 17.35,
       "max_price": 549.9,
-      "listing_count": 84,
+      "listing_count": 75,
       "total_found": 100,
       "price_history": {
         "2025-12": 105,
@@ -2666,14 +2578,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "376523302736",
-        "title": "Gameboy Color Pokemon Special Pikachu Edition System + Pokemon Yellow Version",
-        "price": 143.31,
-        "url": "https://www.ebay.fr/itm/376523302736",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
-      },
-      {
         "item_id": "235908966666",
         "title": "Gameboy Color Pokemon Special Pikachu Nintendo System Console With Pokemon Game",
         "price": 358.3,
@@ -2754,14 +2658,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "187611937592",
-        "title": "Pokémon Special Pikachu Edition Nintendo Game Boy Color Cartridge Tested Works",
-        "price": 46.06,
-        "url": "https://www.ebay.fr/itm/187611937592",
-        "sold_date": "2025-12-19",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "146648498556",
         "title": "RARE Pokemon Version Cristal Vietnamienne Édition Spéciale Pikachu Game Boy Color",
         "price": 199.76,
@@ -2818,14 +2714,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "197916023529",
-        "title": "Pokemon Yellow Special Pikachu Edition Gameboy Color - New Battery - Tested",
-        "price": 66.53,
-        "url": "https://www.ebay.fr/itm/197916023529",
-        "sold_date": "2025-12-19",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "306623533965",
         "title": "Nintendo Game Boy Color Pokémon Pikachu Pichu édition spéciale authentique GBC PAL",
         "price": 74.2,
@@ -2850,30 +2738,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "157537884424",
-        "title": "Pokémon  Version Jaune - Edition Spéciale Pikachu (Nintendo Game Boy, 1999)",
-        "price": 25.0,
-        "url": "https://www.ebay.fr/itm/157537884424",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
-      },
-      {
-        "item_id": "297804481115",
-        "title": "Pokémon  Version Jaune - Edition Spéciale Pikachu (Nintendo Game Boy, 1999)",
-        "price": 49.9,
-        "url": "https://www.ebay.fr/itm/297804481115",
-        "sold_date": "2025-11-29",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "136777590483",
-        "title": "POKÉMON VERSION JAUNE EDITION SPECIALE PIKACHU GAME BOY GB PAL",
-        "price": 184.0,
-        "url": "https://www.ebay.fr/itm/136777590483",
-        "sold_date": "2025-11-28",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "267442720125",
         "title": "CONSOLE GAMEBOY ADVANCE NINTENDO EDITION POKEMON PIKACHU GAME BOY RESHELL",
         "price": 87.9,
@@ -2890,14 +2754,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "317358399278",
-        "title": "Pokémon  Version Jaune - Edition Spéciale Pikachu (Nintendo Game Boy, 1999)boîte",
-        "price": 250.0,
-        "url": "https://www.ebay.fr/itm/317358399278",
-        "sold_date": "2025-10-04",
-        "condition": "Neuf"
-      },
-      {
         "item_id": "357571626800",
         "title": "Console Nintendo Game Boy Color Pokemon Pikachu Edition CGB-001 Testée Rare",
         "price": 84.1,
@@ -2911,14 +2767,6 @@
         "price": 150.0,
         "url": "https://www.ebay.fr/itm/406216310963",
         "sold_date": "2025-09-22",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "187571372832",
-        "title": "Pokemon Version Jaune Edition Spéciale Pikachu Nintendo Game Boy COMPLET FRA CIB",
-        "price": 299.99,
-        "url": "https://www.ebay.fr/itm/187571372832",
-        "sold_date": "2025-09-21",
         "condition": "Occasion"
       },
       {
@@ -3050,14 +2898,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "197866361645",
-        "title": "Pokémon Yellow Version Jaune Pikachu Edition Nintendo Gameboy Color - PAL FR TBE",
-        "price": 45.0,
-        "url": "https://www.ebay.fr/itm/197866361645",
-        "sold_date": "2025-11-18",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "389174189947",
         "title": "GAMEBOY COLOR PIKACHU TBE !!",
         "price": 480.0,
@@ -3128,10 +2968,10 @@
     "variant_name": "Or/Argent (Édition Pokémon)",
     "description": "Édition spéciale pour Pokémon Or et Argent avec boîtier doré ou argenté iridescent. Très prisée des collectionneurs Pokémon.",
     "stats": {
-      "avg_price": 91,
+      "avg_price": 93,
       "min_price": 3.39,
       "max_price": 949.9,
-      "listing_count": 235,
+      "listing_count": 220,
       "total_found": 264,
       "price_history": {
         "2025-12": 113,
@@ -3590,14 +3430,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "286955259070",
-        "title": "Lot Jeu Pokémon Version Bleue, Rouge Et Argent Gameboy",
-        "price": 49.5,
-        "url": "https://www.ebay.fr/itm/286955259070",
-        "sold_date": "2025-11-27",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "127519870848",
         "title": "Pokemon Gold & Silver Authentic Complete In Box CIB Nintendo Gameboy Color",
         "price": 609.11,
@@ -3630,14 +3462,6 @@
         "condition": "Neuf"
       },
       {
-        "item_id": "397275767822",
-        "title": "Jeu Pokemon Version Argent Game Boy Color Cartouche + NOTICE Originale NINTENDO",
-        "price": 45.5,
-        "url": "https://www.ebay.fr/itm/397275767822",
-        "sold_date": "2025-11-23",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "317559665433",
         "title": "🎮 Lot Pokémon Or, Argent & Cristal - Versions Françaises - Game Boy Color (GBC)",
         "price": 34.8,
@@ -3646,35 +3470,11 @@
         "condition": "Neuf"
       },
       {
-        "item_id": "127480075626",
-        "title": "Pokémon Argent Cartouche 100% Originale Game Boy Color GBC FR (pile Neuve)",
-        "price": 49.9,
-        "url": "https://www.ebay.fr/itm/127480075626",
-        "sold_date": "2025-11-22",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "127438230838",
         "title": "✨️Jeu Pokemon Argent sur Game boy OFFICIEL  FRA Pile Neuve✨️",
         "price": 55.0,
         "url": "https://www.ebay.fr/itm/127438230838",
         "sold_date": "2025-11-20",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "397197139316",
-        "title": "POKÉMON VERSION ARGENT CARTOUCHE 100% ORIGINALE NINTENDO GAMEBOY COLOR PAL FRA",
-        "price": 49.9,
-        "url": "https://www.ebay.fr/itm/397197139316",
-        "sold_date": "2025-11-18",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "326844295584",
-        "title": "Pokémon Argent Cartouche 100% Originale Game Boy Color GBC FR",
-        "price": 39.99,
-        "url": "https://www.ebay.fr/itm/326844295584",
-        "sold_date": "2025-11-18",
         "condition": "Occasion"
       },
       {
@@ -3742,14 +3542,6 @@
         "condition": "Neuf"
       },
       {
-        "item_id": "257197425981",
-        "title": "Pokemon version rouge Nintendo Gameboy CIB Notice, boite GBC Game Boy Color",
-        "price": 129.9,
-        "url": "https://www.ebay.fr/itm/257197425981",
-        "sold_date": "2025-11-08",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "127462270367",
         "title": "Jeux Game Boy Pokémon Version Argent",
         "price": 22.5,
@@ -3814,14 +3606,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "187639553369",
-        "title": "Pokemon version Rouge, Jaune, Bleu, Or, Argent, fra Game Boy Advance français L9",
-        "price": 59.99,
-        "url": "https://www.ebay.fr/itm/187639553369",
-        "sold_date": "2025-10-25",
-        "condition": "Neuf"
-      },
-      {
         "item_id": "376648656944",
         "title": "POKéMON Version OR Nintendo Game Boy Color GameBoy GBC  - Complet (sans cale)",
         "price": 155.0,
@@ -3834,14 +3618,6 @@
         "title": "Jeu Pokémon Version Argent Nintendo Game Boy",
         "price": 40.5,
         "url": "https://www.ebay.fr/itm/177487778563",
-        "sold_date": "2025-10-23",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "167868715865",
-        "title": "POKÉMON VERSION OR - CARTOUCHE 100% ORIGINALE NINTENDO GAMEBOY COLOR FAT PAL FRA",
-        "price": 49.89,
-        "url": "https://www.ebay.fr/itm/167868715865",
         "sold_date": "2025-10-23",
         "condition": "Occasion"
       },
@@ -3883,22 +3659,6 @@
         "price": 219.0,
         "url": "https://www.ebay.fr/itm/227008036620",
         "sold_date": "2025-10-06",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "116813258277",
-        "title": "Jeu Pokémon Version Argent - Cartouche 100% original Nintendo Gameboy Color",
-        "price": 45.0,
-        "url": "https://www.ebay.fr/itm/116813258277",
-        "sold_date": "2025-10-06",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "157346928933",
-        "title": "POKÉMON VERSION ARGENT - CARTOUCHE 100% ORIGINALE NINTENDO GAMEBOY COLOR PAL FRA",
-        "price": 40.5,
-        "url": "https://www.ebay.fr/itm/157346928933",
-        "sold_date": "2025-10-05",
         "condition": "Occasion"
       },
       {
@@ -4726,22 +4486,6 @@
         "condition": "Neuf"
       },
       {
-        "item_id": "266789103076",
-        "title": "GBC GameBoy Color Nintendo Replacement Game Cartridge Shell Case Empty Housing",
-        "price": 11.25,
-        "url": "https://www.ebay.fr/itm/266789103076",
-        "sold_date": "2025-12-19",
-        "condition": "Neuf"
-      },
-      {
-        "item_id": "127564597128",
-        "title": "Gameshark Gameboy Color & Pocket v3.1 Use Pokemon Red Blue Yellow Gold Silver",
-        "price": 71.65,
-        "url": "https://www.ebay.fr/itm/127564597128",
-        "sold_date": "2025-12-19",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "203604872279",
         "title": "Nintendo Game Boy Color Cache Batterie GBC Différentes Couleurs NEUF",
         "price": 4.49,
@@ -4958,14 +4702,6 @@
         "condition": "Occasion"
       },
       {
-        "item_id": "257197430307",
-        "title": "Pokémon Version Bleue Game Boy Complet PAL FR GB color advance GBC GBA",
-        "price": 169.9,
-        "url": "https://www.ebay.fr/itm/257197430307",
-        "sold_date": "2025-11-08",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "257114289644",
         "title": "Pokémon Version:  Rouge, Bleu, Jaune, Or, Argent et Cristal Game Boy Color FR",
         "price": 14.99,
@@ -4982,14 +4718,6 @@
         "condition": "Neuf"
       },
       {
-        "item_id": "157411917943",
-        "title": "POKÉMON VERSION ARGENT - CARTOUCHE ORIGINALE NINTENDO GAMEBOY COLOR FAT PAL FRA",
-        "price": 30.5,
-        "url": "https://www.ebay.fr/itm/157411917943",
-        "sold_date": "2025-11-02",
-        "condition": "Occasion"
-      },
-      {
         "item_id": "297678568471",
         "title": "Console Game Boy Color",
         "price": 59.0,
@@ -5003,14 +4731,6 @@
         "price": 140.0,
         "url": "https://www.ebay.fr/itm/357883711151",
         "sold_date": "2025-11-17",
-        "condition": "Occasion"
-      },
-      {
-        "item_id": "146889057925",
-        "title": "Game Boy Color Verte + Pokémon version Bleue (VF originale)",
-        "price": 60.0,
-        "url": "https://www.ebay.fr/itm/146889057925",
-        "sold_date": "2025-10-12",
         "condition": "Occasion"
       },
       {
