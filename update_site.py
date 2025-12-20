@@ -50,9 +50,9 @@ def generate_price_graph(price_history):
             'js': ''
         }
     
-    # Prepare data for Chart.js
-    months = list(price_history.keys())
-    prices = list(price_history.values())
+    # Prepare data for Chart.js - sort months chronologically
+    months = sorted(price_history.keys())  # Sort YYYY-MM format chronologically
+    prices = [price_history[month] for month in months]  # Get prices in sorted order
     
     # Format months for display (YYYY-MM -> Mois Année)
     month_names_fr = {
