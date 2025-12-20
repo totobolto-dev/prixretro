@@ -21,6 +21,25 @@
     <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Vert Néon. 9 ventes analysées. Prix moyen: 84€"
     
     <title>Game Boy Color Vert Néon - Prix & Historique | PrixRetro</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+        
+        // Track eBay affiliate clicks
+        function trackEbayClick(variant) {
+            gtag('event', 'click', {
+                'event_category': 'affiliate',
+                'event_label': 'ebay_' + variant,
+                'value': 1
+            });
+        }
+    </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
@@ -543,7 +562,7 @@
         </div>
 
         <div class="cta-section">
-            <a href="https://www.ebay.fr/sch/i.html?_nkw=game+boy+color+Vert+N%C3%A9on&_dcat=139971&Mod%C3%A8le=Nintendo%20Game%20Boy%20Color&Plateforme=Nintendo%20Game%20Boy%20Color&LH_ItemCondition=3000&mkcid=1&mkrid=709-53476-19255-0&campid=5339134703" class="cta-button" target="_blank" rel="nofollow noopener">
+            <a href="https://www.ebay.fr/sch/i.html?_nkw=game+boy+color+Vert+N%C3%A9on&_dcat=139971&Mod%C3%A8le=Nintendo%20Game%20Boy%20Color&Plateforme=Nintendo%20Game%20Boy%20Color&LH_ItemCondition=3000&mkcid=1&mkrid=709-53476-19255-0&campid=5339134703" class="cta-button" target="_blank" rel="nofollow noopener" onclick="trackEbayClick('vert')">
                 🎮 Voir les offres actuelles sur eBay
             </a>
         </div>

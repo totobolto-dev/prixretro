@@ -260,6 +260,7 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
     # Replace placeholders (Laravel-ready structure)
     product_name = f"Game Boy Color {variant_name}"
     html = template.replace('{VARIANT_NAME}', variant_name)
+    html = html.replace('{VARIANT_KEY}', variant_key)
     html = html.replace('{PRODUCT_NAME}', product_name)
     html = html.replace('{PRODUCT_SLUG}', f"game-boy-color-{variant_key}")
     html = html.replace('{PRODUCT_DESCRIPTION}', description)
