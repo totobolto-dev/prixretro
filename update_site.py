@@ -9,9 +9,14 @@ import os
 from datetime import datetime
 
 def load_scraped_data():
-    """Load scraped data from JSON file - prioritize clean data"""
-    # Try clean data first, fallback to raw data
-    data_file = 'scraped_data_clean.json' if os.path.exists('scraped_data_clean.json') else 'scraped_data.json'
+    """Load scraped data from JSON file - prioritize ultra-clean data"""
+    # Try ultra-clean data first, then clean data, fallback to raw data
+    if os.path.exists('scraped_data_ultra_clean.json'):
+        data_file = 'scraped_data_ultra_clean.json'
+    elif os.path.exists('scraped_data_clean.json'):
+        data_file = 'scraped_data_clean.json'
+    else:
+        data_file = 'scraped_data.json'
     
     if not os.path.exists(data_file):
         print(f"❌ Error: {data_file} not found!")
@@ -333,6 +338,11 @@ def generate_all_pages():
     generated_files = []
     
     for variant_key, variant_data in scraped_data.items():
+        # Skip variants with no listings
+        if not variant_data['listings'] or len(variant_data['listings']) == 0:
+            print(f"  ⚠️  Skipping {variant_data['variant_name']} - no listings after filtering")
+            continue
+            
         filepath = generate_variant_page(
             variant_data, 
             scraped_data, 

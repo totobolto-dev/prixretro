@@ -26,13 +26,24 @@ def is_console_item(title, description=""):
         'cable', 'chargeur', 'charger', 'adaptateur secteur', 'power adapter',
         'link cable', 'câble link',
         
-        # Empty boxes/manuals
+        # Empty boxes/manuals/paperwork
         'boîte vide', 'boite vide', 'empty box', 'box only',
         'notice seule', 'manual only', 'instruction only',
+        'box & paperwork only', 'paperwork only', '*no console*',
+        'sans console', 'ohne konsole', 'no system',
         
         # Modification kits
         'mod kit', 'modification', 'upgrade kit', 'custom kit',
         'trimmed', 'pre-cut', 'ips ready', 'laminated',
+        'installation', 'reshell', 'new body',
+        
+        # Flash carts & games (specific patterns to avoid "game boy")
+        'flashcart', 'everdrive', 'flash cart', 'cartridge only', 'cartouche seule',
+        'pokemon yellow', 'pokemon blue', 'pokemon red', 'pokemon gold',
+        'version jaune', 'version rouge', 'version bleue',
+        
+        # Printer & accessories
+        'printer', 'paper', 'game boy printer', 'printer paper', 'adhesive',
         
         # Other accessories
         'light', 'lampe', 'worm light', 'magnifier', 'loupe',
@@ -142,6 +153,10 @@ def filter_scraped_data(input_file, output_file):
     filtered_data = {}
     stats = defaultdict(lambda: {'removed': 0, 'kept': 0, 'reasons': defaultdict(int)})
     
+    # Get today's date to filter out items scraped today (not real sold dates)
+    from datetime import datetime
+    today = datetime.now().strftime('%Y-%m-%d')
+    
     for variant_key, variant_data in data.items():
         if not isinstance(variant_data, dict) or 'listings' not in variant_data:
             filtered_data[variant_key] = variant_data
@@ -154,6 +169,19 @@ def filter_scraped_data(input_file, output_file):
                 continue
                 
             title = item['title']
+            sold_date = item.get('sold_date', '')
+            
+            # STRICT: Reject items with today's date (scraping artifacts)
+            if today in sold_date:
+                stats[variant_key]['removed'] += 1
+                stats[variant_key]['reasons']['invalid date (scraped today)'] += 1
+                continue
+            
+            # STRICT: Reject items without valid sold dates
+            if not sold_date or sold_date == '' or len(sold_date) < 8:
+                stats[variant_key]['removed'] += 1
+                stats[variant_key]['reasons']['no valid sold date'] += 1
+                continue
             
             # Check if it's a console
             is_console, console_reason = is_console_item(title)

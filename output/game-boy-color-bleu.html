@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prix et historique des ventes du Game Boy Color Bleu (Teal). 24 ventes analysées. Prix moyen: 67€. Tracker retrogaming."
+    <meta name="keywords" content="Game Boy Color Bleu (Teal), prix, vente, occasion, retrogaming, Nintendo, console, collection, nintendo, sega, sony">
+    <meta name="author" content="PrixRetro - Prix du Rétrogaming">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Game Boy Color Bleu (Teal) - Prix & Historique | PrixRetro">
+    <meta property="og:description" content="Prix et historique des ventes du Game Boy Color Bleu (Teal). 24 ventes analysées. Prix moyen: 67€. Tracker de prix retrogaming.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.prixretro.com/game-boy-color-bleu.html">
+    <meta property="og:site_name" content="PrixRetro - Tracker Prix Retrogaming">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Game Boy Color Bleu (Teal) - Prix & Historique | PrixRetro">
+    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Bleu (Teal). 24 ventes analysées. Prix moyen: 67€"
+    
+    <title>Game Boy Color Bleu (Teal) - Prix & Historique | PrixRetro</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QPNVF0BRW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-4QPNVF0BRW');
+        
+        // Track eBay affiliate clicks
+        function trackEbayClick(variant) {
+            gtag('event', 'click', {
+                'event_category': 'affiliate',
+                'event_label': 'ebay_' + variant,
+                'value': 1
+            });
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-card: #242b3d;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7b61ff;
+            --text-primary: #e4e6eb;
+            --text-secondary: #a0a3a8;
+            --success: #00ff88;
+            --warning: #ffb800;
+            --border: #2a3142;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 2.5rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 2rem 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent-primary);
+        }
+
+        .breadcrumb span {
+            color: var(--text-secondary);
+            margin: 0 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            padding: 3rem 0;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stat-value.success {
+            color: var(--success);
+        }
+
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            padding: 2.5rem 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            padding: 1.25rem 3.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.15rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(0, 217, 255, 0.5);
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 3rem 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Price Graph */
+        .graph-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .graph-wrapper {
+            position: relative;
+            height: 400px;
+            margin-top: 1.5rem;
+        }
+
+        .no-graph {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-graph h3 {
+            color: var(--warning);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .info-card h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .info-card ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .info-card li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Listings Section */
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .listings-count {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .listing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+
+        .listing-title {
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        .listing-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .listing-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .listing-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .listing-condition {
+            display: inline-block;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* No listings */
+        .no-listings {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .no-listings h3 {
+            color: var(--warning);
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+        }
+
+        .no-listings p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 0.75rem;
+        }
+
+        /* Related Variants */
+        .related-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .related-link {
+            display: block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .related-link:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent-secondary);
+        }
+
+        footer p {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .graph-wrapper {
+                height: 300px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav a {
+                margin-left: 1.5rem;
+            }
+        }
+    </style>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Game Boy Color Bleu (Teal)",
+        "description": "Le Game Boy Color bleu turquoise était une couleur de lancement très populaire en Europe.",
+        "category": "Console de jeu portable",
+        "brand": {
+            "@type": "Brand",
+            "name": "Nintendo"
+        },
+        "offers": {
+            "@type": "AggregateOffer",
+            "priceCurrency": "EUR",
+            "lowPrice": "7.99",
+            "highPrice": "220.0",
+            "offerCount": "24",
+            "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.5",
+            "reviewCount": "1000"
+        }
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">PrixRetro</a>
+                <nav>
+                    <a href="/">Accueil</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/">Accueil</a>
+            <span>›</span>
+            <a href="/">Game Boy Color</a>
+            <span>›</span>
+            <span>Bleu (Teal)</span>
+        </div>
+
+        <div class="hero">
+            <h1>Game Boy Color Bleu (Teal)</h1>
+            <p class="hero-description">Le Game Boy Color bleu turquoise était une couleur de lancement très populaire en Europe.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Prix Moyen</div>
+                    <div class="stat-value success">67€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Min</div>
+                    <div class="stat-value">7.99€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Max</div>
+                    <div class="stat-value">220.0€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ventes Analysées</div>
+                    <div class="stat-value">24</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <a href="https://www.ebay.fr/sch/i.html?_nkw=game+boy+color+Bleu+%28Teal%29&_dcat=139971&Mod%C3%A8le=Nintendo%20Game%20Boy%20Color&Plateforme=Nintendo%20Game%20Boy%20Color&LH_ItemCondition=3000&mkcid=1&mkrid=709-53476-19255-0&campid=5339134703" class="cta-button" target="_blank" rel="nofollow noopener" onclick="trackEbayClick('bleu')">
+                🎮 Voir les offres actuelles sur eBay
+            </a>
+        </div>
+
+        <div class="content-section">
+            <h2>📈 Évolution des prix</h2>
+            <div class="graph-container">
+                
+        <div class="graph-wrapper">
+            <canvas id="priceChart"></canvas>
+        </div>
+    
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>💡 Comment utiliser ces données</h3>
+                <p>Les prix affichés sont basés sur les ventes réelles terminées sur eBay.fr. Utilisez cette information pour :</p>
+                <ul>
+                    <li>Évaluer le prix juste d'une console</li>
+                    <li>Négocier un achat en connaissance de cause</li>
+                    <li>Déterminer le bon moment pour acheter</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3>⚠️ Points d'attention</h3>
+                <p>Le prix peut varier selon :</p>
+                <ul>
+                    <li>L'état de la console (occasion, très bon état, neuf)</li>
+                    <li>La présence de la boîte et des accessoires</li>
+                    <li>L'état de l'écran (rayures, pixels morts)</li>
+                    <li>Le fonctionnement (son, boutons, etc.)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="listings-header">
+                <h2>📊 Historique des ventes</h2>
+                <span class="listings-count">24 ventes trouvées</span>
+            </div>
+            <div class="listings-grid">
+                
+                <div class="listing-card">
+                    <div class="listing-title">CARL LEWIS ATHLETICS COMPLET GAMEBOY COLOR PAL EURO (FR) CIB OVP - État Moyen</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">12€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">THE BEST OF ENTERTAINMENT PACK COMPLET GAMEBOY COLOR PAL EURO (FR) CIB OVP Cryo</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">11€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🔴🟡🔵 Lot Pokémon Rouge, Jaune & Bleu - Versions Françaises - Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">35€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🔵 Pokémon Bleu - Version Française - Game Boy Color (GBC)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">14€</span>
+                        <span class="listing-date">28/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Trading Card Game 2  Team Gr Return Game Boy Color Japanese</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">27/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Bleu Game Boy Color Francais</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">9€</span>
+                        <span class="listing-date">26/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Game Boy Color bleue - fonctionne</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">52€</span>
+                        <span class="listing-date">24/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB-001 Turquoise Console Portable</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">30€</span>
+                        <span class="listing-date">21/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Bleu Console Complète en Boîte Rare Collector</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">220€</span>
+                        <span class="listing-date">19/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">ZELDA ORACLE OF SEASONS COMPLET GAMEBOY COLOR PAL EURO FR CIB OVP - État Moyen</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">136€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">ZELDA ORACLE OF AGES COMPLET GAMEBOY COLOR PAL EURO (FR) CIB OVP - État Moyen</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">142€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB-001 Turquoise Console Portable</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">200€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Bleu Game Boy Color Francais</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">15/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB-001 Turquoise Console Portable</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">113€</span>
+                        <span class="listing-date">13/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Bleu (Nintendo Game Boy Color, 2001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">12/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🔴🟡🔵 Lot Pokémon Rouge, Jaune & Bleu - Versions Françaises - Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">35€</span>
+                        <span class="listing-date">12/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color Jeu Battle Tanx En Boîte</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">8€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Gameboy Color Édition Pokémon Avec Jeux Très Bon État</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">139€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🔴🟡🔵 Lot Pokémon Rouge, Jaune & Bleu - Versions Françaises - Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">35€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">KLAX COMPLET NINTENDO GAMEBOY COLOR PAL EURO (FR) CIB OVP - Midway Arcade Hits</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">20€</span>
+                        <span class="listing-date">02/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">BOMBERMAN QUEST COMPLET NINTENDO GAMEBOY COLOR PAL EURO CIB OVP - Très bon état</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">103€</span>
+                        <span class="listing-date">02/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">ADAPTATEUR ACTION REPLAY PRO POUR CONSOLE NINTENDO GAMEBOY COLOR POCKET POKÉMON</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">02/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Bleu Game Boy Color Francais</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">02/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Teal</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">190€</span>
+                        <span class="listing-date">15/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="related-section">
+            <h2>🎨 Autres variantes Game Boy Color</h2>
+            <div class="related-grid">
+                <a href="/game-boy-color-violet.html" class="related-link">Violet</a>
+                    <a href="/game-boy-color-atomic-purple.html" class="related-link">Atomic Purple (Violet Transparent)</a>
+                    <a href="/game-boy-color-jaune.html" class="related-link">Jaune</a>
+                    <a href="/game-boy-color-rouge.html" class="related-link">Rouge</a>
+                    <a href="/game-boy-color-vert.html" class="related-link">Vert Néon</a>
+                    <a href="/game-boy-color-pikachu.html" class="related-link">Pikachu (Édition Pokémon)</a>
+                    <a href="/game-boy-color-pokemon-gold-silver.html" class="related-link">Or/Argent (Édition Pokémon)</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PrixRetro - Prix des consoles rétro basés sur les ventes réelles eBay</p>
+            <p>
+                <a href="/mentions-legales.html">Mentions légales</a> • 
+                <a href="/contact.html">Contact</a>
+            </p>
+            <p style="margin-top: 1.5rem; font-size: 0.85rem;">
+                Les prix affichés sont basés sur les ventes terminées sur eBay.fr.
+                PrixRetro n'est pas responsable des prix pratiqués par les vendeurs.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Price history graph data injected by Python
+        
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Oct 2025', 'Nov 2025'],
+                datasets: [{
+                    label: 'Prix moyen (€)',
+                    data: [189, 62],
+                    borderColor: '#00d9ff',
+                    backgroundColor: 'rgba(0, 217, 255, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#00d9ff',
+                    pointBorderColor: '#0f1419',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1f2e',
+                        titleColor: '#e4e6eb',
+                        bodyColor: '#e4e6eb',
+                        borderColor: '#2a3142',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '€';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: '#2a3142',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#a0a3a8',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: '#2a3142',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#a0a3a8',
+                            font: {
+                                size: 12
+                            },
+                            callback: function(value) {
+                                return value + '€';
+                            }
+                        },
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    
+    </script>
+</body>
+</html>
