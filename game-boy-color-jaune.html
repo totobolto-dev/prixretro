@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prix et historique des ventes du Game Boy Color Jaune. 157 ventes analysées. Prix moyen: 78€">
+    <title>Game Boy Color Jaune - Prix & Historique | PrixRetro</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-card: #242b3d;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7b61ff;
+            --text-primary: #e4e6eb;
+            --text-secondary: #a0a3a8;
+            --success: #00ff88;
+            --warning: #ffb800;
+            --border: #2a3142;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 2.5rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 2rem 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent-primary);
+        }
+
+        .breadcrumb span {
+            color: var(--text-secondary);
+            margin: 0 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            padding: 3rem 0;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stat-value.success {
+            color: var(--success);
+        }
+
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            padding: 2.5rem 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            padding: 1.25rem 3.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.15rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(0, 217, 255, 0.5);
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 3rem 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Price Graph */
+        .graph-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .graph-wrapper {
+            position: relative;
+            height: 400px;
+            margin-top: 1.5rem;
+        }
+
+        .no-graph {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-graph h3 {
+            color: var(--warning);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .info-card h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .info-card ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .info-card li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Listings Section */
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .listings-count {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .listing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+
+        .listing-title {
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        .listing-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .listing-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .listing-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .listing-condition {
+            display: inline-block;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* No listings */
+        .no-listings {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .no-listings h3 {
+            color: var(--warning);
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+        }
+
+        .no-listings p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 0.75rem;
+        }
+
+        /* Related Variants */
+        .related-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .related-link {
+            display: block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .related-link:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent-secondary);
+        }
+
+        footer p {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .graph-wrapper {
+                height: 300px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav a {
+                margin-left: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">PrixRetro</a>
+                <nav>
+                    <a href="/">Accueil</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/">Accueil</a>
+            <span>›</span>
+            <a href="/">Game Boy Color</a>
+            <span>›</span>
+            <span>Jaune</span>
+        </div>
+
+        <div class="hero">
+            <h1>Game Boy Color Jaune</h1>
+            <p class="hero-description">Le modèle jaune était l'une des couleurs de lancement. Populaire et facile à trouver sur le marché de l'occasion.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Prix Moyen</div>
+                    <div class="stat-value success">78€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Min</div>
+                    <div class="stat-value">3.32€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Max</div>
+                    <div class="stat-value">549.9€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ventes Analysées</div>
+                    <div class="stat-value">157</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <a href="https://www.ebay.fr/sch/i.html?_nkw=game+boy+color+Jaune&_dcat=139971&Mod%C3%A8le=Nintendo%20Game%20Boy%20Color&Plateforme=Nintendo%20Game%20Boy%20Color&LH_ItemCondition=3000&mkcid=1&mkrid=709-53476-19255-0&campid=5339134703" class="cta-button" target="_blank" rel="nofollow noopener">
+                🎮 Voir les offres actuelles sur eBay
+            </a>
+        </div>
+
+        <div class="content-section">
+            <h2>📈 Évolution des prix</h2>
+            <div class="graph-container">
+                
+        <div class="graph-wrapper">
+            <canvas id="priceChart"></canvas>
+        </div>
+    
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>💡 Comment utiliser ces données</h3>
+                <p>Les prix affichés sont basés sur les ventes réelles terminées sur eBay.fr. Utilisez cette information pour :</p>
+                <ul>
+                    <li>Évaluer le prix juste d'une console</li>
+                    <li>Négocier un achat en connaissance de cause</li>
+                    <li>Déterminer le bon moment pour acheter</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3>⚠️ Points d'attention</h3>
+                <p>Le prix peut varier selon :</p>
+                <ul>
+                    <li>L'état de la console (occasion, très bon état, neuf)</li>
+                    <li>La présence de la boîte et des accessoires</li>
+                    <li>L'état de l'écran (rayures, pixels morts)</li>
+                    <li>Le fonctionnement (son, boutons, etc.)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="listings-header">
+                <h2>📊 Historique des ventes</h2>
+                <span class="listings-count">157 ventes trouvées</span>
+            </div>
+            <div class="listings-grid">
+                
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color Jaune avec organisateur, collection de jeux Y2K</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">105€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Coque Pokemon Pour Gameboy Color GBC - Game Boy Replacement Case Housing</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">17€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game boy color Verte Transparent gameboy GBC Couleur IPS</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">155€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game boy color édition pokemon Center Pikachu gameboy GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">120€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Verte D'origine coque original et d'époque</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console Violette Fonctionnelle +pokemon jaune et rouge</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">80€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">56€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game boy color édition pokemon Center Pikachu gameboy GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">130€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Pikachu Pokemon  Coque D'origine Super Mario</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">+++ Console NINTENDO GAME BOY COLOR  écran IPS MOD Silver CHROME LED custom +++</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">229€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🕹️ Console Nintendo Game Boy Color Jaune - 100% Fonctionnelle</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">80€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Color Pokémon 7 Lot Red Blue Green Yellow Gold Silver Crystal - JAP</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">85€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Drop in 2.45 Inches Same Size HD IPS LCD Kit+Shell For Game Boy Color FRM ON OFF</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">54€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color Console Yellow & 4 Games GBC CGB-001 Bundle Lot Tested</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">92€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Console hand Held Yellow Pokemon Version W/Black Case Tested</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">128€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo GameBoy Color Original Pokemon Special Edition w/ Pokemon Blue Tested.</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">230€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Gameboy Colour édition spéciale en boîte</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">342€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Advance SP CHOOSE A COLOR Replacement Shell Housing IPS Ready Trim</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">11€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Cache batterie pour Nintendo GameBoy Color GBC Game Boy couvercle nombreuses couleurs</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">4€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Cartouche de jeu Pokemon jaune Gameboy Color Nintendo PAL authentique ! 1998</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">34€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">pour Nintendo Gameboy Color - Cache batterie coque porte arrière remplacement GBC | FPC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">3€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GBC OLED AMOLED Laminated Touch Screen OSD RETRO PIXEL Kit For GameBoy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">55€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">For Nintendo GameBoy Advance GBA Replacement Buttons Set - Color button optional</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">4€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GameBoy Color Replacement Shell Housing IPS Ready Q5 2.0 V2 V3 Trim Game Boy GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">11€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Grimace's Birthday Game Boy Color GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">26€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pre-cut Colorful Full Size Modern V3 IPS Backlight LCD For Game Boy DMG GB DMG</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">45€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy / Game Boy Color GB GBC Game Holder Tray Storage Fits Clear Cases</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">14€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">LG6012 With Defects - GameBoy Color Yellow Game Boy Console Japan</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">54€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Color Shell Housing IPS Ready Q5 2.0 V2 CHOOSE A COLOR for Game Boy GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">11€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Advance & Gameboy COLOR Games</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">4€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Vintage Nintendo Game Boy Printer Paper 3 Rolls Adhesive Backed Paper Retro</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">15€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Shell for Laminated IPS Q5 OLED AMOLED Ready GameBoy GBC Housing</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GBC GameBoy Color Nintendo Replacement Game Cartridge Shell Case Empty Housing</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">11€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameshark Gameboy Color & Pocket v3.1 Use Pokemon Red Blue Yellow Gold Silver</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">72€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Kits LCD rétroéclairage IPS 2,45'' GBC sans soudure avec coque pour console GameBoy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon GameBoy Color Special Pikachu Edition Nintendo Game Boy GBC MINT CONSOLE</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">143€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Cache Batterie GBC Différentes Couleurs NEUF</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">4€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Advance GBA SP -Pair of Hinge Caps - PICK A COLOR!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">6€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Dandelion Yellow CGB-001 Tested & Working Good Condition</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">87€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Advance Shell Housing Solid Game Boy GBA IPS Ready Trim CHOOSE A COLOR</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">11€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GBC OLED AMOLED Laminated Touch Screen OSD RETRO PIXEL Kit For GameBoy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Drop In Menu IPS Backlight LCD Kit For Gameboy Color GBC W/Patterned Screen</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">46€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Kits écran LCD rétroéclairage 36 couleurs GameBoy DMG/GBO V5 IPS + coque prédécoupée + haut-parleur</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">52€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Cache batterie de remplacement Nintendo Gameboy Color GBC Game Boy Colour - Jaune</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">3€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Sac Nintendo Pokemon Gameboy Color, sac de transport, rouge violet vert turquoise</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">14€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Replacement Housing For Nintendo GameBoy Color Console GBC Case Shell</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">18€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Bull Airs Shoe Boy Sz 13 Custom Game Boy Color Yellow  Nintendo Limited Edition</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">307€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Original And Gameboy Color lot Yellow Project!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">61€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">NEW Very Bright LED Wormlight Worm Light for Gameboy Color GBC #FS</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">19€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Advance GBA V5 IPS LCD Backlight Housing Shell Mod Kit PICK UR COLORS!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">77€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Battery Door Cover Lid AUTHENTIC Nintendo GBC Original OEM Gameboy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">13€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Vintage Pikachu Pokemon Game Boy Color GBC Travel Carrying Case Bag Pouch OEM ZC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">26€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console CGB-001 - Dandelion Yellow 100% OEM Tested</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">102€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color Yellow Dandelion, Brand New Body Shell. GAME NOT INCLUDED</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">72€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console System, New Shell Transparent Blue & Yellow</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">123€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">HISPEEDIDO Kits de menus OSD écran tactile GBC OLED avec coque prédécoupée pour GameBoy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Original Nintendo Game Boy Color Shell AUTHENTIC HOUSING 👾 OEM GBC Body  USED</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">13€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Yellow Pikachu Nintendo Gameboy GB Japan Import M427 NEW SAVE BATTERY</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">17€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Dragon Ball Z Magnifier Accessory For Nintendo Gameboy Color GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">28€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Color édition violet et Pokemon jaune</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">78€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo GameBoy Color GBC Pokemon Pikachu Edition Console</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">133€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Kit coque de remplacement - Console Pokemon jaune Nintendo Gameboy couleur Pikachu</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">13€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Coque de remplacement Nintendo Gameboy Advance complète différentes couleurs</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">14€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Gameboy Color Violet Clear Purple en boîte Boxed</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">160€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">39€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Color Turquoise + Super Mario Land 2 Et Tetris + Sacoche Et Câble</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">52€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">game boy color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">69€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console GBC ✅ Vert Kiwi  (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Superbe Console Nintendo Game Boy Color Atomic Purple + Jeu + Piles Neuves !</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">84€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Système Portable - Violet</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Mauve Transparente</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">56€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Color TURQUOISE (Teal) + Pokemon Rouge (red) + Tetris + accessoires</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">64€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color - Violet</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Rose</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Advance</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">32€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo GAME BOY COLOR Console GBC ✅ Atomic Purple  (CGB-001) + MARIO & YOSHI</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">75€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo GameBoy Color Console Violette Transparent Fonctionnelle tout d'origine</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">73€</span>
+                        <span class="listing-date">09/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game boy color édition pokemon Pikachu gameboy GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">110€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color - Vert Kiwi</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game boy Color Pikachu Gameboy + Jeu Pokemon Jaune 🇫🇷 Pokémon</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">156€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Mauve Transparente</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">56€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">console GAME BOY COLOR - NINTENDO - violet / en état de marche - 9227p</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">28/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color Original - Pokemon</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">100€</span>
+                        <span class="listing-date">27/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Pikachu + Jeux Pokémon Jaune Or Argent Rouge AUTHENTIQUE</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">349€</span>
+                        <span class="listing-date">27/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Replacement Housing for Nintendo Game Boy Color GBC Shell Yellow Blue Pokemon</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">15€</span>
+                        <span class="listing-date">26/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - vert kiwi  (CGB-001)  + jeu bugs bunny</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">79€</span>
+                        <span class="listing-date">24/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">console Game Boy Color CGB-001 Titeuf Pokémon Nintendo retrogaming handheld game</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">61€</span>
+                        <span class="listing-date">24/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">game boy color jaune</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">75€</span>
+                        <span class="listing-date">22/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game boy color édition pokemon Pikachu gameboy GBC IPS Rétro-éclairé</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">150€</span>
+                        <span class="listing-date">22/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Game Boy Color Pokémon Nintendo</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">120€</span>
+                        <span class="listing-date">21/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Bleue Turquoise</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">21/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">CONSOLE NINTENDO GAMEBOY COLOR VIOLETTE COMPLÈTE PAL EURO CIB OVP Très bon état</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">130€</span>
+                        <span class="listing-date">20/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game boy color édition pokemon Center Pikachu gameboy GBC parfait état!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">100€</span>
+                        <span class="listing-date">19/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">61€</span>
+                        <span class="listing-date">18/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Yellow Version Jaune Pikachu Edition Nintendo Gameboy Color - PAL FR TBE</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">45€</span>
+                        <span class="listing-date">18/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">NINTENDO Game boy Color  CGB-001- pas de piles pour test / vendu pour piéces</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">42€</span>
+                        <span class="listing-date">18/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">CONSOLE RETROFLAG GPi CASE + CARTOUCHE NINTENDO GAMEBOY COLOR FONCTIONNELLE</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">46€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy GAMEBOY Color jaune  sans boite</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Rare: Console Nintendo Game Boy Gameboy Color GBC  violette-noire + jeu Rayman</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy GAMEBOY Color jaune  sans boite</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">35€</span>
+                        <span class="listing-date">15/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy GAMEBOY Color jaune  sans boite</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">30€</span>
+                        <span class="listing-date">15/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy GAMEBOY Color jaune  sans boite</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">45€</span>
+                        <span class="listing-date">15/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console Violette Fonctionnelle +pokemon jaune et rouge</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">80€</span>
+                        <span class="listing-date">14/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">game boy color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">12/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game boy color édition pokemon Pikachu gameboy GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">110€</span>
+                        <span class="listing-date">11/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Jaune</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">11/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Original Size 2.45'' Drop in IPS LCD Display+Shell With Lens For Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">54€</span>
+                        <span class="listing-date">10/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console - GameBoy Color  - Édition Pokémon - Pikachu - En Loose</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">89€</span>
+                        <span class="listing-date">09/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB-001 - Entièrement Fonctionnel, Usure Minimale</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">88€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Rare: Console Nintendo Game Boy Gameboy Color GBC  Bleue - Violette + jeu TINTIN</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">62€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color Original - Pokemon</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">100€</span>
+                        <span class="listing-date">07/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GAMEBOY COLOR PIKACHU TBE !!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">480€</span>
+                        <span class="listing-date">07/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">06/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GBC Limited Pika Yellow&Blue Housing Shell With Yuanqiu Lens for Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">14€</span>
+                        <span class="listing-date">05/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Console Rose Pink  GBC Officiel</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">04/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Edicion Amarilla (Spanish Yellow) Nintendo Game boy | Gameboy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">32€</span>
+                        <span class="listing-date">02/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color - Violet Plus Sachoche De Protection Pikachu</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">55€</span>
+                        <span class="listing-date">02/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console -(CGB-001) + Jeux Pokemon Version Or</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">112€</span>
+                        <span class="listing-date">01/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Console Clear Purple Transparente GBC Officiel</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">71€</span>
+                        <span class="listing-date">31/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Console Jaune GBC Officiel</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">30/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Console Violette Purple GBC Officiel</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">69€</span>
+                        <span class="listing-date">26/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Gameboy Color Jaune Nintendo Yellow Boite Box</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">269€</span>
+                        <span class="listing-date">24/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GameBoy Color + Pochette ( Sans Jeux )</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">61€</span>
+                        <span class="listing-date">22/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Pokémon édition PIKACHU</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">99€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color Original - Pokemon</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">100€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo / Game Boy Color / Rouge -Rosé / Bon État</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo  Gameboy Color Bleu Turquoise Fonctionnelle</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">44€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo  Gameboy Color Violette Fonctionnelle</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo  Gameboy Color Violette Fonctionnelle</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">38€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo GAME BOY COLOR GBC Transparent Violet - CGB-001 - PAL EUR Testé</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">17/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo GameBoy Color CGB-001 GBC bleue entièrement testée !</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">135€</span>
+                        <span class="listing-date">17/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game boy color Verte Transparent gameboy GBC Couleur IPS</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">155€</span>
+                        <span class="listing-date">15/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo GameBoy Color CGB-001 GBC bleue entièrement testée !</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">135€</span>
+                        <span class="listing-date">14/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🎮 Nintendo Game Boy Color Atomic Purple CGB-001 - Très bon état - Fonctionnelle</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">54€</span>
+                        <span class="listing-date">11/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo GameBoy Color CGB-001 GBC bleue entièrement testée ! #5559</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">71€</span>
+                        <span class="listing-date">09/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Pokemon Center Japan Limited Edition TESTÉ #26[Holiday]</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">228€</span>
+                        <span class="listing-date">07/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Verte</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">07/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Superbe Console Nintendo Game Boy Color + Piles Neuves !</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">69€</span>
+                        <span class="listing-date">07/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">[ En l'état ] Console Nintendo Gameboy Color Jaune Game Boy Portable Testée J...</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">63€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Rouge + Pokémon Jaune, Super Mario Bros Deluxe Etc...</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">124€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">CONSOLE NINTENDO GAMEBOY COLOR BLEUE PAL EURO ÉTAT MOYEN FONCTIONNELLE CGB-001</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">53€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Gameboy Color Pokémon Special Edition Pikachu Boxed - Bon Etat</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">550€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Boite Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Customized Nintendo Gameboy Color Pokemon Pikachu Edition (NEW BODY) & GB Soft</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">110€</span>
+                        <span class="listing-date">03/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB-001 Violet - Fonctionne</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">64€</span>
+                        <span class="listing-date">03/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB-001 Bleu Clair - Fonctionne</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">64€</span>
+                        <span class="listing-date">03/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB-001 Citron - Fonctionne</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">64€</span>
+                        <span class="listing-date">03/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo GameBoy Color CGB-001 GBC violet clair entièrement testée...</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">72€</span>
+                        <span class="listing-date">02/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Violette Transparent Fonctionnelle + Gex</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">28/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Boite Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">57€</span>
+                        <span class="listing-date">28/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Pokémon PIKACHU</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">99€</span>
+                        <span class="listing-date">27/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GAME BOY COLOR CONSOLE NINTENDO OFFICIELLE VIOLETTE CGB-001 BE GAMEBOY</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">55€</span>
+                        <span class="listing-date">27/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">63€</span>
+                        <span class="listing-date">24/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Jaune + Pokémon Version Argent</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">24/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="related-section">
+            <h2>🎨 Autres variantes Game Boy Color</h2>
+            <div class="related-grid">
+                <a href="/game-boy-color-violet.html" class="related-link">Violet</a>
+                    <a href="/game-boy-color-atomic-purple.html" class="related-link">Atomic Purple (Violet Transparent)</a>
+                    <a href="/game-boy-color-rouge.html" class="related-link">Rouge</a>
+                    <a href="/game-boy-color-bleu.html" class="related-link">Bleu (Teal)</a>
+                    <a href="/game-boy-color-vert.html" class="related-link">Vert Néon</a>
+                    <a href="/game-boy-color-pikachu.html" class="related-link">Pikachu (Édition Pokémon)</a>
+                    <a href="/game-boy-color-pokemon-gold-silver.html" class="related-link">Or/Argent (Édition Pokémon)</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PrixRetro - Prix des consoles rétro basés sur les ventes réelles eBay</p>
+            <p>
+                <a href="/mentions-legales.html">Mentions légales</a> • 
+                <a href="/contact.html">Contact</a>
+            </p>
+            <p style="margin-top: 1.5rem; font-size: 0.85rem;">
+                Les prix affichés sont basés sur les ventes terminées sur eBay.fr.
+                PrixRetro n'est pas responsable des prix pratiqués par les vendeurs.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Price history graph data injected by Python
+        
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Déc 2025', 'Nov 2025', 'Oct 2025', 'Sep 2025'],
+                datasets: [{
+                    label: 'Prix moyen (€)',
+                    data: [64, 86, 102, 67],
+                    borderColor: '#00d9ff',
+                    backgroundColor: 'rgba(0, 217, 255, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#00d9ff',
+                    pointBorderColor: '#0f1419',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1f2e',
+                        titleColor: '#e4e6eb',
+                        bodyColor: '#e4e6eb',
+                        borderColor: '#2a3142',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '€';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: '#2a3142',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#a0a3a8',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: '#2a3142',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#a0a3a8',
+                            font: {
+                                size: 12
+                            },
+                            callback: function(value) {
+                                return value + '€';
+                            }
+                        },
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    
+    </script>
+</body>
+</html>

@@ -424,9 +424,15 @@ class EbayScraper:
         date_sold = None
         has_vendu = False
 
-        for elem in item.find_all(['span', 'div']):
+        # Try multiple approaches to find sold date
+        # 1. Look in all text elements
+        for elem in item.find_all(['span', 'div', 'time']):
             text = elem.get_text(strip=True)
-            if 'Vendu le' in text or 'Vendu ' in text or 'Sold' in text:
+            # More comprehensive sold indicators
+            if any(indicator in text.lower() for indicator in [
+                'vendu le', 'vendu ', 'sold on', 'sold ', 'terminé le', 
+                'ended ', 'se termine le', 'fin le'
+            ]):
                 has_vendu = True
                 # Try to extract the date part - support multiple formats
 
@@ -444,6 +450,8 @@ class EbayScraper:
                     # Without accents
                     'janv': '01', 'fevr': '02', 'avr': '04', 'juil': '07',
                     'aout': '08', 'sept': '09', 'dec': '12',
+                    # Encoding-mangled versions (eBay encoding issues)
+                    'd�c': '12', 'f�vr': '02', 'ao�t': '08',
                     # Short forms
                     'jan': '01', 'fev': '02', 'mar': '03', 'avr': '04',
                     'jun': '06', 'jul': '07', 'aug': '08', 'sep': '09',
@@ -454,8 +462,9 @@ class EbayScraper:
                     'september': '09', 'october': '10', 'november': '11', 'december': '12',
                 }
 
-                # Try format: "18 déc. 2025" or "18 décembre 2025"
-                date_match = re.search(r'(\d{1,2})\s+([a-zéèêû]+)\.?\s+(\d{4})', text, re.IGNORECASE)
+                # Try format: "18 déc. 2025" - handle extra spaces and encoding issues
+                # Pattern handles: "Vendu le  18 d�c. 2025" or "Vendu le 18 décembre 2025"
+                date_match = re.search(r'(\d{1,2})\s+([a-zéèêû�]+)\.?\s+(\d{4})', text, re.IGNORECASE)
                 if date_match:
                     day, month_str, year = date_match.groups()
                     month_num = months_fr.get(month_str.lower())
@@ -481,14 +490,17 @@ class EbayScraper:
                 if date_sold:
                     break
         
-        # TEMPORARY: Allow items without visible "Vendu le" text
-        # eBay HTML structure might not always show this reliably
-        if not has_vendu:
-            print(f"      ⚠️  NO SOLD DATE FOUND: {title[:60]}")
-            # Continue parsing instead of rejecting
-        
-        if not date_sold:
-            date_sold = datetime.now().strftime("%Y-%m-%d")
+        # STRICT: Require actual sold date - reject items without one
+        if not has_vendu or not date_sold:
+            # Debug output to understand why date parsing failed
+            print(f"      ❌ NO SOLD DATE - REJECTING: {title[:60]}")
+            print(f"         has_vendu={has_vendu}, date_sold={date_sold}")
+            
+            # Show first 200 chars of item HTML for debugging
+            item_html = str(item)[:200].replace('\n', ' ')
+            print(f"         HTML sample: {item_html}...")
+            
+            return None  # Reject items without confirmed sold date
         
         # Condition - Look for "Occasion", "Neuf", etc
         condition = self._extract_condition(item)

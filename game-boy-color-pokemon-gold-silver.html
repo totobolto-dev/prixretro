@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prix et historique des ventes du Game Boy Color Or/Argent (Édition Pokémon). 172 ventes analysées. Prix moyen: 94€">
+    <title>Game Boy Color Or/Argent (Édition Pokémon) - Prix & Historique | PrixRetro</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-card: #242b3d;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7b61ff;
+            --text-primary: #e4e6eb;
+            --text-secondary: #a0a3a8;
+            --success: #00ff88;
+            --warning: #ffb800;
+            --border: #2a3142;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 2.5rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 2rem 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent-primary);
+        }
+
+        .breadcrumb span {
+            color: var(--text-secondary);
+            margin: 0 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            padding: 3rem 0;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stat-value.success {
+            color: var(--success);
+        }
+
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            padding: 2.5rem 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            padding: 1.25rem 3.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.15rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(0, 217, 255, 0.5);
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 3rem 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Price Graph */
+        .graph-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .graph-wrapper {
+            position: relative;
+            height: 400px;
+            margin-top: 1.5rem;
+        }
+
+        .no-graph {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-graph h3 {
+            color: var(--warning);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .info-card h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .info-card ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .info-card li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Listings Section */
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .listings-count {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .listing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+
+        .listing-title {
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        .listing-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .listing-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .listing-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .listing-condition {
+            display: inline-block;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* No listings */
+        .no-listings {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .no-listings h3 {
+            color: var(--warning);
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+        }
+
+        .no-listings p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 0.75rem;
+        }
+
+        /* Related Variants */
+        .related-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .related-link {
+            display: block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .related-link:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent-secondary);
+        }
+
+        footer p {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .graph-wrapper {
+                height: 300px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav a {
+                margin-left: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">PrixRetro</a>
+                <nav>
+                    <a href="/">Accueil</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/">Accueil</a>
+            <span>›</span>
+            <a href="/">Game Boy Color</a>
+            <span>›</span>
+            <span>Or/Argent (Édition Pokémon)</span>
+        </div>
+
+        <div class="hero">
+            <h1>Game Boy Color Or/Argent (Édition Pokémon)</h1>
+            <p class="hero-description">Édition spéciale pour Pokémon Or et Argent avec boîtier doré ou argenté iridescent. Très prisée des collectionneurs Pokémon.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Prix Moyen</div>
+                    <div class="stat-value success">94€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Min</div>
+                    <div class="stat-value">5.41€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Max</div>
+                    <div class="stat-value">930.56€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ventes Analysées</div>
+                    <div class="stat-value">172</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <a href="https://www.ebay.fr/sch/i.html?_nkw=game+boy+color+Or%2FArgent+%28%C3%89dition+Pok%C3%A9mon%29&_dcat=139971&Mod%C3%A8le=Nintendo%20Game%20Boy%20Color&Plateforme=Nintendo%20Game%20Boy%20Color&LH_ItemCondition=3000&mkcid=1&mkrid=709-53476-19255-0&campid=5339134703" class="cta-button" target="_blank" rel="nofollow noopener">
+                🎮 Voir les offres actuelles sur eBay
+            </a>
+        </div>
+
+        <div class="content-section">
+            <h2>📈 Évolution des prix</h2>
+            <div class="graph-container">
+                
+        <div class="graph-wrapper">
+            <canvas id="priceChart"></canvas>
+        </div>
+    
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>💡 Comment utiliser ces données</h3>
+                <p>Les prix affichés sont basés sur les ventes réelles terminées sur eBay.fr. Utilisez cette information pour :</p>
+                <ul>
+                    <li>Évaluer le prix juste d'une console</li>
+                    <li>Négocier un achat en connaissance de cause</li>
+                    <li>Déterminer le bon moment pour acheter</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3>⚠️ Points d'attention</h3>
+                <p>Le prix peut varier selon :</p>
+                <ul>
+                    <li>L'état de la console (occasion, très bon état, neuf)</li>
+                    <li>La présence de la boîte et des accessoires</li>
+                    <li>L'état de l'écran (rayures, pixels morts)</li>
+                    <li>Le fonctionnement (son, boutons, etc.)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="listings-header">
+                <h2>📊 Historique des ventes</h2>
+                <span class="listings-count">172 ventes trouvées</span>
+            </div>
+            <div class="listings-grid">
+                
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Color Pokémon 7 Lot Red Blue Green Yellow Gold Silver Crystal - JAP</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">85€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">1999 Nintendo GAME BOY COLOR Guide Stratégique POKEMON GOLD & SILVER jap...</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color (Pokemon Gold/Silver Edition) Tested works!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">292€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Vintage Pokemon Gold / Silver Guide - Nintendo Gameboy Color - 2000 - Look!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">8€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameshark Gameboy Color & Pocket v3.1 Use Pokemon Red Blue Yellow Gold Silver</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">72€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">2000 Pokemon Gold/Silver Game Boy Color Print Ad/Poster Official Game Promo Art</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">26€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold + Silver Versions Nintendo Gameboy Color Authentic New Battery! VG</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">205€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Très bon état</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gold + Silver + Crystal Version Gameboy Color Lot Authentic New Battery!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">502€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Reconditionné</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pelican Brain Boy Gold Nintendo Game Boy Color GBC Pokemon Gold/Silver</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gold & Silver Gameboy Color Pokemon Center Edition Parts But Works</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">61€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color ~ Limited Edition ~ Gold + Silver Pokemon/Pikachu TESTED</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">95€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Pokemon Gold And Silver With Box</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">205€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gold + Silver + Crystal Version Gameboy Color Lot Authentic New Battery!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">363€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon: Gold & Silver Version Game Boy Color, Nintendo GBC, Authentic Bundle</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">225€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Reconditionné</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold & Silver Gameboy Color - Needs New Batteries Tested & Working</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">118€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gold + Silver + Crystal Version Gameboy Color Lot Authentic New Battery!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">348€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold & Silver Gameboy Color Authentic New Batteries Tested And Working</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">159€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo GameBoy Color  Gold/Silver Pokémon Special Edition ( Reshell)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">102€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Or Argent Nintendo Gameboy Couleur x4 Ensemble Tasse Coasters Joueur Cadeaux Rétro</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">14€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color GBC Pokemon Gold and Silver Edition Handheld CGB-001</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">113€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color (Pokemon Center, Gold & Silver, Pikachu, Limited Edition)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">154€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gameboy Color Silver, Gold, & Yellow Versions Authentic & All Saves Game</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">123€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gameboy & Gameboy Color Red, Gold, Silver, Blue, Yellow - Pokemon GB GBC</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">82€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Gameboy Color Console  Pokemon Pikachu Silver Gold Edition + Case Tested</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">82€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">5Pc Pokemon Silver/Gold/Red/Blue/Yellow GAMES GameBoy/Color AUTHENTIC VERY RARE!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">204€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon 2nd Gen Gameboy Color CGC Cases [Buy Silver & Gold get Crystal for FREE]</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">11€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold and Silver Authentic Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">148€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Housse de remplacement pour objectif écran en verre Game Boy couleur GBC premium IPS Pokémon rare</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">5€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Authentic Nintendo Gameboy Color Pokemon Gold and Silver Edition Handheld System</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">72€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold & Silver Versions W/ New Batteries (GameBoy Color) SHIPS SAME DAY!!</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">205€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo GameBoy Color Pokemon Notice Guide du Dresseur Or Argent Manuel</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">20€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color ~ Limited Edition ~ Gold + Silver Pokemon/Pikachu TESTED</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">97€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">2000 Pokemon Gold & Silver Version Nintendo Gameboy Color Store Display</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">931€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Pokemon Gold and Silver Edition Handheld System</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">113€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Pokemon Gold and Silver Edition Handheld System</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">148€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gold and Silver - Japanese Version - Game Boy Color GBC *NEW BATTERIES*</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">41€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gameboy Color Silver, Gold, & Yellow Versions Authentic & All Saves Game</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">127€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Vintage Pokemon Game Boy Color Travel Pak Gold Silver Lugia Carrying Case</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">36€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold and Silver Authentic Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">123€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Crystal Gold Silver Yellow Authentic Clean Tested Nintendo Gameboy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">358€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Center Gameboy Couleur Or et Argent - Variante Japonaise - 100% Authentique</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">171€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Authentic Pokemon Games Gameboy, Gameboy Color, Advance, DS, Bulk Discounts JPN</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">14€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gold + Silver (Japanese Version GameBoy Color) US Seller w/NEW BATTERIES</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">31€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color console  Pokemon Gold and Silver Nintendo Pokemon Center</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">155€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Système Portable - Violet</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - bleu requin  (CGB-001) + jeu Rayman</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">58€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Game boy color rouge</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">59€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Superbe Console Nintendo Game Boy Color Atomic Purple + Jeu + Piles Neuves !</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">84€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">39€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">game boy color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">69€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo GAME BOY COLOR Console GBC ✅ Atomic Purple  (CGB-001) + MARIO & YOSHI</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">75€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console GBC ✅ Vert Kiwi  (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Rose</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Game Boy Color  + Light Master En Boîte</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">116€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Pikachu Pokemon  Coque D'origine Super Mario</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB-001 Turquoise Console Portable</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">56€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">56€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Advance</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">32€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Pokémon RONFLEX (Snorlax)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">115€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon GBC Or Jaune Rouge Bleue Argent Cristal FR Cartmod boite color gameboys</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">36€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🎮 Lot Pokémon Or, Argent & Cristal - Versions Françaises - Game Boy Color (GBC)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">35€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🎮 Lot Pokémon Or, Argent & Cristal - Versions Françaises - Game Boy Color GBC -</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">33€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent (Nintendo Game Boy Color, 2001) bien lire l'annonce.</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">10€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Argent - Game Boy - Version PAL</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">20€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent Game Boy Color Et Advance NEUF. (cartmod)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">30€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Gameboy - Pokemon Or - Nintendo Game Boy Version FRA - Pile à changer</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">24€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Boîte de remplacement format Nintendo DS pour Pokémon Argent Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">12€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent Pocket Monsters - Nintendo Gameboy Game Boy Color NTSC-J</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">75€</span>
+                        <span class="listing-date">19/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent game boy color & advance en francais</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">09/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gold and Silver Version Authentic (Gameboy Color) *Dry Batteries*</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">112€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold and Silver Gameboy Color Guides Prima Strategy Guide - No Posters</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">45€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Gameboy Color Gbc Pokémon Version Argent</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">48€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Or - Nintendo Game Boy - Pile Neuve - 100% Officiel FRA 🇫🇷</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold and Silver Teal Gameboy Color Bag</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">46€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon: Gold & Silver Version Game Boy Color Authentic, Tested</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">154€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Mauve Transparente</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">56€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent (Nintendo Game Boy) 2001, avec boitier de protection FRA</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">29/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon gold version gameboy color with original box and Silver manual</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">200€</span>
+                        <span class="listing-date">28/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Gold/Silver Strategy Guide by Versus Books 2000 Game Boy Color No Poster</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">28/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold & Silver (Gameboy Color) Authentic NEW BATTERIES Saves Tested Clean</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">204€</span>
+                        <span class="listing-date">28/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Très bon état</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">console GAME BOY COLOR - NINTENDO - violet / en état de marche - 9227p</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">28/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Game Boy Color + jeu Pokémon Version Argent - Nintendo - translucide</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">78€</span>
+                        <span class="listing-date">28/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent (Nintendo Game Boy Color, 2001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">124€</span>
+                        <span class="listing-date">28/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Pikachu + Jeux Pokémon Jaune Or Argent Rouge AUTHENTIQUE</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">349€</span>
+                        <span class="listing-date">27/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Lot Jeu Pokémon Version Bleue, Rouge Et Argent Gameboy</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">27/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold & Silver Authentic Complete In Box CIB Nintendo Gameboy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">609€</span>
+                        <span class="listing-date">26/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Gameboy Color Pokemon Pikachu Edition Gold/Silver + Pokémon Blue VGC✅️</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">135€</span>
+                        <span class="listing-date">26/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Gold & Silver Nintendo Game Boy Color Travel Bag Carrier Blue Nice Shape</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">51€</span>
+                        <span class="listing-date">25/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Crystal Gold Silver Green Red Yellow GameBoy Color Used Japan Authentic</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">102€</span>
+                        <span class="listing-date">25/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">console Game Boy Color CGB-001 Titeuf Pokémon Nintendo retrogaming handheld game</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">61€</span>
+                        <span class="listing-date">24/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - vert kiwi  (CGB-001)  + jeu bugs bunny</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">79€</span>
+                        <span class="listing-date">24/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">✨️Jeu Pokemon Argent Game boy</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">9€</span>
+                        <span class="listing-date">24/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Pokemon Version Argent Game Boy Color Cartouche + NOTICE Originale NINTENDO</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">46€</span>
+                        <span class="listing-date">23/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🎮 Lot Pokémon Or, Argent & Cristal - Versions Françaises - Game Boy Color (GBC)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">35€</span>
+                        <span class="listing-date">22/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Argent Cartouche 100% Originale Game Boy Color GBC FR (pile Neuve)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">22/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Bleue Turquoise</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">21/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">✨️Jeu Pokemon Argent sur Game boy OFFICIEL  FRA Pile Neuve✨️</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">55€</span>
+                        <span class="listing-date">20/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Nintendo Game Boy Gameboy Color Pokemon Pinball</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">19/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">NINTENDO Game boy Color  CGB-001- pas de piles pour test / vendu pour piéces</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">42€</span>
+                        <span class="listing-date">18/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">61€</span>
+                        <span class="listing-date">18/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">POKÉMON VERSION ARGENT CARTOUCHE 100% ORIGINALE NINTENDO GAMEBOY COLOR PAL FRA</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">18/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Argent Cartouche 100% Originale Game Boy Color GBC FR</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">18/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color  Édition Pokémon Avec Jeux Pokémon</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">140€</span>
+                        <span class="listing-date">17/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🎮 Lot Pokémon Or, Argent & Cristal - Versions Françaises - Game Boy Color (GBC)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">35€</span>
+                        <span class="listing-date">17/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">jeu Game Boy Color Pokemon Pinball Nintendo DMG-13 retrogaming videogame console</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">12€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">✨️Jeu Pokemon Argent Game boy</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">30€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Pokemon Argent Game boy Authentique</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">142€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Pokémon Version Argent Nintendo Game Boy</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">33€</span>
+                        <span class="listing-date">15/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">game boy color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">12/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Jaune</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">11/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">POCKET MONSTERS POKÉMON GOLD EN LOOSE JAPAN NINTENDO GAME BOY COLOR REGION FREE</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">6€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Rare: Console Nintendo Game Boy Gameboy Color GBC  Bleue - Violette + jeu TINTIN</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">62€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent game boy color & advance en francais</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Bleue Game Boy Complet PAL FR GB color advance GBC GBA</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">170€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon version rouge Nintendo Gameboy CIB Notice, boite GBC Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">130€</span>
+                        <span class="listing-date">08/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeux Game Boy Pokémon Version Argent</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">22€</span>
+                        <span class="listing-date">07/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Jaune (CGB-001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">06/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version:  Rouge, Bleu, Jaune, Or, Argent et Cristal Game Boy Color FR</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">15€</span>
+                        <span class="listing-date">06/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Game boy  Pokémon ARGENT  (Pile Neuve) original, Excellent état</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">49€</span>
+                        <span class="listing-date">06/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Version Or (Game Boy Color, 2000)France</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">06/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Boitier du jeu POKEMON VERSION ARGENT. GAME BOY COLOR. PAL FR. SANS LE JEU.</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">10€</span>
+                        <span class="listing-date">05/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color CGB 001 1998 Violet Avec DEFAUTS Console Dans L'Etat Pur</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">56€</span>
+                        <span class="listing-date">04/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Bleu Game Boy Color Francais</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">9€</span>
+                        <span class="listing-date">04/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">✨️ Pokemon Or Game Boy Color Officiel ✨️</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">30€</span>
+                        <span class="listing-date">03/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color - Violet Plus Sachoche De Protection Pikachu</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">55€</span>
+                        <span class="listing-date">02/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">POKÉMON VERSION ARGENT - CARTOUCHE ORIGINALE NINTENDO GAMEBOY COLOR FAT PAL FRA</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">30€</span>
+                        <span class="listing-date">02/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console -(CGB-001) + Jeux Pokemon Version Or</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">112€</span>
+                        <span class="listing-date">01/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent (Nintendo Game Boy Color, 2001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">30€</span>
+                        <span class="listing-date">01/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Turquoise Boite avec Notice Pal EUR</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">150€</span>
+                        <span class="listing-date">31/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">POKEMON Cristal Gameboy Color FR Fra Officiel Nintendo Game Boy</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">109€</span>
+                        <span class="listing-date">26/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Version Argent   Nintendo Game Boy Color PAL COMPLET</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">200€</span>
+                        <span class="listing-date">25/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon version Rouge, Jaune, Bleu, Or, Argent, fra Game Boy Advance français L9</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">25/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">POKéMON Version OR Nintendo Game Boy Color GameBoy GBC  - Complet (sans cale)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">155€</span>
+                        <span class="listing-date">25/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Pokémon Version Argent Nintendo Game Boy</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">23/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">POKÉMON VERSION OR - CARTOUCHE 100% ORIGINALE NINTENDO GAMEBOY COLOR FAT PAL FRA</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">23/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - violet  (CGB-001)   complete + jeu titeuf</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">175€</span>
+                        <span class="listing-date">21/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Cristal Game Boy Color (Fr)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">180€</span>
+                        <span class="listing-date">21/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon: Gold Silver Version Nintendo Game Boy Color Authentic Saves New Battery</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">205€</span>
+                        <span class="listing-date">20/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Reconditionné</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo / Game Boy Color / Rouge -Rosé / Bon État</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Pokémon</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">120€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Pokémon édition PIKACHU</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">99€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">✨️Jeu Pokemon Argent sur Game boy OFFICIEL  FRA Pile Neuve✨️</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">55€</span>
+                        <span class="listing-date">18/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo GAME BOY COLOR GBC Transparent Violet - CGB-001 - PAL EUR Testé</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">17/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🎮 Nintendo Game Boy Color Atomic Purple CGB-001 - Très bon état - Fonctionnelle</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">54€</span>
+                        <span class="listing-date">11/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent / Game Boy Color / Officiel Nintendo</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">10/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Sacoche Pokémon Or et Argent / Violette / GBA / Game Boy Color / Ds</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">20€</span>
+                        <span class="listing-date">09/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Superbe Console Nintendo Game Boy Color + Piles Neuves !</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">69€</span>
+                        <span class="listing-date">07/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Verte</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">07/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Version Argent  Nintendo Game Boy Color PAL (AVEC NOTICE)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">219€</span>
+                        <span class="listing-date">06/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Pokémon Version Argent - Cartouche 100% original Nintendo Gameboy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">45€</span>
+                        <span class="listing-date">06/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Boite Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">[ En l'état ] Console Nintendo Gameboy Color Jaune Game Boy Portable Testée J...</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">63€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Rouge + Pokémon Jaune, Super Mario Bros Deluxe Etc...</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">124€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">POKÉMON VERSION ARGENT - CARTOUCHE 100% ORIGINALE NINTENDO GAMEBOY COLOR PAL FRA</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">05/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu POKEMON VERSION ARGENT Authentique PILE NEUVE Game Boy</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">45€</span>
+                        <span class="listing-date">04/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Pokémon Version Argent Version Fr Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">15€</span>
+                        <span class="listing-date">01/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokemon Argent version originale jeu pokemon game boy color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">01/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Boite Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">57€</span>
+                        <span class="listing-date">28/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy Color Console - Violette Transparent Fonctionnelle + Gex</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">28/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game boy color Pikachu + Pokemon OR et Argent | Authentique | Version PAL</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">111€</span>
+                        <span class="listing-date">28/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">GAME BOY COLOR CONSOLE NINTENDO OFFICIELLE VIOLETTE CGB-001 BE GAMEBOY</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">55€</span>
+                        <span class="listing-date">27/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">63€</span>
+                        <span class="listing-date">24/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Jaune + Pokémon Version Argent</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">65€</span>
+                        <span class="listing-date">24/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">NINTENDO game boy color en boite Verte</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">151€</span>
+                        <span class="listing-date">24/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">7 Jeux Pokémon Rouge Jaune Bleu Argent Or Crystal Vert Game Boy USA “Cartmod”</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">40€</span>
+                        <span class="listing-date">22/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Gameboy Color Pokemon Center Limited Edition Only Gold Silver</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">306€</span>
+                        <span class="listing-date">21/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent (Nintendo Game Boy Color, 2001)</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">16€</span>
+                        <span class="listing-date">21/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Jeu Pokémon Crystal -game Boy Color -Nintendo -fr</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">120€</span>
+                        <span class="listing-date">21/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Pokémon Version Argent game boy color & advance en francais</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">15€</span>
+                        <span class="listing-date">20/09/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="related-section">
+            <h2>🎨 Autres variantes Game Boy Color</h2>
+            <div class="related-grid">
+                <a href="/game-boy-color-violet.html" class="related-link">Violet</a>
+                    <a href="/game-boy-color-atomic-purple.html" class="related-link">Atomic Purple (Violet Transparent)</a>
+                    <a href="/game-boy-color-jaune.html" class="related-link">Jaune</a>
+                    <a href="/game-boy-color-rouge.html" class="related-link">Rouge</a>
+                    <a href="/game-boy-color-bleu.html" class="related-link">Bleu (Teal)</a>
+                    <a href="/game-boy-color-vert.html" class="related-link">Vert Néon</a>
+                    <a href="/game-boy-color-pikachu.html" class="related-link">Pikachu (Édition Pokémon)</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PrixRetro - Prix des consoles rétro basés sur les ventes réelles eBay</p>
+            <p>
+                <a href="/mentions-legales.html">Mentions légales</a> • 
+                <a href="/contact.html">Contact</a>
+            </p>
+            <p style="margin-top: 1.5rem; font-size: 0.85rem;">
+                Les prix affichés sont basés sur les ventes terminées sur eBay.fr.
+                PrixRetro n'est pas responsable des prix pratiqués par les vendeurs.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Price history graph data injected by Python
+        
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Déc 2025', 'Nov 2025', 'Oct 2025', 'Sep 2025'],
+                datasets: [{
+                    label: 'Prix moyen (€)',
+                    data: [113, 76, 89, 88],
+                    borderColor: '#00d9ff',
+                    backgroundColor: 'rgba(0, 217, 255, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#00d9ff',
+                    pointBorderColor: '#0f1419',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a1f2e',
+                        titleColor: '#e4e6eb',
+                        bodyColor: '#e4e6eb',
+                        borderColor: '#2a3142',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '€';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: '#2a3142',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#a0a3a8',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: '#2a3142',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#a0a3a8',
+                            font: {
+                                size: 12
+                            },
+                            callback: function(value) {
+                                return value + '€';
+                            }
+                        },
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    
+    </script>
+</body>
+</html>

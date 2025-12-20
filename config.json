@@ -9,7 +9,7 @@
     "min_listings_required": 10,
     "max_results_per_search": 999,
     "outlier_threshold_percent": 30,
-    "max_pages_full_history": 1
+    "max_pages_full_history": 999
   },
 
   "variants": {
