@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Prix et historique des ventes du Game Boy Color Jaune. 1 ventes analysées. Prix moyen: 342€. Tracker retrogaming."
+    <meta name="description" content="Prix et historique des ventes du Game Boy Color Jaune. 0 ventes analysées. Prix moyen: 0€. Tracker retrogaming."
     <meta name="keywords" content="Game Boy Color Jaune, prix, vente, occasion, retrogaming, Nintendo, console, collection, nintendo, sega, sony">
     <meta name="author" content="PrixRetro - Prix du Rétrogaming">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph -->
     <meta property="og:title" content="Game Boy Color Jaune - Prix & Historique | PrixRetro">
-    <meta property="og:description" content="Prix et historique des ventes du Game Boy Color Jaune. 1 ventes analysées. Prix moyen: 342€. Tracker de prix retrogaming.">
+    <meta property="og:description" content="Prix et historique des ventes du Game Boy Color Jaune. 0 ventes analysées. Prix moyen: 0€. Tracker de prix retrogaming.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.prixretro.com/game-boy-color-jaune.html">
     <meta property="og:site_name" content="PrixRetro - Tracker Prix Retrogaming">
@@ -18,7 +18,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Game Boy Color Jaune - Prix & Historique | PrixRetro">
-    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Jaune. 1 ventes analysées. Prix moyen: 342€"
+    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Jaune. 0 ventes analysées. Prix moyen: 0€"
     
     <title>Game Boy Color Jaune - Prix & Historique | PrixRetro</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -484,9 +484,9 @@
         "offers": {
             "@type": "AggregateOffer",
             "priceCurrency": "EUR",
-            "lowPrice": "342.46",
-            "highPrice": "342.46",
-            "offerCount": "1",
+            "lowPrice": "0",
+            "highPrice": "0",
+            "offerCount": "0",
             "availability": "https://schema.org/InStock"
         },
         "aggregateRating": {
@@ -525,19 +525,19 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Prix Moyen</div>
-                    <div class="stat-value success">342€</div>
+                    <div class="stat-value success">0€</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Prix Min</div>
-                    <div class="stat-value">342.46€</div>
+                    <div class="stat-value">0€</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Prix Max</div>
-                    <div class="stat-value">342.46€</div>
+                    <div class="stat-value">0€</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Ventes Analysées</div>
-                    <div class="stat-value">1</div>
+                    <div class="stat-value">0</div>
                 </div>
             </div>
         </div>
@@ -552,10 +552,12 @@
             <h2>📈 Évolution des prix</h2>
             <div class="graph-container">
                 
-        <div class="graph-wrapper">
-            <canvas id="priceChart"></canvas>
-        </div>
-    
+                <div class="no-graph">
+                    <h3>⚠️ Données insuffisantes</h3>
+                    <p>Pas assez de données historiques pour afficher un graphique d'évolution des prix.</p>
+                    <p>Au moins 2 mois de données sont nécessaires.</p>
+                </div>
+            
             </div>
         </div>
 
@@ -585,17 +587,14 @@
         <div class="content-section">
             <div class="listings-header">
                 <h2>📊 Historique des ventes</h2>
-                <span class="listings-count">1 ventes trouvées</span>
+                <span class="listings-count">0 ventes trouvées</span>
             </div>
             <div class="listings-grid">
                 
-                <div class="listing-card">
-                    <div class="listing-title">Console Nintendo Gameboy Colour édition spéciale en boîte</div>
-                    <div class="listing-meta">
-                        <span class="listing-price">342€</span>
-                        <span class="listing-date">19/12/2025</span>
-                    </div>
-                    <span class="listing-condition">Occasion</span>
+                <div class="no-listings">
+                    <h3>⚠️ Données insuffisantes</h3>
+                    <p>Moins de 10 ventes trouvées pour cette variante.</p>
+                    <p>Les prix affichés peuvent ne pas être représentatifs du marché actuel.</p>
                 </div>
             </div>
         </div>
@@ -631,81 +630,6 @@
     <script>
         // Price history graph data injected by Python
         
-        const ctx = document.getElementById('priceChart').getContext('2d');
-        const priceChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Sep 2025', 'Oct 2025', 'Nov 2025', 'Déc 2025'],
-                datasets: [{
-                    label: 'Prix moyen (€)',
-                    data: [67, 102, 86, 64],
-                    borderColor: '#00d9ff',
-                    backgroundColor: 'rgba(0, 217, 255, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
-                    pointBackgroundColor: '#00d9ff',
-                    pointBorderColor: '#0f1419',
-                    pointBorderWidth: 2,
-                    pointHoverRadius: 7
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#1a1f2e',
-                        titleColor: '#e4e6eb',
-                        bodyColor: '#e4e6eb',
-                        borderColor: '#2a3142',
-                        borderWidth: 1,
-                        padding: 12,
-                        displayColors: false,
-                        callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + '€';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            color: '#2a3142',
-                            drawBorder: false
-                        },
-                        ticks: {
-                            color: '#a0a3a8',
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    y: {
-                        grid: {
-                            color: '#2a3142',
-                            drawBorder: false
-                        },
-                        ticks: {
-                            color: '#a0a3a8',
-                            font: {
-                                size: 12
-                            },
-                            callback: function(value) {
-                                return value + '€';
-                            }
-                        },
-                        beginAtZero: false
-                    }
-                }
-            }
-        });
-    
     </script>
 </body>
 </html>
