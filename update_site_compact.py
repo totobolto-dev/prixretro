@@ -9,13 +9,24 @@ import os
 from datetime import datetime
 
 def load_scraped_data():
-    """Load scraped data from JSON file"""
-    if not os.path.exists('scraped_data.json'):
-        print("❌ Error: scraped_data.json not found!")
+    """Load scraped data from JSON file - prioritize ultra-clean data"""
+    # Try bulletproof data first, then fallbacks
+    if os.path.exists('scraped_data_bulletproof.json'):
+        data_file = 'scraped_data_bulletproof.json'
+    elif os.path.exists('scraped_data_ultra_clean.json'):
+        data_file = 'scraped_data_ultra_clean.json'
+    elif os.path.exists('scraped_data_clean.json'):
+        data_file = 'scraped_data_clean.json'
+    else:
+        data_file = 'scraped_data.json'
+    
+    if not os.path.exists(data_file):
+        print(f"❌ Error: {data_file} not found!")
         print("Please run scraper_ebay.py first.")
         return None
     
-    with open('scraped_data.json', 'r', encoding='utf-8') as f:
+    print(f"📂 Loading data from: {data_file}")
+    with open(data_file, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 def load_config():
@@ -25,11 +36,11 @@ def load_config():
 
 def load_template():
     """Load HTML template"""
-    template_path = '../prixretro-static/template-v3.html'
+    template_path = '../prixretro-static/template-v4-compact.html'
     
     if not os.path.exists(template_path):
         # Try current directory
-        template_path = 'template-v3.html'
+        template_path = 'template-v4-compact.html'
     
     with open(template_path, 'r', encoding='utf-8') as f:
         return f.read()
@@ -50,9 +61,9 @@ def generate_price_graph(price_history):
             'js': ''
         }
     
-    # Prepare data for Chart.js
-    months = list(price_history.keys())
-    prices = list(price_history.values())
+    # Prepare data for Chart.js - sort months chronologically
+    months = sorted(price_history.keys())  # Sort YYYY-MM format chronologically
+    prices = [price_history[month] for month in months]  # Get prices in sorted order
     
     # Format months for display (YYYY-MM -> Mois Année)
     month_names_fr = {
@@ -253,13 +264,21 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
     related_html = "\n                    ".join(related_variants[:8])
     
     # Replace placeholders in template
+    # Replace placeholders (Laravel-ready structure)
+    product_name = f"Game Boy Color {variant_name}"
     html = template.replace('{VARIANT_NAME}', variant_name)
+    html = html.replace('{VARIANT_KEY}', variant_key)
+    html = html.replace('{PRODUCT_NAME}', product_name)
+    html = html.replace('{PRODUCT_SLUG}', f"game-boy-color-{variant_key}")
+    html = html.replace('{PRODUCT_DESCRIPTION}', description)
+    html = html.replace('{PRODUCT_CATEGORY}', "Console de jeu portable")
+    html = html.replace('{BRAND_NAME}', "Nintendo")
     html = html.replace('{LISTING_COUNT}', str(stats['listing_count']))
     html = html.replace('{AVG_PRICE}', str(stats['avg_price']))
     html = html.replace('{MIN_PRICE}', str(stats['min_price']))
     html = html.replace('{MAX_PRICE}', str(stats['max_price']))
     html = html.replace('{VARIANT_DESCRIPTION}', description)
-    html = html.replace('{LISTINGS_HTML}', listings_html)
+    html = html.replace('{LISTINGS_ROWS_HTML}', listings_html)
     html = html.replace('{RELATED_VARIANTS}', related_html)
     html = html.replace('{EBAY_SEARCH_LINK}', ebay_search_link)
     html = html.replace('{PRICE_GRAPH_HTML}', graph_data['html'])
@@ -321,6 +340,11 @@ def generate_all_pages():
     generated_files = []
     
     for variant_key, variant_data in scraped_data.items():
+        # Skip variants with no listings
+        if not variant_data['listings'] or len(variant_data['listings']) == 0:
+            print(f"  ⚠️  Skipping {variant_data['variant_name']} - no listings after filtering")
+            continue
+            
         filepath = generate_variant_page(
             variant_data, 
             scraped_data, 

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prix et historique des Game Boy Color. Données basées sur les ventes réelles eBay des 6 derniers mois.">
+    <title>Game Boy Color - Prix & Variantes | PrixRetro</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QPNVF0BRW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-4QPNVF0BRW');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-card: #242b3d;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7b61ff;
+            --text-primary: #e4e6eb;
+            --text-secondary: #a0a3a8;
+            --success: #00ff88;
+            --border: #2a3142;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .tagline-detail {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        /* Variants Grid */
+        .variants-section {
+            padding: 4rem 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--accent-primary);
+        }
+
+        .variants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .variant-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s;
+            display: block;
+        }
+
+        .variant-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 8px 30px rgba(0, 217, 255, 0.2);
+        }
+
+        .variant-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .variant-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .variants-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">PrixRetro</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="container">
+            <h1>🎮 Game Boy Color</h1>
+            <p class="tagline">
+                Découvrez le prix réel du marché pour chaque variante de Game Boy Color
+            </p>
+            <p class="tagline-detail">
+                Graphiques d'évolution des prix • Historique des ventes • Données mises à jour régulièrement
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="variants-section">
+            <h2>Toutes les variantes</h2>
+            <div class="variants-grid">
+                <a href="/game-boy-color-violet.html" class="variant-card">
+                    <div class="variant-name">Violet</div>
+                    <div class="variant-description">Couleur de lancement classique, facile à trouver</div>
+                </a>
+
+                <a href="/game-boy-color-atomic-purple.html" class="variant-card">
+                    <div class="variant-name">Atomic Purple</div>
+                    <div class="variant-description">Édition transparente iconique, très recherchée</div>
+                </a>
+
+
+                <a href="/game-boy-color-rouge.html" class="variant-card">
+                    <div class="variant-name">Rouge</div>
+                    <div class="variant-description">Couleur originale classique</div>
+                </a>
+
+                <a href="/game-boy-color-bleu.html" class="variant-card">
+                    <div class="variant-name">Bleu (Teal)</div>
+                    <div class="variant-description">Version turquoise très populaire</div>
+                </a>
+
+                <a href="/game-boy-color-vert.html" class="variant-card">
+                    <div class="variant-name">Vert Néon</div>
+                    <div class="variant-description">Couleur vive de lancement</div>
+                </a>
+
+                <a href="/game-boy-color-pikachu.html" class="variant-card">
+                    <div class="variant-name">Pikachu (Pokémon)</div>
+                    <div class="variant-description">Édition spéciale recherchée et chère</div>
+                </a>
+
+                <a href="/game-boy-color-pokemon-gold-silver.html" class="variant-card">
+                    <div class="variant-name">Or/Argent (Pokémon)</div>
+                    <div class="variant-description">Édition collector iridescente</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PrixRetro - Prix des consoles rétro basés sur les ventes réelles eBay</p>
+            <p>
+                <a href="/mentions-legales.html">Mentions légales</a> • 
+                <a href="/contact.html">Contact</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.85rem;">
+                Les prix affichés sont basés sur les ventes terminées sur eBay.fr au cours des 6 derniers mois.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

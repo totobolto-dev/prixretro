@@ -61,14 +61,16 @@ class EbayScraper:
         except:
             print("⚠️  Session init failed, continuing anyway...")
     
-    def search_sold_listings(self, search_term, max_results=None, full_history=False):
+    def search_sold_listings(self, search_term, max_results=None, full_history=False, date_from=None, date_to=None):
         """
-        Search for sold listings on eBay.fr
+        Search for sold listings on eBay.fr with optional date range
         
         Args:
             search_term: Search query (e.g., "game boy color violet")
             max_results: Maximum number of results per page (default from config)
             full_history: If True, paginate through ALL pages (can be 1000+ items!)
+            date_from: Start date for filtering (datetime object)
+            date_to: End date for filtering (datetime object)
         
         Returns:
             List of dictionaries with listing data
@@ -79,11 +81,10 @@ class EbayScraper:
         all_listings = []
         page = 1
         # SCRAPING STRATEGY:
-        # - full_history=True: Try to get ALL history (may hit CAPTCHA frequently)
-        # - Realistic: 5 pages = 300 items per session, run multiple times
-        # - Aggressive: 20+ pages = complete history, but expect many CAPTCHA pauses
-        max_pages = self.config.get('scraping', {}).get('max_pages_full_history', 999) if full_history else 1
-        items_per_page = 60  # eBay's standard items per page (NOT 200!)
+        # - full_history=True: Scrape 2 pages (all available Game Boy Color results)
+        # - Otherwise: Just page 1
+        max_pages = 2 if full_history else 1
+        items_per_page = max_results if max_results else 240  # eBay allows up to 240 per page
 
         # Track seen item IDs to prevent duplicates during pagination
         seen_item_ids = set()
@@ -92,22 +93,29 @@ class EbayScraper:
             retry_same_page = False  # Flag for CAPTCHA retry
             print(f"🔍 Searching: '{search_term}' (page {page}/{max_pages if full_history else 1})")
 
-            # eBay.fr sold items URL with PAGE NUMBER PAGINATION
+            # eBay.fr sold items URL with PAGE NUMBER PAGINATION and optional DATE RANGE
             # _ipg: Items per page (60 is standard, eBay may ignore values > 60)
             # _pgn: Page number (1, 2, 3, etc.) - PROPER pagination!
+            # LH_SoldFrom/LH_SoldTo: Date range filtering (MM/DD/YYYY format)
             encoded_term = quote_plus(search_term)
             url = (
                 f"https://www.ebay.fr/sch/i.html?"
                 f"_nkw={encoded_term}&"
-                f"_dcat=139971&"
-                f"Mod%C3%A8le=Nintendo%20Game%20Boy%20Color&"
-                f"Plateforme=Nintendo%20Game%20Boy%20Color&"
+                f"_sacat=139971&"
+                f"_from=R40&"
+                f"_fsrp=1&"
+                f"_sop=10&"
+                f"_ipg=240&"
                 f"LH_Sold=1&"
-                f"LH_Complete=1&"
-                f"_sop=13&"
-                f"_ipg={items_per_page}&"
                 f"_pgn={page}"
             )
+            
+            # Add date range parameters if specified
+            if date_from and date_to:
+                date_from_str = date_from.strftime('%m/%d/%Y')
+                date_to_str = date_to.strftime('%m/%d/%Y')
+                url += f"&LH_SoldFrom={date_from_str}&LH_SoldTo={date_to_str}"
+                print(f"   📅 Date range: {date_from_str} to {date_to_str}")
             
             # Add referer to look more legit
             request_headers = self.headers.copy()
@@ -289,74 +297,9 @@ class EbayScraper:
         
         # Must mention game boy or gameboy
         if 'game boy' not in title_lower and 'gameboy' not in title_lower:
-            print(f"      ❌ REJECT (no gameboy): {title[:60]}")
+            print(f"      ⏭️  SKIP (not gameboy): {title[:60]}")
             return None
-        
-        # REJECT broken/defective consoles - Use precise phrases
-        broken_keywords = [
-            ' hs', 'h.s.', 'hors service', 'ne fonctionne', 'defectueux', 'défectueux',
-            'ne marche', 'broken', 'not working', 'for parts', 'pour pieces', 'pour pièces',
-            'pour piece', 'pour pièce', 'à réparer', 'a reparer',
-            'dead', 'mort', 'ne s\'allume', 'ne s allume',
-            'does not work', 'ne charge pas', 'pas testé', 'pas teste', 'untested',
-            'pour reparation', 'for repair', 'non fonctionnel', 'non testé',
-            'no sound', 'pas de son', 'sans son',  # No sound = broken
-            'no power', 'pas d\'image', 'no display'  # Other defects
-        ]
-        
-        # Check for broken/defective keywords
-        for keyword in broken_keywords:
-            if keyword in title_lower:
-                print(f"      ❌ REJECT (broken: '{keyword}'): {title[:60]}")
-                return None
-        
-        # REJECT parts and accessories - Use precise phrases only
-        parts_keywords = [
-            'boîte vide', 'boite vide',  # Empty box
-            'sans console',  # Box without console
-            'câble link', 'cable link', 'link cable',  # Link cable
-            'chargeur', 'adaptateur secteur',  # Charger (but allow "adaptateur" alone)
-            'kit condensateur', 'kit réparation', 'kit de réparation',  # Repair kits
-            'pièce détachée', 'piece detachee', 'pièces détachées',
-            'condensateur', 'capacitor',
-            'nappe', 'ribbon cable',
-            'carte mère', 'carte mere', 'motherboard', 'pcb',
-            'coque seule', 'coque neuve', 'shell only', 'housing only',  # Shell only
-            'cache pile', 'battery cover', 'couvercle pile',  # Battery covers
-            'vis seules', 'screw set',  # Screws only
-            'écran seul', 'screen only', 'lens only',  # Screen only
-            'boutons seuls', 'button set',  # Buttons only
-            'sticker seul', 'decal only',
-            'notice seule', 'manuel seul',  # Manual only
-            'cartouche seule',  # Cartridge only
-            'remplacement écran', 'replacement screen',
-            'rubber pad', 'pad contact', 'caoutchouc',  # Rubber contacts
-        ]
 
-        # Check for parts/accessories keywords
-        for keyword in parts_keywords:
-            if keyword in title_lower:
-                print(f"      ❌ REJECT (parts: '{keyword}'): {title[:60]}")
-                return None
-
-        # REJECT bundles - Smart detection of multiple consoles or games
-        bundle_patterns = [
-            r'lot de \d+',  # "lot de 3", "lot de 5"
-            r'\d+\s*consoles?',  # "3 consoles", "2 console"
-            r'\+ \d+\s*jeux',  # "+ 5 jeux", "+ 3 jeux"
-            r'avec \d+\s*jeux',  # "avec 5 jeux", "avec 3 jeux"
-            r'\+ \d+\s*games?',  # "+ 5 games", "+ 3 game"
-            r'with \d+\s*games?',  # "with 5 games"
-            r'\d+\s*games? included',  # "5 games included"
-            r'bundle.*jeux',  # "bundle 3 jeux"
-            r'bundle.*games?',  # "bundle 5 games"
-        ]
-
-        for pattern in bundle_patterns:
-            if re.search(pattern, title_lower):
-                print(f"      ❌ REJECT (bundle: matched '{pattern}'): {title[:60]}")
-                return None
-        
         print(f"      ✅ ACCEPT: {title[:80]}")
         
         # Price - Look for s-card__price or su-styled-text with EUR
@@ -424,9 +367,15 @@ class EbayScraper:
         date_sold = None
         has_vendu = False
 
-        for elem in item.find_all(['span', 'div']):
+        # Try multiple approaches to find sold date
+        # 1. Look in all text elements
+        for elem in item.find_all(['span', 'div', 'time']):
             text = elem.get_text(strip=True)
-            if 'Vendu le' in text or 'Vendu ' in text or 'Sold' in text:
+            # More comprehensive sold indicators
+            if any(indicator in text.lower() for indicator in [
+                'vendu le', 'vendu ', 'sold on', 'sold ', 'terminé le', 
+                'ended ', 'se termine le', 'fin le'
+            ]):
                 has_vendu = True
                 # Try to extract the date part - support multiple formats
 
@@ -444,6 +393,8 @@ class EbayScraper:
                     # Without accents
                     'janv': '01', 'fevr': '02', 'avr': '04', 'juil': '07',
                     'aout': '08', 'sept': '09', 'dec': '12',
+                    # Encoding-mangled versions (eBay encoding issues)
+                    'd�c': '12', 'f�vr': '02', 'ao�t': '08',
                     # Short forms
                     'jan': '01', 'fev': '02', 'mar': '03', 'avr': '04',
                     'jun': '06', 'jul': '07', 'aug': '08', 'sep': '09',
@@ -454,13 +405,38 @@ class EbayScraper:
                     'september': '09', 'october': '10', 'november': '11', 'december': '12',
                 }
 
-                # Try format: "18 déc. 2025" or "18 décembre 2025"
-                date_match = re.search(r'(\d{1,2})\s+([a-zéèêû]+)\.?\s+(\d{4})', text, re.IGNORECASE)
+                # Try format: "jeu. 18 déc., 22:04" or "18 déc. 2025"
+                # Pattern handles: "jeu. 18 déc., 22:04", "Vendu le  18 d�c. 2025", etc.
+                # First try with day-of-week and time: "jeu. 18 déc., 22:04"
+                date_match = re.search(r'(?:[a-z]+\.?\s+)?(\d{1,2})\s+([a-zéèêû�]+)\.?,?\s+(?:(\d{4})|(\d{1,2}:\d{2}))', text, re.IGNORECASE)
                 if date_match:
-                    day, month_str, year = date_match.groups()
+                    day, month_str, year, time = date_match.groups()
+                    # If no year found but time is present, use current year
+                    # But if the date is in the future, use previous year
+                    if not year and time:
+                        current_date = datetime.now()
+                        year = str(current_date.year)
+                        # If the parsed date would be in the future, use previous year
+                        month_num_int = int(months_fr.get(month_str.lower(), '01'))
+                        day_int = int(day)
+                        try:
+                            test_date = datetime(int(year), month_num_int, day_int)
+                            if test_date > current_date:
+                                year = str(current_date.year - 1)
+                        except ValueError:
+                            pass  # Keep current year if date is invalid
                     month_num = months_fr.get(month_str.lower())
-                    if month_num:
+                    if month_num and year:
                         date_sold = f"{year}-{month_num}-{day.zfill(2)}"
+                
+                # Fallback: Try format: "18 déc. 2025" - handle extra spaces and encoding issues
+                if not date_sold:
+                    date_match = re.search(r'(\d{1,2})\s+([a-zéèêû�]+)\.?\s+(\d{4})', text, re.IGNORECASE)
+                    if date_match:
+                        day, month_str, year = date_match.groups()
+                        month_num = months_fr.get(month_str.lower())
+                        if month_num:
+                            date_sold = f"{year}-{month_num}-{day.zfill(2)}"
 
                 # Try format: "18/12/2025" or "18-12-2025"
                 if not date_sold:
@@ -481,14 +457,10 @@ class EbayScraper:
                 if date_sold:
                     break
         
-        # TEMPORARY: Allow items without visible "Vendu le" text
-        # eBay HTML structure might not always show this reliably
-        if not has_vendu:
-            print(f"      ⚠️  NO SOLD DATE FOUND: {title[:60]}")
-            # Continue parsing instead of rejecting
-        
+        # If no sold date found, use default from _extract_sold_date (today's date)
         if not date_sold:
             date_sold = datetime.now().strftime("%Y-%m-%d")
+            print(f"      ⚠️  No sold date found, using today: {date_sold}")
         
         # Condition - Look for "Occasion", "Neuf", etc
         condition = self._extract_condition(item)
@@ -575,6 +547,59 @@ class EbayScraper:
         
         # Default
         return "Occasion"
+    
+    def scrape_recent_complete(self, search_term="game boy color"):
+        """
+        Scrape all sold listings from eBay's 90-day limit (approximately 285 total results)
+        Since eBay only shows 90 days of history, we'll get everything in one comprehensive search
+        
+        Args:
+            search_term: Search term to use (default: "game boy color")
+        
+        Returns:
+            List of all found listings from the past 90 days
+        """
+        from datetime import datetime, timedelta
+        
+        print(f"\n{'='*60}")
+        print(f"📊 Complete Recent Scraping: '{search_term}'")
+        print(f"📅 eBay's 90-day sold listings limit (~285 total results)")
+        print(f"{'='*60}")
+        
+        print(f"\n🔍 Searching all available sold listings...")
+        
+        try:
+            # Get ALL available sold listings (eBay's 90-day limit)
+            # Use full_history=True to paginate through all available pages
+            all_listings = self.search_sold_listings(
+                search_term=search_term,
+                max_results=240,  # Max items per page
+                full_history=True  # Get all pages
+            )
+            
+            print(f"✅ Found {len(all_listings)} total listings")
+            
+            # Remove duplicates by item_id
+            seen_ids = set()
+            unique_listings = []
+            for listing in all_listings:
+                item_id = listing.get('item_id')
+                if item_id and item_id not in seen_ids:
+                    seen_ids.add(item_id)
+                    unique_listings.append(listing)
+            
+            if len(unique_listings) != len(all_listings):
+                print(f"🔄 Removed {len(all_listings) - len(unique_listings)} duplicates")
+            
+            print(f"\n🎯 Complete scraping finished!")
+            print(f"   📊 Unique listings: {len(unique_listings)}")
+            print(f"   📈 Expected ~285 based on eBay search")
+            
+            return unique_listings
+            
+        except Exception as e:
+            print(f"❌ Error during complete scraping: {e}")
+            return []
     
     def scrape_variant(self, variant_key, variant_data):
         """
@@ -783,6 +808,153 @@ class EbayScraper:
         
         return results
     
+    def scrape_all_complete(self, search_term="game boy color"):
+        """
+        NEW APPROACH: Scrape ALL available sold listings (90-day eBay limit)
+        Much simpler since eBay only shows ~285 total results for Game Boy Color
+        
+        Args:
+            search_term: Generic search term to use (default: "game boy color")
+        
+        Returns:
+            Dictionary with all found listings organized by detected variants
+        """
+        print(f"\n{'='*60}")
+        print(f"📊 COMPLETE SCRAPING APPROACH")
+        print(f"🎯 Getting ALL sold '{search_term}' listings")
+        print(f"📅 eBay's 90-day limit (~285 total expected)")
+        print(f"{'='*60}")
+        
+        # Get all available listings
+        all_listings = self.scrape_recent_complete(search_term)
+        
+        if not all_listings:
+            print("❌ No listings found!")
+            return {}
+        
+        # Sort by date (newest first)  
+        all_listings.sort(key=lambda x: x['sold_date'], reverse=True)
+        
+        print(f"\n📋 Organizing {len(all_listings)} listings by detected variants...")
+        
+        # Load variant detection patterns from config
+        variants = self.config.get('variants', {})
+        
+        # Organize listings by variant
+        variant_results = {}
+        
+        # Initialize all known variants
+        for variant_key, variant_data in variants.items():
+            variant_results[variant_key] = {
+                'variant_key': variant_key,
+                'variant_name': variant_data['name'],
+                'description': variant_data['description'],
+                'stats': {
+                    'avg_price': 0,
+                    'min_price': 0,
+                    'max_price': 0,
+                    'listing_count': 0,
+                    'total_found': 0,
+                    'price_history': {}
+                },
+                'listings': []
+            }
+        
+        # Add "unmatched" category for items that don't match any variant
+        variant_results['unmatched'] = {
+            'variant_key': 'unmatched',
+            'variant_name': 'Unmatched Items',
+            'description': 'Items that could not be matched to a specific variant',
+            'stats': {
+                'avg_price': 0,
+                'min_price': 0,
+                'max_price': 0,
+                'listing_count': 0,
+                'total_found': 0,
+                'price_history': {}
+            },
+            'listings': []
+        }
+        
+        # Classify each listing by variant
+        for listing in all_listings:
+            title_lower = listing['title'].lower()
+            matched_variant = None
+            
+            # Try to match against each variant's search terms
+            for variant_key, variant_data in variants.items():
+                search_terms = variant_data.get('search_terms', [])
+                
+                # Check if any search term matches the title
+                for search_term in search_terms:
+                    # Extract color/variant name from search term
+                    search_lower = search_term.lower()
+                    
+                    # Simple keyword matching (can be enhanced later)
+                    if any(keyword in title_lower for keyword in search_lower.split() if len(keyword) > 3):
+                        matched_variant = variant_key
+                        break
+                
+                if matched_variant:
+                    break
+            
+            # Add to appropriate variant
+            target_variant = matched_variant or 'unmatched'
+            variant_results[target_variant]['listings'].append(listing)
+        
+        # Calculate statistics for each variant
+        for variant_key, variant_data in variant_results.items():
+            listings = variant_data['listings']
+            
+            if listings:
+                prices = [l['price'] for l in listings]
+                
+                # Remove outliers (±30% from median)
+                if len(prices) >= 5:
+                    median_price = sorted(prices)[len(prices) // 2]
+                    lower_bound = median_price * 0.7
+                    upper_bound = median_price * 1.3
+                    filtered_prices = [p for p in prices if lower_bound <= p <= upper_bound]
+                    if filtered_prices:
+                        prices = filtered_prices
+                
+                # Calculate price history by month
+                price_history = {}
+                for listing in listings:
+                    if listing['price'] in prices:
+                        month = listing['sold_date'][:7]  # "2024-12" from "2024-12-15"
+                        if month not in price_history:
+                            price_history[month] = []
+                        price_history[month].append(listing['price'])
+                
+                # Calculate monthly averages
+                monthly_avg = {}
+                for month, month_prices in sorted(price_history.items()):
+                    monthly_avg[month] = int(sum(month_prices) / len(month_prices))
+                
+                variant_data['stats'] = {
+                    'avg_price': int(sum(prices) / len(prices)),
+                    'min_price': int(min(prices)),
+                    'max_price': int(max(prices)),
+                    'listing_count': len(prices),
+                    'total_found': len(listings),
+                    'price_history': monthly_avg
+                }
+                
+                print(f"   {variant_key}: {len(listings)} listings, avg {variant_data['stats']['avg_price']}€")
+        
+        # Remove empty variants
+        variant_results = {k: v for k, v in variant_results.items() if v['listings']}
+
+        print(f"\n✅ Weekly scraping complete!")
+        print(f"   📊 Variants found: {len(variant_results)}")
+        print(f"   📈 Total listings organized: {sum(len(v['listings']) for v in variant_results.values())}")
+
+        # Save results to file
+        self._save_progress(variant_results)
+
+        return variant_results
+    
     def _save_progress(self, results):
         """Save current results to file"""
         output_file = 'scraped_data.json'
@@ -807,16 +979,31 @@ def main():
     
     try:
         scraper = EbayScraper('config.json')
-        results = scraper.scrape_all_variants()
+        
+        print("\n🚀 SCRAPING STRATEGY:")
+        print("   📊 Getting ALL available sold listings (eBay's 90-day limit)")
+        print("   🎯 ~285 total Game Boy Color results expected")
+        print("   ✅ Complete data set, better date accuracy")
+        print()
+        
+        # Use the new complete approach
+        results = scraper.scrape_all_complete(search_term="game boy color")
         
         print("\n✅ Scraping completed successfully!")
         print(f"📁 Data saved to: scraped_data.json")
         print(f"\n📊 Summary:")
         
         total_listings = sum(r['stats']['listing_count'] for r in results.values())
-        print(f"   • Variants scraped: {len(results)}")
+        print(f"   • Variants found: {len(results)}")
         print(f"   • Total listings: {total_listings}")
         print(f"   • Average per variant: {total_listings // len(results) if results else 0}")
+        
+        # Show breakdown by variant
+        print(f"\n📋 Breakdown by variant:")
+        for variant_key, data in results.items():
+            count = data['stats']['listing_count']
+            avg_price = data['stats']['avg_price']
+            print(f"   • {variant_key}: {count} listings, avg {avg_price}€")
         
         print("\n🎯 Next step: Run update_site.py to generate HTML pages")
         

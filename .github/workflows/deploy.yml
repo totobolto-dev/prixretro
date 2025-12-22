@@ -1,0 +1,37 @@
+name: Deploy to OVH
+
+on:
+  push:
+    branches: [ claude/prixretro-passive-income-d5mpS ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Prepare deployment files
+      run: |
+        mkdir -p deploy
+        cp *.html deploy/ 2>/dev/null || true
+        cp scraped_data_clean.json deploy/ 2>/dev/null || true
+        rm -f deploy/template-v3.html deploy/index_archive.html 2>/dev/null || true
+        ls -la deploy/
+        
+    - name: Deploy to OVH via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./deploy/
+        server-dir: /prixretro/
+        log-level: verbose
+        exclude: |
+          .git*
+          .github/
+          __pycache__/
+          *.py
+          *.md

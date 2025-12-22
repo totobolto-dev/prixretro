@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prix et historique des ventes du Game Boy Color Rouge. 8 ventes analysées. Prix moyen: 180€. Tracker retrogaming."
+    <meta name="keywords" content="Game Boy Color Rouge, prix, vente, occasion, retrogaming, Nintendo, console, collection, nintendo, sega, sony">
+    <meta name="author" content="PrixRetro - Prix du Rétrogaming">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Game Boy Color Rouge - Prix & Historique | PrixRetro">
+    <meta property="og:description" content="Prix et historique des ventes du Game Boy Color Rouge. 8 ventes analysées. Prix moyen: 180€. Tracker de prix retrogaming.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.prixretro.com/game-boy-color-rouge.html">
+    <meta property="og:site_name" content="PrixRetro - Tracker Prix Retrogaming">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Game Boy Color Rouge - Prix & Historique | PrixRetro">
+    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Rouge. 8 ventes analysées. Prix moyen: 180€"
+    
+    <title>Game Boy Color Rouge - Prix & Historique | PrixRetro</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QPNVF0BRW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-4QPNVF0BRW');
+        
+        // Track eBay affiliate clicks
+        function trackEbayClick(variant) {
+            gtag('event', 'click', {
+                'event_category': 'affiliate',
+                'event_label': 'ebay_' + variant,
+                'value': 1
+            });
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-card: #242b3d;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7b61ff;
+            --text-primary: #e4e6eb;
+            --text-secondary: #a0a3a8;
+            --success: #00ff88;
+            --warning: #ffb800;
+            --border: #2a3142;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 2.5rem;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 2rem 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent-primary);
+        }
+
+        .breadcrumb span {
+            color: var(--text-secondary);
+            margin: 0 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            padding: 3rem 0;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stat-value.success {
+            color: var(--success);
+        }
+
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            padding: 2.5rem 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            padding: 1.25rem 3.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.15rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(0, 217, 255, 0.5);
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 3rem 0;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Price Graph */
+        .graph-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .graph-wrapper {
+            position: relative;
+            height: 400px;
+            margin-top: 1.5rem;
+        }
+
+        .no-graph {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-graph h3 {
+            color: var(--warning);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .info-card h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .info-card ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .info-card li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Listings Section */
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .listings-count {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        
+        /* Compact Listings Display */
+        .listings-table {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .listings-header-row {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .listing-row {
+            padding: 0.75rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.2s;
+        }
+        
+        .listing-row:hover {
+            background: rgba(0, 217, 255, 0.05);
+        }
+        
+        .listing-row:last-child {
+            border-bottom: none;
+        }
+        
+        .listing-title-compact {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+            min-width: 0; /* Allow text to truncate */
+        }
+        
+        .listing-price-compact {
+            font-weight: 600;
+            color: var(--success);
+            font-size: 1rem;
+            text-align: right;
+            min-width: 60px;
+        }
+        
+        .listing-date-compact {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-align: right;
+            min-width: 80px;
+        }
+        
+        .listing-condition-compact {
+            background: var(--bg-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            .listings-header-row,
+            .listing-row {
+                grid-template-columns: 1fr auto;
+                gap: 0.5rem;
+            }
+            
+            .listing-date-compact,
+            .listing-condition-compact {
+                display: none;
+            }
+            
+            .listings-header-row .listing-date-compact,
+            .listings-header-row .listing-condition-compact {
+                display: none;
+            }
+        }
+    
+        
+        .listings-grid-old {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .listing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+
+        .listing-title {
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        .listing-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .listing-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .listing-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .listing-condition {
+            display: inline-block;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* No listings */
+        .no-listings {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .no-listings h3 {
+            color: var(--warning);
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+        }
+
+        .no-listings p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 0.75rem;
+        }
+
+        /* Related Variants */
+        .related-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .related-link {
+            display: block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .related-link:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent-secondary);
+        }
+
+        footer p {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .graph-wrapper {
+                height: 300px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            
+        /* Compact Listings Display */
+        .listings-table {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .listings-header-row {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .listing-row {
+            padding: 0.75rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.2s;
+        }
+        
+        .listing-row:hover {
+            background: rgba(0, 217, 255, 0.05);
+        }
+        
+        .listing-row:last-child {
+            border-bottom: none;
+        }
+        
+        .listing-title-compact {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+            min-width: 0; /* Allow text to truncate */
+        }
+        
+        .listing-price-compact {
+            font-weight: 600;
+            color: var(--success);
+            font-size: 1rem;
+            text-align: right;
+            min-width: 60px;
+        }
+        
+        .listing-date-compact {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-align: right;
+            min-width: 80px;
+        }
+        
+        .listing-condition-compact {
+            background: var(--bg-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            .listings-header-row,
+            .listing-row {
+                grid-template-columns: 1fr auto;
+                gap: 0.5rem;
+            }
+            
+            .listing-date-compact,
+            .listing-condition-compact {
+                display: none;
+            }
+            
+            .listings-header-row .listing-date-compact,
+            .listings-header-row .listing-condition-compact {
+                display: none;
+            }
+        }
+    
+        
+        .listings-grid-old {
+                grid-template-columns: 1fr;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav a {
+                margin-left: 1.5rem;
+            }
+        }
+    </style>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Game Boy Color Rouge",
+        "description": "Le modèle rouge classique, l'une des couleurs originales du Game Boy Color lancées en Europe.",
+        "category": "Console de jeu portable",
+        "brand": {
+            "@type": "Brand",
+            "name": "Nintendo"
+        },
+        "offers": {
+            "@type": "AggregateOffer",
+            "priceCurrency": "EUR",
+            "lowPrice": "58.9",
+            "highPrice": "949.9",
+            "offerCount": "8",
+            "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.5",
+            "reviewCount": "1000"
+        }
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">PrixRetro</a>
+                <nav>
+                    <a href="/">Accueil</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/">Accueil</a>
+            <span>›</span>
+            <a href="/">Game Boy Color</a>
+            <span>›</span>
+            <span>Rouge</span>
+        </div>
+
+        <div class="hero">
+            <h1>Game Boy Color Rouge</h1>
+            <p class="hero-description">Le modèle rouge classique, l'une des couleurs originales du Game Boy Color lancées en Europe.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Prix Moyen</div>
+                    <div class="stat-value success">180€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Min</div>
+                    <div class="stat-value">58.9€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Max</div>
+                    <div class="stat-value">949.9€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ventes Analysées</div>
+                    <div class="stat-value">8</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <a href="https://www.ebay.fr/sch/i.html?_nkw=game+boy+color+Rouge&_dcat=139971&Mod%C3%A8le=Nintendo%20Game%20Boy%20Color&Plateforme=Nintendo%20Game%20Boy%20Color&LH_ItemCondition=3000&mkcid=1&mkrid=709-53476-19255-0&campid=5339134703" class="cta-button" target="_blank" rel="nofollow noopener" onclick="trackEbayClick('rouge')">
+                🎮 Voir les offres actuelles sur eBay
+            </a>
+        </div>
+
+        <div class="content-section">
+            <h2>📈 Évolution des prix</h2>
+            <div class="graph-container">
+                
+                <div class="no-graph">
+                    <h3>⚠️ Données insuffisantes</h3>
+                    <p>Pas assez de données historiques pour afficher un graphique d'évolution des prix.</p>
+                    <p>Au moins 2 mois de données sont nécessaires.</p>
+                </div>
+            
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>💡 Comment utiliser ces données</h3>
+                <p>Les prix affichés sont basés sur les ventes réelles terminées sur eBay.fr. Utilisez cette information pour :</p>
+                <ul>
+                    <li>Évaluer le prix juste d'une console</li>
+                    <li>Négocier un achat en connaissance de cause</li>
+                    <li>Déterminer le bon moment pour acheter</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3>⚠️ Points d'attention</h3>
+                <p>Le prix peut varier selon :</p>
+                <ul>
+                    <li>L'état de la console (occasion, très bon état, neuf)</li>
+                    <li>La présence de la boîte et des accessoires</li>
+                    <li>L'état de l'écran (rayures, pixels morts)</li>
+                    <li>Le fonctionnement (son, boutons, etc.)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="listings-header">
+                <h2>📊 Historique des ventes</h2>
+                <span class="listings-count">8 ventes trouvées</span>
+            </div>
+
+            <div class="listings-table">
+                <div class="listings-header-row">
+                    <div>Article vendu</div>
+                    <div>Prix</div>
+                    <div class="listing-date-compact">Date</div>
+                    <div class="listing-condition-compact">État</div>
+                </div>
+                
+                
+                <div class="listing-card">
+                    <div class="listing-title">Console Game boy color rouge</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">59€</span>
+                        <span class="listing-date">17/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Rose</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">02/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">console Game Boy Color CGB-001 Titeuf Pokémon Nintendo retrogaming handheld game</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">61€</span>
+                        <span class="listing-date">24/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Nintendo Game Boy  Color rouge model N° CGB-001</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">23/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Game Boy Color Rouge En Super État</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">75€</span>
+                        <span class="listing-date">05/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Gameboy color Sous Blister Rigide</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">950€</span>
+                        <span class="listing-date">23/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Neuf</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Lot Console Nintendo Game Boy Color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">86€</span>
+                        <span class="listing-date">20/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo / Game Boy Color / Rouge -Rosé / Bon État</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">70€</span>
+                        <span class="listing-date">19/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+            </div>
+    
+        </div>
+
+        <div class="related-section">
+            <h2>🎨 Autres variantes Game Boy Color</h2>
+            <div class="related-grid">
+                <a href="/game-boy-color-atomic-purple.html" class="related-link">Atomic-Purple</a>
+                    <a href="/game-boy-color-vert.html" class="related-link">Vert</a>
+                    <a href="/game-boy-color-violet.html" class="related-link">Violet</a>
+                    <a href="/game-boy-color-bleu.html" class="related-link">Bleu</a>
+                    <a href="/game-boy-color-jaune.html" class="related-link">Jaune</a>
+                    <a href="/game-boy-color-pokemon-center-3rd-anniversary.html" class="related-link">Pokemon Center 3Rd Anniversary</a>
+                    <a href="/game-boy-color-pokemon-special-limited-edition.html" class="related-link">Pokemon Special Limited Edition</a>
+                    <a href="/game-boy-color-pokemon-special-edition.html" class="related-link">Pokemon Special Edition</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PrixRetro - Prix des consoles rétro basés sur les ventes réelles eBay</p>
+            <p>
+                <a href="/mentions-legales.html">Mentions légales</a> • 
+                <a href="/contact.html">Contact</a>
+            </p>
+            <p style="margin-top: 1.5rem; font-size: 0.85rem;">
+                Les prix affichés sont basés sur les ventes terminées sur eBay.fr.
+                PrixRetro n'est pas responsable des prix pratiqués par les vendeurs.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Price history graph data injected by Python
+        
+    </script>
+</body>
+</html>
