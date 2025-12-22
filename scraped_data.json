@@ -3,11 +3,17 @@
     "variant_key": "atomic-purple",
     "variant_name": "Atomic-Purple",
     "stats": {
-      "avg_price": 81,
+      "avg_price": 76,
       "min_price": 50,
       "max_price": 209.9,
       "listing_count": 19,
-      "total_found": 19
+      "total_found": 19,
+      "price_history": {
+        "2025-12": 93,
+        "2025-11": 64,
+        "2025-10": 61,
+        "2025-09": 132
+      }
     },
     "listings": [
       {
@@ -169,11 +175,17 @@
     "variant_key": "vert",
     "variant_name": "Vert",
     "stats": {
-      "avg_price": 81,
+      "avg_price": 74,
       "min_price": 59.9,
       "max_price": 151,
       "listing_count": 8,
-      "total_found": 8
+      "total_found": 8,
+      "price_history": {
+        "2025-12": 69,
+        "2025-11": 79,
+        "2025-10": 79,
+        "2025-09": 109
+      }
     },
     "listings": [
       {
@@ -247,11 +259,17 @@
     "variant_key": "violet",
     "variant_name": "Violet",
     "stats": {
-      "avg_price": 73,
+      "avg_price": 65,
       "min_price": 37.5,
       "max_price": 229.9,
       "listing_count": 18,
-      "total_found": 18
+      "total_found": 18,
+      "price_history": {
+        "2025-12": 105,
+        "2025-11": 71,
+        "2025-10": 52,
+        "2025-09": 59
+      }
     },
     "listings": [
       {
@@ -405,11 +423,16 @@
     "variant_key": "rouge",
     "variant_name": "Rouge",
     "stats": {
-      "avg_price": 180,
+      "avg_price": 72,
       "min_price": 58.9,
       "max_price": 949.9,
       "listing_count": 8,
-      "total_found": 8
+      "total_found": 8,
+      "price_history": {
+        "2025-12": 64,
+        "2025-11": 69,
+        "2025-10": 369
+      }
     },
     "listings": [
       {
@@ -483,11 +506,17 @@
     "variant_key": "bleu",
     "variant_name": "Bleu",
     "stats": {
-      "avg_price": 91,
+      "avg_price": 85,
       "min_price": 33,
       "max_price": 220,
       "listing_count": 13,
-      "total_found": 13
+      "total_found": 13,
+      "price_history": {
+        "2025-12": 84,
+        "2025-11": 104,
+        "2025-10": 89,
+        "2025-09": 85
+      }
     },
     "listings": [
       {
@@ -601,11 +630,16 @@
     "variant_key": "jaune",
     "variant_name": "Jaune",
     "stats": {
-      "avg_price": 84,
+      "avg_price": 65,
       "min_price": 44.99,
       "max_price": 269,
       "listing_count": 10,
-      "total_found": 10
+      "total_found": 10,
+      "price_history": {
+        "2025-12": 71,
+        "2025-11": 58,
+        "2025-10": 174
+      }
     },
     "listings": [
       {
@@ -693,13 +727,16 @@
   },
   "pokemon-center-3rd-anniversary": {
     "variant_key": "pokemon-center-3rd-anniversary",
-    "variant_name": "Pokemon Center 3Rd Anniversary",
+    "variant_name": "Pokemon-Center-3Rd-Anniversary",
     "stats": {
       "avg_price": 280,
       "min_price": 280,
       "max_price": 280,
       "listing_count": 1,
-      "total_found": 1
+      "total_found": 1,
+      "price_history": {
+        "2025-12": 280
+      }
     },
     "listings": [
       {
@@ -715,13 +752,18 @@
   },
   "pokemon-special-limited-edition": {
     "variant_key": "pokemon-special-limited-edition",
-    "variant_name": "Pokemon Special Limited Edition",
+    "variant_name": "Pokemon-Special-Limited-Edition",
     "stats": {
-      "avg_price": 101,
+      "avg_price": 102,
       "min_price": 90,
       "max_price": 110,
       "listing_count": 7,
-      "total_found": 7
+      "total_found": 7,
+      "price_history": {
+        "2025-12": 90,
+        "2025-11": 104,
+        "2025-10": 100
+      }
     },
     "listings": [
       {
@@ -785,13 +827,18 @@
   },
   "pokemon-special-edition": {
     "variant_key": "pokemon-special-edition",
-    "variant_name": "Pokemon Special Edition",
+    "variant_name": "Pokemon-Special-Edition",
     "stats": {
-      "avg_price": 174,
+      "avg_price": 129,
       "min_price": 89,
       "max_price": 480,
       "listing_count": 7,
-      "total_found": 7
+      "total_found": 7,
+      "price_history": {
+        "2025-11": 197,
+        "2025-10": 120,
+        "2025-09": 111
+      }
     },
     "listings": [
       {

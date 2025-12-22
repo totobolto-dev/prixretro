@@ -106,9 +106,34 @@ def merge_sorted_data(sorted_file='sorted_items.json'):
     for variant_key, listings in items_by_variant.items():
         # Calculate stats
         prices = [l['price'] for l in listings if l['price'] > 0]
-        avg_price = round(sum(prices) / len(prices)) if prices else 0
+
+        # Use trimmed mean - exclude top 10% and bottom 10% to remove outliers
+        if len(prices) >= 5:
+            sorted_prices = sorted(prices)
+            trim_count = max(1, len(sorted_prices) // 10)  # 10% on each side
+            trimmed_prices = sorted_prices[trim_count:-trim_count]
+            avg_price = round(sum(trimmed_prices) / len(trimmed_prices))
+        else:
+            # For small datasets, use regular mean
+            avg_price = round(sum(prices) / len(prices)) if prices else 0
+
         min_price = min(prices) if prices else 0
         max_price = max(prices) if prices else 0
+
+        # Calculate price history by month (YYYY-MM)
+        price_by_month = {}
+        for listing in listings:
+            if listing['price'] > 0 and listing['sold_date']:
+                # Extract YYYY-MM from sold_date (format: YYYY-MM-DD)
+                month_key = listing['sold_date'][:7]  # "2024-12-22" -> "2024-12"
+                if month_key not in price_by_month:
+                    price_by_month[month_key] = []
+                price_by_month[month_key].append(listing['price'])
+
+        # Calculate average price per month
+        price_history = {}
+        for month, month_prices in price_by_month.items():
+            price_history[month] = round(sum(month_prices) / len(month_prices))
 
         # Get variant name from config
         variant_name = config['variants'].get(variant_key, {}).get('variant_name', variant_key.title())
@@ -121,7 +146,8 @@ def merge_sorted_data(sorted_file='sorted_items.json'):
                 'min_price': min_price,
                 'max_price': max_price,
                 'listing_count': len(listings),
-                'total_found': len(listings)
+                'total_found': len(listings),
+                'price_history': price_history
             },
             'listings': sorted(listings, key=lambda x: x['sold_date'], reverse=True)
         }

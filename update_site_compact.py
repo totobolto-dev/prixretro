@@ -46,43 +46,45 @@ def load_template():
         return f.read()
 
 def generate_price_graph(price_history):
-    """Generate Chart.js price history graph HTML and JS"""
-    
-    if not price_history or len(price_history) < 2:
-        # Not enough data for a meaningful graph
+    """Generate Chart.js price history graph HTML and JS - compact style like pricecharting.com"""
+
+    if not price_history or len(price_history) < 1:
+        # No data at all
         return {
             'html': '''
                 <div class="no-graph">
-                    <h3>⚠️ Données insuffisantes</h3>
-                    <p>Pas assez de données historiques pour afficher un graphique d'évolution des prix.</p>
-                    <p>Au moins 2 mois de données sont nécessaires.</p>
+                    <p style="color: var(--text-secondary); text-align: center; padding: 1rem;">
+                        Pas assez de données historiques
+                    </p>
                 </div>
             ''',
             'js': ''
         }
-    
+
     # Prepare data for Chart.js - sort months chronologically
     months = sorted(price_history.keys())  # Sort YYYY-MM format chronologically
     prices = [price_history[month] for month in months]  # Get prices in sorted order
-    
+
     # Format months for display (YYYY-MM -> Mois Année)
     month_names_fr = {
         '01': 'Jan', '02': 'Fév', '03': 'Mar', '04': 'Avr',
         '05': 'Mai', '06': 'Juin', '07': 'Juil', '08': 'Août',
         '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Déc'
     }
-    
+
     formatted_labels = []
     for month in months:
         year, month_num = month.split('-')
-        formatted_labels.append(f"{month_names_fr.get(month_num, month_num)} {year}")
-    
+        formatted_labels.append(f"{month_names_fr.get(month_num, month_num)} '{year[-2:]}")  # "Jan '24" style
+
+    # Compact HTML - smaller container like pricecharting.com
     html = '''
         <div class="graph-wrapper">
             <canvas id="priceChart"></canvas>
         </div>
     '''
-    
+
+    # Compact chart settings - reduced point sizes, tighter layout
     js = f'''
         const ctx = document.getElementById('priceChart').getContext('2d');
         const priceChart = new Chart(ctx, {{
@@ -90,23 +92,32 @@ def generate_price_graph(price_history):
             data: {{
                 labels: {formatted_labels},
                 datasets: [{{
-                    label: 'Prix moyen (€)',
+                    label: 'Prix moyen',
                     data: {prices},
                     borderColor: '#00d9ff',
-                    backgroundColor: 'rgba(0, 217, 255, 0.1)',
-                    borderWidth: 3,
+                    backgroundColor: 'rgba(0, 217, 255, 0.05)',
+                    borderWidth: 2,
                     fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
+                    tension: 0.1,
+                    pointRadius: 3,
                     pointBackgroundColor: '#00d9ff',
                     pointBorderColor: '#0f1419',
-                    pointBorderWidth: 2,
-                    pointHoverRadius: 7
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBorderWidth: 2
                 }}]
             }},
             options: {{
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: {{
+                    padding: {{
+                        top: 10,
+                        right: 10,
+                        bottom: 0,
+                        left: 0
+                    }}
+                }},
                 plugins: {{
                     legend: {{
                         display: false
@@ -115,10 +126,17 @@ def generate_price_graph(price_history):
                         backgroundColor: '#1a1f2e',
                         titleColor: '#e4e6eb',
                         bodyColor: '#e4e6eb',
-                        borderColor: '#2a3142',
+                        borderColor: '#00d9ff',
                         borderWidth: 1,
-                        padding: 12,
+                        padding: 8,
                         displayColors: false,
+                        titleFont: {{
+                            size: 11
+                        }},
+                        bodyFont: {{
+                            size: 13,
+                            weight: 'bold'
+                        }},
                         callbacks: {{
                             label: function(context) {{
                                 return context.parsed.y + '€';
@@ -129,29 +147,34 @@ def generate_price_graph(price_history):
                 scales: {{
                     x: {{
                         grid: {{
-                            color: '#2a3142',
+                            display: false,
                             drawBorder: false
                         }},
                         ticks: {{
                             color: '#a0a3a8',
                             font: {{
-                                size: 12
-                            }}
+                                size: 10
+                            }},
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 8
                         }}
                     }},
                     y: {{
                         grid: {{
                             color: '#2a3142',
-                            drawBorder: false
+                            drawBorder: false,
+                            lineWidth: 1
                         }},
                         ticks: {{
                             color: '#a0a3a8',
                             font: {{
-                                size: 12
+                                size: 10
                             }},
                             callback: function(value) {{
                                 return value + '€';
-                            }}
+                            }},
+                            maxTicksLimit: 5
                         }},
                         beginAtZero: false
                     }}
@@ -159,7 +182,7 @@ def generate_price_graph(price_history):
             }}
         }});
     '''
-    
+
     return {'html': html, 'js': js}
 
 

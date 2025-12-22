@@ -82,6 +82,24 @@
         "game boy color pokemon special edition",
         "gameboy color pokemon"
       ]
+    },
+    "transparent": {
+      "variant_name": "Transparent",
+      "search_terms": [
+        "game boy color transparent"
+      ],
+      "keywords": [
+        "transparent"
+      ]
+    },
+    "bleu-transparent": {
+      "variant_name": "Bleu Transparent",
+      "search_terms": [
+        "game boy color bleu-transparent"
+      ],
+      "keywords": [
+        "bleu-transparent"
+      ]
     }
   }
 }
