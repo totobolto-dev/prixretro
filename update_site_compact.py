@@ -260,10 +260,9 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
             related_variants.append(
                 f'<a href="/game-boy-color-{key}.html" class="related-link">{name}</a>'
             )
-    
+
     related_html = "\n                    ".join(related_variants[:8])
-    
-    # Replace placeholders in template
+
     # Replace placeholders (Laravel-ready structure)
     product_name = f"Game Boy Color {variant_name}"
     html = template.replace('{VARIANT_NAME}', variant_name)
@@ -296,22 +295,89 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
 
 def generate_index_page(all_variants, output_dir='output'):
     """Generate homepage with all variants"""
-    
-    # Use the existing index.html as template
-    index_template_path = '../prixretro-static/index.html'
-    if not os.path.exists(index_template_path):
-        index_template_path = 'index.html'
-    
-    # For now, just copy the existing index
-    # In the future, could update with real stats
+
+    # Load config for descriptions
+    with open('config.json', 'r', encoding='utf-8') as f:
+        config = json.load(f)
+
+    # Generate variant cards dynamically
+    variant_cards = []
+    for variant_key, variant_data in all_variants.items():
+        variant_name = variant_data.get('variant_name', variant_key.title())
+
+        # Get description from config or variant_data
+        description = variant_data.get('description', '')
+        if not description and variant_key in config['variants']:
+            description = config['variants'][variant_key].get('description', '')
+
+        # Shorten description for homepage
+        short_desc = description.split('.')[0] if description else f"Édition {variant_name}"
+
+        variant_card = f'''
+                <a href="/game-boy-color-{variant_key}.html" class="variant-card">
+                    <div class="variant-name">{variant_name}</div>
+                    <div class="variant-description">{short_desc}</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">{variant_data['stats']['listing_count']} ventes</span>
+                        <span class="stat-item">~{variant_data['stats']['avg_price']}€</span>
+                    </div>
+                </a>'''
+        variant_cards.append(variant_card)
+
+    variant_cards_html = '\n'.join(variant_cards)
+
+    # Use template if exists, otherwise create minimal one
+    index_template_path = 'index.html'
     if os.path.exists(index_template_path):
         with open(index_template_path, 'r', encoding='utf-8') as f:
             index_html = f.read()
-        
+
+        # Replace variant cards section
+        import re
+        # Find the variants section and replace it - match from opening tag to closing tag
+        # Use a more specific pattern that matches the complete variants-grid block
+        pattern = r'(<div class="variants-grid">\s*)((?:.*?)</div>)(\s*</div>)'
+
+        # Find the position manually since regex is tricky with nested divs
+        start_marker = '<div class="variants-grid">'
+        start_pos = index_html.find(start_marker)
+
+        if start_pos != -1:
+            # Find the corresponding closing </div> for variants-grid
+            # We need to find the closing tag after all variant cards
+            # Look for </div> followed by </div> (variants-grid close + variants-section close)
+            search_start = start_pos + len(start_marker)
+            depth = 1
+            pos = search_start
+
+            while depth > 0 and pos < len(index_html):
+                if index_html[pos:pos+6] == '<div c' or index_html[pos:pos+5] == '<div>':
+                    # Opening tag found
+                    depth += 1
+                    pos += 1
+                elif index_html[pos:pos+6] == '</div>':
+                    # Closing tag found
+                    depth -= 1
+                    if depth == 0:
+                        # Found the matching closing tag
+                        end_pos = pos
+                        break
+                    pos += 6
+                else:
+                    pos += 1
+
+            if depth == 0:
+                # Successfully found matching tags
+                before = index_html[:start_pos + len(start_marker)]
+                after = index_html[end_pos:]
+                index_html = before + '\n' + variant_cards_html + '\n            ' + after
+
         with open(os.path.join(output_dir, 'index.html'), 'w', encoding='utf-8') as f:
             f.write(index_html)
-        
+
         print("  📄 Generated: index.html")
+    else:
+        print("  ⚠️  index.html template not found, skipping homepage")
 
 def generate_all_pages():
     """Generate all HTML pages from scraped data"""
