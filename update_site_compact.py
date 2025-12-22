@@ -502,13 +502,25 @@ def generate_all_pages():
     htaccess_path = '../prixretro-static/.htaccess'
     if not os.path.exists(htaccess_path):
         htaccess_path = '.htaccess'
-    
+
     if os.path.exists(htaccess_path):
         with open(htaccess_path, 'r', encoding='utf-8') as f:
             htaccess = f.read()
         with open(os.path.join(output_dir, '.htaccess'), 'w', encoding='utf-8') as f:
             f.write(htaccess)
         print("  ✅ Copied .htaccess")
+
+    # Copy CSS file
+    print(f"\n📄 Copying styles.css...")
+    css_path = 'styles.css'
+    if os.path.exists(css_path):
+        with open(css_path, 'r', encoding='utf-8') as f:
+            css_content = f.read()
+        with open(os.path.join(output_dir, 'styles.css'), 'w', encoding='utf-8') as f:
+            f.write(css_content)
+        print("  ✅ Copied styles.css")
+    else:
+        print("  ⚠️  styles.css not found!")
     
     # Summary
     print(f"\n{'='*60}")
