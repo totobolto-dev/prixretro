@@ -116,8 +116,8 @@
 
         /* Breadcrumb */
         .breadcrumb {
-            padding: 2rem 0 1rem;
-            font-size: 0.9rem;
+            padding: 3rem 0 2rem;
+            font-size: 0.95rem;
         }
 
         .breadcrumb a {
@@ -132,20 +132,20 @@
 
         .breadcrumb span {
             color: var(--text-secondary);
-            margin: 0 0.5rem;
+            margin: 0 0.75rem;
         }
 
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
-            padding: 3rem 0;
+            padding: 4.5rem 3rem;
             border-radius: 16px;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         h1 {
-            font-size: 2.75rem;
-            margin-bottom: 1rem;
+            font-size: 3.25rem;
+            margin-bottom: 1.5rem;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -154,25 +154,25 @@
 
         .hero-description {
             color: var(--text-secondary);
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             max-width: 800px;
-            margin-bottom: 2.5rem;
-            line-height: 1.7;
+            margin-bottom: 3rem;
+            line-height: 1.8;
         }
 
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.25rem;
-            margin-top: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
 
         .stat-card {
             background: var(--bg-primary);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.75rem;
+            padding: 2.5rem;
             text-align: center;
             transition: border-color 0.2s;
         }
@@ -183,15 +183,15 @@
 
         .stat-label {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             font-weight: 600;
         }
 
         .stat-value {
-            font-size: 2.25rem;
+            font-size: 2.75rem;
             font-weight: 700;
             color: var(--accent-primary);
         }
@@ -202,8 +202,8 @@
 
         .stat-note {
             color: var(--text-secondary);
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
             opacity: 0.7;
         }
 
@@ -256,8 +256,9 @@
 
         .graph-wrapper {
             position: relative;
-            height: 220px;
-            margin-top: 1.5rem;
+            height: 280px;
+            margin-top: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .no-graph {
@@ -420,52 +421,57 @@
         .listing-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            transition: transform 0.15s, border-color 0.15s;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
 
         .listing-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px);
             border-color: var(--accent-primary);
+            box-shadow: 0 8px 24px rgba(0, 217, 255, 0.15);
         }
 
         .listing-title {
-            font-size: 0.9rem;
-            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
             color: var(--text-primary);
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .listing-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .listing-price {
-            font-size: 1.3rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--success);
         }
 
         .listing-date {
             color: var(--text-secondary);
-            font-size: 0.75rem;
+            font-size: 0.85rem;
         }
 
         .listing-condition {
             display: inline-block;
             background: var(--bg-secondary);
             color: var(--text-secondary);
-            padding: 0.25rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
         }
 
         /* No listings */
@@ -795,68 +801,68 @@
                 </div>
                 
                 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/146860353271" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Console Nintendo Gameboy Color GBC Pokémon</div>
                     <div class="listing-meta">
                         <span class="listing-price">90€</span>
                         <span class="listing-date">04/12/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/127522030313" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo Game boy color édition pokemon Pikachu gameboy GBC</div>
                     <div class="listing-meta">
                         <span class="listing-price">110€</span>
                         <span class="listing-date">30/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/197838514503" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo Gameboy Color Original - Pokemon</div>
                     <div class="listing-meta">
                         <span class="listing-price">100€</span>
                         <span class="listing-date">27/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/376710796402" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo Game boy color édition pokemon Center Pikachu gameboy GBC parfait état!</div>
                     <div class="listing-meta">
                         <span class="listing-price">100€</span>
                         <span class="listing-date">19/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/127451700691" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo Game boy color édition pokemon Pikachu gameboy GBC</div>
                     <div class="listing-meta">
                         <span class="listing-price">110€</span>
                         <span class="listing-date">11/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/197812322825" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo Gameboy Color Original - Pokemon</div>
                     <div class="listing-meta">
                         <span class="listing-price">100€</span>
                         <span class="listing-date">07/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/197780124346" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo Gameboy Color Original - Pokemon</div>
                     <div class="listing-meta">
                         <span class="listing-price">100€</span>
                         <span class="listing-date">19/10/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
             </div>
     
         </div>
@@ -894,35 +900,53 @@
         // Price history graph data injected by Python
         
         const ctx = document.getElementById('priceChart').getContext('2d');
+        const chartData = {
+            labels: ["19 Oct", "07 Nov", "11 Nov", "19 Nov", "27 Nov", "30 Nov", "04 D\u00e9c"],
+            prices: [99.9, 99.9, 110, 99.9, 99.9, 110, 90],
+            urls: ["https://www.ebay.fr/itm/197780124346", "https://www.ebay.fr/itm/197812322825", "https://www.ebay.fr/itm/127451700691", "https://www.ebay.fr/itm/376710796402", "https://www.ebay.fr/itm/197838514503", "https://www.ebay.fr/itm/127522030313", "https://www.ebay.fr/itm/146860353271"],
+            titles: ["Nintendo Gameboy Color Original - Pokemon", "Nintendo Gameboy Color Original - Pokemon", "Nintendo Game boy color \u00e9dition pokemon Pikachu gameboy GBC", "Nintendo Game boy color \u00e9dition pokemon Center Pikachu gameboy GBC parfait \u00e9tat!", "Nintendo Gameboy Color Original - Pokemon", "Nintendo Game boy color \u00e9dition pokemon Pikachu gameboy GBC", "Console Nintendo Gameboy Color GBC Pok\u00e9mon"]
+        };
+
         const priceChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ["Oct '25", "Nov '25", "Déc '25"],
+                labels: chartData.labels,
                 datasets: [{
-                    label: 'Prix moyen',
-                    data: [100, 104, 90],
+                    label: 'Prix de vente',
+                    data: chartData.prices,
                     borderColor: '#00d9ff',
-                    backgroundColor: 'rgba(0, 217, 255, 0.05)',
+                    backgroundColor: 'rgba(0, 217, 255, 0.08)',
                     borderWidth: 2,
                     fill: true,
-                    tension: 0.1,
-                    pointRadius: 3,
+                    tension: 0.2,
+                    pointRadius: 4,
                     pointBackgroundColor: '#00d9ff',
                     pointBorderColor: '#0f1419',
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBorderWidth: 2
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7,
+                    pointHoverBorderWidth: 3,
+                    pointHoverBackgroundColor: '#00ff88',
+                    pointHoverBorderColor: '#00d9ff'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                onClick: (event, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const index = activeElements[0].index;
+                        const url = chartData.urls[index];
+                        if (url) {
+                            window.open(url, '_blank', 'noopener,noreferrer');
+                        }
+                    }
+                },
                 layout: {
                     padding: {
-                        top: 10,
-                        right: 10,
-                        bottom: 0,
-                        left: 0
+                        top: 15,
+                        right: 15,
+                        bottom: 5,
+                        left: 5
                     }
                 },
                 plugins: {
@@ -934,19 +958,29 @@
                         titleColor: '#e4e6eb',
                         bodyColor: '#e4e6eb',
                         borderColor: '#00d9ff',
-                        borderWidth: 1,
-                        padding: 8,
+                        borderWidth: 2,
+                        padding: 12,
                         displayColors: false,
                         titleFont: {
-                            size: 11
+                            size: 12,
+                            weight: 'normal'
                         },
                         bodyFont: {
-                            size: 13,
+                            size: 15,
                             weight: 'bold'
                         },
                         callbacks: {
+                            title: function(context) {
+                                const index = context[0].dataIndex;
+                                const title = chartData.titles[index];
+                                // Truncate title if too long
+                                return title.length > 60 ? title.substring(0, 60) + '...' : title;
+                            },
                             label: function(context) {
                                 return context.parsed.y + '€';
+                            },
+                            afterLabel: function(context) {
+                                return 'Cliquer pour voir sur eBay';
                             }
                         }
                     }
@@ -962,9 +996,10 @@
                             font: {
                                 size: 10
                             },
-                            maxRotation: 0,
+                            maxRotation: 45,
+                            minRotation: 0,
                             autoSkip: true,
-                            maxTicksLimit: 8
+                            maxTicksLimit: 12
                         }
                     },
                     y: {
@@ -976,12 +1011,12 @@
                         ticks: {
                             color: '#a0a3a8',
                             font: {
-                                size: 10
+                                size: 11
                             },
                             callback: function(value) {
                                 return value + '€';
                             },
-                            maxTicksLimit: 5
+                            maxTicksLimit: 6
                         },
                         beginAtZero: false
                     }

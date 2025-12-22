@@ -45,10 +45,10 @@ def load_template():
     with open(template_path, 'r', encoding='utf-8') as f:
         return f.read()
 
-def generate_price_graph(price_history):
-    """Generate Chart.js price history graph HTML and JS - compact style like pricecharting.com"""
+def generate_price_graph(listings):
+    """Generate Chart.js price history graph HTML and JS - showing individual sales with clickable points"""
 
-    if not price_history or len(price_history) < 1:
+    if not listings or len(listings) < 1:
         # No data at all
         return {
             'html': '''
@@ -61,61 +61,98 @@ def generate_price_graph(price_history):
             'js': ''
         }
 
-    # Prepare data for Chart.js - sort months chronologically
-    months = sorted(price_history.keys())  # Sort YYYY-MM format chronologically
-    prices = [price_history[month] for month in months]  # Get prices in sorted order
+    # Sort listings by date (oldest first for graph)
+    sorted_listings = sorted(listings, key=lambda x: x['sold_date'])
 
-    # Format months for display (YYYY-MM -> Mois Année)
+    # Format dates for display
     month_names_fr = {
         '01': 'Jan', '02': 'Fév', '03': 'Mar', '04': 'Avr',
         '05': 'Mai', '06': 'Juin', '07': 'Juil', '08': 'Août',
         '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Déc'
     }
 
-    formatted_labels = []
-    for month in months:
-        year, month_num = month.split('-')
-        formatted_labels.append(f"{month_names_fr.get(month_num, month_num)} '{year[-2:]}")  # "Jan '24" style
+    # Prepare data for each point
+    labels = []
+    prices = []
+    urls = []
+    titles = []
 
-    # Compact HTML - smaller container like pricecharting.com
+    for listing in sorted_listings:
+        if listing['price'] > 0:
+            # Format date for label
+            date_parts = listing['sold_date'].split('-')
+            if len(date_parts) == 3:
+                year, month, day = date_parts
+                label = f"{day} {month_names_fr.get(month, month)}"
+                labels.append(label)
+            else:
+                labels.append(listing['sold_date'])
+
+            prices.append(listing['price'])
+            urls.append(listing.get('url', ''))
+            titles.append(listing.get('title', '').replace("'", "\\'").replace('"', '\\"'))
+
     html = '''
         <div class="graph-wrapper">
             <canvas id="priceChart"></canvas>
         </div>
     '''
 
-    # Compact chart settings - reduced point sizes, tighter layout
+    # Convert to JSON-safe format
+    import json
+    labels_json = json.dumps(labels)
+    urls_json = json.dumps(urls)
+    titles_json = json.dumps(titles)
+
     js = f'''
         const ctx = document.getElementById('priceChart').getContext('2d');
+        const chartData = {{
+            labels: {labels_json},
+            prices: {prices},
+            urls: {urls_json},
+            titles: {titles_json}
+        }};
+
         const priceChart = new Chart(ctx, {{
             type: 'line',
             data: {{
-                labels: {formatted_labels},
+                labels: chartData.labels,
                 datasets: [{{
-                    label: 'Prix moyen',
-                    data: {prices},
+                    label: 'Prix de vente',
+                    data: chartData.prices,
                     borderColor: '#00d9ff',
-                    backgroundColor: 'rgba(0, 217, 255, 0.05)',
+                    backgroundColor: 'rgba(0, 217, 255, 0.08)',
                     borderWidth: 2,
                     fill: true,
-                    tension: 0.1,
-                    pointRadius: 3,
+                    tension: 0.2,
+                    pointRadius: 4,
                     pointBackgroundColor: '#00d9ff',
                     pointBorderColor: '#0f1419',
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBorderWidth: 2
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7,
+                    pointHoverBorderWidth: 3,
+                    pointHoverBackgroundColor: '#00ff88',
+                    pointHoverBorderColor: '#00d9ff'
                 }}]
             }},
             options: {{
                 responsive: true,
                 maintainAspectRatio: false,
+                onClick: (event, activeElements) => {{
+                    if (activeElements.length > 0) {{
+                        const index = activeElements[0].index;
+                        const url = chartData.urls[index];
+                        if (url) {{
+                            window.open(url, '_blank', 'noopener,noreferrer');
+                        }}
+                    }}
+                }},
                 layout: {{
                     padding: {{
-                        top: 10,
-                        right: 10,
-                        bottom: 0,
-                        left: 0
+                        top: 15,
+                        right: 15,
+                        bottom: 5,
+                        left: 5
                     }}
                 }},
                 plugins: {{
@@ -127,19 +164,29 @@ def generate_price_graph(price_history):
                         titleColor: '#e4e6eb',
                         bodyColor: '#e4e6eb',
                         borderColor: '#00d9ff',
-                        borderWidth: 1,
-                        padding: 8,
+                        borderWidth: 2,
+                        padding: 12,
                         displayColors: false,
                         titleFont: {{
-                            size: 11
+                            size: 12,
+                            weight: 'normal'
                         }},
                         bodyFont: {{
-                            size: 13,
+                            size: 15,
                             weight: 'bold'
                         }},
                         callbacks: {{
+                            title: function(context) {{
+                                const index = context[0].dataIndex;
+                                const title = chartData.titles[index];
+                                // Truncate title if too long
+                                return title.length > 60 ? title.substring(0, 60) + '...' : title;
+                            }},
                             label: function(context) {{
                                 return context.parsed.y + '€';
+                            }},
+                            afterLabel: function(context) {{
+                                return 'Cliquer pour voir sur eBay';
                             }}
                         }}
                     }}
@@ -155,9 +202,10 @@ def generate_price_graph(price_history):
                             font: {{
                                 size: 10
                             }},
-                            maxRotation: 0,
+                            maxRotation: 45,
+                            minRotation: 0,
                             autoSkip: true,
-                            maxTicksLimit: 8
+                            maxTicksLimit: 12
                         }}
                     }},
                     y: {{
@@ -169,12 +217,12 @@ def generate_price_graph(price_history):
                         ticks: {{
                             color: '#a0a3a8',
                             font: {{
-                                size: 10
+                                size: 11
                             }},
                             callback: function(value) {{
                                 return value + '€';
                             }},
-                            maxTicksLimit: 5
+                            maxTicksLimit: 6
                         }},
                         beginAtZero: false
                     }}
@@ -187,24 +235,27 @@ def generate_price_graph(price_history):
 
 
 def format_listing_html(listing):
-    """Format a single listing as HTML (showing sold price history)"""
-    
+    """Format a single listing as HTML (showing sold price history) - clickable to eBay"""
+
     # Convert YYYY-MM-DD to DD/MM/YYYY for display
     date_parts = listing['sold_date'].split('-')
     if len(date_parts) == 3:
         display_date = f"{date_parts[2]}/{date_parts[1]}/{date_parts[0]}"
     else:
         display_date = listing['sold_date']
-    
+
+    # Get eBay URL
+    ebay_url = listing.get('url', '#')
+
     return f"""
-                <div class="listing-card">
+                <a href="{ebay_url}" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">{listing['title']}</div>
                     <div class="listing-meta">
                         <span class="listing-price">{listing['price']:.0f}€</span>
                         <span class="listing-date">{display_date}</span>
                     </div>
                     <span class="listing-condition">{listing['condition']}</span>
-                </div>"""
+                </a>"""
 
 def build_ebay_search_url(variant_key, variant_name, campaign_id, network_id, tracking_id):
     """Build eBay search URL for items currently FOR SALE with affiliate params"""
@@ -256,10 +307,9 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
     ebay_search_link = build_ebay_search_url(
         variant_key, variant_name, campaign_id, network_id, tracking_id
     )
-    
-    # Generate price history graph
-    price_history = stats.get('price_history', {})
-    graph_data = generate_price_graph(price_history)
+
+    # Generate price history graph - pass listings to show individual sales
+    graph_data = generate_price_graph(listings)
     
     # Format listings HTML (showing SOLD prices for history)
     if listings:

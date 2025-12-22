@@ -116,8 +116,8 @@
 
         /* Breadcrumb */
         .breadcrumb {
-            padding: 2rem 0 1rem;
-            font-size: 0.9rem;
+            padding: 3rem 0 2rem;
+            font-size: 0.95rem;
         }
 
         .breadcrumb a {
@@ -132,20 +132,20 @@
 
         .breadcrumb span {
             color: var(--text-secondary);
-            margin: 0 0.5rem;
+            margin: 0 0.75rem;
         }
 
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
-            padding: 3rem 0;
+            padding: 4.5rem 3rem;
             border-radius: 16px;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         h1 {
-            font-size: 2.75rem;
-            margin-bottom: 1rem;
+            font-size: 3.25rem;
+            margin-bottom: 1.5rem;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -154,25 +154,25 @@
 
         .hero-description {
             color: var(--text-secondary);
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             max-width: 800px;
-            margin-bottom: 2.5rem;
-            line-height: 1.7;
+            margin-bottom: 3rem;
+            line-height: 1.8;
         }
 
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.25rem;
-            margin-top: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
 
         .stat-card {
             background: var(--bg-primary);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.75rem;
+            padding: 2.5rem;
             text-align: center;
             transition: border-color 0.2s;
         }
@@ -183,15 +183,15 @@
 
         .stat-label {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             font-weight: 600;
         }
 
         .stat-value {
-            font-size: 2.25rem;
+            font-size: 2.75rem;
             font-weight: 700;
             color: var(--accent-primary);
         }
@@ -202,8 +202,8 @@
 
         .stat-note {
             color: var(--text-secondary);
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
             opacity: 0.7;
         }
 
@@ -256,8 +256,9 @@
 
         .graph-wrapper {
             position: relative;
-            height: 220px;
-            margin-top: 1.5rem;
+            height: 280px;
+            margin-top: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .no-graph {
@@ -420,52 +421,57 @@
         .listing-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            transition: transform 0.15s, border-color 0.15s;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
 
         .listing-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px);
             border-color: var(--accent-primary);
+            box-shadow: 0 8px 24px rgba(0, 217, 255, 0.15);
         }
 
         .listing-title {
-            font-size: 0.9rem;
-            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
             color: var(--text-primary);
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .listing-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .listing-price {
-            font-size: 1.3rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--success);
         }
 
         .listing-date {
             color: var(--text-secondary);
-            font-size: 0.75rem;
+            font-size: 0.85rem;
         }
 
         .listing-condition {
             display: inline-block;
             background: var(--bg-secondary);
             color: var(--text-secondary);
-            padding: 0.25rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
         }
 
         /* No listings */
@@ -795,176 +801,176 @@
                 </div>
                 
                 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/197658261552" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Console Nintendo Game Boy Color Translucide +Jeu</div>
                     <div class="listing-meta">
                         <span class="listing-price">75€</span>
                         <span class="listing-date">20/12/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/267511657190" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo GAME BOY COLOR Console GBC ✅ Atomic Purple  (CGB-001) + MARIO & YOSHI</div>
                     <div class="listing-meta">
                         <span class="listing-price">75€</span>
                         <span class="listing-date">14/12/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/297830336957" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Game Boy Color Mauve Transparente</div>
                     <div class="listing-meta">
                         <span class="listing-price">56€</span>
                         <span class="listing-date">14/12/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/267504264404" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo GameBoy Color Console Violette Transparent Fonctionnelle tout d'origine</div>
                     <div class="listing-meta">
                         <span class="listing-price">73€</span>
                         <span class="listing-date">09/12/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/205838904350" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Superbe Console Nintendo Game Boy Color Atomic Purple + Jeu + Piles Neuves !</div>
                     <div class="listing-meta">
                         <span class="listing-price">84€</span>
                         <span class="listing-date">08/12/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/267505033721" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">NINTENDO game boy color en boite EUR/FRA TBE Violette Transparente AUTHENTIQUE</div>
                     <div class="listing-meta">
                         <span class="listing-price">210€</span>
                         <span class="listing-date">08/12/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/227111211315" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Console Nintendo GameBoy Color Violette Transparente Tbe Testé</div>
                     <div class="listing-meta">
                         <span class="listing-price">80€</span>
                         <span class="listing-date">03/12/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/406400415091" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Lot Console Nintendo Game Boy Color + 1 Jeu Vidéo Batman</div>
                     <div class="listing-meta">
                         <span class="listing-price">57€</span>
                         <span class="listing-date">30/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/336307151397" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Game Boy Color Mauve Transparente</div>
                     <div class="listing-meta">
                         <span class="listing-price">56€</span>
                         <span class="listing-date">29/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/389249400239" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Console Game Boy Color + jeu Pokémon Version Argent - Nintendo - translucide</div>
                     <div class="listing-meta">
                         <span class="listing-price">78€</span>
                         <span class="listing-date">28/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/297678568471" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Console Game Boy Color</div>
                     <div class="listing-meta">
                         <span class="listing-price">59€</span>
                         <span class="listing-date">22/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/357884725470" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Console Nintendo GameBoy Color Violette Transparente</div>
                     <div class="listing-meta">
                         <span class="listing-price">51€</span>
                         <span class="listing-date">17/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/187677674323" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Game Boy Color – Console originale Nintendo – Testée et fonctionnelle – bon</div>
                     <div class="listing-meta">
                         <span class="listing-price">85€</span>
                         <span class="listing-date">14/11/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/397160963194" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">GameBoy Color + Pochette ( Sans Jeux )</div>
                     <div class="listing-meta">
                         <span class="listing-price">61€</span>
                         <span class="listing-date">22/10/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/205798854142" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">game boy color</div>
                     <div class="listing-meta">
                         <span class="listing-price">70€</span>
                         <span class="listing-date">22/10/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/167821124520" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Gameboy Color color Atomic Violer Transparent Clear Purple OFFICIEL NINTENDO</div>
                     <div class="listing-meta">
                         <span class="listing-price">63€</span>
                         <span class="listing-date">08/10/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/187614203365" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Console Game boy color Transparente (Bien lire )</div>
                     <div class="listing-meta">
                         <span class="listing-price">50€</span>
                         <span class="listing-date">04/10/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/127385693092" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Nintendo Game Boy Color Console - Violette Transparent Fonctionnelle + Gex</div>
                     <div class="listing-meta">
                         <span class="listing-price">65€</span>
                         <span class="listing-date">28/09/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
 
-                <div class="listing-card">
+                <a href="https://www.ebay.fr/itm/317283881648" class="listing-card" target="_blank" rel="nofollow noopener">
                     <div class="listing-title">Gameboy Color Violet Transparente (Atomic Purple), Avec Boîte Et Notice</div>
                     <div class="listing-meta">
                         <span class="listing-price">200€</span>
                         <span class="listing-date">28/09/2025</span>
                     </div>
                     <span class="listing-condition">Occasion</span>
-                </div>
+                </a>
             </div>
     
         </div>
@@ -1002,35 +1008,53 @@
         // Price history graph data injected by Python
         
         const ctx = document.getElementById('priceChart').getContext('2d');
+        const chartData = {
+            labels: ["28 Sep", "28 Sep", "04 Oct", "08 Oct", "22 Oct", "22 Oct", "14 Nov", "17 Nov", "22 Nov", "28 Nov", "29 Nov", "30 Nov", "03 D\u00e9c", "08 D\u00e9c", "08 D\u00e9c", "09 D\u00e9c", "14 D\u00e9c", "14 D\u00e9c", "20 D\u00e9c"],
+            prices: [65, 200, 50, 62.95, 61, 70, 85, 51, 59, 78, 56, 57, 79.9, 84, 209.9, 72.9, 74.9, 55.99, 75],
+            urls: ["https://www.ebay.fr/itm/127385693092", "https://www.ebay.fr/itm/317283881648", "https://www.ebay.fr/itm/187614203365", "https://www.ebay.fr/itm/167821124520", "https://www.ebay.fr/itm/397160963194", "https://www.ebay.fr/itm/205798854142", "https://www.ebay.fr/itm/187677674323", "https://www.ebay.fr/itm/357884725470", "https://www.ebay.fr/itm/297678568471", "https://www.ebay.fr/itm/389249400239", "https://www.ebay.fr/itm/336307151397", "https://www.ebay.fr/itm/406400415091", "https://www.ebay.fr/itm/227111211315", "https://www.ebay.fr/itm/205838904350", "https://www.ebay.fr/itm/267505033721", "https://www.ebay.fr/itm/267504264404", "https://www.ebay.fr/itm/267511657190", "https://www.ebay.fr/itm/297830336957", "https://www.ebay.fr/itm/197658261552"],
+            titles: ["Nintendo Game Boy Color Console - Violette Transparent Fonctionnelle + Gex", "Gameboy Color Violet Transparente (Atomic Purple), Avec Bo\u00eete Et Notice", "Console Game boy color Transparente (Bien lire )", "Gameboy Color color Atomic Violer Transparent Clear Purple OFFICIEL NINTENDO", "GameBoy Color + Pochette ( Sans Jeux )", "game boy color", "Game Boy Color \u2013 Console originale Nintendo \u2013 Test\u00e9e et fonctionnelle \u2013 bon", "Console Nintendo GameBoy Color Violette Transparente", "Console Game Boy Color", "Console Game Boy Color + jeu Pok\u00e9mon Version Argent - Nintendo - translucide", "Game Boy Color Mauve Transparente", "Lot Console Nintendo Game Boy Color + 1 Jeu Vid\u00e9o Batman", "Console Nintendo GameBoy Color Violette Transparente Tbe Test\u00e9", "Superbe Console Nintendo Game Boy Color Atomic Purple + Jeu + Piles Neuves !", "NINTENDO game boy color en boite EUR/FRA TBE Violette Transparente AUTHENTIQUE", "Nintendo GameBoy Color Console Violette Transparent Fonctionnelle tout d\\'origine", "Nintendo GAME BOY COLOR Console GBC \u2705 Atomic Purple  (CGB-001) + MARIO & YOSHI", "Game Boy Color Mauve Transparente", "Console Nintendo Game Boy Color Translucide +Jeu"]
+        };
+
         const priceChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ["Sep '25", "Oct '25", "Nov '25", "Déc '25"],
+                labels: chartData.labels,
                 datasets: [{
-                    label: 'Prix moyen',
-                    data: [132, 61, 64, 93],
+                    label: 'Prix de vente',
+                    data: chartData.prices,
                     borderColor: '#00d9ff',
-                    backgroundColor: 'rgba(0, 217, 255, 0.05)',
+                    backgroundColor: 'rgba(0, 217, 255, 0.08)',
                     borderWidth: 2,
                     fill: true,
-                    tension: 0.1,
-                    pointRadius: 3,
+                    tension: 0.2,
+                    pointRadius: 4,
                     pointBackgroundColor: '#00d9ff',
                     pointBorderColor: '#0f1419',
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBorderWidth: 2
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7,
+                    pointHoverBorderWidth: 3,
+                    pointHoverBackgroundColor: '#00ff88',
+                    pointHoverBorderColor: '#00d9ff'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                onClick: (event, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const index = activeElements[0].index;
+                        const url = chartData.urls[index];
+                        if (url) {
+                            window.open(url, '_blank', 'noopener,noreferrer');
+                        }
+                    }
+                },
                 layout: {
                     padding: {
-                        top: 10,
-                        right: 10,
-                        bottom: 0,
-                        left: 0
+                        top: 15,
+                        right: 15,
+                        bottom: 5,
+                        left: 5
                     }
                 },
                 plugins: {
@@ -1042,19 +1066,29 @@
                         titleColor: '#e4e6eb',
                         bodyColor: '#e4e6eb',
                         borderColor: '#00d9ff',
-                        borderWidth: 1,
-                        padding: 8,
+                        borderWidth: 2,
+                        padding: 12,
                         displayColors: false,
                         titleFont: {
-                            size: 11
+                            size: 12,
+                            weight: 'normal'
                         },
                         bodyFont: {
-                            size: 13,
+                            size: 15,
                             weight: 'bold'
                         },
                         callbacks: {
+                            title: function(context) {
+                                const index = context[0].dataIndex;
+                                const title = chartData.titles[index];
+                                // Truncate title if too long
+                                return title.length > 60 ? title.substring(0, 60) + '...' : title;
+                            },
                             label: function(context) {
                                 return context.parsed.y + '€';
+                            },
+                            afterLabel: function(context) {
+                                return 'Cliquer pour voir sur eBay';
                             }
                         }
                     }
@@ -1070,9 +1104,10 @@
                             font: {
                                 size: 10
                             },
-                            maxRotation: 0,
+                            maxRotation: 45,
+                            minRotation: 0,
                             autoSkip: true,
-                            maxTicksLimit: 8
+                            maxTicksLimit: 12
                         }
                     },
                     y: {
@@ -1084,12 +1119,12 @@
                         ticks: {
                             color: '#a0a3a8',
                             font: {
-                                size: 10
+                                size: 11
                             },
                             callback: function(value) {
                                 return value + '€';
                             },
-                            maxTicksLimit: 5
+                            maxTicksLimit: 6
                         },
                         beginAtZero: false
                     }
