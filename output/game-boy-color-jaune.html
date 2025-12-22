@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Prix et historique des ventes du Game Boy Color Jaune. 0 ventes analysées. Prix moyen: 0€. Tracker retrogaming."
+    <meta name="description" content="Prix et historique des ventes du Game Boy Color Jaune. 10 ventes analysées. Prix moyen: 84€. Tracker retrogaming."
     <meta name="keywords" content="Game Boy Color Jaune, prix, vente, occasion, retrogaming, Nintendo, console, collection, nintendo, sega, sony">
     <meta name="author" content="PrixRetro - Prix du Rétrogaming">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph -->
     <meta property="og:title" content="Game Boy Color Jaune - Prix & Historique | PrixRetro">
-    <meta property="og:description" content="Prix et historique des ventes du Game Boy Color Jaune. 0 ventes analysées. Prix moyen: 0€. Tracker de prix retrogaming.">
+    <meta property="og:description" content="Prix et historique des ventes du Game Boy Color Jaune. 10 ventes analysées. Prix moyen: 84€. Tracker de prix retrogaming.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.prixretro.com/game-boy-color-jaune.html">
     <meta property="og:site_name" content="PrixRetro - Tracker Prix Retrogaming">
@@ -18,17 +18,17 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Game Boy Color Jaune - Prix & Historique | PrixRetro">
-    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Jaune. 0 ventes analysées. Prix moyen: 0€"
+    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Jaune. 10 ventes analysées. Prix moyen: 84€"
     
     <title>Game Boy Color Jaune - Prix & Historique | PrixRetro</title>
     
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QPNVF0BRW"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
+        gtag('config', 'G-4QPNVF0BRW');
         
         // Track eBay affiliate clicks
         function trackEbayClick(variant) {
@@ -314,7 +314,96 @@
             font-size: 0.95rem;
         }
 
-        .listings-grid {
+        
+        /* Compact Listings Display */
+        .listings-table {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .listings-header-row {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .listing-row {
+            padding: 0.75rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.2s;
+        }
+        
+        .listing-row:hover {
+            background: rgba(0, 217, 255, 0.05);
+        }
+        
+        .listing-row:last-child {
+            border-bottom: none;
+        }
+        
+        .listing-title-compact {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+            min-width: 0; /* Allow text to truncate */
+        }
+        
+        .listing-price-compact {
+            font-weight: 600;
+            color: var(--success);
+            font-size: 1rem;
+            text-align: right;
+            min-width: 60px;
+        }
+        
+        .listing-date-compact {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-align: right;
+            min-width: 80px;
+        }
+        
+        .listing-condition-compact {
+            background: var(--bg-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            .listings-header-row,
+            .listing-row {
+                grid-template-columns: 1fr auto;
+                gap: 0.5rem;
+            }
+            
+            .listing-date-compact,
+            .listing-condition-compact {
+                display: none;
+            }
+            
+            .listings-header-row .listing-date-compact,
+            .listings-header-row .listing-condition-compact {
+                display: none;
+            }
+        }
+    
+        
+        .listings-grid-old {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
@@ -474,7 +563,96 @@
                 grid-template-columns: 1fr;
             }
 
-            .listings-grid {
+            
+        /* Compact Listings Display */
+        .listings-table {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .listings-header-row {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .listing-row {
+            padding: 0.75rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.2s;
+        }
+        
+        .listing-row:hover {
+            background: rgba(0, 217, 255, 0.05);
+        }
+        
+        .listing-row:last-child {
+            border-bottom: none;
+        }
+        
+        .listing-title-compact {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+            min-width: 0; /* Allow text to truncate */
+        }
+        
+        .listing-price-compact {
+            font-weight: 600;
+            color: var(--success);
+            font-size: 1rem;
+            text-align: right;
+            min-width: 60px;
+        }
+        
+        .listing-date-compact {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-align: right;
+            min-width: 80px;
+        }
+        
+        .listing-condition-compact {
+            background: var(--bg-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            .listings-header-row,
+            .listing-row {
+                grid-template-columns: 1fr auto;
+                gap: 0.5rem;
+            }
+            
+            .listing-date-compact,
+            .listing-condition-compact {
+                display: none;
+            }
+            
+            .listings-header-row .listing-date-compact,
+            .listings-header-row .listing-condition-compact {
+                display: none;
+            }
+        }
+    
+        
+        .listings-grid-old {
                 grid-template-columns: 1fr;
             }
 
@@ -503,9 +681,9 @@
         "offers": {
             "@type": "AggregateOffer",
             "priceCurrency": "EUR",
-            "lowPrice": "0",
-            "highPrice": "0",
-            "offerCount": "0",
+            "lowPrice": "44.99",
+            "highPrice": "269",
+            "offerCount": "10",
             "availability": "https://schema.org/InStock"
         },
         "aggregateRating": {
@@ -544,19 +722,19 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Prix Moyen</div>
-                    <div class="stat-value success">0€</div>
+                    <div class="stat-value success">84€</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Prix Min</div>
-                    <div class="stat-value">0€</div>
+                    <div class="stat-value">44.99€</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Prix Max</div>
-                    <div class="stat-value">0€</div>
+                    <div class="stat-value">269€</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Ventes Analysées</div>
-                    <div class="stat-value">0</div>
+                    <div class="stat-value">10</div>
                 </div>
             </div>
         </div>
@@ -606,28 +784,122 @@
         <div class="content-section">
             <div class="listings-header">
                 <h2>📊 Historique des ventes</h2>
-                <span class="listings-count">0 ventes trouvées</span>
+                <span class="listings-count">10 ventes trouvées</span>
             </div>
-            <div class="listings-grid">
+
+            <div class="listings-table">
+                <div class="listings-header-row">
+                    <div>Article vendu</div>
+                    <div>Prix</div>
+                    <div class="listing-date-compact">Date</div>
+                    <div class="listing-condition-compact">État</div>
+                </div>
                 
-                <div class="no-listings">
-                    <h3>⚠️ Données insuffisantes</h3>
-                    <p>Moins de 10 ventes trouvées pour cette variante.</p>
-                    <p>Les prix affichés peuvent ne pas être représentatifs du marché actuel.</p>
+                
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color + Light Master + Cordon Tetris Challenge</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">63€</span>
+                        <span class="listing-date">07/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">🕹️ Console Nintendo Game Boy Color Jaune - 100% Fonctionnelle</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">80€</span>
+                        <span class="listing-date">01/12/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Lot Console Nintendo Game Boy Color + 1 Jeu Vidéo Tintin</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">56€</span>
+                        <span class="listing-date">30/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">game boy color jaune</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">75€</span>
+                        <span class="listing-date">22/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy GAMEBOY Color jaune  sans boite</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">50€</span>
+                        <span class="listing-date">16/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy GAMEBOY Color jaune  sans boite</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">45€</span>
+                        <span class="listing-date">15/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">game boy color</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">12/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Jaune</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">60€</span>
+                        <span class="listing-date">11/11/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Gameboy Color Jaune Nintendo Yellow Boite Box</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">269€</span>
+                        <span class="listing-date">24/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-title">Console Nintendo Game Boy Color Parfait État Coque Neuve</div>
+                    <div class="listing-meta">
+                        <span class="listing-price">78€</span>
+                        <span class="listing-date">20/10/2025</span>
+                    </div>
+                    <span class="listing-condition">Occasion</span>
                 </div>
             </div>
+    
         </div>
 
         <div class="related-section">
             <h2>🎨 Autres variantes Game Boy Color</h2>
             <div class="related-grid">
-                <a href="/game-boy-color-violet.html" class="related-link">Violet</a>
-                    <a href="/game-boy-color-atomic-purple.html" class="related-link">Atomic Purple (Violet Transparent)</a>
+                <a href="/game-boy-color-atomic-purple.html" class="related-link">Atomic-Purple</a>
+                    <a href="/game-boy-color-vert.html" class="related-link">Vert</a>
+                    <a href="/game-boy-color-violet.html" class="related-link">Violet</a>
                     <a href="/game-boy-color-rouge.html" class="related-link">Rouge</a>
-                    <a href="/game-boy-color-bleu.html" class="related-link">Bleu (Teal)</a>
-                    <a href="/game-boy-color-vert.html" class="related-link">Vert Néon</a>
-                    <a href="/game-boy-color-pikachu.html" class="related-link">Pikachu (Édition Pokémon)</a>
-                    <a href="/game-boy-color-pokemon-gold-silver.html" class="related-link">Or/Argent (Édition Pokémon)</a>
+                    <a href="/game-boy-color-bleu.html" class="related-link">Bleu</a>
+                    <a href="/game-boy-color-pokemon-center-3rd-anniversary.html" class="related-link">Pokemon Center 3Rd Anniversary</a>
+                    <a href="/game-boy-color-pokemon-special-limited-edition.html" class="related-link">Pokemon Special Limited Edition</a>
+                    <a href="/game-boy-color-pokemon-special-edition.html" class="related-link">Pokemon Special Edition</a>
             </div>
         </div>
     </div>

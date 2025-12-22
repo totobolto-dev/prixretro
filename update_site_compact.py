@@ -10,8 +10,10 @@ from datetime import datetime
 
 def load_scraped_data():
     """Load scraped data from JSON file - prioritize ultra-clean data"""
-    # Try ultra-clean data first, then clean data, fallback to raw data
-    if os.path.exists('scraped_data_ultra_clean.json'):
+    # Try bulletproof data first, then fallbacks
+    if os.path.exists('scraped_data_bulletproof.json'):
+        data_file = 'scraped_data_bulletproof.json'
+    elif os.path.exists('scraped_data_ultra_clean.json'):
         data_file = 'scraped_data_ultra_clean.json'
     elif os.path.exists('scraped_data_clean.json'):
         data_file = 'scraped_data_clean.json'
@@ -34,11 +36,11 @@ def load_config():
 
 def load_template():
     """Load HTML template"""
-    template_path = '../prixretro-static/template-v3.html'
+    template_path = '../prixretro-static/template-v4-compact.html'
     
     if not os.path.exists(template_path):
         # Try current directory
-        template_path = 'template-v3.html'
+        template_path = 'template-v4-compact.html'
     
     with open(template_path, 'r', encoding='utf-8') as f:
         return f.read()
@@ -276,7 +278,7 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
     html = html.replace('{MIN_PRICE}', str(stats['min_price']))
     html = html.replace('{MAX_PRICE}', str(stats['max_price']))
     html = html.replace('{VARIANT_DESCRIPTION}', description)
-    html = html.replace('{LISTINGS_HTML}', listings_html)
+    html = html.replace('{LISTINGS_ROWS_HTML}', listings_html)
     html = html.replace('{RELATED_VARIANTS}', related_html)
     html = html.replace('{EBAY_SEARCH_LINK}', ebay_search_link)
     html = html.replace('{PRICE_GRAPH_HTML}', graph_data['html'])
