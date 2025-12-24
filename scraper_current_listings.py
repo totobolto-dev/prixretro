@@ -147,31 +147,36 @@ async def scrape_all_variants():
                 '--disable-gpu',
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
+                '--single-process',  # Prevent crashes in limited memory
             ]
-        )
-
-        # Create a new page with realistic viewport
-        page = await browser.new_page(
-            viewport={'width': 1920, 'height': 1080},
-            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         )
 
         for variant_key, variant_data in scraped_data.items():
             variant_name = variant_data['variant_name']
 
-            listings = await scrape_current_listings(page, variant_key, variant_name, max_items=5)
+            # Create a FRESH page for each variant to prevent crashes
+            page = await browser.new_page(
+                viewport={'width': 1920, 'height': 1080},
+                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            )
 
-            if listings:
-                all_current_listings[variant_key] = {
-                    'variant_key': variant_key,
-                    'variant_name': variant_name,
-                    'listings': listings,
-                    'count': len(listings)
-                }
-                print(f"  💤 Waiting 2 seconds before next variant...")
-                await asyncio.sleep(2)  # Be nice to eBay
-            else:
-                print(f"  ⚠️  No listings found for {variant_name}")
+            try:
+                listings = await scrape_current_listings(page, variant_key, variant_name, max_items=5)
+
+                if listings:
+                    all_current_listings[variant_key] = {
+                        'variant_key': variant_key,
+                        'variant_name': variant_name,
+                        'listings': listings,
+                        'count': len(listings)
+                    }
+                    print(f"  💤 Waiting 3 seconds before next variant...")
+                    await asyncio.sleep(3)  # Be nice to eBay
+                else:
+                    print(f"  ⚠️  No listings found for {variant_name}")
+            finally:
+                # Always close the page to free memory
+                await page.close()
 
         await browser.close()
 
