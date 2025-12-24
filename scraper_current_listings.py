@@ -47,8 +47,17 @@ async def scrape_current_listings(page, variant_key, variant_name, max_items=5):
             await page.wait_for_selector('.s-item', timeout=15000)
         except Exception as e:
             print(f"  ⚠️  Timeout waiting for .s-item selector")
+            # Save HTML for debugging
+            html_debug = await page.content()
+            with open(f'debug_{variant_key}.html', 'w', encoding='utf-8') as f:
+                f.write(html_debug)
+            print(f"  💾 Saved debug HTML to debug_{variant_key}.html")
             # Try alternative selector
-            await page.wait_for_selector('[class*="s-item"]', timeout=5000)
+            try:
+                await page.wait_for_selector('[class*="s-item"]', timeout=5000)
+            except:
+                print(f"  ⚠️  Alternative selector also failed")
+                return []
 
         # Extract all items
         items = await page.query_selector_all('.s-item')
