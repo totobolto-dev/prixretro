@@ -14,160 +14,99 @@
         gtag('js', new Date());
         gtag('config', 'G-4QPNVF0BRW');
     </script>
+    <link rel="stylesheet" href="/styles.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0f1419;
-            --bg-secondary: #1a1f2e;
-            --bg-card: #242b3d;
-            --accent-primary: #00d9ff;
-            --accent-secondary: #7b61ff;
-            --text-primary: #e4e6eb;
-            --text-secondary: #a0a3a8;
-            --success: #00ff88;
-            --border: #2a3142;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-
-        /* Hero */
+        /* Index-specific styles */
         .hero {
             text-align: center;
-            padding: 4rem 0;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            padding: 3rem 0;
+            background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
         }
 
-        h1 {
-            font-size: 3rem;
+        .hero h1 {
+            font-size: 2.5rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-primary);
         }
 
         .tagline {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-secondary);
             max-width: 700px;
-            margin: 0 auto 1.5rem;
-            line-height: 1.7;
+            margin: 0 auto 1rem;
+            line-height: 1.6;
         }
-        
+
         .tagline-detail {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            opacity: 0.8;
+            font-size: 0.95rem;
+            color: var(--text-muted);
             margin-top: 0.5rem;
         }
 
-        /* Variants Grid */
         .variants-section {
-            padding: 4rem 0;
+            padding: 3rem 0;
         }
 
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
+        .variants-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
             text-align: center;
-            color: var(--accent-primary);
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
         .variants-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
         }
 
         .variant-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
+            border-radius: var(--radius);
+            padding: 1.5rem;
             text-decoration: none;
             color: var(--text-primary);
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: block;
         }
 
         .variant-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-3px);
             border-color: var(--accent-primary);
-            box-shadow: 0 8px 30px rgba(0, 217, 255, 0.2);
         }
 
         .variant-name {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--accent-primary);
+            color: var(--text-primary);
         }
 
         .variant-description {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             line-height: 1.5;
         }
 
-        /* Footer */
-        footer {
-            background: var(--bg-secondary);
+        .variant-stats {
+            margin-top: 1rem;
+            padding-top: 1rem;
             border-top: 1px solid var(--border);
-            padding: 2rem 0;
-            margin-top: 4rem;
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
         }
 
-        footer a {
-            color: var(--accent-primary);
-            text-decoration: none;
+        .stat-item {
+            color: var(--text-muted);
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+            .hero h1 {
+                font-size: 1.8rem;
             }
 
             .variants-grid {
@@ -187,7 +126,7 @@
 
     <div class="hero">
         <div class="container">
-            <h1>🎮 Game Boy Color</h1>
+            <h1>Game Boy Color</h1>
             <p class="tagline">
                 Découvrez le prix réel du marché pour chaque variante de Game Boy Color
             </p>

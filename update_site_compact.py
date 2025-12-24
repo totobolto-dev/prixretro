@@ -120,13 +120,13 @@ def generate_price_graph(listings):
                 datasets: [{{
                     label: 'Prix de vente',
                     data: chartData.prices,
-                    borderColor: '#00d9ff',
-                    backgroundColor: 'rgba(0, 217, 255, 0.08)',
+                    borderColor: '#00ff88',
+                    backgroundColor: 'rgba(0, 255, 136, 0.1)',
                     borderWidth: 2,
                     fill: true,
-                    tension: 0.2,
+                    tension: 0.3,
                     pointRadius: 4,
-                    pointBackgroundColor: '#00d9ff',
+                    pointBackgroundColor: '#00ff88',
                     pointBorderColor: '#0f1419',
                     pointBorderWidth: 2,
                     pointHoverRadius: 7,
@@ -138,6 +138,11 @@ def generate_price_graph(listings):
             options: {{
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {{
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }},
                 onClick: (event, activeElements) => {{
                     if (activeElements.length > 0) {{
                         const index = activeElements[0].index;
@@ -160,33 +165,31 @@ def generate_price_graph(listings):
                         display: false
                     }},
                     tooltip: {{
-                        backgroundColor: '#1a1f2e',
-                        titleColor: '#e4e6eb',
-                        bodyColor: '#e4e6eb',
-                        borderColor: '#00d9ff',
-                        borderWidth: 2,
+                        backgroundColor: '#1a1f29',
+                        titleColor: '#ffffff',
+                        bodyColor: '#00ff88',
+                        borderColor: '#2a2f39',
+                        borderWidth: 1,
                         padding: 12,
                         displayColors: false,
                         titleFont: {{
-                            size: 12,
+                            size: 11,
                             weight: 'normal'
                         }},
                         bodyFont: {{
-                            size: 15,
-                            weight: 'bold'
+                            size: 14,
+                            weight: '600'
                         }},
                         callbacks: {{
                             title: function(context) {{
                                 const index = context[0].dataIndex;
-                                const title = chartData.titles[index];
-                                // Truncate title if too long
-                                return title.length > 60 ? title.substring(0, 60) + '...' : title;
+                                return chartData.labels[index];
                             }},
                             label: function(context) {{
                                 return context.parsed.y + '€';
                             }},
                             afterLabel: function(context) {{
-                                return 'Cliquer pour voir sur eBay';
+                                return 'Cliquer pour voir';
                             }}
                         }}
                     }}
@@ -198,9 +201,9 @@ def generate_price_graph(listings):
                             drawBorder: false
                         }},
                         ticks: {{
-                            color: '#a0a3a8',
+                            color: '#6b7280',
                             font: {{
-                                size: 10
+                                size: 11
                             }},
                             maxRotation: 45,
                             minRotation: 0,
@@ -210,12 +213,12 @@ def generate_price_graph(listings):
                     }},
                     y: {{
                         grid: {{
-                            color: '#2a3142',
+                            color: '#2a2f39',
                             drawBorder: false,
                             lineWidth: 1
                         }},
                         ticks: {{
-                            color: '#a0a3a8',
+                            color: '#6b7280',
                             font: {{
                                 size: 11
                             }},
@@ -235,7 +238,7 @@ def generate_price_graph(listings):
 
 
 def format_listing_html(listing):
-    """Format a single listing as HTML (showing sold price history) - clickable to eBay"""
+    """Format a single listing as compact table row - clickable to eBay"""
 
     # Convert YYYY-MM-DD to DD/MM/YYYY for display
     date_parts = listing['sold_date'].split('-')
@@ -248,13 +251,11 @@ def format_listing_html(listing):
     ebay_url = listing.get('url', '#')
 
     return f"""
-                <a href="{ebay_url}" class="listing-card" target="_blank" rel="nofollow noopener">
-                    <div class="listing-title">{listing['title']}</div>
-                    <div class="listing-meta">
-                        <span class="listing-price">{listing['price']:.0f}€</span>
-                        <span class="listing-date">{display_date}</span>
-                    </div>
-                    <span class="listing-condition">{listing['condition']}</span>
+                <a href="{ebay_url}" class="listing-row" target="_blank" rel="nofollow noopener">
+                    <div class="listing-title-compact">{listing['title']}</div>
+                    <div class="listing-price-compact">{listing['price']:.0f}€</div>
+                    <div class="listing-date-compact">{display_date}</div>
+                    <div class="listing-condition-compact">{listing['condition']}</div>
                 </a>"""
 
 def build_ebay_search_url(variant_key, variant_name, campaign_id, network_id, tracking_id):

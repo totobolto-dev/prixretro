@@ -101,19 +101,25 @@
                 <div class="stat-card">
                     <div class="stat-label">Prix Moyen</div>
                     <div class="stat-value success">{AVG_PRICE}€</div>
-                    <div class="stat-note">Prix moyen excluant les extrêmes</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Ventes Analysées</div>
                     <div class="stat-value">{LISTING_COUNT}</div>
-                    <div class="stat-note">Derniers 6 mois</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Minimum</div>
+                    <div class="stat-value success">{MIN_PRICE}€</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Prix Maximum</div>
+                    <div class="stat-value success">{MAX_PRICE}€</div>
                 </div>
             </div>
         </div>
 
         <div class="cta-section">
             <a href="{EBAY_SEARCH_LINK}" class="cta-button" target="_blank" rel="nofollow noopener" onclick="trackEbayClick('{VARIANT_KEY}')">
-                🎮 Voir les offres actuelles sur eBay
+                Voir les offres actuelles sur eBay
             </a>
         </div>
 
@@ -149,7 +155,7 @@
 
         <div class="content-section">
             <div class="listings-header">
-                <h2>📊 Historique des ventes</h2>
+                <h2>Historique des ventes</h2>
                 <span class="listings-count">{LISTING_COUNT} ventes trouvées</span>
             </div>
 
@@ -167,7 +173,7 @@
         </div>
 
         <div class="related-section">
-            <h2>🎨 Autres variantes Game Boy Color</h2>
+            <h2>Autres variantes Game Boy Color</h2>
             <div class="related-grid">
                 {RELATED_VARIANTS}
             </div>
