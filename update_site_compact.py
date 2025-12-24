@@ -339,12 +339,27 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
     current_listings_html = ''
     current_listings_count = 0
     if current_listings_data and variant_key in current_listings_data:
-        current_listings = current_listings_data[variant_key]['listings']
-        current_listings_count = len(current_listings)
-        current_listings_html = "\n".join([
-            format_current_listing_card(l)
-            for l in current_listings
-        ])
+        all_current_listings = current_listings_data[variant_key]['listings']
+
+        # Filter: only show listings within ±30% of average price
+        avg_price = stats['avg_price']
+        min_acceptable = avg_price * 0.7  # -30%
+        max_acceptable = avg_price * 1.3  # +30%
+
+        filtered_listings = [
+            l for l in all_current_listings
+            if min_acceptable <= l['price'] <= max_acceptable
+        ]
+
+        if filtered_listings:
+            current_listings_count = len(filtered_listings)
+            current_listings_html = "\n".join([
+                format_current_listing_card(l)
+                for l in filtered_listings
+            ])
+            print(f"    📊 Current listings: {len(filtered_listings)}/{len(all_current_listings)} within ±30% of {avg_price}€ (filtered {len(all_current_listings) - len(filtered_listings)} outliers)")
+        else:
+            current_listings_html = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre dans la fourchette de prix acceptable pour le moment</p>'
     else:
         current_listings_html = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre disponible pour le moment</p>'
 

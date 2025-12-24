@@ -174,7 +174,10 @@ prixretro.com (LIVE)
 - Source column for future multi-platform support
 
 ### Current Listings
-- 5 active eBay listings per variant
+- Scrapes 5 active eBay listings per variant
+- **Price filtering:** Only shows listings within ±30% of average price
+  - Example: If avg = 100€, shows 70€-130€ range
+  - Filters out overpriced/suspiciously cheap items
 - Large cards with images
 - Bulkier design than price history
 - "EN VENTE" badge
