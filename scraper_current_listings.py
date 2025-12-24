@@ -16,7 +16,8 @@ def scrape_current_listings(variant_key, variant_name, max_items=5):
     print(f"\n🔍 Scraping current listings for: {variant_name}")
 
     # Build search URL for items FOR SALE (not sold)
-    search_term = f"game boy color {variant_name}"
+    # Use simple "game boy color" search for better results
+    search_term = "game boy color"
     encoded_term = quote_plus(search_term)
 
     url = (
@@ -119,14 +120,14 @@ def scrape_current_listings(variant_key, variant_name, max_items=5):
 def scrape_all_variants():
     """Scrape current listings for all variants"""
 
-    # Load config
-    with open('config.json', 'r', encoding='utf-8') as f:
-        config = json.load(f)
+    # Load scraped_data.json to get variant names
+    with open('scraped_data.json', 'r', encoding='utf-8') as f:
+        scraped_data = json.load(f)
 
     all_current_listings = {}
 
-    for variant_key, variant_info in config['variants'].items():
-        variant_name = variant_info['name']
+    for variant_key, variant_data in scraped_data.items():
+        variant_name = variant_data['variant_name']
 
         listings = scrape_current_listings(variant_key, variant_name, max_items=5)
 
