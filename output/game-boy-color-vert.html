@@ -18,7 +18,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Game Boy Color Vert - Prix & Historique | PrixRetro">
-    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Vert. 8 ventes analysées. Prix moyen: 74€"
+    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Vert. 8 ventes analysées. Prix moyen: 74€">
     
     <title>Game Boy Color Vert - Prix & Historique | PrixRetro</title>
     
@@ -124,6 +124,16 @@
         </div>
 
         <div class="content-section">
+            <div class="listings-header">
+                <h2>Offres actuelles sur eBay</h2>
+                <span class="listings-count">0 offres disponibles</span>
+            </div>
+            <div class="current-listings-grid">
+                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre disponible pour le moment</p>
+            </div>
+        </div>
+
+        <div class="content-section">
             <h2>Évolution des prix</h2>
             <div class="graph-container">
                 
@@ -168,14 +178,16 @@
                     <div>Article vendu</div>
                     <div>Prix</div>
                     <div class="listing-date-compact">Date</div>
+                    <div class="listing-source-compact">Source</div>
                     <div class="listing-condition-compact">État</div>
                 </div>
-                
+
                 
                 <a href="https://www.ebay.fr/itm/366056596993" class="listing-row" target="_blank" rel="nofollow noopener">
                     <div class="listing-title-compact">game boy color</div>
                     <div class="listing-price-compact">60€</div>
                     <div class="listing-date-compact">20/12/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -183,6 +195,7 @@
                     <div class="listing-title-compact">CONSOLE NINTENDO GAMEBOY COLOR BOITE BOITE JEU TETRIS TYPE NES ZELDA MARIO BROS</div>
                     <div class="listing-price-compact">86€</div>
                     <div class="listing-date-compact">09/12/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -190,6 +203,7 @@
                     <div class="listing-title-compact">Nintendo Game Boy Color Console GBC ✅ Vert Kiwi  (CGB-001)</div>
                     <div class="listing-price-compact">60€</div>
                     <div class="listing-date-compact">07/12/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -197,6 +211,7 @@
                     <div class="listing-title-compact">game boy color</div>
                     <div class="listing-price-compact">69€</div>
                     <div class="listing-date-compact">05/12/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -204,6 +219,7 @@
                     <div class="listing-title-compact">Nintendo Game Boy Color Console - vert kiwi  (CGB-001)  + jeu bugs bunny</div>
                     <div class="listing-price-compact">79€</div>
                     <div class="listing-date-compact">24/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -211,6 +227,7 @@
                     <div class="listing-title-compact">Nintendo Game Boy Color verte Pomme + Pokémon Version Or Fr</div>
                     <div class="listing-price-compact">79€</div>
                     <div class="listing-date-compact">08/10/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -218,6 +235,7 @@
                     <div class="listing-title-compact">NINTENDO game boy color en boite Verte</div>
                     <div class="listing-price-compact">151€</div>
                     <div class="listing-date-compact">24/09/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -225,6 +243,7 @@
                     <div class="listing-title-compact">Gameboy Color color Vert Pomme Avec cache pile Officiel</div>
                     <div class="listing-price-compact">68€</div>
                     <div class="listing-date-compact">24/09/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
             </div>
@@ -341,13 +360,15 @@
                         callbacks: {
                             title: function(context) {
                                 const index = context[0].dataIndex;
-                                return chartData.labels[index];
+                                const title = chartData.titles[index];
+                                return title.length > 50 ? title.substring(0, 50) + '...' : title;
                             },
                             label: function(context) {
                                 return context.parsed.y + '€';
                             },
                             afterLabel: function(context) {
-                                return 'Cliquer pour voir';
+                                const index = context[0].dataIndex;
+                                return chartData.labels[index] + ' • Cliquer pour voir';
                             }
                         }
                     }

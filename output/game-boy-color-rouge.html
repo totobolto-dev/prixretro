@@ -18,7 +18,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Game Boy Color Rouge - Prix & Historique | PrixRetro">
-    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Rouge. 8 ventes analysées. Prix moyen: 72€"
+    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Rouge. 8 ventes analysées. Prix moyen: 72€">
     
     <title>Game Boy Color Rouge - Prix & Historique | PrixRetro</title>
     
@@ -124,6 +124,16 @@
         </div>
 
         <div class="content-section">
+            <div class="listings-header">
+                <h2>Offres actuelles sur eBay</h2>
+                <span class="listings-count">0 offres disponibles</span>
+            </div>
+            <div class="current-listings-grid">
+                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre disponible pour le moment</p>
+            </div>
+        </div>
+
+        <div class="content-section">
             <h2>Évolution des prix</h2>
             <div class="graph-container">
                 
@@ -168,14 +178,16 @@
                     <div>Article vendu</div>
                     <div>Prix</div>
                     <div class="listing-date-compact">Date</div>
+                    <div class="listing-source-compact">Source</div>
                     <div class="listing-condition-compact">État</div>
                 </div>
-                
+
                 
                 <a href="https://www.ebay.fr/itm/397394922058" class="listing-row" target="_blank" rel="nofollow noopener">
                     <div class="listing-title-compact">Console Game boy color rouge</div>
                     <div class="listing-price-compact">59€</div>
                     <div class="listing-date-compact">17/12/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -183,6 +195,7 @@
                     <div class="listing-title-compact">Console Nintendo Game Boy Color Rose</div>
                     <div class="listing-price-compact">70€</div>
                     <div class="listing-date-compact">02/12/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -190,6 +203,7 @@
                     <div class="listing-title-compact">console Game Boy Color CGB-001 Titeuf Pokémon Nintendo retrogaming handheld game</div>
                     <div class="listing-price-compact">61€</div>
                     <div class="listing-date-compact">24/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -197,6 +211,7 @@
                     <div class="listing-title-compact">Nintendo Game Boy  Color rouge model N° CGB-001</div>
                     <div class="listing-price-compact">70€</div>
                     <div class="listing-date-compact">23/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -204,6 +219,7 @@
                     <div class="listing-title-compact">Game Boy Color Rouge En Super État</div>
                     <div class="listing-price-compact">75€</div>
                     <div class="listing-date-compact">05/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -211,6 +227,7 @@
                     <div class="listing-title-compact">Console Nintendo Gameboy color Sous Blister Rigide</div>
                     <div class="listing-price-compact">950€</div>
                     <div class="listing-date-compact">23/10/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Neuf</div>
                 </a>
 
@@ -218,6 +235,7 @@
                     <div class="listing-title-compact">Lot Console Nintendo Game Boy Color</div>
                     <div class="listing-price-compact">86€</div>
                     <div class="listing-date-compact">20/10/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -225,6 +243,7 @@
                     <div class="listing-title-compact">Console Nintendo / Game Boy Color / Rouge -Rosé / Bon État</div>
                     <div class="listing-price-compact">70€</div>
                     <div class="listing-date-compact">19/10/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
             </div>
@@ -341,13 +360,15 @@
                         callbacks: {
                             title: function(context) {
                                 const index = context[0].dataIndex;
-                                return chartData.labels[index];
+                                const title = chartData.titles[index];
+                                return title.length > 50 ? title.substring(0, 50) + '...' : title;
                             },
                             label: function(context) {
                                 return context.parsed.y + '€';
                             },
                             afterLabel: function(context) {
-                                return 'Cliquer pour voir';
+                                const index = context[0].dataIndex;
+                                return chartData.labels[index] + ' • Cliquer pour voir';
                             }
                         }
                     }

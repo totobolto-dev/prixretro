@@ -18,7 +18,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{PRODUCT_NAME} - Prix & Historique | PrixRetro">
-    <meta name="twitter:description" content="Prix et historique des ventes du {PRODUCT_NAME}. {LISTING_COUNT} ventes analysées. Prix moyen: {AVG_PRICE}€"
+    <meta name="twitter:description" content="Prix et historique des ventes du {PRODUCT_NAME}. {LISTING_COUNT} ventes analysées. Prix moyen: {AVG_PRICE}€">
     
     <title>{PRODUCT_NAME} - Prix & Historique | PrixRetro</title>
     
@@ -124,6 +124,16 @@
         </div>
 
         <div class="content-section">
+            <div class="listings-header">
+                <h2>Offres actuelles sur eBay</h2>
+                <span class="listings-count">{CURRENT_LISTINGS_COUNT} offres disponibles</span>
+            </div>
+            <div class="current-listings-grid">
+                {CURRENT_LISTINGS_HTML}
+            </div>
+        </div>
+
+        <div class="content-section">
             <h2>Évolution des prix</h2>
             <div class="graph-container">
                 {PRICE_GRAPH_HTML}
@@ -164,9 +174,10 @@
                     <div>Article vendu</div>
                     <div>Prix</div>
                     <div class="listing-date-compact">Date</div>
+                    <div class="listing-source-compact">Source</div>
                     <div class="listing-condition-compact">État</div>
                 </div>
-                
+
                 {LISTINGS_ROWS_HTML}
             </div>
     

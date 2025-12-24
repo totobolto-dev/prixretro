@@ -18,7 +18,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Game Boy Color Jaune - Prix & Historique | PrixRetro">
-    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Jaune. 10 ventes analysées. Prix moyen: 65€"
+    <meta name="twitter:description" content="Prix et historique des ventes du Game Boy Color Jaune. 10 ventes analysées. Prix moyen: 65€">
     
     <title>Game Boy Color Jaune - Prix & Historique | PrixRetro</title>
     
@@ -124,6 +124,16 @@
         </div>
 
         <div class="content-section">
+            <div class="listings-header">
+                <h2>Offres actuelles sur eBay</h2>
+                <span class="listings-count">0 offres disponibles</span>
+            </div>
+            <div class="current-listings-grid">
+                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre disponible pour le moment</p>
+            </div>
+        </div>
+
+        <div class="content-section">
             <h2>Évolution des prix</h2>
             <div class="graph-container">
                 
@@ -168,14 +178,16 @@
                     <div>Article vendu</div>
                     <div>Prix</div>
                     <div class="listing-date-compact">Date</div>
+                    <div class="listing-source-compact">Source</div>
                     <div class="listing-condition-compact">État</div>
                 </div>
-                
+
                 
                 <a href="https://www.ebay.fr/itm/227109852736" class="listing-row" target="_blank" rel="nofollow noopener">
                     <div class="listing-title-compact">Console Nintendo Game Boy Color + Light Master + Cordon Tetris Challenge</div>
                     <div class="listing-price-compact">63€</div>
                     <div class="listing-date-compact">07/12/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -183,6 +195,7 @@
                     <div class="listing-title-compact">🕹️ Console Nintendo Game Boy Color Jaune - 100% Fonctionnelle</div>
                     <div class="listing-price-compact">80€</div>
                     <div class="listing-date-compact">01/12/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -190,6 +203,7 @@
                     <div class="listing-title-compact">Lot Console Nintendo Game Boy Color + 1 Jeu Vidéo Tintin</div>
                     <div class="listing-price-compact">56€</div>
                     <div class="listing-date-compact">30/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -197,6 +211,7 @@
                     <div class="listing-title-compact">game boy color jaune</div>
                     <div class="listing-price-compact">75€</div>
                     <div class="listing-date-compact">22/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -204,6 +219,7 @@
                     <div class="listing-title-compact">Console Nintendo Game Boy GAMEBOY Color jaune  sans boite</div>
                     <div class="listing-price-compact">50€</div>
                     <div class="listing-date-compact">16/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -211,6 +227,7 @@
                     <div class="listing-title-compact">Console Nintendo Game Boy GAMEBOY Color jaune  sans boite</div>
                     <div class="listing-price-compact">45€</div>
                     <div class="listing-date-compact">15/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -218,6 +235,7 @@
                     <div class="listing-title-compact">game boy color</div>
                     <div class="listing-price-compact">60€</div>
                     <div class="listing-date-compact">12/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -225,6 +243,7 @@
                     <div class="listing-title-compact">Console Nintendo Game Boy Color Jaune</div>
                     <div class="listing-price-compact">60€</div>
                     <div class="listing-date-compact">11/11/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -232,6 +251,7 @@
                     <div class="listing-title-compact">Console Gameboy Color Jaune Nintendo Yellow Boite Box</div>
                     <div class="listing-price-compact">269€</div>
                     <div class="listing-date-compact">24/10/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
 
@@ -239,6 +259,7 @@
                     <div class="listing-title-compact">Console Nintendo Game Boy Color Parfait État Coque Neuve</div>
                     <div class="listing-price-compact">78€</div>
                     <div class="listing-date-compact">20/10/2025</div>
+                    <div class="listing-source-compact">eBay</div>
                     <div class="listing-condition-compact">Occasion</div>
                 </a>
             </div>
@@ -355,13 +376,15 @@
                         callbacks: {
                             title: function(context) {
                                 const index = context[0].dataIndex;
-                                return chartData.labels[index];
+                                const title = chartData.titles[index];
+                                return title.length > 50 ? title.substring(0, 50) + '...' : title;
                             },
                             label: function(context) {
                                 return context.parsed.y + '€';
                             },
                             afterLabel: function(context) {
-                                return 'Cliquer pour voir';
+                                const index = context[0].dataIndex;
+                                return chartData.labels[index] + ' • Cliquer pour voir';
                             }
                         }
                     }

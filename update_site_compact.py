@@ -183,13 +183,15 @@ def generate_price_graph(listings):
                         callbacks: {{
                             title: function(context) {{
                                 const index = context[0].dataIndex;
-                                return chartData.labels[index];
+                                const title = chartData.titles[index];
+                                return title.length > 50 ? title.substring(0, 50) + '...' : title;
                             }},
                             label: function(context) {{
                                 return context.parsed.y + '€';
                             }},
                             afterLabel: function(context) {{
-                                return 'Cliquer pour voir';
+                                const index = context[0].dataIndex;
+                                return chartData.labels[index] + ' • Cliquer pour voir';
                             }}
                         }}
                     }}
@@ -247,25 +249,49 @@ def format_listing_html(listing):
     else:
         display_date = listing['sold_date']
 
-    # Get eBay URL
+    # Get eBay URL and source
     ebay_url = listing.get('url', '#')
+    source = listing.get('source', 'eBay')
 
     return f"""
                 <a href="{ebay_url}" class="listing-row" target="_blank" rel="nofollow noopener">
                     <div class="listing-title-compact">{listing['title']}</div>
                     <div class="listing-price-compact">{listing['price']:.0f}€</div>
                     <div class="listing-date-compact">{display_date}</div>
+                    <div class="listing-source-compact">{source}</div>
                     <div class="listing-condition-compact">{listing['condition']}</div>
+                </a>"""
+
+def format_current_listing_card(listing):
+    """Format a current listing card with image"""
+
+    url = listing.get('url', '#')
+    title = listing['title']
+    price = listing['price']
+    condition = listing.get('condition', 'Occasion')
+    image_url = listing.get('image_url', '')
+
+    return f"""
+                <a href="{url}" class="current-listing-card" target="_blank" rel="nofollow noopener">
+                    <img src="{image_url}" alt="{title}" class="current-listing-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%231a1f29%22 width=%22200%22 height=%22200%22/%3E%3C/svg%3E'">
+                    <div class="current-listing-content">
+                        <div class="current-listing-badge">EN VENTE</div>
+                        <div class="current-listing-title">{title}</div>
+                        <div class="current-listing-meta">
+                            <span class="current-listing-price">{price:.0f}€</span>
+                            <span class="current-listing-condition">{condition}</span>
+                        </div>
+                    </div>
                 </a>"""
 
 def build_ebay_search_url(variant_key, variant_name, campaign_id, network_id, tracking_id):
     """Build eBay search URL for items currently FOR SALE with affiliate params"""
     from urllib.parse import quote_plus
-    
+
     # Search for items FOR SALE (not sold)
     search_term = f"game boy color {variant_name}"
     encoded_term = quote_plus(search_term)
-    
+
     # Build URL with category filters + affiliate params
     # LH_ItemCondition=3000 = Used items
     # Remove LH_Sold to show items FOR SALE
@@ -277,37 +303,50 @@ def build_ebay_search_url(variant_key, variant_name, campaign_id, network_id, tr
         f"Plateforme=Nintendo%20Game%20Boy%20Color&"
         f"LH_ItemCondition=3000"
     )
-    
+
     # Add eBay Partner Network affiliate params
     affiliate_params = (
         f"&mkcid={tracking_id}"
         f"&mkrid={network_id}"
         f"&campid={campaign_id}"
     )
-    
+
     return base_url + affiliate_params
 
-def generate_variant_page(variant_data, all_variants, config, template, output_dir='output'):
+def generate_variant_page(variant_data, all_variants, config, template, output_dir='output', current_listings_data=None):
     """Generate HTML page for a specific variant"""
-    
+
     variant_key = variant_data['variant_key']
     variant_name = variant_data['variant_name']
     stats = variant_data['stats']
     listings = variant_data['listings']
     description = variant_data['description']
-    
+
     # Get eBay config
     ebay_config = config['ebay_partner']
     campaign_id = ebay_config['campaign_id']
     network_id = ebay_config['network_id']
     tracking_id = ebay_config['tracking_id']
-    
+
     print(f"  📄 Generating: game-boy-color-{variant_key}.html")
-    
+
     # Build eBay search link for items FOR SALE
     ebay_search_link = build_ebay_search_url(
         variant_key, variant_name, campaign_id, network_id, tracking_id
     )
+
+    # Load current listings for this variant
+    current_listings_html = ''
+    current_listings_count = 0
+    if current_listings_data and variant_key in current_listings_data:
+        current_listings = current_listings_data[variant_key]['listings']
+        current_listings_count = len(current_listings)
+        current_listings_html = "\n".join([
+            format_current_listing_card(l)
+            for l in current_listings
+        ])
+    else:
+        current_listings_html = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre disponible pour le moment</p>'
 
     # Generate price history graph - pass listings to show individual sales
     graph_data = generate_price_graph(listings)
@@ -356,6 +395,8 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
     html = html.replace('{EBAY_SEARCH_LINK}', ebay_search_link)
     html = html.replace('{PRICE_GRAPH_HTML}', graph_data['html'])
     html = html.replace('{PRICE_GRAPH_JS}', graph_data['js'])
+    html = html.replace('{CURRENT_LISTINGS_HTML}', current_listings_html)
+    html = html.replace('{CURRENT_LISTINGS_COUNT}', str(current_listings_count))
     
     # Write output file
     os.makedirs(output_dir, exist_ok=True)
@@ -455,20 +496,29 @@ def generate_index_page(all_variants, output_dir='output'):
 
 def generate_all_pages():
     """Generate all HTML pages from scraped data"""
-    
+
     print("="*60)
     print("🎨 Generating HTML pages from scraped data")
     print("="*60)
-    
+
     # Load data
     print("\n📂 Loading data...")
     scraped_data = load_scraped_data()
     if not scraped_data:
         return False
-    
+
     config = load_config()
     template = load_template()
-    
+
+    # Load current listings if available
+    current_listings_data = None
+    if os.path.exists('current_listings.json'):
+        with open('current_listings.json', 'r', encoding='utf-8') as f:
+            current_listings_data = json.load(f)
+        print(f"✅ Loaded current listings for {len(current_listings_data)} variants")
+    else:
+        print("⚠️  No current_listings.json found, skipping current listings")
+
     print(f"✅ Loaded data for {len(scraped_data)} variants")
     
     # Create output directory
@@ -486,11 +536,12 @@ def generate_all_pages():
             continue
             
         filepath = generate_variant_page(
-            variant_data, 
-            scraped_data, 
-            config, 
-            template, 
-            output_dir
+            variant_data,
+            scraped_data,
+            config,
+            template,
+            output_dir,
+            current_listings_data
         )
         generated_files.append(filepath)
     
