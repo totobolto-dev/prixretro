@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """
-Scrape current eBay listings (FOR SALE) with images
+Scrape current eBay listings (FOR SALE) with images using Playwright
 Saves to current_listings.json
 """
 
-import requests
-from bs4 import BeautifulSoup
+import asyncio
 import json
 import time
-from urllib.parse import quote_plus
+from playwright.async_api import async_playwright
 
-def scrape_current_listings(variant_key, variant_name, max_items=5):
+async def scrape_current_listings(page, variant_key, variant_name, max_items=5):
     """Scrape active eBay listings for a variant with images"""
 
     print(f"\n🔍 Scraping current listings for: {variant_name}")
@@ -18,56 +17,65 @@ def scrape_current_listings(variant_key, variant_name, max_items=5):
     # Build search URL for items FOR SALE (not sold)
     # Use simple "game boy color" search for better results
     search_term = "game boy color"
-    encoded_term = quote_plus(search_term)
 
     url = (
         f"https://www.ebay.fr/sch/i.html?"
-        f"_nkw={encoded_term}&"
-        f"_sacat=139971&"
+        f"_nkw={search_term.replace(' ', '+')}&"
+        f"_sacat=139971&"  # Video game consoles category
         f"_sop=10&"  # Sort by price + shipping (lowest first)
         f"_ipg=50"
         # NO LH_Sold - we want active listings
     )
 
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-    }
-
     try:
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'html.parser')
+        # Navigate to eBay search
+        print(f"  📄 Loading: {url}")
+        await page.goto(url, wait_until='domcontentloaded', timeout=60000)
 
+        # Wait a bit for JavaScript to load
+        await asyncio.sleep(2)
+
+        # Wait for search results to load
+        await page.wait_for_selector('.s-item', timeout=15000)
+
+        # Extract all items
+        items = await page.query_selector_all('.s-item')
         listings = []
-        items = soup.select('.s-item')
 
-        for item in items[:max_items]:
+        for item in items:
             try:
-                # Skip sponsored/ads
-                if 'SPONSORISÉ' in item.get_text():
+                # Skip sponsored items
+                item_text = await item.inner_text()
+                if 'SPONSORISÉ' in item_text or 'Shop on eBay' in item_text:
                     continue
 
                 # Get title
-                title_elem = item.select_one('.s-item__title')
+                title_elem = await item.query_selector('.s-item__title')
                 if not title_elem:
                     continue
-                title = title_elem.get_text().strip()
+                title = await title_elem.inner_text()
+                title = title.strip()
 
-                # Skip "Shop on eBay" header
-                if 'Shop on eBay' in title or title == '':
+                if not title or title == '':
+                    continue
+
+                # Only keep gameboy color items
+                if 'game boy' not in title.lower() and 'gameboy' not in title.lower():
                     continue
 
                 # Get URL
-                link_elem = item.select_one('.s-item__link')
+                link_elem = await item.query_selector('.s-item__link')
                 if not link_elem:
                     continue
-                item_url = link_elem['href'].split('?')[0]  # Clean URL
+                item_url = await link_elem.get_attribute('href')
+                item_url = item_url.split('?')[0] if item_url else ''
 
                 # Get price
-                price_elem = item.select_one('.s-item__price')
+                price_elem = await item.query_selector('.s-item__price')
                 if not price_elem:
                     continue
-                price_text = price_elem.get_text().strip()
+                price_text = await price_elem.inner_text()
+                price_text = price_text.strip()
 
                 # Parse price (handle "XX,XX EUR" or "XX EUR")
                 try:
@@ -80,27 +88,29 @@ def scrape_current_listings(variant_key, variant_name, max_items=5):
                     continue
 
                 # Get condition
-                condition_elem = item.select_one('.SECONDARY_INFO')
-                condition = condition_elem.get_text().strip() if condition_elem else 'Occasion'
+                condition_elem = await item.query_selector('.SECONDARY_INFO')
+                condition = 'Occasion'
+                if condition_elem:
+                    condition = await condition_elem.inner_text()
+                    condition = condition.strip()
 
                 # Get image
-                img_elem = item.select_one('.s-item__image-img')
+                img_elem = await item.query_selector('.s-item__image-img')
                 image_url = ''
-                if img_elem and img_elem.get('src'):
-                    image_url = img_elem['src']
+                if img_elem:
+                    image_url = await img_elem.get_attribute('src')
+                    if not image_url:
+                        image_url = ''
 
-                # Only keep gameboy color items
-                if 'game boy' not in title.lower() and 'gameboy' not in title.lower():
-                    continue
-
-                listings.append({
+                listing = {
                     'title': title,
                     'url': item_url,
                     'price': price,
                     'condition': condition,
                     'image_url': image_url
-                })
+                }
 
+                listings.append(listing)
                 print(f"  ✅ {title[:60]} - {price}€")
 
                 if len(listings) >= max_items:
@@ -117,8 +127,8 @@ def scrape_current_listings(variant_key, variant_name, max_items=5):
         return []
 
 
-def scrape_all_variants():
-    """Scrape current listings for all variants"""
+async def scrape_all_variants():
+    """Scrape current listings for all variants using Playwright"""
 
     # Load scraped_data.json to get variant names
     with open('scraped_data.json', 'r', encoding='utf-8') as f:
@@ -126,21 +136,44 @@ def scrape_all_variants():
 
     all_current_listings = {}
 
-    for variant_key, variant_data in scraped_data.items():
-        variant_name = variant_data['variant_name']
+    async with async_playwright() as p:
+        # Launch browser in headless mode with stable arguments
+        print("🚀 Launching browser...")
+        browser = await p.chromium.launch(
+            headless=True,
+            args=[
+                '--disable-blink-features=AutomationControlled',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+            ]
+        )
 
-        listings = scrape_current_listings(variant_key, variant_name, max_items=5)
+        # Create a new page with realistic viewport
+        page = await browser.new_page(
+            viewport={'width': 1920, 'height': 1080},
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        )
 
-        if listings:
-            all_current_listings[variant_key] = {
-                'variant_key': variant_key,
-                'variant_name': variant_name,
-                'listings': listings,
-                'count': len(listings)
-            }
-            time.sleep(2)  # Be nice to eBay
-        else:
-            print(f"  ⚠️  No listings found for {variant_name}")
+        for variant_key, variant_data in scraped_data.items():
+            variant_name = variant_data['variant_name']
+
+            listings = await scrape_current_listings(page, variant_key, variant_name, max_items=5)
+
+            if listings:
+                all_current_listings[variant_key] = {
+                    'variant_key': variant_key,
+                    'variant_name': variant_name,
+                    'listings': listings,
+                    'count': len(listings)
+                }
+                print(f"  💤 Waiting 2 seconds before next variant...")
+                await asyncio.sleep(2)  # Be nice to eBay
+            else:
+                print(f"  ⚠️  No listings found for {variant_name}")
+
+        await browser.close()
 
     # Save to JSON
     output_file = 'current_listings.json'
@@ -154,4 +187,4 @@ def scrape_all_variants():
 
 
 if __name__ == '__main__':
-    scrape_all_variants()
+    asyncio.run(scrape_all_variants())

@@ -1,8 +1,9 @@
 # Claude Code Session Context
 
-**Last Updated:** 2025-12-24 11:30 UTC
+**Last Updated:** 2025-12-25 (Current session)
 **Branch:** main
 **Latest Commit:** 034514d - Fix variant display names
+**New Features:** Playwright scraper + 6-hour auto-refresh via GitHub Actions
 
 ---
 
@@ -32,18 +33,22 @@
 - Left-aligned text (Figma style)
 - Compact sizing (1rem padding)
 
-#### 4. **Current Listings Section** (⚠️ eBay blocking issue)
-- Scraper: `scraper_current_listings.py`
+#### 4. **Current Listings Section** (✅ FIXED - Using Playwright)
+- Scraper: `scraper_current_listings.py` (now using Playwright)
+- **Automated refresh:** Every 6 hours via GitHub Actions
 - Price filter: ±30% of average (filters outliers)
 - Large image cards (bulkier than price history)
 - "EN VENTE" badge
 - Fallback placeholder image
-- **ISSUE:** eBay anti-bot protection ("Nous sommes désolés")
+- **SOLVED:** eBay anti-bot protection bypassed with headless browser
 
 #### 5. **Automated Workflow**
-- `scripts/daily_update.py` - full automation
-- Runs: merge → scrape → regenerate → commit → push
-- `--no-push` flag for manual review
+- **GitHub Actions** (`.github/workflows/scrape-current-listings.yml`):
+  - Runs every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
+  - Scrapes current listings → regenerates site → auto-deploys
+- **Local script** (`scripts/daily_update.py`):
+  - Full manual automation: merge → scrape → regenerate → commit → push
+  - `--no-push` flag for manual review
 - Complete documentation in `DAILY_WORKFLOW.md`
 
 #### 6. **Bug Fixes**
@@ -73,6 +78,10 @@ prixretro/
 │
 ├── scripts/
 │   └── daily_update.py           # Automated workflow
+│
+├── .github/workflows/
+│   ├── deploy.yml                # FTP deployment to OVH
+│   └── scrape-current-listings.yml  # Auto-scrape every 6 hours
 │
 ├── output/                        # Generated website
 │   ├── index.html
@@ -210,36 +219,25 @@ variant_name = variant_config.get('name', variant_key.replace('-', ' ').title())
 
 ## ⚠️ KNOWN ISSUES
 
-### 1. eBay Anti-Bot Protection (Current Listings)
+### 1. ~~eBay Anti-Bot Protection (Current Listings)~~ ✅ FIXED
 **Problem:** eBay returns "Nous sommes désolés..." page for active listings scraper
 
-**Evidence:**
-```python
-Status code: 200
-Content: <!DOCTYPE html><html><head><title>Nous sommes désolés...</title>
-```
+**Solution Implemented:** Playwright (headless browser automation)
+- Using `async_playwright()` with Chromium
+- Browser launch args: `--no-sandbox`, `--disable-setuid-sandbox`
+- Realistic viewport (1920x1080) + Chrome User-Agent
+- 2-second delays between variants
+- Works perfectly in GitHub Actions environment
 
-**Solutions:**
-1. **Selenium/Playwright** (use real browser)
-   ```bash
-   pip install selenium
-   # or
-   pip install playwright
-   playwright install
-   ```
+**GitHub Actions Automation:**
+- Workflow: `.github/workflows/scrape-current-listings.yml`
+- Schedule: Every 6 hours (cron: `0 */6 * * *`)
+- Auto-commits and deploys when changes detected
 
-2. **Better Headers/Cookies**
-   - Rotate User-Agents
-   - Add browser-like cookies
-   - Add more realistic headers
-
-3. **eBay API** (requires business approval)
-   - Apply for eBay Developers Program
-   - Use official Browse API
-
-4. **Alternative:** Skip current listings temporarily
-
-**Current Status:** Feature disabled until fixed
+**Local Testing:**
+- Requires: `sudo playwright install-deps chromium`
+- Note: System dependencies need sudo access
+- Production: Use GitHub Actions (recommended)
 
 ---
 
@@ -256,7 +254,7 @@ eBay Scraper (sold) → scraped_data.json (raw)
                            ↓
       scraped_data.json (cleaned + categorized)
                            ↓
-      Current Listings Scraper (⚠️ eBay blocking)
+      Current Listings Scraper (✅ Playwright - every 6h)
                            ↓
       current_listings.json
                            ↓
@@ -368,9 +366,9 @@ jq -r '.[] | "\(.variant_key): \(.stats.listing_count)"' scraped_data.json
 
 ## 🎯 NEXT STEPS
 
-### Immediate (Fix eBay Blocking)
-1. Implement Selenium/Playwright for current listings scraper
-2. Or skip current listings and document as "coming soon"
+### ~~Immediate (Fix eBay Blocking)~~ ✅ DONE
+1. ~~Implement Selenium/Playwright for current listings scraper~~ ✅
+2. ~~Set up GitHub Actions cron job for auto-refresh~~ ✅
 
 ### Short-term
 - [ ] Add Leboncoin scraper

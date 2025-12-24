@@ -6,12 +6,32 @@ Complete guide for daily price data updates.
 
 ## 📋 Quick Start (Automated)
 
-### Option 1: Fully Automated
+### ⚡ Fully Automated (GitHub Actions - Recommended)
+
+**Current listings scrape automatically every 6 hours:**
+- 00:00 UTC
+- 06:00 UTC
+- 12:00 UTC
+- 18:00 UTC
+
+GitHub Actions workflow `.github/workflows/scrape-current-listings.yml`:
+1. Scrapes current eBay listings (using Playwright)
+2. Regenerates website
+3. Auto-commits and pushes if changes detected
+4. Triggers deployment to OVH
+
+**Manual trigger:**
+```bash
+gh workflow run scrape-current-listings.yml
+# or via GitHub Actions web interface
+```
+
+### Option 1: Fully Automated (Local)
 ```bash
 python3 scripts/daily_update.py
 ```
 
-This runs everything:
+This runs everything locally:
 1. Merges sorted data
 2. Scrapes current listings with images
 3. Regenerates website
@@ -67,14 +87,17 @@ python3 merge_sorted_data.py
 - Calculates trimmed mean prices
 - Generates price_history by month
 
-### 4. Scrape Current Listings (Optional)
+### 4. Scrape Current Listings (Automated via GitHub Actions)
 ```bash
 python3 scraper_current_listings.py
 ```
 
+- **Uses Playwright** (headless browser) to bypass eBay's anti-bot protection
 - Scrapes 5 active eBay listings per variant
 - Gets images, prices, conditions
 - Saves to `current_listings.json`
+- **Note:** Requires system dependencies - works perfectly in GitHub Actions
+- Local testing needs: `playwright install-deps chromium` (requires sudo)
 
 ### 5. Regenerate Website
 ```bash
@@ -194,7 +217,20 @@ prixretro.com (LIVE)
 
 ## 🛠️ Troubleshooting
 
-### Scraper Issues
+### Current Listings Scraper (Playwright)
+```bash
+# Works in GitHub Actions automatically
+# Local testing requires system dependencies:
+sudo playwright install-deps chromium
+
+# Test manually:
+python3 scraper_current_listings.py
+
+# Check GitHub Actions workflow:
+gh run list --workflow=scrape-current-listings.yml --limit 5
+```
+
+### Sold Listings Scraper Issues
 ```bash
 # Check seen items
 cat .ebay_scraper_progress.json | jq '.seen_item_ids | length'
