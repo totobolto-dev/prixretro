@@ -88,12 +88,14 @@ def merge_sorted_data(sorted_file='sorted_items.json'):
         print(f"\n🎨 Adding {len(custom_variants)} new variants to config...")
         for variant_key in custom_variants:
             if variant_key not in config['variants']:
+                display_name = variant_key.replace('-', ' ').title()
                 config['variants'][variant_key] = {
-                    'variant_name': variant_key.replace('-', ' ').title(),
-                    'search_terms': [f"game boy color {variant_key}"],
+                    'name': display_name,
+                    'description': f"Édition {display_name}.",
+                    'search_terms': [f"game boy color {variant_key.replace('-', ' ')}"],
                     'keywords': [variant_key]
                 }
-                print(f"   + {variant_key}")
+                print(f"   + {variant_key} ({display_name})")
 
         # Save updated config
         with open('config.json', 'w', encoding='utf-8') as f:
@@ -136,11 +138,14 @@ def merge_sorted_data(sorted_file='sorted_items.json'):
             price_history[month] = round(sum(month_prices) / len(month_prices))
 
         # Get variant name from config
-        variant_name = config['variants'].get(variant_key, {}).get('variant_name', variant_key.title())
+        variant_config = config['variants'].get(variant_key, {})
+        variant_name = variant_config.get('name', variant_key.replace('-', ' ').title())
+        variant_description = variant_config.get('description', '')
 
         new_data[variant_key] = {
             'variant_key': variant_key,
             'variant_name': variant_name,
+            'description': variant_description,
             'stats': {
                 'avg_price': avg_price,
                 'min_price': min_price,

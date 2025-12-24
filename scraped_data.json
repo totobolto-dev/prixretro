@@ -1,7 +1,7 @@
 {
   "atomic-purple": {
     "variant_key": "atomic-purple",
-    "variant_name": "Atomic-Purple",
+    "variant_name": "Atomic Purple (Violet Transparent)",
     "stats": {
       "avg_price": 76,
       "min_price": 50,
@@ -173,7 +173,7 @@
   },
   "vert": {
     "variant_key": "vert",
-    "variant_name": "Vert",
+    "variant_name": "Vert Néon",
     "stats": {
       "avg_price": 74,
       "min_price": 59.9,
@@ -504,7 +504,7 @@
   },
   "bleu": {
     "variant_key": "bleu",
-    "variant_name": "Bleu",
+    "variant_name": "Bleu (Teal)",
     "stats": {
       "avg_price": 85,
       "min_price": 33,
@@ -727,7 +727,7 @@
   },
   "pokemon-center-3rd-anniversary": {
     "variant_key": "pokemon-center-3rd-anniversary",
-    "variant_name": "Pokemon-Center-3Rd-Anniversary",
+    "variant_name": "Pokemon Center 3rd Anniversary",
     "stats": {
       "avg_price": 280,
       "min_price": 280,
@@ -752,7 +752,7 @@
   },
   "pokemon-special-limited-edition": {
     "variant_key": "pokemon-special-limited-edition",
-    "variant_name": "Pokemon-Special-Limited-Edition",
+    "variant_name": "Pokemon Special Limited Edition",
     "stats": {
       "avg_price": 102,
       "min_price": 90,
@@ -827,7 +827,7 @@
   },
   "pokemon-special-edition": {
     "variant_key": "pokemon-special-edition",
-    "variant_name": "Pokemon-Special-Edition",
+    "variant_name": "Pokemon Special Edition",
     "stats": {
       "avg_price": 129,
       "min_price": 89,
