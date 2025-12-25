@@ -165,6 +165,9 @@ def generate_price_graph(listings):
                         display: false
                     }},
                     tooltip: {{
+                        enabled: true,
+                        mode: 'nearest',
+                        intersect: false,
                         backgroundColor: '#1a1f29',
                         titleColor: '#ffffff',
                         bodyColor: '#00ff88',
@@ -190,7 +193,7 @@ def generate_price_graph(listings):
                                 return context.parsed.y + '€';
                             }},
                             afterLabel: function(context) {{
-                                const index = context[0].dataIndex;
+                                const index = context.dataIndex;
                                 return chartData.labels[index] + ' • Cliquer pour voir';
                             }}
                         }}

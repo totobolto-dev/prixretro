@@ -16,9 +16,13 @@ def load_config():
     with open('config.json', 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def matches_variant(title, variant_config):
+def matches_variant(title, variant_key, variant_config):
     """Check if listing title matches the variant using search terms"""
     title_lower = title.lower()
+
+    # For Pokemon variants, skip variant matching - sellers don't use exact names
+    if 'pokemon' in variant_key:
+        return 'pokemon' in title_lower or 'pikachu' in title_lower
 
     # Get search terms and keywords from config
     search_terms = variant_config.get('search_terms', [])
@@ -29,41 +33,42 @@ def matches_variant(title, variant_config):
         if keyword.lower() in title_lower:
             return True
 
-    # Check if title contains key color/variant words
-    # Extract just the color words from search terms
-    variant_words = set()
-    for term in search_terms:
-        words = term.lower().replace('game boy color', '').replace('gameboy color', '').strip().split()
-        variant_words.update(words)
+    # For color variants, be more lenient - check for color words
+    # Define color mappings (French and English)
+    color_map = {
+        'atomic-purple': ['atomic', 'purple', 'violet transparent', 'atomique'],
+        'violet': ['violet', 'purple', 'mauve'],
+        'jaune': ['jaune', 'yellow'],
+        'rouge': ['rouge', 'red'],
+        'bleu': ['bleu', 'teal', 'cyan', 'turquoise'],
+        'vert': ['vert', 'green', 'neon'],
+    }
 
-    # Remove common words
-    variant_words.discard('edition')
-    variant_words.discard('special')
-    variant_words.discard('limited')
+    # Check if this variant has color keywords
+    if variant_key in color_map:
+        for color in color_map[variant_key]:
+            if color in title_lower:
+                return True
 
-    # Check if ANY variant word appears in title
-    for word in variant_words:
-        if len(word) > 3 and word in title_lower:  # Only check meaningful words
-            return True
-
-    return False
+    # If no specific match, accept all (lenient mode)
+    return True
 
 def is_valid_image(image_url):
     """Check if image URL is valid (not placeholder/black image)"""
     if not image_url:
         return False
 
-    # Filter out eBay static placeholders
-    if 'ebaystatic.com' in image_url:
+    # Filter out eBay static placeholders (these are truly placeholders)
+    if 'ebaystatic.com' in image_url and '/rs/' in image_url:
         return False
 
-    # Filter out very small images (likely placeholders)
-    if 's-l140' in image_url or 's-l80' in image_url:
+    # s-l140 and above are fine, only filter s-l80 and below
+    if 's-l80' in image_url or 's-l60' in image_url:
         return False
 
     return True
 
-def scrape_current_listings(variant_key, variant_config, max_items=5):
+def scrape_current_listings(variant_key, variant_config, max_items=15):
     """Scrape active eBay listings for a variant with images"""
 
     variant_name = variant_config.get('name', variant_config.get('variant_name', variant_key))
@@ -134,7 +139,7 @@ def scrape_current_listings(variant_key, variant_config, max_items=5):
                     continue
 
                 # CRITICAL: Check if title matches the variant
-                if not matches_variant(title, variant_config):
+                if not matches_variant(title, variant_key, variant_config):
                     continue
 
                 # Get URL
@@ -231,7 +236,7 @@ def scrape_all_variants():
             print(f"⚠️  No config found for {variant_key}, skipping...")
             continue
 
-        listings = scrape_current_listings(variant_key, variant_config, max_items=5)
+        listings = scrape_current_listings(variant_key, variant_config, max_items=15)
 
         if listings:
             all_current_listings[variant_key] = {
