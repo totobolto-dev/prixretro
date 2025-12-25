@@ -20,7 +20,7 @@ def matches_variant(title, variant_key, variant_config):
     """Check if listing title matches the variant using search terms"""
     title_lower = title.lower()
 
-    # For Pokemon variants, skip variant matching - sellers don't use exact names
+    # For Pokemon variants, only check for pokemon/pikachu
     if 'pokemon' in variant_key:
         return 'pokemon' in title_lower or 'pikachu' in title_lower
 
@@ -33,16 +33,31 @@ def matches_variant(title, variant_key, variant_config):
         if keyword.lower() in title_lower:
             return True
 
-    # For color variants, be more lenient - check for color words
-    # Define color mappings (French and English)
+    # Define STRICT color mappings - must match ONE of these
     color_map = {
-        'atomic-purple': ['atomic', 'purple', 'violet transparent', 'atomique'],
-        'violet': ['violet', 'purple', 'mauve'],
+        'atomic-purple': ['atomique', 'atomic purple', 'violet atomique'],
+        'violet': ['violet'],  # Must say "violet" specifically, not "violet atomique"
         'jaune': ['jaune', 'yellow'],
         'rouge': ['rouge', 'red'],
-        'bleu': ['bleu', 'teal', 'cyan', 'turquoise'],
-        'vert': ['vert', 'green', 'neon'],
+        'bleu': ['bleu', 'teal', 'cyan'],
+        'vert': ['vert', 'green'],
     }
+
+    # Exclusions - if title contains these, reject
+    exclusions = {
+        'atomic-purple': [],
+        'violet': ['atomique', 'atomic', 'transparent'],  # violet variant should NOT have these
+        'jaune': ['transparent', 'atomique'],
+        'rouge': ['transparent', 'atomique'],
+        'bleu': ['atomique'],
+        'vert': ['atomique', 'transparent'],
+    }
+
+    # Check exclusions first
+    if variant_key in exclusions:
+        for exclusion in exclusions[variant_key]:
+            if exclusion in title_lower:
+                return False
 
     # Check if this variant has color keywords
     if variant_key in color_map:
@@ -50,8 +65,8 @@ def matches_variant(title, variant_key, variant_config):
             if color in title_lower:
                 return True
 
-    # If no specific match, accept all (lenient mode)
-    return True
+    # NO FALLBACK - if nothing matched, reject
+    return False
 
 def is_valid_image(image_url):
     """Check if image URL is valid (not placeholder/black image)"""
@@ -59,12 +74,24 @@ def is_valid_image(image_url):
         return False
 
     # Filter out eBay static placeholders (these are truly placeholders)
-    if 'ebaystatic.com' in image_url and '/rs/' in image_url:
+    if 'ebaystatic.com' in image_url:
         return False
 
-    # s-l140 and above are fine, only filter s-l80 and below
-    if 's-l80' in image_url or 's-l60' in image_url:
+    # Require minimum s-l225 size - filter small thumbnails that are often black/unclear
+    # s-l140 is too small and often shows black/unclear images
+    if 's-l140' in image_url or 's-l80' in image_url or 's-l60' in image_url:
         return False
+
+    # Require s-l225 or larger (s-l500, s-l640, etc.)
+    # Images must have good resolution to be useful
+    if 'ebayimg.com' in image_url and 's-l' in image_url:
+        # Check if it's at least s-l225
+        import re
+        match = re.search(r's-l(\d+)', image_url)
+        if match:
+            size = int(match.group(1))
+            if size < 225:  # Minimum 225px
+                return False
 
     return True
 
