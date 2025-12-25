@@ -49,10 +49,13 @@ def matches_variant(title, variant_key, variant_config):
             return True
         return False
 
-    # For other color variants, reject if it's atomic-purple
+    # For other color variants, reject if it's atomic-purple or transparent variant
     if variant_key in ['violet', 'jaune', 'rouge', 'bleu', 'vert']:
-        # If it has "atomique/atomic", it's the wrong variant
+        # If it has "atomique/atomic/transparent", it's likely the wrong variant
         if 'atomique' in title_lower or 'atomic' in title_lower:
+            return False
+        # Also reject "transparent" for solid colors (except if it's just "transparente" as description)
+        if 'transparent' in title_lower and variant_key in ['violet', 'rouge', 'jaune']:
             return False
 
     # Check if title contains color keyword
