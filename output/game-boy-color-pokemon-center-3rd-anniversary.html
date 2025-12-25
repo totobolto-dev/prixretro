@@ -126,10 +126,33 @@
         <div class="content-section">
             <div class="listings-header">
                 <h2>Offres actuelles sur eBay</h2>
-                <span class="listings-count">0 offres disponibles</span>
+                <span class="listings-count">2 offres disponibles</span>
             </div>
             <div class="current-listings-grid">
-                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre disponible pour le moment</p>
+                
+                <a href="https://www.ebay.fr/itm/157548685208" class="current-listing-card" target="_blank" rel="nofollow noopener">
+                    <img src="https://i.ebayimg.com/images/g/-f4AAeSwGtBpQkFI/s-l140.webp" alt="Nintendo Game Boy Color Pokemon Center Edition CGB-001 No BOX" class="current-listing-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%231a1f29%22 width=%22200%22 height=%22200%22/%3E%3C/svg%3E'">
+                    <div class="current-listing-content">
+                        <div class="current-listing-badge">EN VENTE</div>
+                        <div class="current-listing-title">Nintendo Game Boy Color Pokemon Center Edition CGB-001 No BOX</div>
+                        <div class="current-listing-meta">
+                            <span class="current-listing-price">324€</span>
+                            <span class="current-listing-condition">Occasion |</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.ebay.fr/itm/157545392971" class="current-listing-card" target="_blank" rel="nofollow noopener">
+                    <img src="https://i.ebayimg.com/images/g/O0oAAeSwfCJpQFPS/s-l140.webp" alt="Nintendo Gameboy Color Pokemon Center Limited Edition silver console No BOX" class="current-listing-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%231a1f29%22 width=%22200%22 height=%22200%22/%3E%3C/svg%3E'">
+                    <div class="current-listing-content">
+                        <div class="current-listing-badge">EN VENTE</div>
+                        <div class="current-listing-title">Nintendo Gameboy Color Pokemon Center Limited Edition silver console No BOX</div>
+                        <div class="current-listing-meta">
+                            <span class="current-listing-price">209€</span>
+                            <span class="current-listing-condition">Occasion |</span>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -286,6 +309,9 @@
                         display: false
                     },
                     tooltip: {
+                        enabled: true,
+                        mode: 'nearest',
+                        intersect: false,
                         backgroundColor: '#1a1f29',
                         titleColor: '#ffffff',
                         bodyColor: '#00ff88',
@@ -311,7 +337,7 @@
                                 return context.parsed.y + '€';
                             },
                             afterLabel: function(context) {
-                                const index = context[0].dataIndex;
+                                const index = context.dataIndex;
                                 return chartData.labels[index] + ' • Cliquer pour voir';
                             }
                         }

@@ -129,7 +129,7 @@
                 <span class="listings-count">0 offres disponibles</span>
             </div>
             <div class="current-listings-grid">
-                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre disponible pour le moment</p>
+                <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre dans la fourchette de prix acceptable pour le moment</p>
             </div>
         </div>
 
@@ -334,6 +334,9 @@
                         display: false
                     },
                     tooltip: {
+                        enabled: true,
+                        mode: 'nearest',
+                        intersect: false,
                         backgroundColor: '#1a1f29',
                         titleColor: '#ffffff',
                         bodyColor: '#00ff88',
@@ -359,7 +362,7 @@
                                 return context.parsed.y + '€';
                             },
                             afterLabel: function(context) {
-                                const index = context[0].dataIndex;
+                                const index = context.dataIndex;
                                 return chartData.labels[index] + ' • Cliquer pour voir';
                             }
                         }
