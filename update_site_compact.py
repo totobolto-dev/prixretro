@@ -45,8 +45,13 @@ def load_template():
     with open(template_path, 'r', encoding='utf-8') as f:
         return f.read()
 
-def generate_price_graph(listings):
+def generate_price_graph(listings, config=None):
     """Generate Chart.js price history graph HTML and JS - showing individual sales with clickable points"""
+
+    # Get affiliate config
+    campaign_id = config['ebay_partner']['campaign_id'] if config else None
+    network_id = config['ebay_partner']['network_id'] if config else None
+    tracking_id = config['ebay_partner']['tracking_id'] if config else None
 
     if not listings or len(listings) < 1:
         # No data at all
@@ -89,7 +94,13 @@ def generate_price_graph(listings):
                 labels.append(listing['sold_date'])
 
             prices.append(listing['price'])
-            urls.append(listing.get('url', ''))
+
+            # Add affiliate params to URL
+            url = listing.get('url', '')
+            if config and url:
+                url = add_affiliate_to_url(url, campaign_id, network_id, tracking_id)
+            urls.append(url)
+
             titles.append(listing.get('title', '').replace("'", "\\'").replace('"', '\\"'))
 
     html = '''
@@ -242,7 +253,7 @@ def generate_price_graph(listings):
     return {'html': html, 'js': js}
 
 
-def format_listing_html(listing):
+def format_listing_html(listing, config=None):
     """Format a single listing as compact table row - clickable to eBay"""
 
     # Convert YYYY-MM-DD to DD/MM/YYYY for display
@@ -252,8 +263,16 @@ def format_listing_html(listing):
     else:
         display_date = listing['sold_date']
 
-    # Get eBay URL and source
+    # Get eBay URL and add affiliate params
     ebay_url = listing.get('url', '#')
+    if config and ebay_url != '#':
+        ebay_url = add_affiliate_to_url(
+            ebay_url,
+            config['ebay_partner']['campaign_id'],
+            config['ebay_partner']['network_id'],
+            config['ebay_partner']['tracking_id']
+        )
+
     source = listing.get('source', 'eBay')
 
     return f"""
@@ -265,10 +284,19 @@ def format_listing_html(listing):
                     <div class="listing-condition-compact">{listing['condition']}</div>
                 </a>"""
 
-def format_current_listing_card(listing):
+def format_current_listing_card(listing, config=None):
     """Format a current listing card with image"""
 
+    # Get URL and add affiliate params
     url = listing.get('url', '#')
+    if config and url != '#':
+        url = add_affiliate_to_url(
+            url,
+            config['ebay_partner']['campaign_id'],
+            config['ebay_partner']['network_id'],
+            config['ebay_partner']['tracking_id']
+        )
+
     title = listing['title']
     price = listing['price']
     condition = listing.get('condition', 'Occasion')
@@ -286,6 +314,21 @@ def format_current_listing_card(listing):
                         </div>
                     </div>
                 </a>"""
+
+def add_affiliate_to_url(ebay_url, campaign_id, network_id, tracking_id):
+    """Add eBay Partner Network affiliate params to an eBay item URL"""
+    if not ebay_url or ebay_url == '#':
+        return ebay_url
+
+    # Add affiliate params to the URL
+    separator = '&' if '?' in ebay_url else '?'
+    affiliate_params = (
+        f"mkcid={tracking_id}"
+        f"&mkrid={network_id}"
+        f"&campid={campaign_id}"
+    )
+
+    return f"{ebay_url}{separator}{affiliate_params}"
 
 def build_ebay_search_url(variant_key, variant_name, campaign_id, network_id, tracking_id):
     """Build eBay search URL for items currently FOR SALE with affiliate params"""
@@ -357,7 +400,7 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
         if filtered_listings:
             current_listings_count = len(filtered_listings)
             current_listings_html = "\n".join([
-                format_current_listing_card(l)
+                format_current_listing_card(l, config)
                 for l in filtered_listings
             ])
             print(f"    📊 Current listings: {len(filtered_listings)}/{len(all_current_listings)} within ±30% of {avg_price}€ (filtered {len(all_current_listings) - len(filtered_listings)} outliers)")
@@ -366,13 +409,13 @@ def generate_variant_page(variant_data, all_variants, config, template, output_d
     else:
         current_listings_html = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Aucune offre disponible pour le moment</p>'
 
-    # Generate price history graph - pass listings to show individual sales
-    graph_data = generate_price_graph(listings)
-    
-    # Format listings HTML (showing SOLD prices for history)
+    # Generate price history graph - pass listings to show individual sales (with affiliate links!)
+    graph_data = generate_price_graph(listings, config)
+
+    # Format listings HTML (showing SOLD prices for history with affiliate links!)
     if listings:
         listings_html = "\n".join([
-            format_listing_html(l) 
+            format_listing_html(l, config)
             for l in listings  # Show ALL listings, not just 20
         ])
     else:
