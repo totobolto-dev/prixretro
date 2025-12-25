@@ -11,9 +11,62 @@ import json
 import time
 from urllib.parse import quote_plus
 
-def scrape_current_listings(variant_key, variant_name, max_items=5):
+def load_config():
+    """Load config with variant search terms"""
+    with open('config.json', 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def matches_variant(title, variant_config):
+    """Check if listing title matches the variant using search terms"""
+    title_lower = title.lower()
+
+    # Get search terms and keywords from config
+    search_terms = variant_config.get('search_terms', [])
+    keywords = variant_config.get('keywords', [])
+
+    # Check if ANY of the keywords appear in the title
+    for keyword in keywords:
+        if keyword.lower() in title_lower:
+            return True
+
+    # Check if title contains key color/variant words
+    # Extract just the color words from search terms
+    variant_words = set()
+    for term in search_terms:
+        words = term.lower().replace('game boy color', '').replace('gameboy color', '').strip().split()
+        variant_words.update(words)
+
+    # Remove common words
+    variant_words.discard('edition')
+    variant_words.discard('special')
+    variant_words.discard('limited')
+
+    # Check if ANY variant word appears in title
+    for word in variant_words:
+        if len(word) > 3 and word in title_lower:  # Only check meaningful words
+            return True
+
+    return False
+
+def is_valid_image(image_url):
+    """Check if image URL is valid (not placeholder/black image)"""
+    if not image_url:
+        return False
+
+    # Filter out eBay static placeholders
+    if 'ebaystatic.com' in image_url:
+        return False
+
+    # Filter out very small images (likely placeholders)
+    if 's-l140' in image_url or 's-l80' in image_url:
+        return False
+
+    return True
+
+def scrape_current_listings(variant_key, variant_config, max_items=5):
     """Scrape active eBay listings for a variant with images"""
 
+    variant_name = variant_config.get('name', variant_config.get('variant_name', variant_key))
     print(f"\n🔍 Scraping current listings for: {variant_name}")
 
     # Build search URL for items FOR SALE (not sold)
@@ -80,24 +133,30 @@ def scrape_current_listings(variant_key, variant_name, max_items=5):
                 if 'game boy' not in title.lower() and 'gameboy' not in title.lower():
                     continue
 
+                # CRITICAL: Check if title matches the variant
+                if not matches_variant(title, variant_config):
+                    continue
+
                 # Get URL
                 link_elem = card.select_one('.s-card__link')
                 if not link_elem:
                     continue
                 item_url = link_elem.get('href', '').split('?')[0]
 
-                # Get price
+                # Get price (base price WITHOUT shipping - eBay usually shows "XX EUR + livraison")
                 price_elem = card.select_one('.s-card__price')
                 if not price_elem:
                     continue
                 price_text = price_elem.get_text().strip()
 
-                # Parse price (handle "XX,XX EUR" or "XX EUR")
+                # Parse price - just the first number (base price)
                 try:
                     price_clean = price_text.replace('EUR', '').replace(',', '.').strip()
-                    # Handle price ranges like "50,00 à 100,00"
+                    # Handle price ranges like "50,00 à 100,00" - take the first price
                     if 'à' in price_clean:
                         price_clean = price_clean.split('à')[0].strip()
+                    # Remove any text after the price
+                    price_clean = price_clean.split()[0] if price_clean else '0'
                     price = float(price_clean)
                 except:
                     continue
@@ -111,11 +170,14 @@ def scrape_current_listings(variant_key, variant_name, max_items=5):
                         condition = text
                         break
 
-                # Get image
+                # Get image - must be valid (not placeholder)
                 img_elem = card.select_one('.su-media img')
                 image_url = ''
                 if img_elem:
                     image_url = img_elem.get('src', '')
+                    # Validate image
+                    if not is_valid_image(image_url):
+                        continue  # Skip listings with invalid images
 
                 listings.append({
                     'title': title,
@@ -144,7 +206,9 @@ def scrape_current_listings(variant_key, variant_name, max_items=5):
 def scrape_all_variants():
     """Scrape current listings for all variants"""
 
-    # Load scraped_data.json to get variant names
+    # Load config and scraped_data
+    config = load_config()
+
     with open('scraped_data.json', 'r', encoding='utf-8') as f:
         scraped_data = json.load(f)
 
@@ -161,20 +225,24 @@ def scrape_all_variants():
         print("⚠️  Session init failed, continuing anyway...\n")
 
     for variant_key, variant_data in scraped_data.items():
-        variant_name = variant_data['variant_name']
+        # Get variant config from config.json
+        variant_config = config['variants'].get(variant_key, {})
+        if not variant_config:
+            print(f"⚠️  No config found for {variant_key}, skipping...")
+            continue
 
-        listings = scrape_current_listings(variant_key, variant_name, max_items=5)
+        listings = scrape_current_listings(variant_key, variant_config, max_items=5)
 
         if listings:
             all_current_listings[variant_key] = {
                 'variant_key': variant_key,
-                'variant_name': variant_name,
+                'variant_name': variant_data['variant_name'],
                 'listings': listings,
                 'count': len(listings)
             }
             time.sleep(5)  # Be extra nice to eBay to avoid rate limiting
         else:
-            print(f"  ⚠️  No listings found for {variant_name}")
+            print(f"  ⚠️  No listings found for {variant_data['variant_name']}")
 
     # Save to JSON
     output_file = 'current_listings.json'
