@@ -132,7 +132,7 @@
       {
         "title": "Console Nintendo Game Boy Color Bleu CGB-001 Japon Testée Fonctionnelle...",
         "url": "https://www.ebay.fr/itm/187844934177",
-        "price": 380.27,
+        "price": 374.4,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/bZcAAeSw7UNpQJV8/s-l140.webp"
       }
@@ -197,7 +197,7 @@
         "url": "https://www.ebay.fr/itm/366079717670",
         "price": 286.68,
         "condition": "Occasion |",
-        "image_url": "https://i.ebayimg.com/images/g/3YQAAeSw6bZpTMsN/s-l500.webp"
+        "image_url": "https://i.ebayimg.com/images/g/3YQAAeSw6bZpTMsN/s-l140.webp"
       },
       {
         "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC",
@@ -205,13 +205,6 @@
         "price": 32.58,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/7CAAAeSwoo1pSEdo/s-l140.webp"
-      },
-      {
-        "title": "Console Nintendo Game Boy Color Pokemon Center Limited Gold Silver avec boîte",
-        "url": "https://www.ebay.fr/itm/366069553054",
-        "price": 890.64,
-        "condition": "Occasion |",
-        "image_url": "https://i.ebayimg.com/images/g/0yAAAeSw0U9pS~ZQ/s-l140.webp"
       },
       {
         "title": "Console Nintendo Gameboy Color Pokémon Limited Edition Pikachu Boxed - TBE",
@@ -256,7 +249,7 @@
         "image_url": "https://i.ebayimg.com/images/g/ZpkAAeSwjfBpQEZl/s-l140.webp"
       }
     ],
-    "count": 9
+    "count": 8
   },
   "pokemon-special-limited-edition": {
     "variant_key": "pokemon-special-limited-edition",
@@ -267,7 +260,7 @@
         "url": "https://www.ebay.fr/itm/366079717670",
         "price": 286.68,
         "condition": "Occasion |",
-        "image_url": "https://i.ebayimg.com/images/g/3YQAAeSw6bZpTMsN/s-l500.webp"
+        "image_url": "https://i.ebayimg.com/images/g/3YQAAeSw6bZpTMsN/s-l140.webp"
       },
       {
         "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC",
@@ -275,13 +268,6 @@
         "price": 32.58,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/7CAAAeSwoo1pSEdo/s-l140.webp"
-      },
-      {
-        "title": "Console Nintendo Game Boy Color Pokemon Center Limited Gold Silver avec boîte",
-        "url": "https://www.ebay.fr/itm/366069553054",
-        "price": 890.64,
-        "condition": "Occasion |",
-        "image_url": "https://i.ebayimg.com/images/g/0yAAAeSw0U9pS~ZQ/s-l140.webp"
       },
       {
         "title": "Console Nintendo Gameboy Color Pokémon Limited Edition Pikachu Boxed - TBE",
@@ -326,7 +312,7 @@
         "image_url": "https://i.ebayimg.com/images/g/ZpkAAeSwjfBpQEZl/s-l140.webp"
       }
     ],
-    "count": 9
+    "count": 8
   },
   "pokemon-special-edition": {
     "variant_key": "pokemon-special-edition",
@@ -337,7 +323,7 @@
         "url": "https://www.ebay.fr/itm/366079717670",
         "price": 286.68,
         "condition": "Occasion |",
-        "image_url": "https://i.ebayimg.com/images/g/3YQAAeSw6bZpTMsN/s-l500.webp"
+        "image_url": "https://i.ebayimg.com/images/g/3YQAAeSw6bZpTMsN/s-l140.webp"
       },
       {
         "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC",
@@ -345,13 +331,6 @@
         "price": 32.58,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/7CAAAeSwoo1pSEdo/s-l140.webp"
-      },
-      {
-        "title": "Console Nintendo Game Boy Color Pokemon Center Limited Gold Silver avec boîte",
-        "url": "https://www.ebay.fr/itm/366069553054",
-        "price": 890.64,
-        "condition": "Occasion |",
-        "image_url": "https://i.ebayimg.com/images/g/0yAAAeSw0U9pS~ZQ/s-l140.webp"
       },
       {
         "title": "Console Nintendo Gameboy Color Pokémon Limited Edition Pikachu Boxed - TBE",
@@ -396,6 +375,6 @@
         "image_url": "https://i.ebayimg.com/images/g/ZpkAAeSwjfBpQEZl/s-l140.webp"
       }
     ],
-    "count": 9
+    "count": 8
   }
 }
