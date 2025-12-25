@@ -67,3 +67,20 @@ jobs:
     - name: No changes detected
       if: steps.check_changes.outputs.changes == 'false'
       run: echo "ℹ️ No changes to commit"
+
+    - name: Deploy to OVH via FTP
+      if: steps.check_changes.outputs.changes == 'true'
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./output/
+        server-dir: /prixretro/
+        log-level: verbose
+        exclude: |
+          .git*
+          .github/
+          __pycache__/
+          *.py
+          *.md
