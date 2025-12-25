@@ -33,39 +33,35 @@ def matches_variant(title, variant_key, variant_config):
         if keyword.lower() in title_lower:
             return True
 
-    # Define STRICT color mappings - must match ONE of these
+    # Define color mappings with priority matching
     color_map = {
-        'atomic-purple': ['atomique', 'atomic purple', 'violet atomique'],
-        'violet': ['violet'],  # Must say "violet" specifically, not "violet atomique"
+        'atomic-purple': ['atomique', 'atomic'],
+        'violet': ['violet', 'purple', 'mauve'],
         'jaune': ['jaune', 'yellow'],
         'rouge': ['rouge', 'red'],
-        'bleu': ['bleu', 'teal', 'cyan'],
-        'vert': ['vert', 'green'],
+        'bleu': ['bleu', 'teal', 'cyan', 'turquoise'],
+        'vert': ['vert', 'green', 'kiwi'],
     }
 
-    # Exclusions - if title contains these, reject
-    exclusions = {
-        'atomic-purple': [],
-        'violet': ['atomique', 'atomic', 'transparent'],  # violet variant should NOT have these
-        'jaune': ['transparent', 'atomique'],
-        'rouge': ['transparent', 'atomique'],
-        'bleu': ['atomique'],
-        'vert': ['atomique', 'transparent'],
-    }
+    # For atomic-purple, REQUIRE "atomique" or "atomic"
+    if variant_key == 'atomic-purple':
+        if 'atomique' in title_lower or 'atomic' in title_lower:
+            return True
+        return False
 
-    # Check exclusions first
-    if variant_key in exclusions:
-        for exclusion in exclusions[variant_key]:
-            if exclusion in title_lower:
-                return False
+    # For other color variants, reject if it's atomic-purple
+    if variant_key in ['violet', 'jaune', 'rouge', 'bleu', 'vert']:
+        # If it has "atomique/atomic", it's the wrong variant
+        if 'atomique' in title_lower or 'atomic' in title_lower:
+            return False
 
-    # Check if this variant has color keywords
+    # Check if title contains color keyword
     if variant_key in color_map:
         for color in color_map[variant_key]:
             if color in title_lower:
                 return True
 
-    # NO FALLBACK - if nothing matched, reject
+    # If no match, reject
     return False
 
 def is_valid_image(image_url):
@@ -73,25 +69,15 @@ def is_valid_image(image_url):
     if not image_url:
         return False
 
-    # Filter out eBay static placeholders (these are truly placeholders)
-    if 'ebaystatic.com' in image_url:
+    # Filter out eBay static placeholders with /rs/ path (these are generic icons)
+    if 'ebaystatic.com' in image_url and '/rs/' in image_url:
         return False
 
-    # Require minimum s-l225 size - filter small thumbnails that are often black/unclear
-    # s-l140 is too small and often shows black/unclear images
-    if 's-l140' in image_url or 's-l80' in image_url or 's-l60' in image_url:
+    # Most eBay images are valid - just filter the obviously bad ones
+    # Accept s-l140 and above (most listings use this or s-l500)
+    # Only reject tiny thumbnails
+    if 's-l80' in image_url or 's-l60' in image_url or 's-l40' in image_url:
         return False
-
-    # Require s-l225 or larger (s-l500, s-l640, etc.)
-    # Images must have good resolution to be useful
-    if 'ebayimg.com' in image_url and 's-l' in image_url:
-        # Check if it's at least s-l225
-        import re
-        match = re.search(r's-l(\d+)', image_url)
-        if match:
-            size = int(match.group(1))
-            if size < 225:  # Minimum 225px
-                return False
 
     return True
 
