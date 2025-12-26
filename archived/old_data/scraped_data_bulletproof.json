@@ -1,0 +1,1372 @@
+{
+  "violet": {
+    "variant_key": "violet",
+    "variant_name": "Violet",
+    "description": "La Game Boy Color violette était l'une des couleurs de lancement les plus populaires en Europe. Facile à trouver sur le marché de l'occasion.",
+    "stats": {
+      "avg_price": 73,
+      "min_price": 55.99,
+      "max_price": 91.0,
+      "listing_count": 2,
+      "total_found": 28,
+      "price_history": {
+        "2025-10": 73
+      }
+    },
+    "listings": [
+      {
+        "item_id": "406314735353",
+        "title": "Nintendo Game Boy Color CGB 001 1998 Violet Avec DEFAUTS Console Dans L'Etat",
+        "price": 55.99,
+        "url": "https://www.ebay.fr/itm/406314735353",
+        "sold_date": "2025-10-27",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167853684196",
+        "title": "Nintendo Game Boy Color Système Portable - Violet avec boite",
+        "price": 91.0,
+        "url": "https://www.ebay.fr/itm/167853684196",
+        "sold_date": "2025-10-18",
+        "condition": "Occasion"
+      }
+    ]
+  },
+  "atomic-purple": {
+    "variant_key": "atomic-purple",
+    "variant_name": "Atomic Purple (Violet Transparent)",
+    "description": "L'édition Atomic Purple est une variante transparente violette iconique qui permet de voir les composants internes. Très recherchée des collectionneurs.",
+    "stats": {
+      "avg_price": 75,
+      "min_price": 38.89,
+      "max_price": 200.0,
+      "listing_count": 15,
+      "total_found": 104,
+      "price_history": {
+        "2025-09": 112,
+        "2025-10": 59,
+        "2025-11": 54
+      }
+    },
+    "listings": [
+      {
+        "item_id": "397239444375",
+        "title": "Nintendo Gameboy Color CGB001 Atomic Transparent Purple Handheld System Console",
+        "price": 45.03,
+        "url": "https://www.ebay.fr/itm/397239444375",
+        "sold_date": "2025-11-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397198078959",
+        "title": "Nintendo Gameboy Color CGB001 Transparent Atomic Purple Handheld System Console",
+        "price": 38.89,
+        "url": "https://www.ebay.fr/itm/397198078959",
+        "sold_date": "2025-11-17",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "267451377004",
+        "title": "Nintendo Game Boy Color Console GBC Clear Purple",
+        "price": 54.26,
+        "url": "https://www.ebay.fr/itm/267451377004",
+        "sold_date": "2025-11-04",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "306568677602",
+        "title": "Console Nintendo Game Boy Color portable transparente violette en boîte très bon état PAL UK",
+        "price": 123.29,
+        "url": "https://www.ebay.fr/itm/306568677602",
+        "sold_date": "2025-11-02",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397191444791",
+        "title": "Nintendo Game Boy Color Handheld Console System Atomic Purple Clear Transparent",
+        "price": 81.39,
+        "url": "https://www.ebay.fr/itm/397191444791",
+        "sold_date": "2025-10-26",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187681156018",
+        "title": "Gameboy Color Game Console Transparent Purple",
+        "price": 51.18,
+        "url": "https://www.ebay.fr/itm/187681156018",
+        "sold_date": "2025-10-25",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167567109471",
+        "title": "Console Nintendo Gameboy Color Transparente Transparente Atomique Violet, GC !",
+        "price": 62.77,
+        "url": "https://www.ebay.fr/itm/167567109471",
+        "sold_date": "2025-10-22",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "267437082694",
+        "title": "Nintendo Game Boy Color Console GBC Clear Purple",
+        "price": 51.19,
+        "url": "https://www.ebay.fr/itm/267437082694",
+        "sold_date": "2025-10-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397110405316",
+        "title": "Nintendo Gameboy Color CGB001 Atomic Transparent Purple Handheld System Console",
+        "price": 41.96,
+        "url": "https://www.ebay.fr/itm/397110405316",
+        "sold_date": "2025-10-17",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167881895360",
+        "title": "Console Nintendo Game Boy Color Console Clear Purple Transparente GBC Officiel",
+        "price": 70.95,
+        "url": "https://www.ebay.fr/itm/167881895360",
+        "sold_date": "2025-10-31",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "297689492264",
+        "title": "Console Nintendo GAME BOY COLOR GBC Transparent Violet - CGB-001 - PAL EUR Testé",
+        "price": 64.9,
+        "url": "https://www.ebay.fr/itm/297689492264",
+        "sold_date": "2025-10-17",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "317370573737",
+        "title": "🎮 Nintendo Game Boy Color Atomic Purple CGB-001 - Très bon état - Fonctionnelle",
+        "price": 53.87,
+        "url": "https://www.ebay.fr/itm/317370573737",
+        "sold_date": "2025-10-11",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167821124520",
+        "title": "Gameboy Color color Atomic Violer Transparent Clear Purple OFFICIEL NINTENDO",
+        "price": 62.95,
+        "url": "https://www.ebay.fr/itm/167821124520",
+        "sold_date": "2025-10-08",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "317283881648",
+        "title": "Gameboy Color Violet Transparente (Atomic Purple), Avec Boîte Et Notice",
+        "price": 200.0,
+        "url": "https://www.ebay.fr/itm/317283881648",
+        "sold_date": "2025-09-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187596171333",
+        "title": "Game Boy Color IPS FPGBC Atomic Purple with Classic GB Buttons",
+        "price": 129.0,
+        "url": "https://www.ebay.fr/itm/187596171333",
+        "sold_date": "2025-09-28",
+        "condition": "Occasion"
+      }
+    ]
+  },
+  "jaune": {
+    "variant_key": "jaune",
+    "variant_name": "Jaune",
+    "description": "Le modèle jaune était l'une des couleurs de lancement. Populaire et facile à trouver sur le marché de l'occasion.",
+    "stats": {
+      "avg_price": 0,
+      "min_price": 0,
+      "max_price": 0,
+      "listing_count": 0,
+      "total_found": 44,
+      "price_history": {}
+    },
+    "listings": []
+  },
+  "rouge": {
+    "variant_key": "rouge",
+    "variant_name": "Rouge",
+    "description": "Le modèle rouge classique, l'une des couleurs originales du Game Boy Color lancées en Europe.",
+    "stats": {
+      "avg_price": 81,
+      "min_price": 33.33,
+      "max_price": 149.99,
+      "listing_count": 5,
+      "total_found": 72,
+      "price_history": {
+        "2025-09": 99,
+        "2025-10": 126,
+        "2025-11": 63
+      }
+    },
+    "listings": [
+      {
+        "item_id": "197892380519",
+        "title": "NINTENDO GAMEBOY COLOR - Bomberman Max Red Challenger - CIB",
+        "price": 33.33,
+        "url": "https://www.ebay.fr/itm/197892380519",
+        "sold_date": "2025-11-30",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "146970157242",
+        "title": "Nintendo Game Boy  Color rouge model N° CGB-001",
+        "price": 70.0,
+        "url": "https://www.ebay.fr/itm/146970157242",
+        "sold_date": "2025-11-23",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "267455272256",
+        "title": "Game Boy Color Rouge En Super État",
+        "price": 75.0,
+        "url": "https://www.ebay.fr/itm/267455272256",
+        "sold_date": "2025-11-05",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "376611557580",
+        "title": "Nintendo Gameboy Color (GBC) with AMOLED Touch Screen & Red Clear Shell",
+        "price": 149.99,
+        "url": "https://www.ebay.fr/itm/376611557580",
+        "sold_date": "2025-10-15",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "388830917263",
+        "title": "Nintendo Game Boy Color Console - rouge diablotin  (CGB-001)  + jeu titeuf",
+        "price": 79.0,
+        "url": "https://www.ebay.fr/itm/388830917263",
+        "sold_date": "2025-10-12",
+        "condition": "Occasion"
+      }
+    ]
+  },
+  "bleu": {
+    "variant_key": "bleu",
+    "variant_name": "Bleu (Teal)",
+    "description": "Le Game Boy Color bleu turquoise était une couleur de lancement très populaire en Europe.",
+    "stats": {
+      "avg_price": 101,
+      "min_price": 30.0,
+      "max_price": 220.0,
+      "listing_count": 9,
+      "total_found": 74,
+      "price_history": {
+        "2025-10": 189,
+        "2025-11": 62
+      }
+    },
+    "listings": [
+      {
+        "item_id": "317571007222",
+        "title": "🔴🟡🔵 Lot Pokémon Rouge, Jaune & Bleu - Versions Françaises - Game Boy Color",
+        "price": 34.8,
+        "url": "https://www.ebay.fr/itm/317571007222",
+        "sold_date": "2025-11-30",
+        "condition": "Neuf"
+      },
+      {
+        "item_id": "397302999696",
+        "title": "Console Game Boy Color bleue - fonctionne",
+        "price": 52.0,
+        "url": "https://www.ebay.fr/itm/397302999696",
+        "sold_date": "2025-11-24",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "197881595758",
+        "title": "Nintendo Game Boy Color CGB-001 Turquoise Console Portable",
+        "price": 30.0,
+        "url": "https://www.ebay.fr/itm/197881595758",
+        "sold_date": "2025-11-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "136546154748",
+        "title": "Nintendo Game Boy Color Bleu Console Complète en Boîte Rare Collector",
+        "price": 220.0,
+        "url": "https://www.ebay.fr/itm/136546154748",
+        "sold_date": "2025-11-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "157417506021",
+        "title": "Nintendo Game Boy Color CGB-001 Turquoise Console Portable",
+        "price": 200.0,
+        "url": "https://www.ebay.fr/itm/157417506021",
+        "sold_date": "2025-11-16",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "389144797642",
+        "title": "Nintendo Game Boy Color CGB-001 Turquoise Console Portable",
+        "price": 112.74,
+        "url": "https://www.ebay.fr/itm/389144797642",
+        "sold_date": "2025-11-13",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "317519307723",
+        "title": "🔴🟡🔵 Lot Pokémon Rouge, Jaune & Bleu - Versions Françaises - Game Boy Color",
+        "price": 34.8,
+        "url": "https://www.ebay.fr/itm/317519307723",
+        "sold_date": "2025-11-12",
+        "condition": "Neuf"
+      },
+      {
+        "item_id": "317450640772",
+        "title": "🔴🟡🔵 Lot Pokémon Rouge, Jaune & Bleu - Versions Françaises - Game Boy Color",
+        "price": 34.8,
+        "url": "https://www.ebay.fr/itm/317450640772",
+        "sold_date": "2025-11-08",
+        "condition": "Neuf"
+      },
+      {
+        "item_id": "187639832485",
+        "title": "Console Nintendo Game Boy Color Teal",
+        "price": 189.99,
+        "url": "https://www.ebay.fr/itm/187639832485",
+        "sold_date": "2025-10-15",
+        "condition": "Occasion"
+      }
+    ]
+  },
+  "vert": {
+    "variant_key": "vert",
+    "variant_name": "Vert Néon",
+    "description": "Le modèle vert néon était une des couleurs de lancement, relativement facile à trouver.",
+    "stats": {
+      "avg_price": 79,
+      "min_price": 65.0,
+      "max_price": 105.0,
+      "listing_count": 4,
+      "total_found": 71,
+      "price_history": {
+        "2025-09": 114,
+        "2025-10": 92,
+        "2025-11": 79,
+        "2025-12": 73
+      }
+    },
+    "listings": [
+      {
+        "item_id": "365979279077",
+        "title": "Game Boy Color - Verte",
+        "price": 65.0,
+        "url": "https://www.ebay.fr/itm/365979279077",
+        "sold_date": "2025-11-13",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "365932098841",
+        "title": "Game Boy Color - Verte",
+        "price": 68.0,
+        "url": "https://www.ebay.fr/itm/365932098841",
+        "sold_date": "2025-11-05",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397108510986",
+        "title": "LOT Game Boy Color Verte avec étuis et jeux - Fonctionnels",
+        "price": 105.0,
+        "url": "https://www.ebay.fr/itm/397108510986",
+        "sold_date": "2025-10-31",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "297611108726",
+        "title": "Nintendo Game Boy Color verte Pomme + Pokémon Version Or Fr",
+        "price": 79.0,
+        "url": "https://www.ebay.fr/itm/297611108726",
+        "sold_date": "2025-10-08",
+        "condition": "Occasion"
+      }
+    ]
+  },
+  "pikachu": {
+    "variant_key": "pikachu",
+    "variant_name": "Pikachu (Édition Pokémon)",
+    "description": "Édition spéciale Pokémon avec un Pikachu imprimé sur le boîtier jaune et bleu. C'est l'une des variantes les plus recherchées et les plus chères.",
+    "stats": {
+      "avg_price": 177,
+      "min_price": 55.0,
+      "max_price": 549.9,
+      "listing_count": 17,
+      "total_found": 100,
+      "price_history": {
+        "2025-09": 111,
+        "2025-10": 235,
+        "2025-11": 165
+      }
+    },
+    "listings": [
+      {
+        "item_id": "336220347442",
+        "title": "Console Nintendo Gameboy Color Pokémon Edition Limitée Pikachu",
+        "price": 183.99,
+        "url": "https://www.ebay.fr/itm/336220347442",
+        "sold_date": "2025-10-31",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357571626800",
+        "title": "Console Nintendo Game Boy Color Pokemon Pikachu Edition CGB-001 Testée Rare",
+        "price": 84.1,
+        "url": "https://www.ebay.fr/itm/357571626800",
+        "sold_date": "2025-09-30",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "406216310963",
+        "title": "game boy color pikachu et jeux",
+        "price": 150.0,
+        "url": "https://www.ebay.fr/itm/406216310963",
+        "sold_date": "2025-09-22",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127451700691",
+        "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC",
+        "price": 110.0,
+        "url": "https://www.ebay.fr/itm/127451700691",
+        "sold_date": "2025-11-11",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "136679883757",
+        "title": "Console - GameBoy Color  - Édition Pokémon - Pikachu - En Loose",
+        "price": 89.0,
+        "url": "https://www.ebay.fr/itm/136679883757",
+        "sold_date": "2025-11-09",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "406344315244",
+        "title": "Nintendo Game Boy Color - Violet Plus Sachoche De Protection Pikachu",
+        "price": 55.0,
+        "url": "https://www.ebay.fr/itm/406344315244",
+        "sold_date": "2025-11-02",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "116832596742",
+        "title": "Console Nintendo Game Boy Color Pokémon édition PIKACHU",
+        "price": 99.0,
+        "url": "https://www.ebay.fr/itm/116832596742",
+        "sold_date": "2025-10-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "405857140585",
+        "title": "Console Nintendo Gameboy Color Pokémon Special Edition Pikachu Boxed - Bon Etat",
+        "price": 549.9,
+        "url": "https://www.ebay.fr/itm/405857140585",
+        "sold_date": "2025-10-05",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "317313111385",
+        "title": "Game boy color Pikachu + Pokemon OR et Argent | Authentique | Version PAL",
+        "price": 111.0,
+        "url": "https://www.ebay.fr/itm/317313111385",
+        "sold_date": "2025-09-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127522030313",
+        "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC",
+        "price": 110.0,
+        "url": "https://www.ebay.fr/itm/127522030313",
+        "sold_date": "2025-11-30",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "326854763540",
+        "title": "Console Nintendo Game boy Color Pikachu Gameboy + Jeu Pokemon Jaune 🇫🇷 Pokémon",
+        "price": 155.82,
+        "url": "https://www.ebay.fr/itm/326854763540",
+        "sold_date": "2025-11-29",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "388597896407",
+        "title": "Nintendo Game Boy Color Pikachu + Jeux Pokémon Jaune Or Argent Rouge AUTHENTIQUE",
+        "price": 349.0,
+        "url": "https://www.ebay.fr/itm/388597896407",
+        "sold_date": "2025-11-27",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "236362449119",
+        "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC IPS Rétro-éclairé",
+        "price": 149.99,
+        "url": "https://www.ebay.fr/itm/236362449119",
+        "sold_date": "2025-11-22",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "376710796402",
+        "title": "Nintendo Game boy color édition pokemon Center Pikachu gameboy GBC parfait état!",
+        "price": 99.9,
+        "url": "https://www.ebay.fr/itm/376710796402",
+        "sold_date": "2025-11-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "389174189947",
+        "title": "GAMEBOY COLOR PIKACHU TBE !!",
+        "price": 480.0,
+        "url": "https://www.ebay.fr/itm/389174189947",
+        "sold_date": "2025-11-07",
+        "condition": "Neuf"
+      },
+      {
+        "item_id": "167804832239",
+        "title": "Console Nintendo Game Boy Color Pokémon PIKACHU",
+        "price": 99.0,
+        "url": "https://www.ebay.fr/itm/167804832239",
+        "sold_date": "2025-09-27",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357898151871",
+        "title": "Game Boy Color - Édition Pokemon Pikachu/Pichu Limitée avec Pokémon Bleu",
+        "price": 136.97,
+        "url": "https://www.ebay.fr/itm/357898151871",
+        "sold_date": "2025-11-20",
+        "condition": "Occasion"
+      }
+    ]
+  },
+  "pokemon-gold-silver": {
+    "variant_key": "pokemon-gold-silver",
+    "variant_name": "Or/Argent (Édition Pokémon)",
+    "description": "Édition spéciale pour Pokémon Or et Argent avec boîtier doré ou argenté iridescent. Très prisée des collectionneurs Pokémon.",
+    "stats": {
+      "avg_price": 81,
+      "min_price": 29.9,
+      "max_price": 219.0,
+      "listing_count": 101,
+      "total_found": 264,
+      "price_history": {
+        "2025-09": 67,
+        "2025-10": 110,
+        "2025-11": 70,
+        "2025-12": 46
+      }
+    },
+    "listings": [
+      {
+        "item_id": "397270078772",
+        "title": "Pokémon Gold and Silver Version Authentic (Gameboy Color) *Dry Batteries*",
+        "price": 111.59,
+        "url": "https://www.ebay.fr/itm/397270078772",
+        "sold_date": "2025-11-30",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "177625605172",
+        "title": "Pokemon Gold and Silver Gameboy Color Guides Prima Strategy Guide - No Posters",
+        "price": 44.96,
+        "url": "https://www.ebay.fr/itm/177625605172",
+        "sold_date": "2025-11-30",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "236427189006",
+        "title": "Jeu Gameboy Color Gbc Pokémon Version Argent",
+        "price": 47.99,
+        "url": "https://www.ebay.fr/itm/236427189006",
+        "sold_date": "2025-11-30",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127400787408",
+        "title": "Pokemon Gold and Silver Teal Gameboy Color Bag",
+        "price": 46.07,
+        "url": "https://www.ebay.fr/itm/127400787408",
+        "sold_date": "2025-11-29",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167948057173",
+        "title": "Pokemon: Gold & Silver Version Game Boy Color Authentic, Tested",
+        "price": 154.07,
+        "url": "https://www.ebay.fr/itm/167948057173",
+        "sold_date": "2025-11-29",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "389211058902",
+        "title": "Pokémon gold version gameboy color with original box and Silver manual",
+        "price": 199.57,
+        "url": "https://www.ebay.fr/itm/389211058902",
+        "sold_date": "2025-11-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "406367185010",
+        "title": "Pokemon Gold & Silver (Gameboy Color) Authentic NEW BATTERIES Saves Tested Clean",
+        "price": 203.67,
+        "url": "https://www.ebay.fr/itm/406367185010",
+        "sold_date": "2025-11-28",
+        "condition": "Très bon état"
+      },
+      {
+        "item_id": "157487488255",
+        "title": "Pokémon Version Argent (Nintendo Game Boy Color, 2001)",
+        "price": 123.5,
+        "url": "https://www.ebay.fr/itm/157487488255",
+        "sold_date": "2025-11-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "227082503635",
+        "title": "Pokemon Gold & Silver Nintendo Game Boy Color Travel Bag Carrier Blue Nice Shape",
+        "price": 51.13,
+        "url": "https://www.ebay.fr/itm/227082503635",
+        "sold_date": "2025-11-25",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "234594456693",
+        "title": "Pokemon Crystal Gold Silver Green Red Yellow GameBoy Color Used Japan Authentic",
+        "price": 102.22,
+        "url": "https://www.ebay.fr/itm/234594456693",
+        "sold_date": "2025-11-25",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "317559665433",
+        "title": "🎮 Lot Pokémon Or, Argent & Cristal - Versions Françaises - Game Boy Color (GBC)",
+        "price": 34.8,
+        "url": "https://www.ebay.fr/itm/317559665433",
+        "sold_date": "2025-11-22",
+        "condition": "Neuf"
+      },
+      {
+        "item_id": "317366246219",
+        "title": "🎮 Lot Pokémon Or, Argent & Cristal - Versions Françaises - Game Boy Color (GBC)",
+        "price": 34.8,
+        "url": "https://www.ebay.fr/itm/317366246219",
+        "sold_date": "2025-11-17",
+        "condition": "Neuf"
+      },
+      {
+        "item_id": "197783588779",
+        "title": "Pokémon Version Argent Game Boy Color",
+        "price": 50.0,
+        "url": "https://www.ebay.fr/itm/197783588779",
+        "sold_date": "2025-11-16",
+        "condition": "Neuf"
+      },
+      {
+        "item_id": "177523698841",
+        "title": "✨️ Pokemon Or Game Boy Color Officiel ✨️",
+        "price": 29.9,
+        "url": "https://www.ebay.fr/itm/177523698841",
+        "sold_date": "2025-11-03",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127451958446",
+        "title": "Pokémon Version Argent (Nintendo Game Boy Color, 2001)",
+        "price": 30.0,
+        "url": "https://www.ebay.fr/itm/127451958446",
+        "sold_date": "2025-11-01",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397197126409",
+        "title": "POKEMON Cristal Gameboy Color FR Fra Officiel Nintendo Game Boy",
+        "price": 109.0,
+        "url": "https://www.ebay.fr/itm/397197126409",
+        "sold_date": "2025-10-26",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "257112216903",
+        "title": "Pokemon Version Argent   Nintendo Game Boy Color PAL COMPLET",
+        "price": 199.9,
+        "url": "https://www.ebay.fr/itm/257112216903",
+        "sold_date": "2025-10-25",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "376648656944",
+        "title": "POKéMON Version OR Nintendo Game Boy Color GameBoy GBC  - Complet (sans cale)",
+        "price": 155.0,
+        "url": "https://www.ebay.fr/itm/376648656944",
+        "sold_date": "2025-10-25",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397179850810",
+        "title": "Pokemon Cristal Game Boy Color (Fr)",
+        "price": 180.0,
+        "url": "https://www.ebay.fr/itm/397179850810",
+        "sold_date": "2025-10-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187448722734",
+        "title": "Pokemon: Gold Silver Version Nintendo Game Boy Color Authentic Saves New Battery",
+        "price": 204.68,
+        "url": "https://www.ebay.fr/itm/187448722734",
+        "sold_date": "2025-10-20",
+        "condition": "Reconditionné"
+      },
+      {
+        "item_id": "167839360876",
+        "title": "Pokémon Version Argent / Game Boy Color / Officiel Nintendo",
+        "price": 39.9,
+        "url": "https://www.ebay.fr/itm/167839360876",
+        "sold_date": "2025-10-10",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "227008036620",
+        "title": "Pokemon Version Argent  Nintendo Game Boy Color PAL (AVEC NOTICE)",
+        "price": 219.0,
+        "url": "https://www.ebay.fr/itm/227008036620",
+        "sold_date": "2025-10-06",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "267396311497",
+        "title": "Pokemon Argent version originale jeu pokemon game boy color",
+        "price": 39.5,
+        "url": "https://www.ebay.fr/itm/267396311497",
+        "sold_date": "2025-10-01",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "297356931383",
+        "title": "Jeu Pokémon Crystal -game Boy Color -Nintendo -fr",
+        "price": 119.9,
+        "url": "https://www.ebay.fr/itm/297356931383",
+        "sold_date": "2025-09-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "297830336957",
+        "title": "Game Boy Color Mauve Transparente",
+        "price": 55.99,
+        "url": "https://www.ebay.fr/itm/297830336957",
+        "sold_date": "2025-12-14",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127546460633",
+        "title": "Nintendo Game Boy Color Console - Jaune (CGB-001)",
+        "price": 56.0,
+        "url": "https://www.ebay.fr/itm/127546460633",
+        "sold_date": "2025-12-13",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "406452406465",
+        "title": "Console Nintendo Game Boy Color Advance",
+        "price": 32.5,
+        "url": "https://www.ebay.fr/itm/406452406465",
+        "sold_date": "2025-12-12",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "326886375684",
+        "title": "Nintendo Game Boy Color CGB-001 Turquoise Console Portable",
+        "price": 56.0,
+        "url": "https://www.ebay.fr/itm/326886375684",
+        "sold_date": "2025-12-03",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187791609135",
+        "title": "Nintendo Game Boy Color - Vert Kiwi",
+        "price": 49.99,
+        "url": "https://www.ebay.fr/itm/187791609135",
+        "sold_date": "2025-11-30",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "336307144662",
+        "title": "Nintendo Game Boy Color Console - Jaune (CGB-001)",
+        "price": 50.0,
+        "url": "https://www.ebay.fr/itm/336307144662",
+        "sold_date": "2025-11-29",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "336307151397",
+        "title": "Game Boy Color Mauve Transparente",
+        "price": 56.0,
+        "url": "https://www.ebay.fr/itm/336307151397",
+        "sold_date": "2025-11-29",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "227099224383",
+        "title": "console GAME BOY COLOR - NINTENDO - violet / en état de marche - 9227p",
+        "price": 51.0,
+        "url": "https://www.ebay.fr/itm/227099224383",
+        "sold_date": "2025-11-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "389249400239",
+        "title": "Console Game Boy Color + jeu Pokémon Version Argent - Nintendo - translucide",
+        "price": 78.0,
+        "url": "https://www.ebay.fr/itm/389249400239",
+        "sold_date": "2025-11-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "297778394237",
+        "title": "Game Boy Color Violette",
+        "price": 119.75,
+        "url": "https://www.ebay.fr/itm/297778394237",
+        "sold_date": "2025-11-27",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "365988536910",
+        "title": "console Game Boy Color CGB-001 Titeuf Pokémon Nintendo retrogaming handheld game",
+        "price": 61.0,
+        "url": "https://www.ebay.fr/itm/365988536910",
+        "sold_date": "2025-11-24",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "389255096178",
+        "title": "Nintendo Game Boy Color Console - vert kiwi  (CGB-001)  + jeu bugs bunny",
+        "price": 79.0,
+        "url": "https://www.ebay.fr/itm/389255096178",
+        "sold_date": "2025-11-24",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "277495267564",
+        "title": "Console Nintendo Game Boy Color Bleue Turquoise",
+        "price": 69.99,
+        "url": "https://www.ebay.fr/itm/277495267564",
+        "sold_date": "2025-11-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "257197426491",
+        "title": "CONSOLE NINTENDO GAMEBOY COLOR VIOLETTE COMPLÈTE PAL EURO CIB OVP Très bon état",
+        "price": 129.9,
+        "url": "https://www.ebay.fr/itm/257197426491",
+        "sold_date": "2025-11-20",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "317535993767",
+        "title": "Nintendo Game Boy Color Console - Jaune (CGB-001)",
+        "price": 61.0,
+        "url": "https://www.ebay.fr/itm/317535993767",
+        "sold_date": "2025-11-18",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "267467183436",
+        "title": "NINTENDO Game boy Color  CGB-001- pas de piles pour test / vendu pour piéces",
+        "price": 41.5,
+        "url": "https://www.ebay.fr/itm/267467183436",
+        "sold_date": "2025-11-18",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357884725470",
+        "title": "Console Nintendo GameBoy Color Violette Transparente",
+        "price": 51.0,
+        "url": "https://www.ebay.fr/itm/357884725470",
+        "sold_date": "2025-11-17",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397252458809",
+        "title": "Rare: Console Nintendo Game Boy Gameboy Color GBC  violette-noire + jeu Rayman",
+        "price": 49.5,
+        "url": "https://www.ebay.fr/itm/397252458809",
+        "sold_date": "2025-11-16",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357906509191",
+        "title": "Console Nintendo Game Boy GAMEBOY Color VIOLETTE sans boite -",
+        "price": 34.99,
+        "url": "https://www.ebay.fr/itm/357906509191",
+        "sold_date": "2025-11-15",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "306595763294",
+        "title": "Nintendo Game Boy Color Console Violette Fonctionnelle +pokemon jaune et rouge",
+        "price": 80.0,
+        "url": "https://www.ebay.fr/itm/306595763294",
+        "sold_date": "2025-11-14",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127451874990",
+        "title": "game boy color",
+        "price": 60.0,
+        "url": "https://www.ebay.fr/itm/127451874990",
+        "sold_date": "2025-11-12",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "277492978839",
+        "title": "Console Nintendo Game Boy Color Jaune",
+        "price": 59.99,
+        "url": "https://www.ebay.fr/itm/277492978839",
+        "sold_date": "2025-11-11",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397224858531",
+        "title": "Rare: Console Nintendo Game Boy Gameboy Color GBC  Bleue - Violette + jeu TINTIN",
+        "price": 62.0,
+        "url": "https://www.ebay.fr/itm/397224858531",
+        "sold_date": "2025-11-08",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "277485408834",
+        "title": "Nintendo Game Boy Color Console - Jaune (CGB-001)",
+        "price": 60.0,
+        "url": "https://www.ebay.fr/itm/277485408834",
+        "sold_date": "2025-11-06",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "406349645855",
+        "title": "Nintendo Game Boy Color CGB 001 1998 Violet Avec DEFAUTS Console Dans L'Etat Pur",
+        "price": 55.99,
+        "url": "https://www.ebay.fr/itm/406349645855",
+        "sold_date": "2025-11-04",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "236350300655",
+        "title": "Console Nintendo Game Boy Color Violette",
+        "price": 76.5,
+        "url": "https://www.ebay.fr/itm/236350300655",
+        "sold_date": "2025-11-04",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "267447773261",
+        "title": "Nintendo Game Boy Color Console -(CGB-001) + Jeux Pokemon Version Or",
+        "price": 112.0,
+        "url": "https://www.ebay.fr/itm/267447773261",
+        "sold_date": "2025-11-01",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "157393029351",
+        "title": "Console Nintendo Game Boy Color Turquoise Boite avec Notice Pal EUR",
+        "price": 149.9,
+        "url": "https://www.ebay.fr/itm/157393029351",
+        "sold_date": "2025-10-31",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167888156657",
+        "title": "Console Nintendo Game Boy Color Pokémon Dracaufeu (Charizard)",
+        "price": 110.0,
+        "url": "https://www.ebay.fr/itm/167888156657",
+        "sold_date": "2025-10-31",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "317028407514",
+        "title": "Nintendo Game Boy Color Système Portable - Violet",
+        "price": 165.0,
+        "url": "https://www.ebay.fr/itm/317028407514",
+        "sold_date": "2025-10-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167881911512",
+        "title": "Console Nintendo Game Boy Color Console Violette Purple GBC Officiel",
+        "price": 68.95,
+        "url": "https://www.ebay.fr/itm/167881911512",
+        "sold_date": "2025-10-26",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "205798854142",
+        "title": "game boy color",
+        "price": 70.0,
+        "url": "https://www.ebay.fr/itm/205798854142",
+        "sold_date": "2025-10-22",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "397160963194",
+        "title": "GameBoy Color + Pochette ( Sans Jeux )",
+        "price": 61.0,
+        "url": "https://www.ebay.fr/itm/397160963194",
+        "sold_date": "2025-10-22",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "388783338367",
+        "title": "Nintendo Game Boy Color Console - violet  (CGB-001)   complete + jeu titeuf",
+        "price": 175.0,
+        "url": "https://www.ebay.fr/itm/388783338367",
+        "sold_date": "2025-10-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "116765091129",
+        "title": "Game Boy Color",
+        "price": 80.0,
+        "url": "https://www.ebay.fr/itm/116765091129",
+        "sold_date": "2025-10-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187648035700",
+        "title": "Console Nintendo  Gameboy Color Bleu Turquoise Fonctionnelle",
+        "price": 43.5,
+        "url": "https://www.ebay.fr/itm/187648035700",
+        "sold_date": "2025-10-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187648059940",
+        "title": "Console Nintendo  Gameboy Color Violette Fonctionnelle",
+        "price": 40.5,
+        "url": "https://www.ebay.fr/itm/187648059940",
+        "sold_date": "2025-10-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "116820866929",
+        "title": "Console Nintendo Game Boy Color",
+        "price": 49.5,
+        "url": "https://www.ebay.fr/itm/116820866929",
+        "sold_date": "2025-10-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187648049509",
+        "title": "Console Nintendo  Gameboy Color Violette Fonctionnelle",
+        "price": 37.5,
+        "url": "https://www.ebay.fr/itm/187648049509",
+        "sold_date": "2025-10-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187648060649",
+        "title": "Console Nintendo  Gameboy Color Violette Fonctionnelle",
+        "price": 33.5,
+        "url": "https://www.ebay.fr/itm/187648060649",
+        "sold_date": "2025-10-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167870981523",
+        "title": "Console Nintendo / Game Boy Color / Rouge -Rosé / Bon État",
+        "price": 69.9,
+        "url": "https://www.ebay.fr/itm/167870981523",
+        "sold_date": "2025-10-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "157205376788",
+        "title": "Console Nintendo Game Boy Color Pokémon",
+        "price": 119.5,
+        "url": "https://www.ebay.fr/itm/157205376788",
+        "sold_date": "2025-10-19",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "335959242038",
+        "title": "Console Sony Game Boy Color violette",
+        "price": 153.89,
+        "url": "https://www.ebay.fr/itm/335959242038",
+        "sold_date": "2025-10-15",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "116803817860",
+        "title": "Console Nintendo GameBoy Color CGB-001 GBC bleue entièrement testée ! #5559",
+        "price": 71.3,
+        "url": "https://www.ebay.fr/itm/116803817860",
+        "sold_date": "2025-10-09",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "389051621206",
+        "title": "Nintendo Game Boy Color Handheld Video Game Console - Teal - Tested - Works",
+        "price": 33.0,
+        "url": "https://www.ebay.fr/itm/389051621206",
+        "sold_date": "2025-10-08",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "205768588687",
+        "title": "Superbe Console Nintendo Game Boy Color + Piles Neuves !",
+        "price": 69.0,
+        "url": "https://www.ebay.fr/itm/205768588687",
+        "sold_date": "2025-10-07",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "336219104059",
+        "title": "Console Nintendo Game Boy Color Verte",
+        "price": 60.0,
+        "url": "https://www.ebay.fr/itm/336219104059",
+        "sold_date": "2025-10-07",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "157344500834",
+        "title": "CONSOLE NINTENDO GAMEBOY COLOR BLEUE PAL EURO ÉTAT MOYEN FONCTIONNELLE CGB-001",
+        "price": 52.55,
+        "url": "https://www.ebay.fr/itm/157344500834",
+        "sold_date": "2025-10-05",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "116725218056",
+        "title": "[ En l'état ] Console Nintendo Gameboy Color Jaune Game Boy Portable Testée J...",
+        "price": 63.32,
+        "url": "https://www.ebay.fr/itm/116725218056",
+        "sold_date": "2025-10-05",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "187614203365",
+        "title": "Console Game boy color Transparente (Bien lire )",
+        "price": 50.0,
+        "url": "https://www.ebay.fr/itm/187614203365",
+        "sold_date": "2025-10-04",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "335959224093",
+        "title": "Console Nintendo Game Boy Color",
+        "price": 138.75,
+        "url": "https://www.ebay.fr/itm/335959224093",
+        "sold_date": "2025-10-04",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "406260399155",
+        "title": "Nintendo Game Boy Color CGB-001 Violet - Fonctionne",
+        "price": 64.0,
+        "url": "https://www.ebay.fr/itm/406260399155",
+        "sold_date": "2025-10-03",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167825017898",
+        "title": "Console Nintendo Gameboy Color GBC Violette",
+        "price": 69.99,
+        "url": "https://www.ebay.fr/itm/167825017898",
+        "sold_date": "2025-10-03",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "116803817907",
+        "title": "Console Nintendo GameBoy Color CGB-001 GBC violet clair entièrement testée...",
+        "price": 72.0,
+        "url": "https://www.ebay.fr/itm/116803817907",
+        "sold_date": "2025-10-02",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167822195955",
+        "title": "Console Nintendo Game Boy Color D'origine + Boite",
+        "price": 99.0,
+        "url": "https://www.ebay.fr/itm/167822195955",
+        "sold_date": "2025-09-30",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127385693092",
+        "title": "Nintendo Game Boy Color Console - Violette Transparent Fonctionnelle + Gex",
+        "price": 65.0,
+        "url": "https://www.ebay.fr/itm/127385693092",
+        "sold_date": "2025-09-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127385517086",
+        "title": "Boite Nintendo Game Boy Color",
+        "price": 56.99,
+        "url": "https://www.ebay.fr/itm/127385517086",
+        "sold_date": "2025-09-28",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "388988055011",
+        "title": "GAME BOY COLOR CONSOLE NINTENDO OFFICIELLE VIOLETTE CGB-001 BE GAMEBOY",
+        "price": 54.9,
+        "url": "https://www.ebay.fr/itm/388988055011",
+        "sold_date": "2025-09-27",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "226979011865",
+        "title": "Game Boy Color",
+        "price": 63.0,
+        "url": "https://www.ebay.fr/itm/226979011865",
+        "sold_date": "2025-09-24",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "336037937334",
+        "title": "Console Nintendo Gameboy Color Select Color GBC authentique testée sans région",
+        "price": 65.08,
+        "url": "https://www.ebay.fr/itm/336037937334",
+        "sold_date": "2025-09-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "376445689655",
+        "title": "Console Game Boy Color Pokémon custom - écran IPS",
+        "price": 100.0,
+        "url": "https://www.ebay.fr/itm/376445689655",
+        "sold_date": "2025-11-02",
+        "condition": "Neuf"
+      },
+      {
+        "item_id": "336152936546",
+        "title": "Console Nintendo Game boy color Verte Transparent gameboy GBC Couleur IPS",
+        "price": 154.99,
+        "url": "https://www.ebay.fr/itm/336152936546",
+        "sold_date": "2025-10-15",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "127400269113",
+        "title": "Boite Nintendo Game Boy Color",
+        "price": 65.0,
+        "url": "https://www.ebay.fr/itm/127400269113",
+        "sold_date": "2025-10-05",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "306525196817",
+        "title": "Nintendo Game Boy Color Rouge + Pokémon Jaune, Super Mario Bros Deluxe Etc...",
+        "price": 124.0,
+        "url": "https://www.ebay.fr/itm/306525196817",
+        "sold_date": "2025-10-05",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "226979309086",
+        "title": "NINTENDO game boy color en boite Verte",
+        "price": 151.0,
+        "url": "https://www.ebay.fr/itm/226979309086",
+        "sold_date": "2025-09-24",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "297775321882",
+        "title": "Console Game Boy Color Pokémon Nintendo",
+        "price": 120.0,
+        "url": "https://www.ebay.fr/itm/297775321882",
+        "sold_date": "2025-11-21",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357906297511",
+        "title": "Console Nintendo Game Boy GAMEBOY Color jaune  sans boite",
+        "price": 49.99,
+        "url": "https://www.ebay.fr/itm/357906297511",
+        "sold_date": "2025-11-16",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357906536326",
+        "title": "Console Nintendo Game Boy GAMEBOY Color jaune  sans boite",
+        "price": 34.99,
+        "url": "https://www.ebay.fr/itm/357906536326",
+        "sold_date": "2025-11-15",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357906556707",
+        "title": "Console Nintendo Game Boy GAMEBOY Color jaune  sans boite",
+        "price": 29.99,
+        "url": "https://www.ebay.fr/itm/357906556707",
+        "sold_date": "2025-11-15",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357906281995",
+        "title": "Console Nintendo Game Boy GAMEBOY Color jaune  sans boite",
+        "price": 44.99,
+        "url": "https://www.ebay.fr/itm/357906281995",
+        "sold_date": "2025-11-15",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "197812322825",
+        "title": "Nintendo Gameboy Color Original - Pokemon",
+        "price": 99.9,
+        "url": "https://www.ebay.fr/itm/197812322825",
+        "sold_date": "2025-11-07",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "167797875367",
+        "title": "Game Boy Color Jaune + Pokémon Version Argent",
+        "price": 65.0,
+        "url": "https://www.ebay.fr/itm/167797875367",
+        "sold_date": "2025-09-24",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357858703860",
+        "title": "Nintendo Game Boy Color Système Portable - Kiwi",
+        "price": 60.0,
+        "url": "https://www.ebay.fr/itm/357858703860",
+        "sold_date": "2025-11-11",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357906523942",
+        "title": "Console Nintendo Game Boy GAMEBOY Color VERTE sans boite",
+        "price": 34.99,
+        "url": "https://www.ebay.fr/itm/357906523942",
+        "sold_date": "2025-11-15",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "297678568471",
+        "title": "Console Game Boy Color",
+        "price": 59.0,
+        "url": "https://www.ebay.fr/itm/297678568471",
+        "sold_date": "2025-11-22",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "357883711151",
+        "title": "Nintendo Game Boy Color  Édition Pokémon Avec Jeux Pokémon",
+        "price": 140.0,
+        "url": "https://www.ebay.fr/itm/357883711151",
+        "sold_date": "2025-11-17",
+        "condition": "Occasion"
+      },
+      {
+        "item_id": "286951632743",
+        "title": "Jeu Nintendo Game Boy Gameboy Color Pokemon Pinball",
+        "price": 50.0,
+        "url": "https://www.ebay.fr/itm/286951632743",
+        "sold_date": "2025-11-19",
+        "condition": "Occasion"
+      }
+    ]
+  }
+}

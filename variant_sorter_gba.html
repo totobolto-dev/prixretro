@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrixRetro - GBA Variant Sorter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0f1419;
+            --bg-card: #1a1f2e;
+            --accent: #00d9ff;
+            --text-light: #e4e6eb;
+            --text-muted: #a0a3a8;
+            --keep: #00ff88;
+            --bundle: #ffaa00;
+            --reject: #ff4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-card);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #333;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        select, input {
+            background: var(--bg-dark);
+            border: 1px solid #333;
+            color: var(--text-light);
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .stats {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .item-card {
+            background: var(--bg-card);
+            margin-bottom: 1px;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 50px 1fr 300px;
+            gap: 1rem;
+            align-items: start;
+            transition: background-color 0.1s;
+        }
+
+        .item-card:hover {
+            background: #242936;
+        }
+
+        .item-card.status-keep { border-left: 3px solid var(--keep); }
+        .item-card.status-bundle { border-left: 3px solid var(--bundle); }
+        .item-card.status-reject { border-left: 3px solid var(--reject); }
+        .item-card.status-parts { border-left: 3px solid #9966ff; }
+
+        .item-card.active {
+            background: #2a3a4a !important;
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .item-number {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .item-title {
+            font-size: 1rem;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .item-title:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .price {
+            color: var(--keep);
+            font-weight: 600;
+        }
+
+        .item-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .variant-selector {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .variant-select {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .add-variant-btn {
+            background: #444;
+            color: var(--text-light);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .add-variant-btn:hover {
+            background: #555;
+        }
+
+        .status-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .status-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .status-btn.keep {
+            background: var(--keep);
+            color: black;
+        }
+
+        .status-btn.bundle {
+            background: var(--bundle);
+            color: black;
+        }
+
+        .status-btn.reject {
+            background: var(--reject);
+            color: white;
+        }
+
+        .status-btn.parts {
+            background: #9966ff;
+            color: white;
+        }
+
+        .status-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .status-btn.active {
+            box-shadow: 0 0 0 2px white;
+        }
+
+        .progress {
+            background: #333;
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar {
+            background: var(--accent);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .export-btn {
+            background: var(--accent);
+            color: black;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .export-btn:hover {
+            background: #00b8d9;
+        }
+
+        .keyboard-hints {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            border: 1px solid #333;
+            max-width: 250px;
+        }
+
+        .keyboard-hints h4 {
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .keyboard-hints div {
+            margin: 0.25rem 0;
+        }
+
+        .key {
+            background: #333;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .modal-content input {
+            width: 100%;
+            margin: 1rem 0;
+            padding: 0.75rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="controls">
+            <div class="stats" id="stats">
+                Total: 275 |
+                Keep: <span id="keep-count">0</span> |
+                Bundle: <span id="bundle-count">0</span> |
+                Parts: <span id="parts-count">0</span> |
+                Reject: <span id="reject-count">0</span> |
+                Progress: <span id="progress-percent">0%</span>
+            </div>
+
+            <div class="filter-group">
+                <label>Status:</label>
+                <select id="status-filter" onchange="applyFilters()">
+                    <option value="">All items</option>
+                    <option value="pending">Pending only</option>
+                    <option value="keep">Keep only</option>
+                    <option value="bundle">Bundle only</option>
+                    <option value="parts">Parts only</option>
+                    <option value="reject">Reject only</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Variant:</label>
+                <select id="variant-filter" onchange="applyFilters()">
+                    <option value="">All variants</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Search:</label>
+                <input type="text" id="search-input" placeholder="Title..." oninput="applyFilters()">
+            </div>
+
+            <button class="export-btn" onclick="saveProgress()" style="background: #666;">
+                💾 Save Progress
+            </button>
+
+            <button class="export-btn" onclick="exportData()">
+                📤 Export Final
+            </button>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div style="padding: 0.5rem 1rem; font-size: 0.8rem; color: var(--text-muted);">
+            <span id="save-status">Auto-save enabled • Last saved: <span id="last-saved">Never</span></span>
+        </div>
+    </div>
+
+    <div class="container" id="items-container">
+        <!-- Items will be inserted here -->
+    </div>
+
+    <div class="keyboard-hints">
+        <h4>⌨️ Keyboard Shortcuts</h4>
+        <div><span class="key">K</span> Keep</div>
+        <div><span class="key">B</span> Bundle</div>
+        <div><span class="key">P</span> Parts</div>
+        <div><span class="key">R</span> Reject</div>
+        <div><span class="key">1-9</span> Quick variant</div>
+        <div><span class="key">Enter</span> Open eBay</div>
+        <div><span class="key">↑/↓</span> Navigate</div>
+        <hr style="margin: 0.5rem 0; border-color: #444;">
+        <div style="margin-top: 0.5rem;">
+            <button onclick="loadProgressFile()" style="background: #444; color: white; border: none; padding: 0.4rem; border-radius: 4px; cursor: pointer; width: 100%; font-size: 0.75rem; margin-bottom: 0.25rem;">
+                📂 Load Progress File
+            </button>
+            <button onclick="clearProgress()" style="background: #662; color: white; border: none; padding: 0.4rem; border-radius: 4px; cursor: pointer; width: 100%; font-size: 0.75rem;">
+                🗑️ Clear Progress
+            </button>
+        </div>
+    </div>
+
+    <input type="file" id="progress-file-input" accept=".json" style="display: none;" onchange="handleProgressFile(event)">
+
+    <!-- Modal for adding new variant -->
+    <div class="modal" id="add-variant-modal">
+        <div class="modal-content">
+            <h3>Add New Variant</h3>
+            <input type="text" id="new-variant-key" placeholder="Variant key (e.g., 'orange', 'gold')">
+            <input type="text" id="new-variant-name" placeholder="Display name (e.g., 'Orange', 'Gold Edition')">
+            <div class="modal-buttons">
+                <button style="background: #666; color: white;" onclick="closeModal()">Cancel</button>
+                <button style="background: var(--accent); color: black;" onclick="confirmAddVariant()">Add Variant</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        let allItems = [{"id": "389213033974", "title": "Nintendo Game Boy Advance SP Système Portable - Platine With Charge", "price": 102.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389213033974", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "385736354830", "title": "Console Game Boy Advance SP Silver Tribal", "price": 94.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/385736354830", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116814495218", "title": "game boy advance ips", "price": 160.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116814495218", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "294631599005", "title": "Batterie Nintendo GameBoy Advance SP - GBA SP - 850 mah - 3,7 V - Battery", "price": 6.47, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/294631599005", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297869667273", "title": "Game Boy Advance Custom IPS AGS 101 5 Level", "price": 120.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/297869667273", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406509500844", "title": "GAMEBOY ADVANCE GBA NINTENDO Officiel Rose Pink   Game Boy Officiel", "price": 70.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406509500844", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357974284106", "title": "Console Game Boy Advance SP Famicom NES Color GBA testée fonctionnelle sans...", "price": 102.3, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357974284106", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406509488389", "title": "GAMEBOY ADVANCE GBA NINTENDO Officiel Violet Purple Clear Transparent  Game Boy", "price": 68.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406509488389", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406504862625", "title": "GAMEBOY ADVANCE GBA NINTENDO Officiel Violet Purple  Game Boy", "price": 64.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406504862625", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "168020599855", "title": "Console Nintendo Gameboy Advance GBA Violette", "price": 69.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/168020599855", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336342223292", "title": "Console Nintendo Game Boy Advance SP Tribale Ecran TBE  avec chargeur USB", "price": 109.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336342223292", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167996560223", "title": "CONSOLE NINTENDO GAMEBOY ADVANCE GBA SP COQUE CUSTOM POKÉBALL FONCTIONNELLE", "price": 87.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167996560223", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397391320929", "title": "LOT DE 2 CONSOLES GAME BOY ADVANCE  POUR PIECES DETACHEES  (HS)", "price": 71.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397391320929", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167986961701", "title": "CONSOLE NINTENDO GAMEBOY ADVANCE GBA SP COQUE CUSTOM POKÉMON RAYQUAZA FONCTIONNE", "price": 87.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167986961701", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397382066502", "title": "Game boy advance micro - Nintendo Famicom anniversary rare", "price": 279.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397382066502", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236523369956", "title": "Nintendo Game Boy Advance SP ROSE Console Jeu portable AGS 001 GBA PAL eur Retro", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236523369956", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "294048902140", "title": "Haut parleur Game Boy Color Advance - Remplacement Speaker Enceinte GBA GBC  0.5", "price": 3.95, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/294048902140", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397331570686", "title": "NINTENDO DS Lite Console +5 Cartouches +2 Jeux Game Boy Advance Retrogaming C24", "price": 32.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397331570686", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406501640261", "title": "Console Nintendo Game Boy Advance bleu glacier transparent HS", "price": 25.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/406501640261", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397349003232", "title": "Game boy Advance SP AGS 001 - Groudon - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397349003232", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187688626985", "title": "Nintendo Game Boy Advance SP Lot de 44 coques de remplacement non officielles ne", "price": 182.7, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/187688626985", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116925787493", "title": "Console Nintendo Game Boy Advance édition Pokémon Dracaufeu + pokemon saphir", "price": 170.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116925787493", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236522163095", "title": "Game boy Advance Model n° AGB 001 noire fonctionne , elle a été testée", "price": 40.51, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236522163095", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "394786392739", "title": "Nintendo GameBoy Advance SP Console IPS V2 Écran rétro-éclairé Utilisé...", "price": 216.36, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/394786392739", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389391591067", "title": "Console Nintendo Gameboy Advance SP + Chargeur D'origine", "price": 85.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389391591067", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236523369955", "title": "Nintendo Game Boy Advance SP BLEU Console Jeu portable AGS 001 GBA PAL eur", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236523369955", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "204967572207", "title": "Ecran Game Boy Advance GBA Screen Vitre de remplacement Gameboy  FRANCE", "price": 3.45, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/204967572207", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267508755489", "title": "Console Portable Nintendo Game Boy Advance Indigo Avec Son Cache Pile", "price": 43.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267508755489", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389369374217", "title": "Console Nintendo Game Boy Advance Sp Édition Ultra Limitée Collector Dk...", "price": 289.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389369374217", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197894439615", "title": "Nintendo Gameboy Advance SP - IPS V2 -  Pokemon Édition Pikachu", "price": 169.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197894439615", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317634839164", "title": "Boîte vide Console Nintendo Game Boy Advance  : pokémon version saphir", "price": 146.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/317634839164", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317634835050", "title": "Boîte vide Console Nintendo Game Boy Advance  : advance wars", "price": 27.5, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/317634835050", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317634828739", "title": "Boîte vide Console Nintendo Game Boy Advance  :mario kart", "price": 29.9, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/317634828739", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317634804149", "title": "Boîte vide Console Nintendo Game Boy Advance", "price": 17.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/317634804149", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "257242554707", "title": "nintendo gameboy advance sp pokemon center venusaur florizarre ntsc jp green gba", "price": 867.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/257242554707", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127546701093", "title": "Console portable Nintendo Gameboy Advance Translucide gris AGB001Sans Cache Pile", "price": 74.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127546701093", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177673049944", "title": "Console Game Boy Advance SP Bleu Arctique / Arctic Blue Nintendo GBA EUR Complet", "price": 219.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177673049944", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236523369957", "title": "Nintendo Game Boy Advance Console Jeu portable AGB 001 Translucide GBA Retro Pal", "price": 49.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236523369957", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "326914339805", "title": "Console Nintendo Gameboy Advance GBA SP Console AGS 001 Pearl Pink Testée...", "price": 99.11, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/326914339805", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157487331853", "title": "console nintendo game boy advance SP pokemon groudon GBA SP état neuve", "price": 149.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157487331853", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389343643721", "title": "Nintendo Game Boy Advance AGB-001 Violet+ Box +Manual + AGB-003 & AGB-004 TESTED", "price": 132.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389343643721", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236514810350", "title": "Nintendo Game Boy Advance SP \"Super Nintendo Edition\" avec chargeur en boite", "price": 159.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236514810350", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "305066080914", "title": "Cable Link Pour Nintendo GameCube / GBA - Game Cube Gameboy Advance Pokemon", "price": 10.17, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/305066080914", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157487330548", "title": "console nintendo game boy advance SP zelda GBA SP état neuve", "price": 149.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157487330548", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397394875339", "title": "Console de jeux vidéo Nintendo Game Boy Advance SP Pearl Pink + 4 Jeux", "price": 77.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397394875339", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177673350640", "title": "Nintendo Game Boy Advance SP Console Portable + Jeux Super Mario Land 2", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177673350640", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397375208417", "title": "console nintendo GBA game boy advance sp coque changée neuve + chargeur", "price": 75.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397375208417", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157518339641", "title": "CONSOLE NINTENDO GAMEBOY ADVANCE COQUE CUSTOM SUPER FAMICOM SFC AGB-001 Bon état", "price": 66.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157518339641", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "335959256814", "title": "Console Nintendo Game Boy Advance", "price": 85.94, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/335959256814", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227121304958", "title": "Console Nintendo Game Boy Advance SP + Valise Rangement", "price": 82.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227121304958", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227121300649", "title": "Console Nintendo Game Boy Advance + Loupe", "price": 48.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227121300649", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "305201060419", "title": "Câble Link Pour Gameboy Advance & Game boy Ad SP - GBA & GBA SP Cable connexion", "price": 4.89, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/305201060419", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "396944947542", "title": "Nintendo Game Boy Advance SP Console Portable - Bleu - AGS-001 - Avec Chargeur", "price": 100.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/396944947542", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "135235771410", "title": "Gameboy Advance GBA Pokemon Ectoplasma sur le Thème Rétro-éclairage IPS V2", "price": 245.27, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/135235771410", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "123984807608", "title": "Support pour console Gameboy Advance", "price": 5.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/123984807608", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "376761031616", "title": "Console Nintendo Game Boy Advance Sp Grise Tribale + Chargeur Fonctionnel", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/376761031616", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "305501758613", "title": "Câble USB Charge Gameboy Advance GBA SP / DS - Charging Line Cord Charger Cable", "price": 3.9, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/305501758613", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157496816857", "title": "Console Nintendo Gameboy advance SP MARIO rouge red PAL Game boy", "price": 159.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157496816857", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397380054116", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397380054116", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397349054756", "title": "Game Boy Advance SP Pikachu Edition - AGS 001 Nintendo GBA SP", "price": 150.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/397349054756", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389353838952", "title": "Nintendo Game Boy Advance SP Doré Zelda minish cap Console Portable", "price": 100.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389353838952", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286995953634", "title": "Nintendo Game Boy Advance GBA - Custom Pokémon Center - Écran IPS", "price": 139.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286995953634", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336244665099", "title": "Console Nintendo Game Boy Advance SP couleur sélectionnée GBA authentique...", "price": 131.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336244665099", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "376761048082", "title": "Console Nintendo Game Boy Advance Sp Grise + Chargeur Fonctionnel", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/376761048082", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317601445980", "title": "Nintendo Game Boy Advance AGB-001 blanche - Hors service - B16", "price": 55.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/317601445980", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267501185649", "title": "Console Portable Nintendo Game Boy Advance Indigo Avec Son Cache Pile", "price": 80.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267501185649", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116912901443", "title": "Console Nintendo Game Boy Advance SP édition POKEMON KYOGRE", "price": 130.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116912901443", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267439146182", "title": "Nintendo Game Boy Advance SP NES Edition", "price": 149.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267439146182", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157496965271", "title": "Nintendo Game Boy Advance SP Bleu Métallisé - remise à neuf + 3 jeux + Chargeur", "price": 89.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157496965271", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127351823056", "title": "Nintendo Game Boy Advance SP - PINK PAL + Chargeur Officiel NINTENDO GBA SP", "price": 99.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127351823056", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "306623041685", "title": "Game Boy Advance Rose En Boite ( Jamais Utilisée)", "price": 105.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/306623041685", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397379926412", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397379926412", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157531235628", "title": "GameBoy Advance SP Pokémon Groudon - IPS v4 + 5 jeux + chargeur - en boîte", "price": 189.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157531235628", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397375364004", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397375364004", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157495960281", "title": "GameBoy Advance SP Edition Super Famicom - IPS v4 + 5 jeux - chargeur - en boîte", "price": 179.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157495960281", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336329205422", "title": "Nintendo Game Boy Advance  avec 3 jeux", "price": 59.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/336329205422", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389353882218", "title": "Nintendo Game Boy Advance Système Portable - noir", "price": 60.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389353882218", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "277564005108", "title": "Console Nintendo Gba Game Boy Advance SP Bleu Arctique En Boîte", "price": 124.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/277564005108", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397367645436", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397367645436", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127446052332", "title": "Nintendo Game Boy Advance SP Console GRIS PAL + Chargeur Officiel NINTENDO GBA", "price": 89.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127446052332", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116912446036", "title": "Console Game Boy Advance Sp Rouge", "price": 51.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/116912446036", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "277547659564", "title": "nintendo game boy advance Avec Jeu Golf", "price": 50.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/277547659564", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177657759594", "title": "Console NINTENDO Game Boy Advance SP  rouge métal  chargeur Officiel tbe", "price": 99.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177657759594", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397198969660", "title": "Nintendo Game Boy Advance SP - Mew + Adaptateur USB-C", "price": 189.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397198969660", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389345343491", "title": "Console Nintendo Game Boy Advance", "price": 56.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389345343491", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389345322804", "title": "Nintendo Game Boy Advance SP Console Portable - Bleu Ciel. Console Uniquement", "price": 70.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389345322804", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "284316191353", "title": "écran vitre en VERRE - Nintendo Game boy Advance -  Style Gameboy DMG classique", "price": 4.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/284316191353", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "284756342992", "title": "Kit fusible F1 - Nintendo GBA GameBoy advance - haute qualité", "price": 2.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/284756342992", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "284550362633", "title": "Nintendo - GameBoy Advance GBA - Kit condensateurs capacitor + inducteur L1 101", "price": 6.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/284550362633", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397360725887", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397360725887", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227109873148", "title": "Console Nintendo Game Boy Advance SP + Valise Rangement", "price": 73.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227109873148", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227109871249", "title": "Console Nintendo Game Boy Advance + Loupe", "price": 50.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227109871249", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177559457039", "title": "Nintendo Game Boy Advance IPS V5 - GBA", "price": 179.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177559457039", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "155492459860", "title": "Jeu Nintendo Game Boy Advance GBA : Super black bass advance", "price": 22.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/155492459860", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167982318299", "title": "CONSOLE NINTENDO GAME BOY ADVANCE SP", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167982318299", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286927248956", "title": "Console Nintendo Game Boy Advance  GBA Grise", "price": 74.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286927248956", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "405516484105", "title": "Nintendo Gameboy Advance SP Pikachu Pokémon Reshell *Écran en verre et batter...", "price": 146.03, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/405516484105", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187812341643", "title": "Gameboy Advance Son HS", "price": 42.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/187812341643", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187812351731", "title": "Gameboy advance HS", "price": 42.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/187812351731", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167974206676", "title": "CONSOLE NINTENDO GAME BOY ADVANCE SP", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167974206676", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397356036663", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397356036663", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297800548030", "title": "game boy advance", "price": 110.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/297800548030", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389145643582", "title": "Nintendo Game Boy Advance AGB-001 Violet+ Box +Manual + AGB-003 & AGB-004 TESTED", "price": 132.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389145643582", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286929926189", "title": "Console Nintendo Gba Game Boy Advance SP Rose", "price": 74.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286929926189", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397311932447", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397311932447", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "294302241328", "title": "Adaptateur Jack - Headphone Earphone Adapter for Game Boy Advance & GBA SP", "price": 2.95, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/294302241328", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116911319102", "title": "Nintendo Game Boy Advance SP Console Portable - Bleu", "price": 40.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116911319102", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297803512227", "title": "Gameboy Advance Blanche / White Écran  IPS V5  backlit Screen", "price": 179.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/297803512227", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336009861422", "title": "Console Nintendo GAME BOY ADVANCE MAGMA : ROUGE TRANSPARENTE", "price": 62.39, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336009861422", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167946730047", "title": "Nintendo Game Boy Advance SP Édition Tribale Console Gba SP GameBoy", "price": 94.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167946730047", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317519991863", "title": "Console Game Boy Advance SP Silver édition Tribal", "price": 85.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/317519991863", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397001216967", "title": "【Très bon】Console Nintendo GameBoy Advance SP Azurite Blue uniquement #Ret081...", "price": 115.33, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397001216967", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "155480674538", "title": "Jeu Nintendo Game Boy Advance GBA : Le Pôle express", "price": 15.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/155480674538", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157491041939", "title": "Console Nintendo Game Boy Advance SP Édition ZELDA, coque neuve", "price": 139.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/157491041939", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397345047587", "title": "Game boy Advance SP AGS 001 - Groudon - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397345047587", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157447429682", "title": "Console Nintendo Game Boy Advance SP MAJORA'S MASK", "price": 135.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/157447429682", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "326893776504", "title": "Système Portable Nintendo Game Boy Advance", "price": 39.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/326893776504", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397205480806", "title": "Game Boy Advance SP Pikachu Edition - AGS 001 Nintendo GBA SP", "price": 150.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/397205480806", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "396080206384", "title": "Nintendo Game Boy Advance Mew Antique Holo + LED Mod  + Adaptateur USB-C", "price": 249.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/396080206384", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297445120401", "title": "Console Gameboy advance SP rouge + boite + chargeur et notice - Occasion", "price": 129.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/297445120401", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227099599380", "title": "Console Gameboy advance SP rouge  Chargeur Officiel Nintendo Fonctionne TB", "price": 99.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227099599380", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "136148616298", "title": "Game Boy Advance GBA HDMI 720p TV Sortie Rétroéclairage IPS Écran Choix De Obus", "price": 305.23, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/136148616298", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "146987421027", "title": "Nintendo Game Boy Advance SP  2002 N° AGS-001 et 1 Jeux MARIO KART", "price": 70.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/146987421027", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236256912723", "title": "Console Nintendo Game Boy Advance SP Zelda", "price": 150.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236256912723", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267493941656", "title": "Game Boy Advance Sp Classic Nes Edition Complète", "price": 252.98, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267493941656", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "296762330803", "title": "Ecran GBA Game Boy Advance  - Vitre de remplacement Gameboy advance", "price": 3.45, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/296762330803", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227099613471", "title": "game boy advance sp Edition Nes Plus Jeux Pokémon Jaune", "price": 112.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227099613471", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267488135051", "title": "Nintendo Game Boy Advance Console Portable Crystal Rose", "price": 47.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267488135051", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "146830234819", "title": "Console Nintendo Gameboy Advance GBA Pokémon", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/146830234819", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336309452585", "title": "Nintendo - Game Boy Advance SP - Ovp - Limited Tribal Edition -", "price": 142.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336309452585", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "146983466179", "title": "Console nintendo Gameboy advance micro gba micro not working for parts", "price": 70.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/146983466179", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "366014634591", "title": "Nintendo Game Boy Advance SP Édition Tribale", "price": 70.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/366014634591", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286967881344", "title": "Console Nintendo Gba Game Boy Advance SP Gris Argent", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286967881344", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "335961834243", "title": "Console Nintendo Game Boy Advance Glacier", "price": 62.39, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/335961834243", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157491059157", "title": "Console Nintendo Game Boy Advance SP  Super Famicom  coque neuve", "price": 139.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/157491059157", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286964474481", "title": "Nintendo Game Boy Advance SP + super Mario Bros 3, FIFA 06, Super Mario Ball…", "price": 68.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286964474481", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157505941878", "title": "Console Nintendo Game Boy Advance SP Pokemon Saphir Kyogre GameBoy GBA Saphire", "price": 149.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157505941878", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397332307566", "title": "Game boy Advance SP AGS 001 - Groudon - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397332307566", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "146998888948", "title": "Console Game Boy Advance / GBA - S'allume Pas", "price": 34.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/146998888948", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286832503794", "title": "Gameboy Advance Translucide", "price": 89.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286832503794", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167888482397", "title": "Console Nintendo Game Boy Advance SP édition POKEMON KYOGRE", "price": 130.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167888482397", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167888478249", "title": "Console Nintendo Game Boy Advance SP édition POKEMON GROUDON", "price": 130.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167888478249", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116847834257", "title": "Console Nintendo Game Boy Advance édition Pokémon Center", "price": 99.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116847834257", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406386598607", "title": "Console Nintendo Game Boy Advance  GBA Grise", "price": 64.36, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406386598607", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167888159541", "title": "Console Nintendo Game Boy Advance + Housse de Rangement", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167888159541", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127312328905", "title": "game boy advance sp ags 001", "price": 160.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127312328905", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127086555844", "title": "Console Game Boy Advance SP - Classic NES [TOP ✅ OFFICIEL] Eur", "price": 199.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127086555844", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406408419870", "title": "Nintendo Game boy Advance GBA SP NES Officiel", "price": 129.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406408419870", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127483139643", "title": "Game Boy Advance noir fumé et boutons truquoise restaurée - Ecran IPS M2 neuf", "price": 199.9, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/127483139643", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167958938323", "title": "Game Boy Advance SP Bleu (AGS-001) + Chargeur – Excellent État – Fonctionnelle", "price": 89.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167958938323", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157495921880", "title": "GameBoy Advance SP Custom edition PIKACHU - IPS v4 + 3 jeux - chargeur -en boîte", "price": 179.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157495921880", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187760412158", "title": "Console Nintendo Game Boy Advance - Gris - AGB-001", "price": 80.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187760412158", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "405498433875", "title": "Nintendo Gameboy Advance SP Pikachu Pokémon Reshell *Écran en verre et batter...", "price": 146.03, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/405498433875", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "405518487339", "title": "Nintendo Gameboy Advance SP Rayquaza Pokémon écran en verre reshell et batter...", "price": 165.5, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/405518487339", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317598892504", "title": "Nintendo Game Boy Advance complète en boîte + 1 Jeu", "price": 165.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/317598892504", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336217360240", "title": "Console Game Boy Advance SP Onyx Noire En Boîte Testée GBA Région Japon Gratu...", "price": 87.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336217360240", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336222315292", "title": "Console Game Boy Advance SP Pearl Blue GBA testée Japon sans région", "price": 70.06, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336222315292", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157205372099", "title": "Console Nintendo Game Boy Advance SP Pokemon Saphir Kyogre GameBoy GBA Saphire", "price": 149.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157205372099", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397257311021", "title": "Game boy Advance SP AGS 001 - Groudon - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397257311021", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "293732059134", "title": "Silicon Rubber Nintendo Gameboy Game Boy Advance Set Pad Contact Caoutchouc  GBA", "price": 2.4, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/293732059134", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "257219695969", "title": "Console Game Boy Advance Avec Jeu", "price": 45.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/257219695969", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "326879574027", "title": "2 Consoles Nintendo Game Boy Advance SP Bleue + 1 chargeur + 2 modes d'emploi", "price": 121.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/326879574027", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357887819501", "title": "Console GAME BOY Advance SP Famicom Color Edition GAMEBOY GBA SP JPN Region Free", "price": 159.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357887819501", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177615159349", "title": "Console Game Boy Advance SP Bleu Arctique - Nintendo GBA EUR AGS-001 - En Loose", "price": 87.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177615159349", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197844058313", "title": "Nintendo Gameboy Advance SP - AGS- 001 - Pokémon Édition Kyogre", "price": 119.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197844058313", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "156853758585", "title": "Système Portable Nintendo Game Boy Advance Indigo", "price": 109.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/156853758585", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127483115479", "title": "Game Boy Advance SP - Edition Rayquaza - Ecran IPS - Batterie Haute capacité", "price": 219.9, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/127483115479", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "277409298255", "title": "Console Nintendo Game Boy Advance SP (AGS-001) + chargeur officiel + Spider-Man", "price": 139.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/277409298255", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187727510721", "title": "Console Nintendo Game Boy Advance SP Version Pokémon Groudon - AGS-001", "price": 80.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187727510721", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "293808660481", "title": "2pcs Film Polarisant pour GAMEBOY Advance GBA GBC GBA SP Polarizing Backlit Mod", "price": 4.55, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/293808660481", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127521850191", "title": "game boy advance sp", "price": 55.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/127521850191", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "366014079299", "title": "Nintendo Game Boy Advance SP Système Portable - Platine", "price": 60.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/366014079299", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116208808427", "title": "Boîte vide Console Nintendo Game Boy Advance", "price": 75.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/116208808427", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157447267299", "title": "CONSOLE NINTENDO GAMEBOY ADVANCE GBA SP ÉDITION LIMITÉE NES CLASSIC BON ÉTAT OEM", "price": 83.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157447267299", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "155480738399", "title": "Jeu Nintendo Game Boy Advance GBA : King Kong", "price": 12.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/155480738399", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "306605551786", "title": "Game Boy Advance Nintendo \"couleur transparent\"", "price": 62.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/306605551786", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397311396807", "title": "Nintendo Game Boy Advance Hello Kitty Édition Système Portable - Rose", "price": 30.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397311396807", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397299835611", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397299835611", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397311402740", "title": "Nintendo Game Boy Advance SP Console Portable - Flame Red Sans Câble.", "price": 30.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397311402740", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "205469707353", "title": "Gameboy Advance Sp Nintendo Housse Protection Officielle", "price": 25.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/205469707353", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357908587403", "title": "CONSOLE GAME BOY ADVANCE SP ÉDITION LIMITÉE GROUDON GBA +ÉTUI + Pokemon Saphir", "price": 143.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357908587403", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406124344247", "title": "Console Nintendo Game Boy Advance Sp  - CR", "price": 100.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406124344247", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167879244349", "title": "Nintendo game boy advance Noir", "price": 79.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167879244349", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406375693729", "title": "Console Nintendo Gameboy Advance Rose + 3 Jeux", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406375693729", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389227040339", "title": "Console Nintendo Game Boy Advance SP Zelda Et Chargeur Officiel", "price": 140.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389227040339", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "205469704414", "title": "Gameboy Advance Sp Zelda Limited Edition Pak New non utilisée", "price": 1.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/205469704414", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397286617887", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397286617887", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286901563964", "title": "Console Nintendo Game Boy Advance SP Gris Argent À Réparer", "price": 49.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/286901563964", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397261122985", "title": "Fonction Tre Bien Console Game Boy Advance Plus Un Jeux J'ai Pas Le Chargeur", "price": 147.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397261122985", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187738129102", "title": "Game Boy Advance", "price": 41.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187738129102", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167933271694", "title": "Console Game Boy Advance / Noir / Bon État / Testée", "price": 69.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167933271694", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317535826692", "title": "GameBoy advance Sp édition USA en boîte", "price": 161.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/317535826692", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "376695184568", "title": "Lot 5 Console Nintendo Game Boy Advance  GBA", "price": 209.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/376695184568", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286929926195", "title": "Console Nintendo Game Boy Advance SP Noire", "price": 74.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286929926195", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236469725658", "title": "Nintendo Game Boy Advance SP - Bleue - Console Portable + jeux offerts", "price": 104.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236469725658", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116347099559", "title": "Game Boy Advance SP Remise A Neuf Écran IPS 4.0", "price": 269.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/116347099559", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357890718430", "title": "Nintendo Game Boy Advance Micro", "price": 165.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357890718430", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236311421211", "title": "Console Nintendo Game Boy  advance GBA  Coque Violette Transparente Boîte", "price": 114.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236311421211", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397260546883", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397260546883", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397000071884", "title": "【Excellent】Nintendo GameBoy Advance SP PlatinumSilver Console Box Charger Manual", "price": 155.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397000071884", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "146954062216", "title": "console game boy advance jeu dragon ball Z II", "price": 55.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/146954062216", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "156802362782", "title": "console nintendo game boy advance SP pokemon groudon GBA SP état neuve", "price": 149.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/156802362782", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "135878845739", "title": "Gameboy Advance GBA V3 Laminate - Tactile - Amp - DMG", "price": 210.28, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/135878845739", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406366991433", "title": "Nintendo Game Boy Advance SP Pikachu Console Portable - Jaune", "price": 92.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/406366991433", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406390322060", "title": "Nintendo Game Boy Advance SP Édition Limitée Tribal", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406390322060", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167933282960", "title": "Console Game Boy Advance / Indigo / Bon État / Testée", "price": 79.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167933282960", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157429188288", "title": "CONSOLE NINTENDO GAMEBOY ADVANCE COQUE CUSTOM SUPER FAMICOM SFC AGB-001 Bon état", "price": 66.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157429188288", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "136694176638", "title": "Console - Nintendo GameBoy Advance - Transparente - Game Boy - Écran Non Rayé", "price": 49.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/136694176638", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406303153084", "title": "Nintendo Game Boy Advance SP Édition Limitée Tribal", "price": 105.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406303153084", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336290920664", "title": "Nintendo Game Boy Advance SP Édition Tribale + Chargeur Officiel", "price": 69.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336290920664", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "136538545301", "title": "Batterie Rechargeable Gameboy Advance GBA IPS V3 Laminate - Tactile - Amp - Noir", "price": 247.69, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/136538545301", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357763676474", "title": "Nintendo Game Boy Advance IPS V5 - GBA Matte Transparent Black", "price": 165.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357763676474", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "284369085288", "title": "Nintendo - GameBoy Advance GBA - Kit condensateurs capacitor - CMS - panasonic", "price": 3.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/284369085288", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "395619179004", "title": "Console Nintendo Game Boy Advance Blanche", "price": 100.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/395619179004", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389213024469", "title": "Système Portable Nintendo Game Boy Advance Indigo", "price": 96.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389213024469", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177368036297", "title": "Console Nintendo Game Boy Advance SP - Bleu Cobalt AGS-001 en boîte du Japon", "price": 130.24, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177368036297", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187741485354", "title": "Gameboy Advance HS", "price": 41.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/187741485354", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336217359084", "title": "Console Game Boy Advance rose laiteux Pokemon GBA Japon testée région libre r...", "price": 75.58, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336217359084", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236454262876", "title": "Nintendo Game Boy Advance Violette  - Prête à jouer !", "price": 99.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236454262876", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357869123836", "title": "CONSOLE GAME BOY ADVANCE SP ÉDITION LIMITÉE GROUDON GBA +ÉTUI + Pokemon Saphir", "price": 144.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357869123836", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "365967727131", "title": "CONSOLE NINTENDO GAMEBOY ADVANCE GBA COLOR SP NES ZELDA MARIO BROS", "price": 59.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/365967727131", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397216716497", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397216716497", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336249683300", "title": "Nintendo Gameboy Advance Sp - Édition Limitée NES - Boîte complète - EUR", "price": 455.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336249683300", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406316235201", "title": "Nintendo Game boy Advance GBA SP Famicom Mario", "price": 99.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406316235201", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "136572941096", "title": "Console Game Boy Advance Nintendo Gameboy GBA Translucide - Fonctionne Bien", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/136572941096", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397251296745", "title": "Game boy Advance SP AGS 001 - Groudon - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397251296745", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "123984817769", "title": "Support pour console Gameboy Advance SP", "price": 5.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/123984817769", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127483110691", "title": "Game Boy Advance SP - Edition NES - Ecran IPS - Batterie Haute capacité neuve", "price": 219.9, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/127483110691", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297747526244", "title": "Gameboy Advance Blanche / White Écran  IPS V5  backlit Screen", "price": 149.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/297747526244", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197848421079", "title": "Nintendo GameBoy Advance Indigo Puprle AGB-001 + Accessories Thrustmaster Link", "price": 69.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197848421079", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177521221848", "title": "Nintendo Game Boy Advance SP  ZELDA et 2 Jeux ORIGINAL", "price": 150.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177521221848", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "405517452804", "title": "Gameboy Advance SP AGS-001 Super Famicom Reshell * écran en verre et batterie...", "price": 137.27, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/405517452804", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397238913166", "title": "Game boy Advance SP AGS 001 - Groudon - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397238913166", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187728581706", "title": "Console Nintendo Gameboy Advance SP", "price": 75.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187728581706", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177473426149", "title": "🎮 Game Boy Advance écran rétroéclairé + 2 jeux Mario inclus !", "price": 119.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177473426149", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197812456708", "title": "Nintendo Gameboy Advance SP - IPS V2 -  Pokemon Édition Pikachu", "price": 169.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197812456708", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267439142969", "title": "Nintendo Game Boy Advance SP Pikachu version", "price": 399.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267439142969", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197665820552", "title": "Nintendo Gameboy Advance SP - AGS- 001 - Pokémon Édition Kyogre", "price": 119.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197665820552", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317341102865", "title": "Console NINTENDO Game Boy Advance SP noire + chargeur officiel °o° Fonctionne", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/317341102865", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397224860613", "title": "Rare: Console Nintendo Game Boy Gameboy Advance Noire + jeu Pirates Des Caraibes", "price": 70.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/397224860613", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336252122287", "title": "Console Nintendo Game Boy Advance SP Ecran TBE  avec chargeur USB   Envoi suivi", "price": 99.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336252122287", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157204304822", "title": "CONSOLE GAME BOY ADVANCE SP ÉDITION LIMITÉE GROUDON GBA +ÉTUI + CHARGEUR", "price": 420.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157204304822", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177495673091", "title": "Console Game Boy Advance SP Rouge Flamme / Flame Red - Nintendo GBA EUR", "price": 169.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177495673091", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397198952207", "title": "Game boy Advance SP AGS 001 - Groudon - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397198952207", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317356820445", "title": "Flash Omega Definitive Edition GBA Gameboy Advance Multi Cart Rom sd card GLOBAL", "price": 75.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/317356820445", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317356820448", "title": "Flash Omega Definitive Edition GBA Gameboy Advance Multi Cart Rom sd card 25", "price": 89.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/317356820448", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317356820443", "title": "Flash Omega Definitive Edition GBA Gameboy Advance Multi Cart Rom sd card 23", "price": 89.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/317356820443", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317356820447", "title": "Flash Omega Definitive Edition GBA Gameboy Advance Multi Cart Rom sd card 21", "price": 89.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/317356820447", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317356820446", "title": "Flash Omega Definitive Edition GBA Gameboy Advance Multi Cart Rom sd card 20", "price": 89.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/317356820446", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286870061131", "title": "Game Boy Advance SP – Édition Spéciale Zelda Link Très Bonne État", "price": 219.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286870061131", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167906828691", "title": "Nintendo Game Boy Advance SP Système Portable - Argenté", "price": 85.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167906828691", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127455900208", "title": "🎮 Game Boy Advance SP Silver - 🔥 Originale - 💼 Sacoche Et Câble De Charge", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127455900208", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167876945387", "title": "Nintendo Console Game Boy ADVANCE GBA AGB 001 Glacier Transparent Testée OK", "price": 84.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167876945387", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "405517251335", "title": "Gameboy Advance SP AGS-001 mario Reshell * écran en verre et batterie neuve *", "price": 137.27, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/405517251335", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286901563998", "title": "Console Nintendo Game Boy Advance  GBA Grise", "price": 64.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286901563998", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389080234535", "title": "Console Nintendo Game Boy Advance Sp Avec Chargeur", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389080234535", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267442720125", "title": "CONSOLE GAMEBOY ADVANCE NINTENDO EDITION POKEMON PIKACHU GAME BOY RESHELL", "price": 87.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267442720125", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297253098636", "title": "Potentiomètre Volume Audio - Gameboy Color Pocket Advance - GBC GBP GBA Control", "price": 1.1, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/297253098636", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227047970379", "title": "Nintendo Game Boy Advance SP Édition Tribale Console Avec Jeux Pokémon Jaune", "price": 81.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227047970379", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227047970226", "title": "Nintendo Game Boy Advance SP Système Portable - Edition Nes + Jeux Pokémon Jaune", "price": 131.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227047970226", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "145982079137", "title": "Lot 6 Set GameBoy Advance SP couleur aléatoire Nintendo Console Junk du JAPON", "price": 315.92, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/145982079137", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197518564300", "title": "Gameboy Advance Sp Console Arctic Blue Ags-001 Pal + 5 Games + Pouch - Tested", "price": 119.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197518564300", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267450032774", "title": "GameBoy Advance SP grise, 3 jeux et malette officielle", "price": 120.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267450032774", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "135605837752", "title": "Game Boy Advance GBA Vert Clair Lumineux LCD IPS V5 720x480 Rétroéclairage", "price": 197.58, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/135605837752", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167896665413", "title": "Superbe Console Nintendo Game Boy Advance + Piles Neuves !", "price": 79.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167896665413", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177529678558", "title": "Nintendo Game Boy Advance IPS V5 - GBA", "price": 179.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177529678558", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317436752475", "title": "🎮 Écran Game Boy Advance SP – Très propre & 100 % fonctionnel ! 🔧", "price": 19.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/317436752475", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167879290022", "title": "CONSOLE NINTENDO GAMEBOY ADVANCE ROSE COMPLÈTE PAL EURO CIB OVP GBA - Bon état", "price": 75.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167879290022", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336260742395", "title": "game boy advance sp console portable Pink Avec 5 Jeux", "price": 89.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336260742395", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "257141642827", "title": "carte mère original GBA 40 broche Gameboy advance occasion", "price": 45.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/257141642827", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187397382573", "title": "Notice Nintendo Game Boy Advance Tom Clancy's Splinter Cell EUR Excellent état", "price": 9.48, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187397382573", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "146919683277", "title": "nintendo game boy advance", "price": 79.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/146919683277", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "296659750884", "title": "Câble chargeur USB Pour GameBoy Advance GBA SP / DS - Power Cable", "price": 1.41, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/296659750884", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127459582905", "title": "RETROGAMING LOT 10 JEUX NINTENDO GAMEBOY ADVANCE PAS ATARI XBOX SATURN", "price": 8.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127459582905", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167873757306", "title": "Nintendo Game Boy Advance SP Console Portable - Bleu", "price": 85.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167873757306", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167894353647", "title": "Nintendo Game Boy Advance SP Système Portable - Argenté", "price": 85.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167894353647", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "335748704689", "title": "Console Nintendo Game Boy  advance GBA Écran IPS Coque Verte Transparente Boîte", "price": 154.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/335748704689", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397202128416", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 151.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397202128416", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286867974885", "title": "{BOÎTE VIDE} GAME BOY ADVANCE SP ZELDA LIMITED EDITION", "price": 310.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286867974885", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187668030079", "title": "Lot Game boy Advance SP Grise Console vintage + jeu Spiderman", "price": 67.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187668030079", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357835601065", "title": "Nintendo Game Boy Advance SP Zelda", "price": 190.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357835601065", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267450027648", "title": "Nintendo Game boy Advance GBA SP Tribal Officiel + 1 Jeu Offert", "price": 72.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267450027648", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "376643438296", "title": "Nintendo Game Boy Advance SP Système Portable - famicom ( collector ) rare", "price": 116.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/376643438296", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "136672821013", "title": "Console Game Boy Advance Nintendo Gameboy GBA - Noire - Fonctionne Bien", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/136672821013", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317436344399", "title": "Nintendo Game Boy Advance SP Console Portable - Bleu", "price": 110.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/317436344399", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "405517071926", "title": "Coque personnalisée Gameboy Advance SP AGS-001 Rayquaza Pokémon Reshell et ba...", "price": 146.03, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/405517071926", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397198940012", "title": "Game Boy Advance SP Pikachu Edition - AGS 001 Nintendo GBA SP", "price": 150.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/397198940012", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389155817192", "title": "Console Game Boy Advance SP Bleu Ciel", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/389155817192", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286898937567", "title": "Console Nintendo Game Boy Advance GBA SP Bleu + Chageur", "price": 100.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286898937567", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357642074579", "title": "Console Portable Nintendo Game Boy Advance SP Rose", "price": 84.75, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357642074579", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357787657952", "title": "game boy advance", "price": 63.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357787657952", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397198940566", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397198940566", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236418543232", "title": "Nintendo Game Boy Advance SP Plus De Cordon", "price": 8.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236418543232", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406318531625", "title": "GAMEBOY ADVANCE GBA NINTENDO Officiel Rose Pink   Game Boy", "price": 66.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406318531625", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187684456138", "title": "console Game Boy Advance transparente HS", "price": 39.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/187684456138", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "205794727949", "title": "Nintendo Game Boy Advance SP Système Portable - Platine", "price": 81.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/205794727949", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336087827175", "title": "Console Nintendo Console Gameboy Advance AGB-001 translucide", "price": 74.74, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336087827175", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177509323366", "title": "Nintendo Game Boy Advance SP IPS + HDMI", "price": 150.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177509323366", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "166288900426", "title": "GBA CRYSTAL AVEC ÉCRAN IPS (GAME BOY ADVANCE MOD)", "price": 169.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/166288900426", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267442128208", "title": "Nintendo Game Boy Advance Console Portable Crystal NTSC-J", "price": 58.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267442128208", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336239697700", "title": "Nintendo Gameboy Advance Sp - Édition Limitée NES - Boîte complète - EUR", "price": 650.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336239697700", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357645835962", "title": "Nintendo Game Boy Advance SP Système Portable - Argenté", "price": 84.46, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357645835962", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227029093287", "title": "Système Portable Nintendo Game Boy Advance", "price": 35.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227029093287", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397188001587", "title": "Game Boy Advance En Boite - Complet", "price": 111.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397188001587", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267439604666", "title": "Nintendo Game Boy Advance GBA SP - Bleu Argent  + Chargeur", "price": 79.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267439604666", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297688600714", "title": "Nintendo Game Boy Advance Console Portable Crystal NTSC-J", "price": 51.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/297688600714", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167872567020", "title": "CONSOLE NINTENDO GAME BOY ADVANCE. SP", "price": 60.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/167872567020", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286152452259", "title": "Nintendo Game Boy Advance Macro dsLite Ips Switch Color Pocket Gameboy Pokemon", "price": 89.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286152452259", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397160983151", "title": "Game Boy Advance En Boite - Complet", "price": 111.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397160983151", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "396841326010", "title": "Game Boy Advance SP custom", "price": 165.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/396841326010", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236391193369", "title": "CONSOLE DE JEU -  NINTENDO GAMEBOY ADVANCE - avec  lumière et loupe", "price": 45.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236391193369", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167863402352", "title": "game boy advance sp ags 101 white pearl", "price": 140.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167863402352", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297612522305", "title": "Console Game Boy Advance SP Nintendo Classic NES Edition /AGS-001 ETAT CORRECT", "price": 139.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/297612522305", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286695825017", "title": "Nintendo Game Boy Advance Macro dsLite Ips Switch Color Pocket Gameboy Pokemon", "price": 99.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286695825017", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "257151828858", "title": "nintendo gameboy advance sp Famicom color mario game boy console gba", "price": 150.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/257151828858", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357779940282", "title": "🎮 Nintendo Game Boy Advance SP Bleu + Pochette (Testée Fonctionne Parfaitement)", "price": 79.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357779940282", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317410157343", "title": "Nintendo Game Boy Advance SP EN BOITE - PINK LIMITED EDITION", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/317410157343", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116820868158", "title": "Console Nintendo Game Boy Advance", "price": 57.6, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116820868158", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177483784536", "title": "Nintendo Game Boy Advance SP  et 1 Jeux MARIO KART", "price": 90.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177483784536", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187648056839", "title": "Lot 3 Console Nintendo  Gameboy Advance Lire Description", "price": 97.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187648056839", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "236390611053", "title": "Gameboy Advance Translucide", "price": 70.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/236390611053", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "306545736854", "title": "Nintendo Game Boy Advance Système Portable - Transparent Avec Warioland 4", "price": 63.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/306545736854", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167853734210", "title": "Nintendo Game Boy Advance Système Portable - noire", "price": 117.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167853734210", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "227023547448", "title": "Nintendo Game Boy Advance + 1 Jeux", "price": 80.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/227023547448", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267432730185", "title": "Console game boy advance AGB-001 noir , sans cache piles fonctionnelle .", "price": 43.5, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267432730185", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267434285042", "title": "CONSOLE GAMEBOY ADVANCE NINTENDO EDITION POKEMON PIKACHU GAME BOY RESHELL", "price": 87.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267434285042", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127109837871", "title": "🎮 GameBoy Advance - 🔧 Restaurée - 💼 Sacoche", "price": 80.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127109837871", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286589087661", "title": "Nintendo Game Boy Advance Macro dsLite Ips Switch Color Pocket Gameboy Pokemon", "price": 89.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/286589087661", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177495668841", "title": "Nintendo Game Boy Advance IPS V5 - GBA", "price": 179.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177495668841", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357750802326", "title": "Nintendo Game Boy Advance IPS V5 - GBA Matte Transparent Black", "price": 169.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357750802326", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116802405358", "title": "Console Nintendo Game Boy Advance Crystal d'origine + Boite et notices", "price": 100.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116802405358", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187397381600", "title": "Game Boy Advance Boitier de protection x10 PAL Trés Bon état", "price": 12.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187397381600", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177490786139", "title": "Console Game Boy Advance SP Rouge Flamme / Flame Red - Nintendo GBA EUR", "price": 175.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177490786139", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "376619121621", "title": "POUR PIECES Nintendo Game Boy Advance SP Système Portable - Argenté", "price": 39.45, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/376619121621", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197646502229", "title": "Nintendo Game boy Advance GBA SP Zelda Officiel", "price": 125.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197646502229", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "316479146274", "title": "Console Portable Nintendo Game Boy Advance Blanche", "price": 100.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/316479146274", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357640061849", "title": "Nintendo Game Boy Advance IPS V5 - GBA Matte Transparent Black", "price": 169.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357640061849", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197765304343", "title": "Nintendo Gameboy Advance SP - IPS V2 -  Pokemon Édition kyogre", "price": 169.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197765304343", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197765304719", "title": "Nintendo Gameboy Advance SP - IPS V2 -  Pokemon Édition Goudron", "price": 169.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197765304719", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197632508535", "title": "Nintendo Gameboy Advance SP - IPS V2 -  Pokemon Édition Goudron", "price": 169.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197632508535", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "197632507270", "title": "Nintendo Gameboy Advance SP - IPS V2 -  Pokemon Édition kyogre", "price": 169.9, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/197632507270", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397044141010", "title": "Game boy Advance SP AGS 001 - Kyogre - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397044141010", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397053986132", "title": "Game boy Advance SP AGS 001 - Groudon - & Accessoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397053986132", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "304484373272", "title": "Set 2 Tournevis Nintendo - Gameboy Advance Color Wii 3DS - Screwdriver Tool", "price": 2.66, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/304484373272", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357725149616", "title": "Nintendo Gameboy Advance GBA SP Cobalt Blue Handheld Console System AGS-001", "price": 83.27, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357725149616", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "167847974718", "title": "Nintendo Game Boy Advance SP Console - Noire", "price": 95.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/167847974718", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "157356539786", "title": "Console GameBoy Advance SP - Eur - Complet - Pack ZELDA MINISH CAP", "price": 359.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/157356539786", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267421592029", "title": "Nintendo Game boy Advance GBA SP Tribal Officiel", "price": 66.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267421592029", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406253588258", "title": "Console Nintendo Game Boy Advance SP Pokemon Saphir Kyogre 100% Authentique", "price": 120.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406253588258", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "396685645835", "title": "Console Nintendo Game Boy Advance  MODEL NO AGB-001 + 1 Jeux officielle Crème", "price": 89.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/396685645835", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "156908889556", "title": "GameBoy Advance SP/ GameBoy Advance Lot 6 Set Couleur Aléatoire Nintendo Cons...", "price": 314.93, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/156908889556", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187629483340", "title": "Lot de 4 Game boy advance HS - Pour pièces", "price": 148.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/187629483340", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "276916441870", "title": "Nintendo Game Boy Advance SP FAMICOM GBA AGS Limited Edition JAPAN USED", "price": 189.78, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/276916441870", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "396548894512", "title": "Game Boy Advance SP - Blaziken/Braségali Edition - Pokémon - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/396548894512", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317378447548", "title": "ENSEMBLE ADAPTATEUR SECTEUR OFFICIEL GAMEBOY ADVANCE GBA PAL EURO complet neuf", "price": 37.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/317378447548", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "365905486393", "title": "Nintendo Game Boy Advance SP Argentée (Nintendo, 2003)", "price": 64.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/365905486393", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267421593598", "title": "Nintendo Game boy Advance GBA SP Tribal Officiel 2", "price": 73.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267421593598", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "297637159890", "title": "Nintendo Gameboy Advance Sp AGS-001 Rose Avec Finding Nemo Jeu & Étui 2002", "price": 131.09, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/297637159890", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "376582157301", "title": "Console Nintendo Game Boy Advance Violet", "price": 62.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/376582157301", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "365319658852", "title": "Game Boy Advance Noir + Pac man   Console Nintendo * Test OK * TBE", "price": 88.66, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/365319658852", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "257099425589", "title": "Nintendo Game Boy Advance SP Naruto RPG Orange AGS-S-NROBNR gameboy gba", "price": 205.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/257099425589", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "257104397265", "title": "Nintendo game boy Advance Pokemon Center New York edition console gameboy gold", "price": 1.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/257104397265", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "257134638092", "title": "NINTENDO Game Boy Advance SP  rouge métal + chargeur en très bon  état", "price": 79.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/257134638092", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406218392252", "title": "Game boy advance blanche en l'état", "price": 55.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406218392252", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286847977736", "title": "Console Nintendo Game Boy Advance  GBA HS", "price": 29.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/286847977736", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "357620744967", "title": "Game Boy advance, Console De Jeux + 1 Jeu Pokémon Rouge", "price": 80.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/357620744967", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "376586009305", "title": "Nintendo Game Boy Advance Système Portable - Pokecenter", "price": 70.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/376586009305", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "306332820183", "title": "Gameboy Advance Translucide", "price": 170.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/306332820183", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177439490267", "title": "Nintendo Game Boy Advance SP Système Portable - Argenté", "price": 132.53, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177439490267", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "267414377881", "title": "Console Nintendo Game Boy Advance Violet AGB-001 PAL EUR GameBoy GB GBA", "price": 199.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/267414377881", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "389041841282", "title": "Gameboy advance HS - Ne démarre Pas", "price": 29.9, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/389041841282", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336162365819", "title": "Console Game Boy Advance SP Mana Blue Edition testée GBA fonctionnelle sans r...", "price": 103.15, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336162365819", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "226999591104", "title": "Nintendo GameBoy Advance SP", "price": 125.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/226999591104", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116728436292", "title": "Cable Link Pour Nintendo GameCube / GBA - Game Cube Gameboy Advance", "price": 13.49, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116728436292", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "395417541147", "title": "Nintendo Game Boy Advance SP - HO-OH + Chargeur original Nintendo", "price": 239.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/395417541147", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "286847977745", "title": "Lot De 2 Consoles Game Boy Advance SP Gba", "price": 84.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/286847977745", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "187397382496", "title": "Notice Nintendo Game Boy Advance Crash & Spyro Super Pack volume 3 EUR", "price": 9.48, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/187397382496", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177303262958", "title": "Nintendo Game Boy Advance IPS V5 - GBA", "price": 179.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177303262958", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "365875985792", "title": "nintendo game boy advance Sealed", "price": 590.0, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/365875985792", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397056217259", "title": "Game boy Advance SP AGS 001 - Rayquaza - & Accesoires - Nintendo", "price": 149.99, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/397056217259", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336192269302", "title": "Nintendo Game Boy Advance Indigo EUR avec sacoche de transport", "price": 79.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336192269302", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "336204647501", "title": "Nintendo Game Boy Advance SP Édition Tribale Fonctionnel , Sortie En 2004 Fr", "price": 39.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/336204647501", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "116782543692", "title": "Console Nintendo Game Boy Advance En Boite", "price": 98.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/116782543692", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "177371619755", "title": "Nintendo Game Boy Advance JAPAN JAP Box / Notice Serial Matching", "price": 144.99, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/177371619755", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "317300936202", "title": "Nintendo Game Boy Advance SP Console Portable - Flame Red (AGSSZRA)", "price": 69.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/317300936202", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "376581463413", "title": "Nintendo Game boy Advance SP Zelda Officiel  - OCCASION  + jeux Zelda + chargeur", "price": 125.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/376581463413", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "277385119796", "title": "Game boy advance orange HS", "price": 45.0, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/277385119796", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "205012883692", "title": "Cartouche Flash Ez Omega Definitive Edition De Neuf Gameboy Advance GBA Game Boy", "price": 104.12, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/205012883692", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "397069570531", "title": "Game Boy Advance SP Pikachu Edition - AGS 001 Nintendo GBA SP", "price": 150.99, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/397069570531", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "127383579054", "title": "Nintendo Game Boy Advance - Noir - Avec boîte - Très bon état", "price": 101.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/127383579054", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406245338700", "title": "Nintendo Game boy Advance SP Pokemon Groudon Officielle + sacoche Housse Gba Sp", "price": 149.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406245338700", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406178192512", "title": "Nintendo Game boy Advance SP  Officie Gba Sp Bleu Semi HS", "price": 56.95, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/406178192512", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "257107192815", "title": "Game Boy Advance Super Famicom", "price": 69.0, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/257107192815", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "304182767405", "title": "Haut parleur Game Boy Color Advance - Remplacement Speaker Enceinte - GBA GBC", "price": 5.85, "date": "2025-12-25", "condition": "Neuf |", "url": "https://www.ebay.fr/itm/304182767405", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406222758796", "title": "Console Nintendo Game Boy Advance", "price": 25.5, "date": "2025-12-25", "condition": "Occasion", "url": "https://www.ebay.fr/itm/406222758796", "current_variant": "", "assigned_variant": "", "status": "pending"}, {"id": "406178192005", "title": "GAMEBOY ADVANCE GBA NINTENDO Officiel Rose Pink   Game Boy", "price": 66.95, "date": "2025-12-25", "condition": "Occasion |", "url": "https://www.ebay.fr/itm/406178192005", "current_variant": "", "assigned_variant": "", "status": "pending"}];
+        const suggestedVariants = ["standard-purple", "standard-black", "standard-glacier", "standard-orange", "standard-pink", "sp-platinum", "sp-cobalt", "sp-flame", "sp-graphite", "sp-pearl-blue", "sp-pearl-pink", "sp-tribal", "sp-famicom", "sp-nes", "micro-silver", "micro-black", "micro-blue", "micro-pink", "micro-famicom"];
+        let customVariants = [];
+        let currentItemIndex = 0;
+        let addingVariantForItem = null;
+
+        // Initialize
+        function init() {
+            loadFromLocalStorage();
+            updateVariantFilter();
+            renderItems();
+            updateStats();
+            setupKeyboardShortcuts();
+            setupAutoSave();
+        }
+
+        function updateVariantFilter() {
+            const filter = document.getElementById('variant-filter');
+            const allVariants = [...suggestedVariants, ...customVariants];
+            filter.innerHTML = '<option value="">All variants</option>';
+            allVariants.forEach(v => {
+                const option = document.createElement('option');
+                option.value = v;
+                option.textContent = v;
+                filter.appendChild(option);
+            });
+        }
+
+        function renderItems() {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+
+            allItems.forEach((item, index) => {
+                if (!isItemVisible(item, index)) return;
+
+                const card = document.createElement('div');
+                card.className = `item-card status-${item.status}`;
+                card.id = `item-${index}`;
+
+                const allVariants = [...suggestedVariants, ...customVariants];
+                const variantOptions = allVariants.map(v =>
+                    `<option value="${v}" ${item.assigned_variant === v ? 'selected' : ''}>${v}</option>`
+                ).join('');
+
+                card.innerHTML = `
+                    <div class="item-number">#${index + 1}</div>
+                    <div class="item-info">
+                        <div class="item-title" onclick="openEbay(${index})">
+                            ${item.title}
+                        </div>
+                        <div class="item-meta">
+                            <span class="price">${item.price}€</span>
+                            <span>${item.date}</span>
+                            <span>${item.condition}</span>
+                        </div>
+                    </div>
+                    <div class="item-controls">
+                        <div class="variant-selector">
+                            <select class="variant-select" onchange="setVariant(${index}, this.value)">
+                                <option value="">Select variant...</option>
+                                ${variantOptions}
+                            </select>
+                            <button class="add-variant-btn" onclick="showAddVariantModal(${index})" title="Add new variant">+</button>
+                        </div>
+                        <div class="status-buttons">
+                            <button class="status-btn keep ${item.status === 'keep' ? 'active' : ''}" onclick="setStatus(${index}, 'keep')">Keep</button>
+                            <button class="status-btn bundle ${item.status === 'bundle' ? 'active' : ''}" onclick="setStatus(${index}, 'bundle')">Bundle</button>
+                            <button class="status-btn parts ${item.status === 'parts' ? 'active' : ''}" onclick="setStatus(${index}, 'parts')">Parts</button>
+                            <button class="status-btn reject ${item.status === 'reject' ? 'active' : ''}" onclick="setStatus(${index}, 'reject')">Reject</button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function isItemVisible(item, index) {
+            const statusFilter = document.getElementById('status-filter').value;
+            const variantFilter = document.getElementById('variant-filter').value;
+            const searchText = document.getElementById('search-input').value.toLowerCase();
+
+            if (statusFilter && item.status !== statusFilter) return false;
+            if (variantFilter && item.assigned_variant !== variantFilter) return false;
+            if (searchText && !item.title.toLowerCase().includes(searchText)) return false;
+
+            return true;
+        }
+
+        function setVariant(index, variant) {
+            allItems[index].assigned_variant = variant;
+            updateStats();
+            saveToLocalStorage();
+        }
+
+        function setStatus(index, status) {
+            allItems[index].status = status;
+            renderItems();
+            updateStats();
+            saveToLocalStorage();
+
+            // Auto-advance to next pending item
+            const nextPending = allItems.findIndex((item, i) => i > index && item.status === 'pending');
+            if (nextPending !== -1) {
+                scrollToItem(nextPending);
+            }
+        }
+
+        function showAddVariantModal(index) {
+            addingVariantForItem = index;
+            document.getElementById('add-variant-modal').classList.add('active');
+            document.getElementById('new-variant-key').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('add-variant-modal').classList.remove('active');
+            document.getElementById('new-variant-key').value = '';
+            document.getElementById('new-variant-name').value = '';
+            addingVariantForItem = null;
+        }
+
+        function confirmAddVariant() {
+            const key = document.getElementById('new-variant-key').value.trim().toLowerCase();
+            const name = document.getElementById('new-variant-name').value.trim();
+
+            if (!key || !name) {
+                alert('Please enter both variant key and name');
+                return;
+            }
+
+            if (suggestedVariants.includes(key) || customVariants.includes(key)) {
+                alert('This variant already exists');
+                return;
+            }
+
+            customVariants.push(key);
+            updateVariantFilter();
+
+            if (addingVariantForItem !== null) {
+                allItems[addingVariantForItem].assigned_variant = key;
+                renderItems();
+            }
+
+            closeModal();
+        }
+
+        function openEbay(index) {
+            window.open(allItems[index].url, '_blank');
+        }
+
+        function scrollToItem(index) {
+            // Remove active class from all items
+            document.querySelectorAll('.item-card').forEach(el => el.classList.remove('active'));
+
+            const element = document.getElementById(`item-${index}`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.classList.add('active');
+                currentItemIndex = index;
+            }
+        }
+
+        function applyFilters() {
+            renderItems();
+        }
+
+        function updateStats() {
+            const keepCount = allItems.filter(i => i.status === 'keep').length;
+            const bundleCount = allItems.filter(i => i.status === 'bundle').length;
+            const partsCount = allItems.filter(i => i.status === 'parts').length;
+            const rejectCount = allItems.filter(i => i.status === 'reject').length;
+            const total = allItems.length;
+            const processed = keepCount + bundleCount + partsCount + rejectCount;
+            const progress = Math.round((processed / total) * 100);
+
+            document.getElementById('keep-count').textContent = keepCount;
+            document.getElementById('bundle-count').textContent = bundleCount;
+            document.getElementById('parts-count').textContent = partsCount;
+            document.getElementById('reject-count').textContent = rejectCount;
+            document.getElementById('progress-percent').textContent = progress + '%';
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Don't trigger if in input field
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+
+                const visibleItems = allItems.map((item, index) => ({ item, index }))
+                    .filter(({ item, index }) => isItemVisible(item, index));
+
+                if (!visibleItems.length) return;
+
+                const currentVisible = visibleItems.findIndex(({ index }) => index === currentItemIndex);
+
+                switch(e.key.toLowerCase()) {
+                    case 'k':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) {
+                            setStatus(visibleItems[currentVisible].index, 'keep');
+                        }
+                        break;
+                    case 'b':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) {
+                            setStatus(visibleItems[currentVisible].index, 'bundle');
+                        }
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) {
+                            setStatus(visibleItems[currentVisible].index, 'parts');
+                        }
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) {
+                            setStatus(visibleItems[currentVisible].index, 'reject');
+                        }
+                        break;
+                    case 'enter':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) {
+                            openEbay(visibleItems[currentVisible].index);
+                        }
+                        break;
+                    case 'arrowup':
+                        e.preventDefault();
+                        if (currentVisible > 0) {
+                            currentItemIndex = visibleItems[currentVisible - 1].index;
+                            scrollToItem(currentItemIndex);
+                        }
+                        break;
+                    case 'arrowdown':
+                        e.preventDefault();
+                        if (currentVisible < visibleItems.length - 1) {
+                            currentItemIndex = visibleItems[currentVisible + 1].index;
+                            scrollToItem(currentItemIndex);
+                        }
+                        break;
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) {
+                            const allVariants = [...suggestedVariants, ...customVariants];
+                            const variantIndex = parseInt(e.key) - 1;
+                            if (variantIndex < allVariants.length) {
+                                const variant = allVariants[variantIndex];
+                                setVariant(visibleItems[currentVisible].index, variant);
+                                // Update the select dropdown visually
+                                const select = document.querySelector(`#item-${visibleItems[currentVisible].index} .variant-select`);
+                                if (select) select.value = variant;
+                            }
+                        }
+                        break;
+                }
+            });
+        }
+
+        function exportData() {
+            const result = {
+                items: allItems,
+                custom_variants: customVariants,
+                summary: {
+                    total: allItems.length,
+                    keep: allItems.filter(i => i.status === 'keep').length,
+                    bundle: allItems.filter(i => i.status === 'bundle').length,
+                    parts: allItems.filter(i => i.status === 'parts').length,
+                    reject: allItems.filter(i => i.status === 'reject').length
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sorted_items_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert(`Exported: ${result.summary.keep} keep, ${result.summary.parts} parts, ${result.summary.bundle} bundle, ${result.summary.reject} reject`);
+        }
+
+        function saveProgress() {
+            const progressData = {
+                items: allItems,
+                custom_variants: customVariants,
+                current_index: currentItemIndex,
+                timestamp: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(progressData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sorting_progress_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert('Progress saved to file! You can continue later by loading this file.');
+        }
+
+        function saveToLocalStorage() {
+            try {
+                const progressData = {
+                    items: allItems,
+                    custom_variants: customVariants,
+                    current_index: currentItemIndex,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('gba_sorter_progress', JSON.stringify(progressData));
+                console.log('✅ Progress saved to localStorage');
+                updateLastSaved();
+            } catch (e) {
+                console.error('❌ Failed to save to localStorage:', e);
+                document.getElementById('save-status').innerHTML = '❌ Save failed: ' + e.message;
+            }
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('gba_sorter_progress');
+                if (!saved) {
+                    console.log('ℹ️  No saved progress found');
+                    return;
+                }
+
+                const progressData = JSON.parse(saved);
+                console.log('📂 Found saved progress:', {
+                    items: progressData.items?.length,
+                    timestamp: progressData.timestamp
+                });
+
+                // Check if the data matches current items (same item IDs)
+                const savedIds = new Set(progressData.items.map(i => i.id));
+                const currentIds = new Set(allItems.map(i => i.id));
+                const idsMatch = savedIds.size === currentIds.size &&
+                                [...savedIds].every(id => currentIds.has(id));
+
+                console.log('🔍 ID check:', {
+                    savedCount: savedIds.size,
+                    currentCount: currentIds.size,
+                    match: idsMatch
+                });
+
+                if (idsMatch) {
+                    // Merge saved progress
+                    allItems = progressData.items;
+                    customVariants = progressData.custom_variants || [];
+                    currentItemIndex = progressData.current_index || 0;
+
+                    const sortedCount = allItems.filter(i => i.status !== 'pending').length;
+                    console.log(`✅ Loaded progress: ${sortedCount} items sorted`);
+
+                    document.getElementById('save-status').innerHTML =
+                        `✅ Progress restored: ${sortedCount} items sorted • Saved ${new Date(progressData.timestamp).toLocaleString()}`;
+                } else {
+                    console.warn('⚠️  Saved data has different items, starting fresh');
+                    document.getElementById('save-status').innerHTML =
+                        `⚠️  Old progress found but doesn't match current data`;
+                }
+            } catch (e) {
+                console.error('❌ Failed to load from localStorage:', e);
+                document.getElementById('save-status').innerHTML = '❌ Load failed: ' + e.message;
+            }
+        }
+
+        function updateLastSaved() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('last-saved').textContent = timeStr;
+        }
+
+        function setupAutoSave() {
+            // Auto-save every 30 seconds
+            setInterval(() => {
+                saveToLocalStorage();
+            }, 30000);
+
+            // Also save on page unload
+            window.addEventListener('beforeunload', () => {
+                saveToLocalStorage();
+            });
+        }
+
+        function clearProgress() {
+            if (confirm('Clear all sorting progress? This cannot be undone.')) {
+                localStorage.removeItem('gba_sorter_progress');
+                location.reload();
+            }
+        }
+
+        function loadProgressFile() {
+            document.getElementById('progress-file-input').click();
+        }
+
+        function handleProgressFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const progressData = JSON.parse(e.target.result);
+
+                    // Validate data
+                    if (!progressData.items || !Array.isArray(progressData.items)) {
+                        alert('Invalid progress file format');
+                        return;
+                    }
+
+                    // Check if item IDs match
+                    const savedIds = new Set(progressData.items.map(i => i.id));
+                    const currentIds = new Set(allItems.map(i => i.id));
+                    const idsMatch = savedIds.size === currentIds.size &&
+                                    [...savedIds].every(id => currentIds.has(id));
+
+                    if (!idsMatch) {
+                        if (!confirm('Warning: This progress file has different items. Load anyway?')) {
+                            return;
+                        }
+                    }
+
+                    // Load progress
+                    allItems = progressData.items;
+                    customVariants = progressData.custom_variants || [];
+                    currentItemIndex = progressData.current_index || 0;
+
+                    // Update UI
+                    updateVariantFilter();
+                    renderItems();
+                    updateStats();
+                    saveToLocalStorage();
+
+                    alert('✅ Progress loaded successfully!');
+                } catch (e) {
+                    alert('Error loading progress file: ' + e.message);
+                }
+            };
+            reader.readAsText(file);
+
+            // Reset input so same file can be loaded again
+            event.target.value = '';
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 # PrixRetro - Claude Session Context
 
 **Last Updated:** 2025-12-25
-**Project Status:** SEO Optimization Complete, Ready for Deployment
+**Project Status:** Multi-Console Expansion in Progress (GBA)
 
 ---
 
@@ -345,6 +345,157 @@ git add . && git commit -m "..." && git push
 | `update_site_compact.py` | Site generator | No |
 | `scraper_ebay.py` | Sold items scraper | No |
 | `scraper_current_listings.py` | Active listings scraper | No |
+
+---
+
+## 🚀 Multi-Console Expansion (December 2025)
+
+### Revenue Strategy
+**Goal:** Scale from 9 GBC pages to 70+ pages across multiple consoles
+**Target:** 5,000-10,000 monthly visitors = 50-100€/month revenue
+
+**Search Volume Analysis:**
+- GBA: ~2,000/month
+- Nintendo DS: ~3,000/month
+- PSP: ~2,500/month
+- GB Classic: ~1,500/month
+
+### GBA Expansion Status (IN PROGRESS)
+
+#### ✅ Completed (2025-12-25)
+1. **scraper_gba.py** - Scrapes all GBA sold items from eBay.fr
+   - Uses `.s-card.s-card--horizontal` selectors
+   - Successfully scraped 396 GBA items
+   - Output: `scraped_data_gba_raw.json`
+
+2. **variant_sorter_gba.html** - Interactive sorting interface
+   - 396 items loaded for manual categorization
+   - 19 suggested variants (standard/SP/Micro)
+   - Keyboard shortcuts: K/B/P/R
+   - Auto-save to localStorage (key: `gba_sorter_progress`)
+   - User currently sorting (challenge: color similarity)
+
+3. **config_multiconsole.json** - Multi-console configuration
+   - Organized by console type
+   - GBC: 9 variants configured
+   - GBA: 19 variants configured
+   - Ready for DS, PSP expansion
+
+4. **migrate_to_multiconsole.py** - Data migration script
+   - Converts flat `scraped_data.json` to multi-console structure
+   - Preserves backward compatibility
+   - Creates backups before migration
+
+5. **process_gba_sorted_data.py** - Processes sorted GBA data
+   - Takes exported JSON from variant_sorter_gba.html
+   - Calculates stats (avg, min, max prices)
+   - Creates `scraped_data_gba.json`
+   - Updates `scraped_data_multiconsole.json`
+
+6. **scraper_gba_current_listings.py** - GBA current listings
+   - Scrapes active FOR SALE GBA listings
+   - Variant-aware filtering (SP/Micro/Standard)
+   - Image validation
+   - Output: `current_listings_gba.json`
+
+#### 🔄 In Progress
+- **User manually sorting 396 GBA items** in variant_sorter_gba.html
+  - Challenge: Visual similarity of metallic colors (silver/platinum/pearl)
+  - Expected to take significant time
+
+#### 📋 Pending (After User Finishes Sorting)
+1. **Run process_gba_sorted_data.py** with exported JSON
+2. **Update site generator** for multi-console (or create new version)
+3. **Generate GBA variant pages** (18-19 new pages expected)
+4. **Update homepage** to show console categories
+5. **Update sitemap.xml** to include GBA pages
+6. **Deploy to production**
+
+### New File Structure
+
+```
+prixretro/
+├── config_multiconsole.json          # Multi-console config
+├── scraped_data.json                 # Current flat GBC data
+├── scraped_data_multiconsole.json    # New multi-console format
+├── scraped_data_gba.json             # GBA sold items (pending)
+├── scraped_data_gba_raw.json         # Raw GBA scrape (396 items)
+├── current_listings_gba.json         # GBA current listings (pending)
+│
+├── scraper_gba.py                    # GBA sold items scraper
+├── scraper_gba_current_listings.py   # GBA current listings scraper
+├── variant_sorter_gba.html           # GBA sorting interface
+├── create_gba_variant_sorter.py      # Creates sorting HTML
+│
+├── migrate_to_multiconsole.py        # Migration script
+├── process_gba_sorted_data.py        # Process sorted GBA data
+│
+└── update_site_compact.py            # Current site generator (GBC only)
+    update_site_multiconsole.py       # Future: multi-console generator
+```
+
+### Multi-Console Data Structure
+
+**New scraped_data.json format:**
+```json
+{
+  "consoles": {
+    "game-boy-color": {
+      "variants": {
+        "atomic-purple": { ... },
+        "violet": { ... }
+      }
+    },
+    "game-boy-advance": {
+      "variants": {
+        "sp-platinum": { ... },
+        "standard-purple": { ... }
+      }
+    }
+  },
+  "metadata": {
+    "version": "2.0",
+    "format": "multi-console"
+  }
+}
+```
+
+### GBA Variant Categories
+
+**Standard GBA (5 variants):**
+- standard-purple, standard-black, standard-glacier, standard-orange, standard-pink
+
+**SP Models (9 variants):**
+- sp-platinum, sp-cobalt, sp-flame, sp-graphite
+- sp-pearl-blue, sp-pearl-pink
+- sp-tribal-edition, sp-famicom, sp-nes
+
+**Micro Models (5 variants):**
+- micro-silver, micro-black, micro-blue, micro-pink, micro-famicom
+
+**Total:** ~19 GBA variants expected
+
+### Expected Page Growth
+
+**Current:** 9 GBC pages
+**After GBA:** ~28 pages (+19 GBA variants)
+**After DS/PSP:** 70+ pages
+**Target:** 100+ pages across all Nintendo handhelds
+
+### Technical Notes
+
+**eBay Scraping for GBA:**
+- Uses same `.s-card` selectors as GBC
+- Category: 139971 (same as GBC)
+- Search term: "game boy advance"
+- Variant matching: SP requires "sp" in title, Micro requires "micro"
+- Color matching: Similar to GBC but adapted for metallic finishes
+
+**Manual Sorting Required:**
+- User preference: "auto filter wasn't good enough"
+- Colors too similar for automated detection
+- Quality control: Human verification ensures accuracy
+- Same workflow as GBC (proven successful)
 
 ---
 
