@@ -2,6 +2,15 @@
 
 **Your Amazon Tag:** `prixretro-21` ✅ **ACTIVE!**
 
+**STATUS:** ⚠️ **ON HOLD - FUTURE USE ONLY**
+
+**Strategy Update (2025-12-26):**
+- ❌ **DO NOT use for vintage consoles/games** (too many fakes, shady sellers)
+- ✅ **FUTURE USE: NEW modern accessories only** (cases, cleaning kits, display stands)
+- ✅ **Focus NOW on:** eBay affiliate + AdSense + B2B API (reach €2k without Amazon!)
+
+**When to revisit:** Month 6+ when you have time to curate NEW accessory products carefully.
+
 ---
 
 ## 🚀 Step 1: Find Products on Amazon.fr (5 minutes)
