@@ -1,0 +1,202 @@
+{
+  "game-boy-color": {
+    "consoles": [
+      {
+        "name": "Game Boy Color Console - Violet (Reconditionné)",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "79.99",
+        "description": "Console Game Boy Color reconditionnée en excellent état",
+        "category": "console",
+        "priority": 1
+      },
+      {
+        "name": "Game Boy Color Console - Atomic Purple (Occasion)",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "89.99",
+        "description": "Console transparente iconique en très bon état",
+        "category": "console",
+        "priority": 2
+      }
+    ],
+    "games": [
+      {
+        "name": "Pokémon Cristal - Game Boy Color",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "49.99",
+        "description": "Le classique Pokémon pour GBC",
+        "category": "game",
+        "priority": 1
+      },
+      {
+        "name": "The Legend of Zelda: Oracle of Seasons",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "39.99",
+        "description": "Aventure Zelda pour Game Boy Color",
+        "category": "game",
+        "priority": 2
+      },
+      {
+        "name": "The Legend of Zelda: Oracle of Ages",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "39.99",
+        "description": "Deuxième volet des aventures Oracle",
+        "category": "game",
+        "priority": 3
+      },
+      {
+        "name": "Super Mario Bros. Deluxe - GBC",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "29.99",
+        "description": "Mario classique sur Game Boy Color",
+        "category": "game",
+        "priority": 4
+      },
+      {
+        "name": "Pokémon Or / Argent (Au choix)",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "44.99",
+        "description": "Deuxième génération Pokémon",
+        "category": "game",
+        "priority": 5
+      }
+    ],
+    "accessories": [
+      {
+        "name": "Housse de protection Game Boy Color",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "12.99",
+        "description": "Protège votre console vintage",
+        "category": "accessory",
+        "priority": 1
+      },
+      {
+        "name": "Câble Link Game Boy Color",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "8.99",
+        "description": "Pour jouer à deux",
+        "category": "accessory",
+        "priority": 2
+      },
+      {
+        "name": "Écran de protection GBC",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "6.99",
+        "description": "Protège l'écran des rayures",
+        "category": "accessory",
+        "priority": 3
+      }
+    ]
+  },
+  "game-boy-advance": {
+    "consoles": [
+      {
+        "name": "Game Boy Advance SP - Platinum (Reconditionné)",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "89.99",
+        "description": "GBA SP pliable avec rétroéclairage",
+        "category": "console",
+        "priority": 1
+      },
+      {
+        "name": "Game Boy Advance SP - Cobalt Blue",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "94.99",
+        "description": "Modèle bleu cobalt recherché",
+        "category": "console",
+        "priority": 2
+      }
+    ],
+    "games": [
+      {
+        "name": "Pokémon Émeraude - GBA",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "59.99",
+        "description": "Le meilleur Pokémon GBA",
+        "category": "game",
+        "priority": 1
+      },
+      {
+        "name": "The Legend of Zelda: The Minish Cap",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "49.99",
+        "description": "Aventure Zelda exclusive GBA",
+        "category": "game",
+        "priority": 2
+      },
+      {
+        "name": "Metroid Fusion - GBA",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "39.99",
+        "description": "Action spatiale culte",
+        "category": "game",
+        "priority": 3
+      },
+      {
+        "name": "Mario Kart: Super Circuit",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "34.99",
+        "description": "Courses Mario sur GBA",
+        "category": "game",
+        "priority": 4
+      }
+    ],
+    "accessories": [
+      {
+        "name": "Chargeur Game Boy Advance SP",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "9.99",
+        "description": "Chargeur compatible GBA SP",
+        "category": "accessory",
+        "priority": 1
+      },
+      {
+        "name": "Housse de transport GBA SP",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "14.99",
+        "description": "Protection rigide pour voyager",
+        "category": "accessory",
+        "priority": 2
+      }
+    ]
+  },
+  "general": {
+    "bundles": [
+      {
+        "name": "Pack Console + 3 Jeux Pokémon",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "149.99",
+        "description": "Console + Pokémon Cristal, Or et Argent",
+        "category": "bundle",
+        "priority": 1
+      }
+    ],
+    "books": [
+      {
+        "name": "L'Histoire de Nintendo - Livre",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "24.99",
+        "description": "L'épopée de la Game Boy",
+        "category": "book",
+        "priority": 1
+      },
+      {
+        "name": "Guide Pokémon Générations 1 & 2",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "19.99",
+        "description": "Guide complet des premiers Pokémon",
+        "category": "book",
+        "priority": 2
+      }
+    ],
+    "display": [
+      {
+        "name": "Vitrine d'exposition pour consoles",
+        "asin": "REPLACE_WITH_ASIN",
+        "price": "34.99",
+        "description": "Présentoir acrylique pour collection",
+        "category": "display",
+        "priority": 1
+      }
+    ]
+  }
+}
