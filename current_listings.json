@@ -32,9 +32,16 @@
     "variant_name": "Violet",
     "listings": [
       {
+        "title": "Nintendo Game Boy Color Console Portable - Violet - FR - Fonctionnelle",
+        "url": "https://www.ebay.fr/itm/187882117196",
+        "price": 80.0,
+        "condition": "Occasion |",
+        "image_url": "https://i.ebayimg.com/images/g/-CIAAeSw8qZpTn-E/s-l500.webp"
+      },
+      {
         "title": "Nintendo Game Boy Color CGB-001  Violette Violet",
-        "url": "https://www.ebay.fr/itm/267519134170",
-        "price": 127.9,
+        "url": "https://www.ebay.fr/itm/267524136102",
+        "price": 124.9,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/X48AAeSw-i9pSDvf/s-l140.webp"
       },
@@ -53,7 +60,7 @@
         "image_url": "https://i.ebayimg.com/images/g/CPsAAeSwJshpQt63/s-l140.webp"
       }
     ],
-    "count": 3
+    "count": 4
   },
   "rouge": {
     "variant_key": "rouge",
@@ -86,13 +93,6 @@
         "price": 168.0,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/abcAAeSwJV1pSc~F/s-l140.webp"
-      },
-      {
-        "title": "Nintendo Game Boy Color Bleu  Avec Accessoires",
-        "url": "https://www.ebay.fr/itm/297867783368",
-        "price": 88.0,
-        "condition": "Occasion |",
-        "image_url": "https://i.ebayimg.com/images/g/hpUAAeSwdC9pSXpo/s-l140.webp"
       },
       {
         "title": "Console Nintendo Game Boy Color CGB-001 Bleue - Fonctionne, Signes D'Utilisation",
@@ -130,7 +130,7 @@
         "image_url": "https://i.ebayimg.com/images/g/bZcAAeSw7UNpQJV8/s-l140.webp"
       }
     ],
-    "count": 7
+    "count": 6
   },
   "jaune": {
     "variant_key": "jaune",
@@ -152,8 +152,8 @@
       },
       {
         "title": "Console Nintendo Game Boy Color jaune",
-        "url": "https://www.ebay.fr/itm/267519130601",
-        "price": 74.9,
+        "url": "https://www.ebay.fr/itm/267524136081",
+        "price": 72.9,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/HPoAAeSwBCxpSDnu/s-l140.webp"
       },
@@ -186,6 +186,13 @@
     "variant_name": "Pokemon Center 3rd Anniversary",
     "listings": [
       {
+        "title": "5 Pile CR1616 - Cartouche Jeu Game Boy Color Advance - GBC GBA SP POKEMON",
+        "url": "https://www.ebay.fr/itm/306678251865",
+        "price": 9.95,
+        "condition": "Neuf |",
+        "image_url": "https://i.ebayimg.com/images/g/3jAAAeSwUuxpTrsC/s-l500.webp"
+      },
+      {
         "title": "Nintendo Game Boy Color Pokemon Center Japan 3rd Anniversary Edition CGB-001",
         "url": "https://www.ebay.fr/itm/366079717670",
         "price": 286.68,
@@ -195,7 +202,7 @@
       {
         "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC",
         "url": "https://www.ebay.fr/itm/397416523166",
-        "price": 34.5,
+        "price": 45.5,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/7CAAAeSwoo1pSEdo/s-l140.webp"
       },
@@ -242,13 +249,20 @@
         "image_url": "https://i.ebayimg.com/images/g/ZpkAAeSwjfBpQEZl/s-l140.webp"
       }
     ],
-    "count": 8
+    "count": 9
   },
   "pokemon-special-limited-edition": {
     "variant_key": "pokemon-special-limited-edition",
     "variant_name": "Pokemon Special Limited Edition",
     "listings": [
       {
+        "title": "5 Pile CR1616 - Cartouche Jeu Game Boy Color Advance - GBC GBA SP POKEMON",
+        "url": "https://www.ebay.fr/itm/306678251865",
+        "price": 9.95,
+        "condition": "Neuf |",
+        "image_url": "https://i.ebayimg.com/images/g/3jAAAeSwUuxpTrsC/s-l500.webp"
+      },
+      {
         "title": "Nintendo Game Boy Color Pokemon Center Japan 3rd Anniversary Edition CGB-001",
         "url": "https://www.ebay.fr/itm/366079717670",
         "price": 286.68,
@@ -258,7 +272,7 @@
       {
         "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC",
         "url": "https://www.ebay.fr/itm/397416523166",
-        "price": 34.5,
+        "price": 45.5,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/7CAAAeSwoo1pSEdo/s-l140.webp"
       },
@@ -305,13 +319,20 @@
         "image_url": "https://i.ebayimg.com/images/g/ZpkAAeSwjfBpQEZl/s-l140.webp"
       }
     ],
-    "count": 8
+    "count": 9
   },
   "pokemon-special-edition": {
     "variant_key": "pokemon-special-edition",
     "variant_name": "Pokemon Special Edition",
     "listings": [
       {
+        "title": "5 Pile CR1616 - Cartouche Jeu Game Boy Color Advance - GBC GBA SP POKEMON",
+        "url": "https://www.ebay.fr/itm/306678251865",
+        "price": 9.95,
+        "condition": "Neuf |",
+        "image_url": "https://i.ebayimg.com/images/g/3jAAAeSwUuxpTrsC/s-l500.webp"
+      },
+      {
         "title": "Nintendo Game Boy Color Pokemon Center Japan 3rd Anniversary Edition CGB-001",
         "url": "https://www.ebay.fr/itm/366079717670",
         "price": 286.68,
@@ -321,7 +342,7 @@
       {
         "title": "Nintendo Game boy color édition pokemon Pikachu gameboy GBC",
         "url": "https://www.ebay.fr/itm/397416523166",
-        "price": 34.5,
+        "price": 45.5,
         "condition": "Occasion |",
         "image_url": "https://i.ebayimg.com/images/g/7CAAAeSwoo1pSEdo/s-l140.webp"
       },
@@ -368,6 +389,6 @@
         "image_url": "https://i.ebayimg.com/images/g/ZpkAAeSwjfBpQEZl/s-l140.webp"
       }
     ],
-    "count": 8
+    "count": 9
   }
 }
