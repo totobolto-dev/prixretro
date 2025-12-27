@@ -92,6 +92,7 @@ def scrape_leboncoin_console(search_term, category="jeux_video", max_pages=3):
                 continue
 
             response.raise_for_status()
+            response.encoding = 'utf-8'  # Force UTF-8 to handle French characters (é, à, etc.)
 
             # Parse HTML
             soup = BeautifulSoup(response.text, 'html.parser')

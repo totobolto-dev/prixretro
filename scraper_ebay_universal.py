@@ -148,6 +148,7 @@ def scrape_ebay_console(search_term, console_slug, max_pages=50):
         try:
             response = session.get(url, headers=headers, timeout=15)
             response.raise_for_status()
+            response.encoding = 'utf-8'  # Force UTF-8 to handle French characters (é, à, etc.)
 
             soup = BeautifulSoup(response.text, 'html.parser')
 
