@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GBA Date Editor - Fix Sold Dates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .controls {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+
+        button.secondary {
+            background: #555;
+        }
+
+        button.secondary:hover {
+            background: #666;
+        }
+
+        .item-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .item-card {
+            background: #2d2d2d;
+            border: 2px solid #3d3d3d;
+            border-radius: 8px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 60px 1fr 200px 150px 60px;
+            gap: 15px;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .item-card:hover {
+            border-color: #4CAF50;
+        }
+
+        .item-card.edited {
+            border-color: #2196F3;
+            background: #2a3a4a;
+        }
+
+        .item-card.deleted {
+            opacity: 0.3;
+            border-color: #f44336;
+            background: #3a2a2a;
+        }
+
+        .item-card.deleted .item-title {
+            text-decoration: line-through;
+        }
+
+        .item-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #888;
+            text-align: center;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .item-variant {
+            color: #4CAF50;
+            font-weight: 500;
+        }
+
+        .item-price {
+            color: #FFB74D;
+        }
+
+        .date-editor {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .date-input {
+            background: #1a1a1a;
+            border: 2px solid #3d3d3d;
+            color: #e0e0e0;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: monospace;
+            transition: all 0.2s;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .date-input.edited {
+            border-color: #2196F3;
+            background: #1a2a3a;
+        }
+
+        .date-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ebay-link {
+            background: #0064D2;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .ebay-link:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .delete-btn:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        .delete-btn.undo {
+            background: #4CAF50;
+        }
+
+        .delete-btn.undo:hover {
+            background: #45a049;
+        }
+
+        .keyboard-hint {
+            background: #2d2d2d;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #888;
+            border-left: 3px solid #4CAF50;
+        }
+
+        .saved-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .saved-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding: 20px;
+            background: #2d2d2d;
+            border-radius: 8px;
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GBA Date Editor</h1>
+            <div class="stats">
+                <div class="stat">
+                    <span>Total Items:</span>
+                    <span class="progress" id="totalCount">0</span>
+                </div>
+                <div class="stat">
+                    <span>Edited:</span>
+                    <span class="progress" id="editedCount">0</span>
+                </div>
+                <div class="stat">
+                    <span>Deleted:</span>
+                    <span class="progress" style="color: #f44336;" id="deletedCount">0</span>
+                </div>
+                <div class="stat">
+                    <span>Auto-saved</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="keyboard-hint">
+                💡 Click date field, enter YYYY-MM-DD format, then press Enter to open eBay
+            </div>
+            <button onclick="exportData()">💾 Export JSON</button>
+            <button class="secondary" onclick="resetAll()">🔄 Reset All Dates</button>
+        </div>
+
+        <div class="item-grid" id="itemGrid"></div>
+
+        <div class="footer">
+            Data is auto-saved to localStorage. Export JSON when done to update scraped_data_gba.json
+        </div>
+    </div>
+
+    <div class="saved-indicator" id="savedIndicator">✓ Auto-saved</div>
+
+    <script>
+        // Load GBA kept items
+        let items = [];
+        let editedDates = {};
+        let deletedItems = new Set();
+
+        // Load data from file
+        async function loadData() {
+            try {
+                const response = await fetch('gba_kept_items_with_dates.json');
+                const data = await response.json();
+                items = data.items;
+
+                // Load saved edits from localStorage
+                const saved = localStorage.getItem('gba_date_edits');
+                if (saved) {
+                    editedDates = JSON.parse(saved);
+                }
+
+                // Load deleted items from localStorage
+                const savedDeleted = localStorage.getItem('gba_deleted_items');
+                if (savedDeleted) {
+                    deletedItems = new Set(JSON.parse(savedDeleted));
+                }
+
+                renderItems();
+                updateStats();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                alert('Failed to load data. Make sure gba_kept_items_with_dates.json is in the same directory.');
+            }
+        }
+
+        function renderItems() {
+            const grid = document.getElementById('itemGrid');
+            grid.innerHTML = '';
+
+            items.forEach((item, index) => {
+                const currentDate = editedDates[item.id] || item.date;
+                const isEdited = editedDates[item.id] && editedDates[item.id] !== item.date;
+                const isDeleted = deletedItems.has(item.id);
+
+                const card = document.createElement('div');
+                card.className = `item-card ${isEdited ? 'edited' : ''} ${isDeleted ? 'deleted' : ''}`;
+                card.innerHTML = `
+                    <div class="item-number">${index + 1}</div>
+                    <div class="item-info">
+                        <div class="item-title">${escapeHtml(item.title)}</div>
+                        <div class="item-meta">
+                            <span class="item-variant">${item.assigned_variant}</span>
+                            <span class="item-price">${item.price}€</span>
+                            <span>ID: ${item.id}</span>
+                        </div>
+                    </div>
+                    <div class="date-editor">
+                        <label class="date-label">Sold Date</label>
+                        <input
+                            type="text"
+                            class="date-input ${isEdited ? 'edited' : ''}"
+                            data-item-id="${item.id}"
+                            value="${currentDate}"
+                            placeholder="YYYY-MM-DD"
+                            pattern="\\d{4}-\\d{2}-\\d{2}"
+                            ${isDeleted ? 'disabled' : ''}
+                        >
+                    </div>
+                    <a href="${item.url}" class="ebay-link" target="_blank" tabindex="-1" ${isDeleted ? 'style="opacity:0.3;pointer-events:none;"' : ''}>
+                        Open eBay →
+                    </a>
+                    <button class="delete-btn ${isDeleted ? 'undo' : ''}" data-item-id="${item.id}">
+                        ${isDeleted ? '↺' : '🗑'}
+                    </button>
+                `;
+
+                // Add event listeners
+                const input = card.querySelector('.date-input');
+                input.addEventListener('input', (e) => handleDateChange(e, item.id));
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        card.querySelector('.ebay-link').click();
+                    }
+                });
+
+                // Delete button
+                const deleteBtn = card.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', () => toggleDelete(item.id));
+
+                grid.appendChild(card);
+            });
+        }
+
+        function handleDateChange(event, itemId) {
+            const newDate = event.target.value;
+
+            // Validate date format
+            if (newDate && !/^\d{4}-\d{2}-\d{2}$/.test(newDate)) {
+                event.target.style.borderColor = '#f44336';
+                return;
+            }
+
+            event.target.style.borderColor = '';
+            editedDates[itemId] = newDate;
+
+            // Auto-save
+            localStorage.setItem('gba_date_edits', JSON.stringify(editedDates));
+            showSavedIndicator();
+
+            // Update just this card's styling (no re-render to prevent page jump)
+            const originalItem = items.find(i => i.id === itemId);
+            const isEdited = newDate !== originalItem.date;
+
+            const card = event.target.closest('.item-card');
+            const input = event.target;
+
+            if (isEdited) {
+                card.classList.add('edited');
+                input.classList.add('edited');
+            } else {
+                card.classList.remove('edited');
+                input.classList.remove('edited');
+            }
+
+            updateStats();
+        }
+
+        function toggleDelete(itemId) {
+            if (deletedItems.has(itemId)) {
+                deletedItems.delete(itemId);
+            } else {
+                deletedItems.add(itemId);
+            }
+
+            // Save to localStorage
+            localStorage.setItem('gba_deleted_items', JSON.stringify([...deletedItems]));
+            showSavedIndicator();
+
+            // Re-render to update UI
+            renderItems();
+            updateStats();
+        }
+
+        function updateStats() {
+            const activeCount = items.length - deletedItems.size;
+            document.getElementById('totalCount').textContent = `${activeCount} (${items.length} total)`;
+            document.getElementById('editedCount').textContent = Object.keys(editedDates).length;
+            document.getElementById('deletedCount').textContent = deletedItems.size;
+        }
+
+        function showSavedIndicator() {
+            const indicator = document.getElementById('savedIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 1500);
+        }
+
+        function exportData() {
+            // Create updated items with edited dates, excluding deleted items
+            const updatedItems = items
+                .filter(item => !deletedItems.has(item.id))
+                .map(item => ({
+                    ...item,
+                    date: editedDates[item.id] || item.date
+                }));
+
+            const exportData = {
+                items: updatedItems,
+                exported_at: new Date().toISOString(),
+                edited_count: Object.keys(editedDates).length,
+                deleted_count: deletedItems.size
+            };
+
+            // Download as JSON
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'gba_kept_items_fixed_dates.json';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert(`Exported ${updatedItems.length} items (${Object.keys(editedDates).length} edited, ${deletedItems.size} deleted)!`);
+        }
+
+        function resetAll() {
+            if (confirm('Reset all date edits AND deletions? This will clear localStorage but not affect the original file.')) {
+                editedDates = {};
+                deletedItems = new Set();
+                localStorage.removeItem('gba_date_edits');
+                localStorage.removeItem('gba_deleted_items');
+                renderItems();
+                updateStats();
+                alert('All edits and deletions cleared!');
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>
