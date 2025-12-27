@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Prix et historique du retrogaming Nintendo. Game Boy Color et Game Boy Advance - Données basées sur les ventes réelles eBay.">
-    <meta name="keywords" content="Game Boy Color, Game Boy Advance, prix, vente, occasion, retrogaming, Nintendo, console, collection, GBC, GBA">
+    <meta name="description" content="Prix et historique des Game Boy Color. Données basées sur les ventes réelles eBay des 6 derniers mois.">
+    <meta name="keywords" content="Game Boy Color, prix, vente, occasion, retrogaming, Nintendo, console, collection, GBC">
     <meta name="author" content="PrixRetro - Prix du Rétrogaming">
     <meta name="robots" content="index, follow">
 
-    <!-- Google AdSense -->
+    <!-- Google AdSense Verification -->
     <meta name="google-adsense-account" content="ca-pub-2791408282004471">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="PrixRetro - Prix Game Boy Color & Advance">
-    <meta property="og:description" content="Découvrez le prix réel du marché pour Game Boy Color et Game Boy Advance. Données basées sur les ventes réelles eBay.">
+    <meta property="og:title" content="Game Boy Color - Prix & Variantes | PrixRetro">
+    <meta property="og:description" content="Découvrez le prix réel du marché pour chaque variante de Game Boy Color. Données basées sur les ventes réelles eBay.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.prixretro.com/">
     <meta property="og:site_name" content="PrixRetro - Tracker Prix Retrogaming">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="PrixRetro - Prix Game Boy Color & Advance">
-    <meta name="twitter:description" content="Prix réel du marché pour consoles Nintendo rétro">
+    <meta name="twitter:title" content="Game Boy Color - Prix & Variantes | PrixRetro">
+    <meta name="twitter:description" content="Découvrez le prix réel du marché pour chaque variante de Game Boy Color">
 
-    <title>PrixRetro - Prix Game Boy Color & Advance | Ventes eBay</title>
+    <title>Game Boy Color - Prix & Variantes | PrixRetro</title>
 
+    <!-- Canonical URL -->
     <link rel="canonical" href="https://www.prixretro.com/">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
     <!-- Structured Data -->
@@ -39,11 +42,16 @@
         "publisher": {
             "@type": "Organization",
             "name": "PrixRetro"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.prixretro.com/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
         }
     }
     </script>
 
-    <!-- Google Analytics -->
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QPNVF0BRW"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -51,9 +59,9 @@
         gtag('js', new Date());
         gtag('config', 'G-4QPNVF0BRW');
     </script>
-
     <link rel="stylesheet" href="/styles.css">
     <style>
+        /* Index-specific styles */
         .hero {
             text-align: center;
             padding: 3rem 0;
@@ -72,226 +80,207 @@
             color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto 1rem;
+            line-height: 1.6;
         }
 
-        .console-section {
-            padding: 3rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .console-section:last-child {
-            border-bottom: none;
-        }
-
-        .console-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .console-header h2 {
-            font-size: 1.8rem;
-            color: var(--text-primary);
-        }
-
-        .console-stats {
-            font-size: 0.9rem;
+        .tagline-detail {
+            font-size: 0.95rem;
             color: var(--text-muted);
+            margin-top: 0.5rem;
         }
 
-        .variant-grid {
+        .variants-section {
+            padding: 3rem 0;
+        }
+
+        .variants-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .variants-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
         }
 
         .variant-card {
-            background: var(--bg-secondary);
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 3px;
+            border-radius: var(--radius);
             padding: 1.5rem;
-            transition: all 0.2s;
             text-decoration: none;
-            color: inherit;
+            color: var(--text-primary);
+            transition: all 0.2s;
             display: block;
         }
 
         .variant-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            border-color: var(--accent-primary);
         }
 
         .variant-name {
             font-size: 1.1rem;
             font-weight: 600;
-            color: var(--text-primary);
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .variant-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
         }
 
         .variant-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: var(--text-muted);
             margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
         }
 
-        .price {
-            color: var(--success);
-            font-weight: 600;
+        .stat-item {
+            color: var(--text-muted);
         }
 
-        .view-all {
-            text-align: center;
-        }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
 
-        .view-all-btn {
-            display: inline-block;
-            padding: 0.8rem 2rem;
-            background: var(--accent);
-            color: var(--bg-primary);
-            text-decoration: none;
-            border-radius: 3px;
-            font-weight: 600;
-            transition: opacity 0.2s;
-        }
-
-        .view-all-btn:hover {
-            opacity: 0.9;
+            .variants-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="hero">
-            <h1>PrixRetro</h1>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">PrixRetro</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="container">
+            <h1>Game Boy Color</h1>
             <p class="tagline">
-                Prix du marché pour Game Boy Color et Game Boy Advance<br>
-                <span style="color: var(--text-muted); font-size: 0.95rem;">Basé sur 28 variantes • 65 ventes analysées</span>
+                Découvrez le prix réel du marché pour chaque variante de Game Boy Color
+            </p>
+            <p class="tagline-detail">
+                Graphiques d'évolution des prix • Historique des ventes • Données mises à jour régulièrement
             </p>
         </div>
+    </div>
 
-        <!-- Game Boy Color Section -->
-        <div class="console-section">
-            <div class="console-header">
-                <h2>🎮 Game Boy Color</h2>
-                <div class="console-stats">9 variantes • 0 ventes</div>
-            </div>
+    <div class="container">
+        <div class="variants-section">
+            <h2>Toutes les variantes</h2>
+            <div class="variants-grid">
 
-            <div class="variant-grid">
                 <a href="/game-boy-color-atomic-purple.html" class="variant-card">
                     <div class="variant-name">Atomic Purple (Violet Transparent)</div>
+                    <div class="variant-description">L'édition Atomic Purple est une variante transparente violette iconique qui permet de voir les composants internes</div>
                     <div class="variant-stats">
-                        <span class="price">76€</span>
-                        <span>0 ventes</span>
+                        <span class="stat-item">19 ventes</span>
+                        <span class="stat-item">~76€</span>
                     </div>
                 </a>
+
                 <a href="/game-boy-color-vert.html" class="variant-card">
                     <div class="variant-name">Vert Néon</div>
+                    <div class="variant-description">Le modèle vert néon était une des couleurs de lancement, relativement facile à trouver</div>
                     <div class="variant-stats">
-                        <span class="price">74€</span>
-                        <span>0 ventes</span>
+                        <span class="stat-item">8 ventes</span>
+                        <span class="stat-item">~74€</span>
                     </div>
                 </a>
+
                 <a href="/game-boy-color-violet.html" class="variant-card">
                     <div class="variant-name">Violet</div>
+                    <div class="variant-description">La Game Boy Color violette était l'une des couleurs de lancement les plus populaires en Europe</div>
                     <div class="variant-stats">
-                        <span class="price">65€</span>
-                        <span>0 ventes</span>
+                        <span class="stat-item">18 ventes</span>
+                        <span class="stat-item">~65€</span>
                     </div>
                 </a>
+
                 <a href="/game-boy-color-rouge.html" class="variant-card">
                     <div class="variant-name">Rouge</div>
+                    <div class="variant-description">Le modèle rouge classique, l'une des couleurs originales du Game Boy Color lancées en Europe</div>
                     <div class="variant-stats">
-                        <span class="price">72€</span>
-                        <span>0 ventes</span>
+                        <span class="stat-item">8 ventes</span>
+                        <span class="stat-item">~72€</span>
                     </div>
                 </a>
+
                 <a href="/game-boy-color-bleu.html" class="variant-card">
                     <div class="variant-name">Bleu (Teal)</div>
+                    <div class="variant-description">Le Game Boy Color bleu turquoise était une couleur de lancement très populaire en Europe</div>
                     <div class="variant-stats">
-                        <span class="price">85€</span>
-                        <span>0 ventes</span>
+                        <span class="stat-item">13 ventes</span>
+                        <span class="stat-item">~85€</span>
                     </div>
                 </a>
+
                 <a href="/game-boy-color-jaune.html" class="variant-card">
                     <div class="variant-name">Jaune</div>
+                    <div class="variant-description">Le modèle jaune était l'une des couleurs de lancement</div>
                     <div class="variant-stats">
-                        <span class="price">65€</span>
-                        <span>0 ventes</span>
+                        <span class="stat-item">10 ventes</span>
+                        <span class="stat-item">~65€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-color-pokemon-center-3rd-anniversary.html" class="variant-card">
+                    <div class="variant-name">Pokemon Center 3rd Anniversary</div>
+                    <div class="variant-description">Édition limitée exclusive du Pokemon Center pour le 3ème anniversaire</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">1 ventes</span>
+                        <span class="stat-item">~280€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-color-pokemon-special-limited-edition.html" class="variant-card">
+                    <div class="variant-name">Pokemon Special Limited Edition</div>
+                    <div class="variant-description">Édition spéciale Pokémon limitée avec design exclusif</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">7 ventes</span>
+                        <span class="stat-item">~102€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-color-pokemon-special-edition.html" class="variant-card">
+                    <div class="variant-name">Pokemon Special Edition</div>
+                    <div class="variant-description">Édition spéciale Pokémon avec design unique</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">7 ventes</span>
+                        <span class="stat-item">~129€</span>
                     </div>
                 </a>
             </div>
-
-            <div class="view-all">
-                <a href="#gbc-all" class="view-all-btn">Voir les 9 variantes GBC</a>
-            </div>
-        </div>
-
-        <!-- Game Boy Advance Section -->
-        <div class="console-section">
-            <div class="console-header">
-                <h2>🎮 Game Boy Advance</h2>
-                <div class="console-stats">19 variantes • 65 ventes</div>
-            </div>
-
-            <div class="variant-grid">
-                <a href="/game-boy-advance-sp-pearl-blue.html" class="variant-card">
-                    <div class="variant-name">SP Pearl Blue</div>
-                    <div class="variant-stats">
-                        <span class="price">97€</span>
-                        <span>7 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-standard-fuchsia.html" class="variant-card">
-                    <div class="variant-name">Fuchsia</div>
-                    <div class="variant-stats">
-                        <span class="price">72€</span>
-                        <span>6 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-standard-indigo.html" class="variant-card">
-                    <div class="variant-name">Indigo</div>
-                    <div class="variant-stats">
-                        <span class="price">66€</span>
-                        <span>6 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-sp-flame.html" class="variant-card">
-                    <div class="variant-name">SP Flame</div>
-                    <div class="variant-stats">
-                        <span class="price">109€</span>
-                        <span>5 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-sp-nes.html" class="variant-card">
-                    <div class="variant-name">SP Nes</div>
-                    <div class="variant-stats">
-                        <span class="price">155€</span>
-                        <span>5 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-standard-black.html" class="variant-card">
-                    <div class="variant-name">Black</div>
-                    <div class="variant-stats">
-                        <span class="price">68€</span>
-                        <span>5 ventes</span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="view-all">
-                <a href="#gba-all" class="view-all-btn">Voir les 19 variantes GBA</a>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div style="text-align: center; padding: 2rem 0; color: var(--text-muted); font-size: 0.9rem;">
-            <p>Données mises à jour quotidiennement depuis eBay.fr</p>
-            <p style="margin-top: 0.5rem;">PrixRetro © 2024-2025 • Prix du Retrogaming</p>
         </div>
     </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PrixRetro - Prix des consoles rétro basés sur les ventes réelles eBay</p>
+            <p>
+                <a href="/mentions-legales.html">Mentions légales</a> • 
+                <a href="/contact.html">Contact</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.85rem;">
+                Les prix affichés sont basés sur les ventes terminées sur eBay.fr au cours des 6 derniers mois.
+            </p>
+        </div>
+    </footer>
 </body>
 </html>
