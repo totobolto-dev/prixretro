@@ -1,4 +1,42 @@
-<!DOCTYPE html>
+#!/usr/bin/env python3
+"""
+Generate multi-console homepage showing GBC and GBA
+Shows featured variants per console with a clean layout
+"""
+
+import json
+
+def load_gbc_data():
+    """Load GBC data"""
+    with open('scraped_data.json', 'r') as f:
+        return json.load(f)
+
+def load_gba_data():
+    """Load GBA data"""
+    with open('scraped_data_gba.json', 'r') as f:
+        return json.load(f)
+
+def generate_homepage():
+    """Generate multi-console homepage"""
+
+    # Load data
+    gbc_data = load_gbc_data()
+    gba_data = load_gba_data()
+
+    # Select top variants per console (by listing count)
+    def get_top_variants(data, limit=6):
+        """Get top variants sorted by count"""
+        sorted_variants = sorted(
+            data.items(),
+            key=lambda x: x[1].get('count', x[1].get('listing_count', 0)),
+            reverse=True
+        )
+        return sorted_variants[:limit]
+
+    gbc_top = get_top_variants(gbc_data, 6)
+    gba_top = get_top_variants(gba_data, 6)
+
+    html = f"""<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -30,84 +68,84 @@
 
     <!-- Structured Data -->
     <script type="application/ld+json">
-    {
+    {{
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "PrixRetro",
         "description": "Tracker de prix retrogaming basé sur les ventes réelles eBay",
         "url": "https://www.prixretro.com/",
-        "publisher": {
+        "publisher": {{
             "@type": "Organization",
             "name": "PrixRetro"
-        }
-    }
+        }}
+    }}
     </script>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QPNVF0BRW"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag(){{dataLayer.push(arguments);}}
         gtag('js', new Date());
         gtag('config', 'G-4QPNVF0BRW');
     </script>
 
     <link rel="stylesheet" href="/styles.css">
     <style>
-        .hero {
+        .hero {{
             text-align: center;
             padding: 3rem 0;
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
-        }
+        }}
 
-        .hero h1 {
+        .hero h1 {{
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: var(--text-primary);
-        }
+        }}
 
-        .tagline {
+        .tagline {{
             font-size: 1.1rem;
             color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto 1rem;
-        }
+        }}
 
-        .console-section {
+        .console-section {{
             padding: 3rem 0;
             border-bottom: 1px solid var(--border);
-        }
+        }}
 
-        .console-section:last-child {
+        .console-section:last-child {{
             border-bottom: none;
-        }
+        }}
 
-        .console-header {
+        .console-header {{
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-        }
+        }}
 
-        .console-header h2 {
+        .console-header h2 {{
             font-size: 1.8rem;
             color: var(--text-primary);
-        }
+        }}
 
-        .console-stats {
+        .console-stats {{
             font-size: 0.9rem;
             color: var(--text-muted);
-        }
+        }}
 
-        .variant-grid {
+        .variant-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
-        }
+        }}
 
-        .variant-card {
+        .variant-card {{
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 3px;
@@ -116,38 +154,38 @@
             text-decoration: none;
             color: inherit;
             display: block;
-        }
+        }}
 
-        .variant-card:hover {
+        .variant-card:hover {{
             border-color: var(--accent);
             transform: translateY(-2px);
-        }
+        }}
 
-        .variant-name {
+        .variant-name {{
             font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 0.5rem;
-        }
+        }}
 
-        .variant-stats {
+        .variant-stats {{
             display: flex;
             justify-content: space-between;
             font-size: 0.9rem;
             color: var(--text-muted);
             margin-top: 1rem;
-        }
+        }}
 
-        .price {
+        .price {{
             color: var(--success);
             font-weight: 600;
-        }
+        }}
 
-        .view-all {
+        .view-all {{
             text-align: center;
-        }
+        }}
 
-        .view-all-btn {
+        .view-all-btn {{
             display: inline-block;
             padding: 0.8rem 2rem;
             background: var(--accent);
@@ -156,11 +194,11 @@
             border-radius: 3px;
             font-weight: 600;
             transition: opacity 0.2s;
-        }
+        }}
 
-        .view-all-btn:hover {
+        .view-all-btn:hover {{
             opacity: 0.9;
-        }
+        }}
     </style>
 </head>
 <body>
@@ -169,7 +207,7 @@
             <h1>PrixRetro</h1>
             <p class="tagline">
                 Prix du marché pour Game Boy Color et Game Boy Advance<br>
-                <span style="color: var(--text-muted); font-size: 0.95rem;">Basé sur 28 variantes • 65 ventes analysées</span>
+                <span style="color: var(--text-muted); font-size: 0.95rem;">Basé sur {len(gbc_data) + len(gba_data)} variantes • {sum(v.get('count', v.get('listing_count', 0)) for v in list(gbc_data.values()) + list(gba_data.values()))} ventes analysées</span>
             </p>
         </div>
 
@@ -177,56 +215,31 @@
         <div class="console-section">
             <div class="console-header">
                 <h2>🎮 Game Boy Color</h2>
-                <div class="console-stats">9 variantes • 0 ventes</div>
+                <div class="console-stats">{len(gbc_data)} variantes • {sum(v.get('listing_count', v.get('count', 0)) for v in gbc_data.values())} ventes</div>
             </div>
 
-            <div class="variant-grid">
-                <a href="/game-boy-color-atomic-purple.html" class="variant-card">
-                    <div class="variant-name">Atomic Purple (Violet Transparent)</div>
+            <div class="variant-grid">"""
+
+    # Add GBC variants
+    for variant_key, variant_data in gbc_top:
+        name = variant_data.get('variant_name', variant_data.get('name', variant_key))
+        avg_price = variant_data.get('avg_price', variant_data.get('stats', {}).get('avg_price', 0))
+        count = variant_data.get('listing_count', variant_data.get('count', 0))
+
+        html += f"""
+                <a href="/game-boy-color-{variant_key}.html" class="variant-card">
+                    <div class="variant-name">{name}</div>
                     <div class="variant-stats">
-                        <span class="price">76€</span>
-                        <span>0 ventes</span>
+                        <span class="price">{int(avg_price)}€</span>
+                        <span>{count} ventes</span>
                     </div>
-                </a>
-                <a href="/game-boy-color-vert.html" class="variant-card">
-                    <div class="variant-name">Vert Néon</div>
-                    <div class="variant-stats">
-                        <span class="price">74€</span>
-                        <span>0 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-color-violet.html" class="variant-card">
-                    <div class="variant-name">Violet</div>
-                    <div class="variant-stats">
-                        <span class="price">65€</span>
-                        <span>0 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-color-rouge.html" class="variant-card">
-                    <div class="variant-name">Rouge</div>
-                    <div class="variant-stats">
-                        <span class="price">72€</span>
-                        <span>0 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-color-bleu.html" class="variant-card">
-                    <div class="variant-name">Bleu (Teal)</div>
-                    <div class="variant-stats">
-                        <span class="price">85€</span>
-                        <span>0 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-color-jaune.html" class="variant-card">
-                    <div class="variant-name">Jaune</div>
-                    <div class="variant-stats">
-                        <span class="price">65€</span>
-                        <span>0 ventes</span>
-                    </div>
-                </a>
+                </a>"""
+
+    html += f"""
             </div>
 
             <div class="view-all">
-                <a href="#gbc-all" class="view-all-btn">Voir les 9 variantes GBC</a>
+                <a href="#gbc-all" class="view-all-btn">Voir les {len(gbc_data)} variantes GBC</a>
             </div>
         </div>
 
@@ -234,56 +247,31 @@
         <div class="console-section">
             <div class="console-header">
                 <h2>🎮 Game Boy Advance</h2>
-                <div class="console-stats">19 variantes • 65 ventes</div>
+                <div class="console-stats">{len(gba_data)} variantes • {sum(v.get('count', 0) for v in gba_data.values())} ventes</div>
             </div>
 
-            <div class="variant-grid">
-                <a href="/game-boy-advance-sp-pearl-blue.html" class="variant-card">
-                    <div class="variant-name">SP Pearl Blue</div>
+            <div class="variant-grid">"""
+
+    # Add GBA variants
+    for variant_key, variant_data in gba_top:
+        name = variant_data.get('name', variant_key)
+        avg_price = variant_data.get('avg_price', 0)
+        count = variant_data.get('count', 0)
+
+        html += f"""
+                <a href="/game-boy-advance-{variant_key}.html" class="variant-card">
+                    <div class="variant-name">{name}</div>
                     <div class="variant-stats">
-                        <span class="price">97€</span>
-                        <span>7 ventes</span>
+                        <span class="price">{int(avg_price)}€</span>
+                        <span>{count} ventes</span>
                     </div>
-                </a>
-                <a href="/game-boy-advance-standard-fuchsia.html" class="variant-card">
-                    <div class="variant-name">Fuchsia</div>
-                    <div class="variant-stats">
-                        <span class="price">72€</span>
-                        <span>6 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-standard-indigo.html" class="variant-card">
-                    <div class="variant-name">Indigo</div>
-                    <div class="variant-stats">
-                        <span class="price">66€</span>
-                        <span>6 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-sp-flame.html" class="variant-card">
-                    <div class="variant-name">SP Flame</div>
-                    <div class="variant-stats">
-                        <span class="price">109€</span>
-                        <span>5 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-sp-nes.html" class="variant-card">
-                    <div class="variant-name">SP Nes</div>
-                    <div class="variant-stats">
-                        <span class="price">155€</span>
-                        <span>5 ventes</span>
-                    </div>
-                </a>
-                <a href="/game-boy-advance-standard-black.html" class="variant-card">
-                    <div class="variant-name">Black</div>
-                    <div class="variant-stats">
-                        <span class="price">68€</span>
-                        <span>5 ventes</span>
-                    </div>
-                </a>
+                </a>"""
+
+    html += f"""
             </div>
 
             <div class="view-all">
-                <a href="#gba-all" class="view-all-btn">Voir les 19 variantes GBA</a>
+                <a href="#gba-all" class="view-all-btn">Voir les {len(gba_data)} variantes GBA</a>
             </div>
         </div>
 
@@ -294,4 +282,16 @@
         </div>
     </div>
 </body>
-</html>
+</html>"""
+
+    # Save homepage
+    with open('output/index.html', 'w', encoding='utf-8') as f:
+        f.write(html)
+
+    print("✅ Homepage generated with both GBC and GBA!")
+    print(f"   - Game Boy Color: {len(gbc_data)} variants")
+    print(f"   - Game Boy Advance: {len(gba_data)} variants")
+    print(f"   - Total: {len(gbc_data) + len(gba_data)} variants")
+
+if __name__ == '__main__':
+    generate_homepage()
