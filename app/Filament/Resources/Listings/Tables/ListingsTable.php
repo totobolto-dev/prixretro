@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Listings\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
@@ -14,6 +16,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 class ListingsTable
 {
@@ -70,6 +73,58 @@ class ListingsTable
                 EditAction::make(),
             ])
             ->headerActions([
+                Action::make('import_scraped')
+                    ->label('Import Scraped Data')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('info')
+                    ->form([
+                        Select::make('console')
+                            ->label('Console')
+                            ->options([
+                                'gbc' => 'Game Boy Color',
+                                'gba' => 'Game Boy Advance',
+                                'ds' => 'Nintendo DS',
+                            ])
+                            ->required()
+                            ->helperText('Select which console data to import from legacy-python/scraped_data_[console].json'),
+                    ])
+                    ->action(function (array $data) {
+                        $console = $data['console'];
+                        $filePath = base_path("legacy-python/scraped_data_{$console}.json");
+
+                        if (!file_exists($filePath)) {
+                            Notification::make()
+                                ->title('Import Failed')
+                                ->body("File not found: scraped_data_{$console}.json")
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
+                        try {
+                            Artisan::call('import:scraped', ['file' => $filePath]);
+                            $output = Artisan::output();
+
+                            // Parse results
+                            preg_match('/Would import: (\d+)/', $output, $imported);
+                            preg_match('/Skipped: (\d+)/', $output, $skipped);
+
+                            $importedCount = $imported[1] ?? 0;
+                            $skippedCount = $skipped[1] ?? 0;
+
+                            Notification::make()
+                                ->title('Import Completed')
+                                ->body("Imported {$importedCount} new listings, skipped {$skippedCount} existing.")
+                                ->success()
+                                ->send();
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title('Import Failed')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
                 Action::make('sync_to_production')
                     ->label('Sync to Production')
                     ->icon('heroicon-o-cloud-arrow-up')
