@@ -2,21 +2,19 @@
 
 namespace App\Filament\Resources\Listings\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\HeaderAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 
 class ListingsTable
 {
@@ -73,7 +71,7 @@ class ListingsTable
                 EditAction::make(),
             ])
             ->headerActions([
-                Action::make('import_scraped')
+                HeaderAction::make('import_scraped')
                     ->label('Import Scraped Data')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('info')
@@ -125,7 +123,7 @@ class ListingsTable
                                 ->send();
                         }
                     }),
-                Action::make('sync_to_production')
+                HeaderAction::make('sync_to_production')
                     ->label('Sync to Production')
                     ->icon('heroicon-o-cloud-arrow-up')
                     ->color('success')
