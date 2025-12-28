@@ -63,6 +63,21 @@ return [
             ]) : [],
         ],
 
+        'production' => [
+            'driver' => 'mysql',
+            'host' => env('PRODUCTION_DB_HOST', 'ba2247864-001.eu.clouddb.ovh.net'),
+            'port' => env('PRODUCTION_DB_PORT', '35831'),
+            'database' => env('PRODUCTION_DB_DATABASE', 'prixretro'),
+            'username' => env('PRODUCTION_DB_USERNAME', 'prixretro_user'),
+            'password' => env('PRODUCTION_DB_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

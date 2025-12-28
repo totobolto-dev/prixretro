@@ -5,12 +5,15 @@ namespace App\Filament\Resources\Listings\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Artisan;
 
 class ListingsTable
 {
@@ -65,6 +68,41 @@ class ListingsTable
             ->defaultSort('created_at', 'desc')
             ->recordActions([
                 EditAction::make(),
+            ])
+            ->headerActions([
+                Action::make('sync_to_production')
+                    ->label('Sync to Production')
+                    ->icon('heroicon-o-cloud-arrow-up')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Sync Approved Listings to Production')
+                    ->modalDescription('This will sync all approved listings from the last 30 days to the production CloudDB.')
+                    ->modalSubmitActionLabel('Sync Now')
+                    ->action(function () {
+                        try {
+                            Artisan::call('sync:production');
+                            $output = Artisan::output();
+
+                            // Parse output to show results
+                            preg_match('/Synced (\d+) new listings/', $output, $synced);
+                            preg_match('/Skipped (\d+) existing/', $output, $skipped);
+
+                            $syncedCount = $synced[1] ?? 0;
+                            $skippedCount = $skipped[1] ?? 0;
+
+                            Notification::make()
+                                ->title('Sync Completed')
+                                ->body("Synced {$syncedCount} new listings, skipped {$skippedCount} existing.")
+                                ->success()
+                                ->send();
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title('Sync Failed')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

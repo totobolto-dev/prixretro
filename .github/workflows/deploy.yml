@@ -91,5 +91,14 @@ jobs:
           **/package-lock.json
           **/_archive/**
           **/_cleanup/**
-          **/legacy-python/**
+          **/legacy-python/*.py
+          **/legacy-python/__pycache__/**
+          **/legacy-python/venv/**
           **/claude.md
+          **/debug.php
+          **/info.php
+          **/dbtest.php
+          **/setup.php
+          **/migrate.php
+          **/fix-storage.php
+          **/import.php
