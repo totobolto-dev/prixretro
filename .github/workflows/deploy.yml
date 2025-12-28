@@ -44,10 +44,13 @@ jobs:
 
         BROADCAST_DRIVER=log
         CACHE_DRIVER=file
+        CACHE_PATH=/home/pwagrad/prixretro/storage/framework/cache
         FILESYSTEM_DISK=local
         QUEUE_CONNECTION=database
         SESSION_DRIVER=file
         SESSION_LIFETIME=120
+
+        VIEW_COMPILED_PATH=/home/pwagrad/prixretro/storage/framework/views
 
         MEMCACHED_HOST=127.0.0.1
 
