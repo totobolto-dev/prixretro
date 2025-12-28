@@ -70,7 +70,7 @@ $logFile = $basePath . '/storage/logs/laravel.log';
 if (file_exists($logFile)) {
     $logs = file_get_contents($logFile);
     $lines = explode("\n", $logs);
-    $recent = array_slice($lines, -50);
+    $recent = array_slice($lines, -100);
 
     echo "<pre style='max-height: 500px; overflow: auto; background: #f0f0f0; padding: 10px; font-size: 11px;'>";
     echo htmlspecialchars(implode("\n", $recent));
