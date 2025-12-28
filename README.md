@@ -1,115 +1,59 @@
-# PrixRetro - Game Boy Color Price Tracker
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-## Project Structure
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-```
-/
-├── 📁 data/                     # Raw scraped data
-│   └── scraped_data.json        # Original eBay scraping results
-│
-├── 📁 docs/                     # Documentation & guides  
-│   ├── ANALYTICS_SETUP.md       # Google Analytics setup guide
-│   ├── CONTENT_STRATEGY.md      # SEO content strategy
-│   ├── LARAVEL_MIGRATION_STRATEGY.md  # Future Laravel plans
-│   └── MANUAL_REVIEW.md         # Item classification guide
-│
-├── 📁 scripts/                  # Utility scripts
-│   ├── categorize_all_data.py   # Categorize items for review
-│   ├── deduplicate_and_compact.py  # Remove duplicates
-│   └── generate_sitemap.py      # SEO sitemap generation
-│
-├── 📁 templates/                # HTML templates
-│   └── template-v3.html         # Previous template (archived)
-│
-├── 📁 output/                   # Generated website files
-│   ├── index.html               # Homepage
-│   └── game-boy-color-*.html    # Variant pages
-│
-├── 📁 archived/                 # Historical files
-│   ├── old_filters/             # Previous filtering attempts
-│   ├── old_data/                # Intermediate data processing
-│   ├── old_templates/           # Previous site generators  
-│   └── reports/                 # Processing reports
-│
-├── 🔧 config.json               # eBay scraper configuration
-├── 🐍 scraper_ebay.py           # Main eBay scraping script
-├── 🐍 update_site_compact.py    # Site generator (current)
-├── 📊 scraped_data_deduplicated.json  # Clean data (current)
-├── 🎮 gameboy_color_specs.json  # Console specifications
-├── 🏠 index.html                # Homepage template
-├── 🎨 template-v4-compact.html  # Current compact template
-└── 📄 README.md                 # This file
-```
+## About Laravel
 
-## Quick Start
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-### 1. Generate Website
-```bash
-python3 update_site_compact.py
-```
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-### 2. Update Data (re-scrape eBay)
-```bash
-python3 scraper_ebay.py
-python3 scripts/deduplicate_and_compact.py
-python3 update_site_compact.py
-```
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-### 3. Manual Data Review
-1. Review `docs/MANUAL_REVIEW.md`
-2. Classify items as consoles/games/parts
-3. Update data classifications
+## Learning Laravel
 
-## Current Status
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 
-✅ **Functional Website**: Compact display with real analytics  
-✅ **Clean Data**: 879 deduplicated items across 8 variants  
-✅ **SEO Foundation**: Sitemap, structured data, meta tags  
-✅ **Analytics**: Google Analytics (G-4QPNVF0BRW) tracking  
-✅ **Future Roadmap**: Laravel migration strategy documented  
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Data Quality
+## Laravel Sponsors
 
-- **Original scraped**: 1,352 items
-- **After deduplication**: 879 unique items  
-- **Manual review needed**: Classify authentic consoles vs games/parts
-- **Current live data**: Uses deduplicated dataset
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-## Key Files
+### Premium Partners
 
-### Active Development
-- `scraper_ebay.py` - eBay scraping engine
-- `update_site_compact.py` - Website generator  
-- `template-v4-compact.html` - Current template (compact display)
-- `scraped_data_deduplicated.json` - Clean deduplicated data
-- `gameboy_color_specs.json` - Console technical specifications
+- **[Vehikl](https://vehikl.com)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Redberry](https://redberry.international/laravel-development)**
+- **[Active Logic](https://activelogic.com)**
 
-### Configuration
-- `config.json` - eBay scraper settings
-- `index.html` - Homepage template
-- `sitemap.xml` - SEO sitemap
-- `robots.txt` - Search engine directives
+## Contributing
 
-### Utilities
-- `scripts/categorize_all_data.py` - Smart categorization for manual review
-- `scripts/deduplicate_and_compact.py` - Remove duplicates & create compact display
-- `scripts/generate_sitemap.py` - Generate SEO sitemap
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Deployment
+## Code of Conduct
 
-Site auto-deploys via GitHub Actions to OVH hosting when pushed to main branch.
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-**Live site**: https://prixretro.com
+## Security Vulnerabilities
 
-## Game Boy Color Variants
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-Currently tracking these variants:
-- **Standard Colors**: Violet, Rouge, Bleu (Teal), Vert Néon, Jaune
-- **Special Editions**: Atomic Purple, Pikachu Edition, Pokémon Gold/Silver
+## License
 
-## Next Development Steps
-
-1. **Manual data curation** - Classify authentic consoles vs games/parts
-2. **Console specs integration** - Add technical details to variant pages  
-3. **Content creation** - Implement SEO content strategy
-4. **Laravel migration** - Transition to dynamic platform with user features
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

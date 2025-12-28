@@ -1,0 +1,166 @@
+@extends('layout')
+
+@section('title', $variant->name . ' - Prix & Historique | PrixRetro')
+@section('meta_description', "Prix et historique des ventes du {$variant->name}. {$statistics['count']} ventes analysées. Prix moyen: " . number_format($statistics['avg_price'] ?? 0, 2) . "€")
+@section('meta_keywords', "{$variant->name}, {$variant->console->name}, prix, vente, occasion, retrogaming")
+
+@section('head')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ $variant->name }}",
+    "description": "{{ $variant->console->name }} - {{ $variant->name }}",
+    "category": "{{ $variant->console->name }}",
+    "brand": {
+        "@type": "Brand",
+        "name": "{{ $variant->console->manufacturer }}"
+    },
+    "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "EUR",
+        "lowPrice": "{{ $statistics['min_price'] ?? 0 }}",
+        "highPrice": "{{ $statistics['max_price'] ?? 0 }}",
+        "offerCount": "{{ $statistics['count'] }}",
+        "availability": "https://schema.org/InStock"
+    }
+}
+</script>
+@endsection
+
+@section('content')
+<div class="container">
+    <div class="breadcrumb">
+        <a href="/">Accueil</a>
+        <span>›</span>
+        <a href="/{{ $variant->console->slug }}">{{ $variant->console->name }}</a>
+        <span>›</span>
+        <span>{{ $variant->name }}</span>
+    </div>
+
+    <h1>{{ $variant->console->name }} {{ $variant->name }}</h1>
+
+    @if($statistics['count'] > 0)
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Prix Moyen</div>
+                <div class="stat-value">{{ number_format($statistics['avg_price'], 2) }}€</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Prix Min</div>
+                <div class="stat-value">{{ number_format($statistics['min_price'], 2) }}€</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Prix Max</div>
+                <div class="stat-value">{{ number_format($statistics['max_price'], 2) }}€</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Ventes Analysées</div>
+                <div class="stat-value">{{ $statistics['count'] }}</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Évolution du Prix</h2>
+            <canvas id="priceChart"></canvas>
+        </div>
+
+        <div class="listings-section">
+            <h2>Ventes Récentes ({{ $statistics['count'] }} au total)</h2>
+
+            <div class="ebay-cta">
+                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode(implode(' ', $variant->search_terms ?? [$variant->name])) }}&_sop=10"
+                   target="_blank"
+                   rel="nofollow noopener"
+                   class="btn-primary"
+                   onclick="trackEbayClick('{{ $variant->slug }}')">
+                    🔍 Voir les annonces actuelles sur eBay
+                </a>
+            </div>
+
+            <table class="listings-table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Prix</th>
+                        <th>Date</th>
+                        <th>État</th>
+                        <th>Lien</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($recentListings as $listing)
+                    <tr>
+                        <td>{{ Str::limit($listing->title, 80) }}</td>
+                        <td class="price">{{ number_format($listing->price, 2) }}€</td>
+                        <td>{{ $listing->sold_date?->format('d/m/Y') ?? 'N/A' }}</td>
+                        <td>{{ $listing->condition ?? 'N/A' }}</td>
+                        <td><a href="{{ $listing->url }}" target="_blank" rel="nofollow noopener">Voir</a></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <div class="no-data">
+            <p>Aucune donnée de prix disponible pour ce modèle pour le moment.</p>
+            <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode(implode(' ', $variant->search_terms ?? [$variant->name])) }}"
+               target="_blank"
+               rel="nofollow noopener"
+               class="btn-primary">
+                Voir sur eBay
+            </a>
+        </div>
+    @endif
+</div>
+@endsection
+
+@section('scripts')
+@if($statistics['count'] > 0 && $chartData->count() > 0)
+<script>
+const ctx = document.getElementById('priceChart').getContext('2d');
+const chartData = @json($chartData);
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: Object.keys(chartData),
+        datasets: [{
+            label: 'Prix Moyen (€)',
+            data: Object.values(chartData).map(d => d.avg_price),
+            borderColor: '#4CAF50',
+            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.parsed.y.toFixed(2) + '€';
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: false,
+                ticks: {
+                    callback: function(value) {
+                        return value + '€';
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+@endif
+@endsection
