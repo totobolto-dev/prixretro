@@ -86,16 +86,16 @@ class ListingsTable
                                 'ds' => 'Nintendo DS',
                             ])
                             ->required()
-                            ->helperText('Select which console data to import from legacy-python/scraped_data_[console].json'),
+                            ->helperText('Select which console data to import from storage/app/scraped_data_[console].json'),
                     ])
                     ->action(function (array $data) {
                         $console = $data['console'];
-                        $filePath = base_path("legacy-python/scraped_data_{$console}.json");
+                        $filePath = storage_path("app/scraped_data_{$console}.json");
 
                         if (!file_exists($filePath)) {
                             Notification::make()
                                 ->title('Import Failed')
-                                ->body("File not found: scraped_data_{$console}.json")
+                                ->body("File not found: scraped_data_{$console}.json. Run 'php artisan scrape:{$console}' first.")
                                 ->danger()
                                 ->send();
                             return;
