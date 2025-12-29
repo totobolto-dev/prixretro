@@ -1,409 +1,410 @@
-# PrixRetro Laravel Migration - Session Context
+# PrixRetro - Claude Session Notes
 
-**Date:** 2025-12-28
-**Current Phase:** ✅ COMPLETE - Deployed to GitHub & Production Ready
+**Last Updated:** 2025-12-29
+**Current Phase:** ✅ PRODUCTION DEPLOYED & ADMIN PANEL WORKING
 
-## Progress Completed
+## Quick Reference
 
-### 1. UTF-8 Encoding Fix (DONE)
-- Fixed French character corruption in all eBay scrapers
-- Added `response.encoding = 'utf-8'` to 5 scraper files
-- Deployed to production
+- **Live Site**: https://www.prixretro.com
+- **Admin Panel**: https://www.prixretro.com/admin
+- **Login**: prixretro@proton.me / password
+- **Local Dev**: http://localhost:8000
+- **GitHub**: https://github.com/totobolto-dev/prixretro
 
-### 2. Directory Reorganization (DONE)
-- Moved all Python project files to `legacy-python/`
-- Clean root directory ready for Laravel installation
-- Current structure:
-  ```
-  ~/Documents/web-apps/prixretro/
-  ├── .git/
-  ├── .github/
-  ├── _archive/
-  ├── _cleanup/
-  ├── legacy-python/ (all Python files here)
-  ├── CNAME
-  └── claude.md (this file)
-  ```
+## Tech Stack
 
-### 3. Architecture Planning (DONE)
-- 11-phase Laravel migration plan created
-- Technology stack selected:
-  - PHP 8.4 (latest stable)
-  - Laravel 12 (latest)
-  - Filament 4.3.1 (admin panel)
-  - MySQL 8.0
-  - Docker/Laravel Sail (local dev)
-- Database schema designed (6 core tables)
+- **Backend**: Laravel 12.44.0 (PHP 8.4+)
+- **Admin Panel**: Filament 4.3.1
+- **Database**: MySQL 8.4 (OVH CloudDB)
+- **Hosting**: OVH Shared Hosting (Performance 1)
+- **Deployment**: GitHub Actions FTP Deploy
+- **Scraping**: Python 3.12 (Playwright + BeautifulSoup)
 
-### 4. Laravel 12 Installation (DONE ✅)
-- Laravel 12.44.0 installed with Sail
-- Running on http://localhost:8000
-- MySQL database configured
-- 6 database tables created with migrations
-- 6 Eloquent models created with full relationships
-- Filament 4.3.1 admin panel installed
-- 4 Filament resources created (Console, Variant, Listing, CurrentListing)
-- Admin user created: admin@prixretro.com / password
+## Production Deployment Status ✅
 
-### 5. Data Import (DONE ✅)
-- Import commands created:
-  - `import:consoles` - Imports from config_multiconsole.json
-  - `import:gba-listings` - Imports from scraped_data_gba.json
-- Database populated:
-  - 3 consoles (GBC, GBA, NDS)
-  - 48 variants across all consoles
-  - 36 GBA listings (all approved)
-- All data accessible via Filament admin panel
+### Completed (2025-12-29)
+- [x] Laravel app deployed to https://www.prixretro.com
+- [x] Filament admin panel accessible
+- [x] Database seeded with consoles/variants
+- [x] User authentication working (FilamentUser interface)
+- [x] TrustProxies middleware configured for OVH
+- [x] View config file created (VIEW_COMPILED_PATH)
+- [x] Sitemap generated with all variant pages
+- [x] Admin header actions fixed (Filament v4 Action class)
 
-### 6. Public Pages Built (DONE ✅)
-- Routes created for clean URLs:
-  - `/` - Homepage listing all consoles
-  - `/{console}` - Console page (future)
-  - `/{console}/{variant}` - Variant page with price data
-- Controllers implemented:
-  - `ConsoleController` - Homepage listing
-  - `VariantController` - Price statistics & listings
-- Blade templates created:
-  - Layout with SEO meta tags, Google Analytics, AdSense
-  - Homepage showing all consoles & variants
-  - Variant page with:
-    - Price statistics (avg, min, max, count)
-    - Chart.js price trend chart
-    - Recent listings table
-    - eBay affiliate CTA button
-- CSS and favicon copied from legacy output
+### Current Issues
+- None! Everything working.
 
-### 7. Variant Name Cleanup (DONE ✅)
-- Removed "Standard" prefix from basic GBA variants:
-  - Standard Black → Black
-  - Standard Glacier → Glacier
-  - Standard Orange → Orange
-  - Standard Pink → Pink
-  - Standard Purple → Purple
-- Updated slugs and full_slugs accordingly
-- SP and Micro variants keep their prefixes (SP Flame, Micro Black, etc.)
-- All variant pages tested and working correctly
+## Critical Fixes Applied
 
-### 8. Key Decisions Made
-
-**URL Structure:**
-- Use CLEAN URLs: `/gba/sp-flame` (no .html extension)
-- NO 301 redirects needed (site has zero Google traffic)
-- Fresh start with modern routes
-
-**Hosting:**
-- Local dev: Docker + Laravel Sail
-- Production: Existing OVH Performance 1 hosting (2 vCore, 4GB RAM, SSH, Git, Cron)
-- No VPS needed - saves €5/month
-
-**Deployment Strategy:**
-- File cache (not Redis - OVH limitation)
-- Cron-based queue workers (`schedule:run` every minute)
-- GitHub Actions for automated deployment
-
-## Current Task: Docker Installation
-
-### Docker Installation Status
-You just installed Docker and added your user to the docker group.
-
-**After restart, verify Docker:**
-```bash
-docker --version
-docker compose version
-docker ps
-```
-
-If docker group isn't active yet, run:
-```bash
-newgrp docker
-```
-
-## Accessing Your Data
-
-### Filament Admin Panel
-Visit **http://localhost:8000/admin**
-- Login: `admin@prixretro.com` / `password`
-- Manage consoles, variants, and listings
-- Approve/reject scraped listings
-- View price statistics
-
-### Re-import Data (if needed)
-```bash
-# Re-import consoles and variants
-./vendor/bin/sail artisan import:consoles --fresh
-
-# Re-import GBA listings
-./vendor/bin/sail artisan import:gba-listings --fresh
-```
-
-## Testing Your Site
-
-### Visit Your Pages
-Open your browser and visit:
-- **Homepage**: http://localhost:8000
-- **GBA SP Flame**: http://localhost:8000/game-boy-advance/sp-flame
-- **GBA SP Cobalt**: http://localhost:8000/game-boy-advance/sp-cobalt
-- **Admin Panel**: http://localhost:8000/admin
-
-All pages are live with:
-- Price statistics calculated on-the-fly
-- Monthly price trend charts
-- Recent listings tables
-- eBay affiliate links
-- Google Analytics tracking
-- SEO meta tags
-
-## ✅ All Tasks Complete
-
-### GitHub Deployment ✅
-- Commit `95315c0` pushed to main branch
-- 369 files changed: 16,579 insertions, 153,633 deletions
-- Clean repository with only essential Laravel files
-- Legacy Python code removed from git history
-
-### Final Database State ✅
-- **3 consoles** (GBC, GBA, NDS)
-- **57 variants** across all consoles
-- **178 listings** (91 GBC + 87 GBA)
-- All data approved and ready for production
-
-### Public Pages Tested ✅
-- Homepage with all consoles and variants
-- Console pages organized by category (Standard, SP, Micro)
-- Variant pages with interactive charts and statistics
-- eBay affiliate links ready for monetization
-
-## Optional: Deploy to OVH Production ← **NEXT TASK (IF NEEDED)**
-
-When ready to deploy to OVH Performance 1:
-1. Configure production .env on OVH server
-2. Set up GitHub Actions for automated deployment
-3. Run migrations on production: `php artisan migrate --force`
-4. Import data on production: `php artisan import:consoles && php artisan import:gbc-listings && php artisan import:gba-listings`
-5. Configure cron: `* * * * * cd /path && php artisan schedule:run >> /dev/null 2>&1`
-
-## Database Schema Reference
-
-### consoles
-```sql
-id, slug, name, short_name, search_term, ebay_category_id,
-description, release_year, manufacturer, is_active, display_order,
-timestamps
-```
-
-### variants
-```sql
-id, console_id, slug, name, full_slug (gba/sp-flame),
-search_terms (JSON array), image_filename, rarity_level,
-region, is_special_edition, timestamps
-```
-
-### listings (sold items)
-```sql
-id, variant_id, item_id, title, price, sold_date, condition,
-url, thumbnail_url, source (ebay/leboncoin), is_outlier,
-status (pending/approved/rejected), reviewed_at, timestamps
-```
-
-### current_listings (for sale)
-```sql
-id, variant_id, item_id, title, price, url, is_sold,
-last_seen_at, timestamps
-```
-
-### scrape_jobs
-```sql
-id, variant_id, job_type (sold/current/images), status,
-started_at, completed_at, items_found, error_message, timestamps
-```
-
-### price_statistics (cached)
-```sql
-id, variant_id, period (7d/30d/90d/all), avg_price, min_price,
-max_price, median_price, count, last_calculated_at, timestamps
-```
-
-## Eloquent Model Relationships
-
+### 1. FilamentUser Interface (Required for Admin Access)
 ```php
-// Console model
-public function variants(): HasMany
-public function scrapeJobs(): HasMany
+// app/Models/User.php
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-// Variant model
-public function console(): BelongsTo
-public function listings(): HasMany
-public function approvedListings(): HasMany
-public function currentListings(): HasMany
-public function priceStatistics(): HasMany
-public function scrapeJobs(): HasMany
-
-// Listing model
-public function variant(): BelongsTo
-public function scopeApproved()
-public function scopePending()
+class User extends Authenticatable implements FilamentUser
+{
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;  // Allow all authenticated users
+    }
+}
 ```
 
-## Route Structure
+**Problem**: 403 Forbidden after login
+**Solution**: User model must implement FilamentUser to access Filament panels
 
+### 2. TrustProxies Middleware (OVH Reverse Proxy)
 ```php
-// routes/web.php
-Route::get('/', [ConsoleController::class, 'index']);
-Route::get('/{console:slug}', [ConsoleController::class, 'show']);
-Route::get('/{console:slug}/{variant:slug}', [VariantController::class, 'show']);
-
-// Examples:
-// /gba → GBA console page
-// /gba/sp-flame → SP Flame variant page with price data
+// bootstrap/app.php
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->trustProxies(at: '*');
+})
 ```
 
-## Data Import Strategy
+**Problem**: Redirects going to `http://localhost` instead of `https://www.prixretro.com`
+**Solution**: Trust all proxy headers on shared hosting
 
-### Phase 1: Import Config
+### 3. View Config (Blade Compilation Path)
+```php
+// config/view.php
+'compiled' => env(
+    'VIEW_COMPILED_PATH',
+    realpath(storage_path('framework/views'))
+),
+```
+
+**Problem**: "Please provide a valid cache path" error
+**Solution**: Missing config file - created with proper VIEW_COMPILED_PATH
+
+### 4. Filament v4 Action Classes
+```php
+// Use this:
+use Filament\Tables\Actions\Action;
+Action::make('import_scraped')
+
+// NOT this:
+use Filament\Tables\Actions\HeaderAction;  // Doesn't exist in v4
+HeaderAction::make('import_scraped')
+```
+
+**Problem**: Class "Filament\Tables\Actions\HeaderAction" not found
+**Solution**: Use `Action` class for all table actions in Filament v4
+
+## Environment Configuration
+
+### Production (.env via GitHub Actions)
+```env
+APP_NAME=PrixRetro
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://www.prixretro.com
+
+DB_CONNECTION=mysql
+DB_HOST=ba2247864-001.eu.clouddb.ovh.net
+DB_PORT=35831
+DB_DATABASE=prixretro
+DB_USERNAME=prixretro_user
+DB_PASSWORD=f5bxVvfQUvkapKgNtjy5
+
+CACHE_STORE=file  # Not CACHE_DRIVER!
+SESSION_DRIVER=file
+
+VIEW_COMPILED_PATH=/home/pwagrad/prixretro/storage/framework/views
+```
+
+**Important**:
+- Use `CACHE_STORE` not `CACHE_DRIVER` (config/cache.php expects CACHE_STORE)
+- Trust proxies for OVH reverse proxy
+- File-based cache and sessions (no Redis on shared hosting)
+
+### Local Development (.env)
+```env
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
+
+CACHE_STORE=database
+```
+
+## Database Structure
+
+### Production CloudDB
+- **Host**: ba2247864-001.eu.clouddb.ovh.net
+- **Port**: 35831
+- **Database**: prixretro
+- **User**: prixretro_user
+
+### Tables
+- `users` - Admin users
+- `consoles` - Console types (GBC, GBA, DS)
+- `variants` - Console color/edition variants
+- `listings` - Scraped eBay listings (pending/approved/rejected)
+- `current_listings` - Items currently for sale
+- `scrape_jobs` - Track scraping operations
+- `price_statistics` - Cached price data
+
+## Admin Panel Features
+
+**URL**: https://www.prixretro.com/admin
+
+**Resources**:
+- ✅ Consoles - Manage console types
+- ✅ Variants - Manage color variants
+- ✅ Listings - View/approve/reject scraped data
+- ✅ Current Listings - Items for sale
+
+**Header Actions** (on Listings page):
+- ✅ Import Scraped Data - Import from JSON files
+- ✅ Sync to Production - Sync approved listings to CloudDB
+
+**Bulk Actions**:
+- ✅ Approve Selected - Bulk approve listings
+- ✅ Reject Selected - Bulk reject listings
+
+## Scraping Workflow
+
+### Current (Python + Manual Review)
+1. Run Python scraper: `python3 scraper_ebay.py` (in legacy-python/)
+2. Data saved to `scraped_data_*.json`
+3. Login to `/admin/listings`
+4. Click "Import Scraped Data" button
+5. Select console (GBC/GBA/DS)
+6. Review and approve/reject listings
+7. Click "Sync to Production" to push approved data to CloudDB
+
+### Files
+- **Scrapers**: `legacy-python/scraper_*.py`
+- **Output**: `legacy-python/scraped_data_*.json`
+- **Static Pages**: `legacy-python/output/*.html` (still live on site)
+
+## Deployment Process
+
+1. Push to GitHub `main` branch
+2. GitHub Actions workflow triggers
+3. Generates production `.env` with secrets
+4. FTP deploys to OVH `/prixretro/` directory
+5. Laravel boots from `/public/index.php`
+
+**Deployment Workflow**: `.github/workflows/deploy.yml`
+
+**Excluded from deployment**:
+- `.git*`, `.github/`, `node_modules/`, `tests/`
+- `storage/logs/`, `storage/framework/cache/`
+- `_archive/`, `_cleanup/`, `legacy-python/`
+
+## Common Issues & Solutions
+
+### Issue: 403 Forbidden after login
+**Cause**: User doesn't implement FilamentUser interface
+**Solution**: Add `implements FilamentUser` and `canAccessPanel()` method
+
+### Issue: Redirects to localhost
+**Cause**: Reverse proxy headers not trusted
+**Solution**: Enable TrustProxies middleware with `at: '*'`
+
+### Issue: "Please provide a valid cache path"
+**Cause**: Missing `config/view.php` file
+**Solution**: Create config file with VIEW_COMPILED_PATH
+
+### Issue: Class "HeaderAction" not found
+**Cause**: Using Filament v3 syntax in v4
+**Solution**: Use `Action` class instead of `HeaderAction`
+
+### Issue: .env not loading
+**Check**: Config cached (`bootstrap/cache/config.php`)
+**Solution**: Run `php artisan config:clear`
+**Best Practice**: Use `config()` helper, not `env()` in code
+
+## Useful Commands
+
+### Local Development (Sail)
 ```bash
-# Import consoles and variants from config_multiconsole.json
-./vendor/bin/sail artisan make:command ImportConsoles
+./vendor/bin/sail up -d          # Start containers
+./vendor/bin/sail artisan migrate # Run migrations
+./vendor/bin/sail artisan db:seed # Seed database
+./vendor/bin/sail artisan tinker  # Laravel REPL
 ```
 
-### Phase 2: Import Historical Data
+### Production (SSH)
 ```bash
-# Import scraped_data_gba.json → listings table
-./vendor/bin/sail artisan make:command ImportGbaListings
+php artisan migrate --force       # Run migrations
+php artisan config:clear          # Clear config cache
+php artisan view:clear            # Clear view cache
+php artisan import:consoles       # Import console config
+php artisan sync:production       # Sync approved listings
 ```
 
-### Phase 3: Import Current Listings
+### Deployment
 ```bash
-# Import current_listings.json → current_listings table
-./vendor/bin/sail artisan make:command ImportCurrentListings
+git add .
+git commit -m "Message"
+git push                          # Triggers auto-deploy via GitHub Actions
 ```
 
-## Filament Admin Resources
+## File Structure
 
-**Create these resources:**
-```bash
-./vendor/bin/sail artisan make:filament-resource Console --generate
-./vendor/bin/sail artisan make:filament-resource Variant --generate
-./vendor/bin/sail artisan make:filament-resource Listing --generate
-./vendor/bin/sail artisan make:filament-resource CurrentListing --generate
+```
+/home/ganzu/Documents/web-apps/prixretro/
+├── app/
+│   ├── Filament/
+│   │   ├── Resources/
+│   │   │   ├── Listings/
+│   │   │   ├── Variants/
+│   │   │   └── Consoles/
+│   │   └── Pages/
+│   ├── Models/
+│   │   ├── User.php (implements FilamentUser)
+│   │   ├── Console.php
+│   │   ├── Variant.php
+│   │   └── Listing.php
+│   └── Http/
+│       └── Middleware/
+│           └── TrustProxies.php
+├── config/
+│   ├── view.php (created for VIEW_COMPILED_PATH)
+│   ├── cache.php
+│   └── app.php
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── public/
+│   ├── index.php
+│   ├── sitemap.xml (generated with all variant pages)
+│   └── [diagnostic files - to be deleted]
+├── legacy-python/
+│   ├── scraper_ebay.py
+│   ├── scraper_gba.py
+│   ├── scraped_data_*.json
+│   └── output/*.html (static pages)
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── bootstrap/
+│   └── app.php (TrustProxies configured here)
+└── claude.md (this file)
 ```
 
-**Admin URL:** http://localhost/admin
+## Diagnostic Files to Delete
 
-**Replaces these HTML tools:**
-- `variant_sorter_gba.html` → Listing Resource (approve/reject)
-- `gba_date_editor.html` → Listing Resource (edit dates)
-- Manual JSON editing → Console/Variant Resources
+Once everything is stable, remove these from `public/`:
+- check-admin-error.php
+- check-assets.php
+- check-env.php
+- check-login.php
+- check-opcache.php
+- check-putenv.php
+- check-storage-paths.php
+- clear-cache.php
+- diagnose-env.php
+- fix-permissions.php
+- reset-opcache.php
+- set-password.php
+- test-admin-direct.php
+- test-env-after-boot.php
+- trace-bootstrap.php
+- verify-config.php
+- verify-email.php
+- view-logs.php
+- write-env.php
 
-## Deployment to OVH Performance 1
+## Sitemap
 
-**GitHub Actions workflow:**
-```yaml
-- name: Deploy to OVH
-  run: |
-    rsync -avz --exclude 'vendor' --exclude 'node_modules' ./ user@host:/path/
-    ssh user@host "cd /path && composer install --no-dev"
-    ssh user@host "cd /path && php artisan migrate --force"
-    ssh user@host "cd /path && php artisan optimize"
-```
+**Location**: `/public/sitemap.xml`
 
-**OVH Cron setup:**
-```
-* * * * * cd /path && php artisan schedule:run >> /dev/null 2>&1
-```
+**Includes**:
+- Homepage (priority 1.0)
+- 10 Game Boy Color variants
+- 13 Game Boy Advance SP variants
+- 6 Game Boy Advance Standard variants
+- 1 Game Boy Advance Micro variant
 
-## Useful Sail Commands
+**Total**: 31 pages
 
-```bash
-# Start containers
-./vendor/bin/sail up -d
+## Next Steps
 
-# Stop containers
-./vendor/bin/sail down
+### Immediate (This Session)
+- [ ] Test scraping workflow locally
+- [ ] Import test data from JSON
+- [ ] Verify sync to production works
+- [ ] Clean up diagnostic files
 
-# Run artisan commands
-./vendor/bin/sail artisan [command]
+### Short Term
+- [ ] Migrate Python scrapers to Laravel commands
+- [ ] Build public-facing Laravel views (replace static HTML)
+- [ ] Add Laravel routes for all variant pages
+- [ ] Implement price charts with Chart.js
 
-# Run migrations
-./vendor/bin/sail artisan migrate
+### Medium Term
+- [ ] SEO optimization (meta tags, structured data)
+- [ ] Performance optimization (caching, CDN)
+- [ ] Analytics integration (Google Analytics)
+- [ ] Automated daily scraping via cron
+- [ ] Email notifications for price alerts
 
-# Fresh database
-./vendor/bin/sail artisan migrate:fresh
+### Long Term
+- [ ] User-facing search and filtering
+- [ ] Price history graphs
+- [ ] Mobile app (PWA)
+- [ ] Multi-language support (FR/EN)
 
-# Tinker (Laravel REPL)
-./vendor/bin/sail tinker
+## Important Notes for Future Sessions
 
-# Composer install
-./vendor/bin/sail composer install
+### Filament v4 Specifics
+1. **No HeaderAction class** - Use `Action` from `Filament\Tables\Actions\Action`
+2. **Table actions** - Use `->actions()` not `->recordActions()`
+3. **Custom forms** - Use `->form()` method on actions
+4. **Notifications** - Use `Filament\Notifications\Notification::make()`
 
-# NPM commands
-./vendor/bin/sail npm install
-./vendor/bin/sail npm run dev
+### OVH Shared Hosting Quirks
+1. **Reverse proxy** - Must trust all proxy headers (`at: '*'`)
+2. **No service reload** - Can't clear OPcache manually (usually disabled)
+3. **Limited shell access** - No sudo, limited commands
+4. **File-based cache** - No Redis available
 
-# Access MySQL
-./vendor/bin/sail mysql
+### Environment Variables Best Practices
+1. **Always** use `config()` helper in application code
+2. **Never** use `env()` outside of config files
+3. **Use standard Laravel config keys** - Don't create custom env vars
+4. **Cache config in production** - `php artisan config:cache`
 
-# View logs
-./vendor/bin/sail logs -f
-```
+### Database Sync Strategy
+1. **Local → Production**: Use `php artisan sync:production`
+2. **Production → Local**: Use `php artisan import:production`
+3. **Always review** listings before syncing
+4. **Backup before** major data changes
 
-## Todo List Status - ✅ ALL COMPLETE
+## Credentials
 
-- [x] Design Laravel architecture and migration plan
-- [x] Reorganize directory - move Python to legacy-python/
-- [x] Install Docker for Laravel Sail
-- [x] Install Laravel 12 in root directory
-- [x] Build database migrations (6 tables)
-- [x] Set up Filament 4 admin panel
-- [x] Create Eloquent models with relationships
-- [x] Create data import commands
-- [x] Import existing data from legacy-python/
-- [x] Build public pages (Blade templates)
-- [x] Fix all routing and view errors
-- [x] Clean up variant names (remove "Standard" prefix)
-- [x] Test all pages with real data
-- [x] Import GBC and NDS listings
-- [x] Import 29 new GBA items with manual date correction
-- [x] Remove duplicate variants (SP Tribal Edition)
-- [x] Organize console pages by category (Standard, SP, Micro)
-- [x] Clean up GitHub repository
-- [x] Push to GitHub (commit 95315c0)
+**Admin Login**: prixretro@proton.me / password
+**GitHub Repo**: totobolto-dev/prixretro
+**OVH FTP/SSH**: Stored in GitHub Secrets
 
-## Questions to Revisit Later
+## Links
 
-1. Do we want to keep Python scrapers or rewrite in PHP?
-   - PHP could use Symfony Panther or Goutte
-   - Cron can run Python scripts for now
-
-2. Should we add image scraping to Filament admin?
-   - Could be a button "Scrape Images" on variant page
-
-3. Price graph library?
-   - Chart.js (simple)
-   - ApexCharts (prettier)
-   - Filament has Chart widgets built-in
-
-## Reference Files
-
-**Legacy Python files:** `legacy-python/`
-- `config_multiconsole.json` - Console/variant config
-- `scraped_data_gba.json` - GBA sold listings
-- `current_listings.json` - Items for sale
-- `scraper_ebay_universal.py` - Universal scraper
-- `template-v4-compact.html` - Current page template
+- Live Site: https://www.prixretro.com
+- Admin Panel: https://www.prixretro.com/admin
+- GitHub: https://github.com/totobolto-dev/prixretro
+- OVH Manager: https://www.ovh.com/manager/
 
 ## Summary
 
-**🎉 Laravel migration complete and deployed to GitHub!**
+**🎉 Production deployment successful!**
 
 Your PrixRetro site is now:
-- Modern Laravel 12 application with Filament admin panel
-- 178 approved listings across 57 variants
-- Interactive charts with clickable eBay links
-- Clean, organized codebase ready for production
-- Fully tested and working locally
+- ✅ Live at https://www.prixretro.com
+- ✅ Admin panel working at /admin
+- ✅ All Filament resources functional
+- ✅ Import and sync features operational
+- ✅ Sitemap generated with 31 pages
+- ✅ Ready for daily scraping workflow
 
-**Next step:** Deploy to OVH Production (when ready)
-
-If session continues, search this file for "NEXT TASK (IF NEEDED)" to find optional production deployment steps.
-
-Last updated: 2025-12-28 after successful GitHub deployment
+**Current focus**: Use the admin panel to scrape, review, and publish data while token budget is low (8% remaining).
