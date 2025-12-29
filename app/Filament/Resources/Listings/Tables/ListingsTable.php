@@ -4,10 +4,10 @@ namespace App\Filament\Resources\Listings\Tables;
 
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\HeaderAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -67,8 +67,10 @@ class ListingsTable
                     ->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
-            ->recordActions([
-                EditAction::make(),
+            ->actions([
+                Action::make('edit')
+                    ->url(fn ($record): string => route('filament.admin.resources.listings.edit', ['record' => $record]))
+                    ->icon('heroicon-m-pencil-square'),
             ])
             ->headerActions([
                 HeaderAction::make('import_scraped')
