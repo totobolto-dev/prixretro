@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Listings\Tables;
 
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -65,9 +66,8 @@ class ListingsTable
                     ->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
-            // TODO: Fix header actions - HeaderAction class doesn't exist in Filament v4
-            /* ->headerActions([
-                HeaderAction::make('import_scraped')
+            ->headerActions([
+                Action::make('import_scraped')
                     ->label('Import Scraped Data')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('info')
@@ -119,7 +119,7 @@ class ListingsTable
                                 ->send();
                         }
                     }),
-                HeaderAction::make('sync_to_production')
+                Action::make('sync_to_production')
                     ->label('Sync to Production')
                     ->icon('heroicon-o-cloud-arrow-up')
                     ->color('success')
@@ -152,7 +152,7 @@ class ListingsTable
                                 ->send();
                         }
                     }),
-            ]) */
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('approve')
