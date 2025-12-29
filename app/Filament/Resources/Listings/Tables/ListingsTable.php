@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Listings\Tables;
 
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -66,7 +65,10 @@ class ListingsTable
                     ->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
-            ->headerActions([
+            // Header actions removed - use Artisan commands instead:
+            // php artisan import:scraped storage/app/scraped_data_gbc.json
+            // php artisan sync:production
+            /* ->headerActions([
                 Action::make('import_scraped')
                     ->label('Import Scraped Data')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -152,8 +154,8 @@ class ListingsTable
                                 ->send();
                         }
                     }),
-            ])
-            ->toolbarActions([
+            ]) */
+            ->bulkActions([
                 BulkActionGroup::make([
                     BulkAction::make('approve')
                         ->label('Approve Selected')
