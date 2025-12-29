@@ -4,9 +4,6 @@ namespace App\Filament\Resources\Listings\Tables;
 
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -154,39 +151,12 @@ class ListingsTable
                                 ->send();
                         }
                     }),
-            ]) */
-            ->bulkActions([
-                BulkActionGroup::make([
-                    BulkAction::make('approve')
-                        ->label('Approve Selected')
-                        ->icon('heroicon-o-check-circle')
-                        ->color('success')
-                        ->requiresConfirmation()
-                        ->action(function (Collection $records) {
-                            $records->each(function ($record) {
-                                $record->update([
-                                    'status' => 'approved',
-                                    'reviewed_at' => now(),
-                                ]);
-                            });
-                        })
-                        ->deselectRecordsAfterCompletion(),
-                    BulkAction::make('reject')
-                        ->label('Reject Selected')
-                        ->icon('heroicon-o-x-circle')
-                        ->color('danger')
-                        ->requiresConfirmation()
-                        ->action(function (Collection $records) {
-                            $records->each(function ($record) {
-                                $record->update([
-                                    'status' => 'rejected',
-                                    'reviewed_at' => now(),
-                                ]);
-                            });
-                        })
-                        ->deselectRecordsAfterCompletion(),
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ]) */;
+
+        // Bulk actions removed - edit listings individually or use Artisan commands
+        // To approve: Click into listing and change status
+        // To bulk approve: php artisan listings:approve --status=pending
+
+        return $table;
     }
 }
