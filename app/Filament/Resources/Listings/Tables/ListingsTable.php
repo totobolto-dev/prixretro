@@ -7,7 +7,6 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\HeaderAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -66,7 +65,8 @@ class ListingsTable
                     ->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
-            ->headerActions([
+            // TODO: Fix header actions - HeaderAction class doesn't exist in Filament v4
+            /* ->headerActions([
                 HeaderAction::make('import_scraped')
                     ->label('Import Scraped Data')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -152,7 +152,7 @@ class ListingsTable
                                 ->send();
                         }
                     }),
-            ])
+            ]) */
             ->toolbarActions([
                 BulkActionGroup::make([
                     BulkAction::make('approve')
