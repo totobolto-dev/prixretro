@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prix et historique des Game Boy Color. Données basées sur les ventes réelles eBay des 6 derniers mois.">
+    <meta name="keywords" content="Game Boy Color, prix, vente, occasion, retrogaming, Nintendo, console, collection, GBC">
+    <meta name="author" content="PrixRetro - Prix du Rétrogaming">
+    <meta name="robots" content="index, follow">
+
+    <!-- Google AdSense Verification -->
+    <meta name="google-adsense-account" content="ca-pub-2791408282004471">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Game Boy Color - Prix & Variantes | PrixRetro">
+    <meta property="og:description" content="Découvrez le prix réel du marché pour chaque variante de Game Boy Color. Données basées sur les ventes réelles eBay.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.prixretro.com/">
+    <meta property="og:site_name" content="PrixRetro - Tracker Prix Retrogaming">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Game Boy Color - Prix & Variantes | PrixRetro">
+    <meta name="twitter:description" content="Découvrez le prix réel du marché pour chaque variante de Game Boy Color">
+
+    <title>Game Boy Color - Prix & Variantes | PrixRetro</title>
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.prixretro.com/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "PrixRetro",
+        "description": "Tracker de prix retrogaming basé sur les ventes réelles eBay",
+        "url": "https://www.prixretro.com/",
+        "publisher": {
+            "@type": "Organization",
+            "name": "PrixRetro"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.prixretro.com/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QPNVF0BRW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-4QPNVF0BRW');
+    </script>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* Index-specific styles */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 1rem;
+            line-height: 1.6;
+        }
+
+        .tagline-detail {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .variants-section {
+            padding: 3rem 0;
+        }
+
+        .variants-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .variants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .variant-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            display: block;
+        }
+
+        .variant-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-primary);
+        }
+
+        .variant-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .variant-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .variant-stats {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .stat-item {
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .variants-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">PrixRetro</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="container">
+            <h1>Game Boy Color</h1>
+            <p class="tagline">
+                Découvrez le prix réel du marché pour chaque variante de Game Boy Color
+            </p>
+            <p class="tagline-detail">
+                Graphiques d'évolution des prix • Historique des ventes • Données mises à jour régulièrement
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="variants-section">
+            <h2>Toutes les variantes</h2>
+            <div class="variants-grid">
+
+                <a href="/game-boy-advance-sp-cobalt.html" class="variant-card">
+                    <div class="variant-name">SP Cobalt</div>
+                    <div class="variant-description">SP en bleu cobalt, un des modèles les plus populaires</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">2 ventes</span>
+                        <span class="stat-item">~77.47€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-sp-flame.html" class="variant-card">
+                    <div class="variant-name">SP Flame</div>
+                    <div class="variant-description">SP en rouge flamme, design sportif</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">1 ventes</span>
+                        <span class="stat-item">~79.0€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-sp-onyx.html" class="variant-card">
+                    <div class="variant-name">SP Onyx</div>
+                    <div class="variant-description">Game Boy Advance SP Onyx</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">1 ventes</span>
+                        <span class="stat-item">~95.0€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-sp-pearl-pink.html" class="variant-card">
+                    <div class="variant-name">SP Pearl Pink</div>
+                    <div class="variant-description">SP en rose nacré, finition élégante</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">1 ventes</span>
+                        <span class="stat-item">~131.09€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-sp-platinum.html" class="variant-card">
+                    <div class="variant-name">SP Platinum</div>
+                    <div class="variant-description">Game Boy Advance SP au design pliable argenté, avec écran rétroéclairé</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">1 ventes</span>
+                        <span class="stat-item">~125.0€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-sp-pokemon-sapphire-kyogre.html" class="variant-card">
+                    <div class="variant-name">SP Pokemon Sapphire Kyogre</div>
+                    <div class="variant-description">Game Boy Advance SP Pokemon Sapphire Kyogre</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">1 ventes</span>
+                        <span class="stat-item">~120.0€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-sp-tribal.html" class="variant-card">
+                    <div class="variant-name">SP Tribal</div>
+                    <div class="variant-description">Game Boy Advance SP Tribal</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">2 ventes</span>
+                        <span class="stat-item">~69.5€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-sp-zelda.html" class="variant-card">
+                    <div class="variant-name">SP Zelda</div>
+                    <div class="variant-description">Game Boy Advance SP Zelda</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">3 ventes</span>
+                        <span class="stat-item">~203.0€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-standard-arctic-white.html" class="variant-card">
+                    <div class="variant-name">Arctic White</div>
+                    <div class="variant-description">Game Boy Advance Arctic White</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">1 ventes</span>
+                        <span class="stat-item">~55.0€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-standard-black.html" class="variant-card">
+                    <div class="variant-name">Black</div>
+                    <div class="variant-description">Le modèle noir sobre et élégant de la GBA</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">3 ventes</span>
+                        <span class="stat-item">~77.72€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-standard-glacier.html" class="variant-card">
+                    <div class="variant-name">Glacier</div>
+                    <div class="variant-description">L'édition Glacier transparente bleue de la GBA</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">3 ventes</span>
+                        <span class="stat-item">~128.33€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-standard-indigo.html" class="variant-card">
+                    <div class="variant-name">Indigo</div>
+                    <div class="variant-description">Game Boy Advance Indigo</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">1 ventes</span>
+                        <span class="stat-item">~62.0€</span>
+                    </div>
+                </a>
+
+                <a href="/game-boy-advance-standard-platinum.html" class="variant-card">
+                    <div class="variant-name">Platinum</div>
+                    <div class="variant-description">Game Boy Advance Platinum</div>
+                    <div class="variant-stats">
+                        <span class="stat-item">3 ventes</span>
+                        <span class="stat-item">~250.0€</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PrixRetro - Prix des consoles rétro basés sur les ventes réelles eBay</p>
+            <p>
+                <a href="/mentions-legales.html">Mentions légales</a> • 
+                <a href="/contact.html">Contact</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.85rem;">
+                Les prix affichés sont basés sur les ventes terminées sur eBay.fr au cours des 6 derniers mois.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
