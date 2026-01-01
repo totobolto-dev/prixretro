@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Listings\Tables;
 
+use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -238,45 +238,47 @@ class ListingsTable
                         }
                     }),
             ])
-            ->bulkActions([
-                BulkAction::make('approve')
-                    ->label('Approve Selected')
-                    ->icon('heroicon-o-check-circle')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->action(function (Collection $records) {
-                        $records->each(function ($record) {
-                            $record->update([
-                                'status' => 'approved',
-                                'reviewed_at' => now(),
-                            ]);
-                        });
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    \Filament\Tables\Actions\BulkAction::make('approve')
+                        ->label('Approve Selected')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            $records->each(function ($record) {
+                                $record->update([
+                                    'status' => 'approved',
+                                    'reviewed_at' => now(),
+                                ]);
+                            });
 
-                        Notification::make()
-                            ->title('Listings Approved')
-                            ->body("Approved {$records->count()} listings")
-                            ->success()
-                            ->send();
-                    }),
-                BulkAction::make('reject')
-                    ->label('Reject Selected')
-                    ->icon('heroicon-o-x-circle')
-                    ->color('danger')
-                    ->requiresConfirmation()
-                    ->action(function (Collection $records) {
-                        $records->each(function ($record) {
-                            $record->update([
-                                'status' => 'rejected',
-                                'reviewed_at' => now(),
-                            ]);
-                        });
+                            Notification::make()
+                                ->title('Listings Approved')
+                                ->body("Approved {$records->count()} listings")
+                                ->success()
+                                ->send();
+                        }),
+                    \Filament\Tables\Actions\BulkAction::make('reject')
+                        ->label('Reject Selected')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            $records->each(function ($record) {
+                                $record->update([
+                                    'status' => 'rejected',
+                                    'reviewed_at' => now(),
+                                ]);
+                            });
 
-                        Notification::make()
-                            ->title('Listings Rejected')
-                            ->body("Rejected {$records->count()} listings")
-                            ->danger()
-                            ->send();
-                    }),
+                            Notification::make()
+                                ->title('Listings Rejected')
+                                ->body("Rejected {$records->count()} listings")
+                                ->danger()
+                                ->send();
+                        }),
+                ]),
             ]);
 
         return $table;
