@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Listings\Tables;
 
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
@@ -63,7 +64,7 @@ class ListingsTable
             ->defaultSort('created_at', 'desc')
             ->toolbarActions([
                 BulkActionGroup::make([
-                    \Filament\Tables\Actions\BulkAction::make('approve')
+                    BulkAction::make('approve')
                         ->label('Approve Selected')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
@@ -82,7 +83,7 @@ class ListingsTable
                                 ->success()
                                 ->send();
                         }),
-                    \Filament\Tables\Actions\BulkAction::make('reject')
+                    BulkAction::make('reject')
                         ->label('Reject Selected')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
