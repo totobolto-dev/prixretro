@@ -17,9 +17,11 @@ class SortListings extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-funnel';
+
     protected static string $view = 'filament.pages.sort-listings';
-    protected static ?string $navigationGroup = 'Data Management';
+
     protected static ?string $navigationLabel = 'Sort Listings';
+
     protected static ?int $navigationSort = 2;
 
     public $listings = [];
