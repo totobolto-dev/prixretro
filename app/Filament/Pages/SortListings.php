@@ -24,7 +24,9 @@ class SortListings extends Page implements HasForms
 
     protected static ?int $navigationSort = 2;
 
-    protected string $view = 'filament.pages.sort-listings';
+    protected static ?string $slug = 'sort-listings';
+
+    protected static string $view = 'filament.pages.sort-listings';
 
     public $listings = [];
     public $currentIndex = 0;
