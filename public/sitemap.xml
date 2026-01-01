@@ -2,159 +2,143 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.prixretro.com/</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- Game Boy Color Variants -->
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-atomic-purple</loc>
+    <loc>https://www.prixretro.com/game-boy-color/atomic-purple</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-bleu</loc>
+    <loc>https://www.prixretro.com/game-boy-color/vert</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-jaune</loc>
+    <loc>https://www.prixretro.com/game-boy-color/violet</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-micro-famicom</loc>
+    <loc>https://www.prixretro.com/game-boy-color/rouge</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-pokemon-center-3rd-anniversary</loc>
+    <loc>https://www.prixretro.com/game-boy-color/bleu</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-pokemon-special-edition</loc>
+    <loc>https://www.prixretro.com/game-boy-color/jaune</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-pokemon-special-limited-edition</loc>
+    <loc>https://www.prixretro.com/game-boy-color/pokemon-center-3rd-anniversary</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-rouge</loc>
+    <loc>https://www.prixretro.com/game-boy-color/pokemon-special-limited-edition</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-color-vert</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-color-violet</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Game Boy Advance SP Variants -->
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-cobalt</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-donkey-kong</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-flame</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-mario-vs-donkey-kong</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-nes</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-onyx</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-pearl-blue</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-pearl-pink</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-platinum</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-pokemon-ruby-groudon</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-tribal</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.prixretro.com/game-boy-advance-sp-zelda</loc>
+    <loc>https://www.prixretro.com/game-boy-color/pokemon-special-edition</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Game Boy Advance Standard Variants -->
+  <!-- Game Boy Advance Variants -->
   <url>
-    <loc>https://www.prixretro.com/game-boy-advance-standard-arctic-white</loc>
+    <loc>https://www.prixretro.com/game-boy-advance/sp-cobalt</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-advance-standard-black</loc>
+    <loc>https://www.prixretro.com/game-boy-advance/sp-flame</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-advance-standard-fuchsia</loc>
+    <loc>https://www.prixretro.com/game-boy-advance/sp-onyx</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-advance-standard-glacier</loc>
+    <loc>https://www.prixretro.com/game-boy-advance/sp-pearl-pink</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-advance-standard-indigo</loc>
+    <loc>https://www.prixretro.com/game-boy-advance/sp-platinum</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.prixretro.com/game-boy-advance-standard-platinum</loc>
+    <loc>https://www.prixretro.com/game-boy-advance/sp-pokemon-sapphire-kyogre</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Game Boy Advance Micro -->
   <url>
-    <loc>https://www.prixretro.com/game-boy-advance-micro-famicom</loc>
+    <loc>https://www.prixretro.com/game-boy-advance/sp-tribal</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.prixretro.com/game-boy-advance/sp-zelda</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.prixretro.com/game-boy-advance/standard-arctic-white</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.prixretro.com/game-boy-advance/standard-black</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.prixretro.com/game-boy-advance/standard-glacier</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.prixretro.com/game-boy-advance/standard-indigo</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.prixretro.com/game-boy-advance/standard-platinum</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
