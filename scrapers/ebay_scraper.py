@@ -26,6 +26,16 @@ import re
 from urllib.parse import quote_plus
 from datetime import datetime
 
+def normalize_month_token(token):
+    token = token.lower()
+
+    # Fix common mojibake / broken accents
+    token = re.sub(r"f.*v", "feb", token)   # fév, févr, f�v → feb
+    token = re.sub(r"d.*c", "dec", token)   # déc, d�c → dec
+    token = re.sub(r"a.*t", "aug", token)   # août, aôut → aug (optional)
+
+    return token
+
 def parse_french_date(date_text):
     """Parse French eBay date: 'Vendu le 20 déc. 2024'"""
     months_fr = {
@@ -50,6 +60,8 @@ def parse_french_date(date_text):
     year = None
 
     for part in parts:
+        part = normalize_month_token(part)
+
         # Day (1-31)
         if part.isdigit() and 1 <= int(part) <= 31 and day is None:
             day = part.zfill(2)
@@ -232,7 +244,8 @@ def scrape_ebay_console(search_term, console_slug, max_pages=50):
 
                     # Sold date from search results
                     sold_date = None
-                    date_elem = item.select_one('.su-styled-text.POSITIVE')
+
+                    date_elem = item.select_one('.su-styled-text.positive')
                     if date_elem:
                         date_text = date_elem.get_text().strip()
                         sold_date = parse_french_date(date_text)
