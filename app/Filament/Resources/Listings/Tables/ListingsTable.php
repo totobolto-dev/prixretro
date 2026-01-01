@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Listings\Tables;
 
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -62,10 +64,42 @@ class ListingsTable
                     ->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
-            // Header actions removed - use Artisan commands instead:
-            // php artisan import:scraped storage/app/scraped_data_gbc.json
-            // php artisan sync:production
-            /* ->headerActions([
+            ->headerActions([
+                Action::make('scrape_console')
+                    ->label('Scrape eBay')
+                    ->icon('heroicon-o-magnifying-glass')
+                    ->color('primary')
+                    ->form([
+                        Select::make('console')
+                            ->label('Console')
+                            ->options([
+                                'gbc' => 'Game Boy Color',
+                                'gba' => 'Game Boy Advance',
+                                'ds' => 'Nintendo DS',
+                            ])
+                            ->required()
+                            ->helperText('Scrape eBay sold listings for this console'),
+                    ])
+                    ->action(function (array $data) {
+                        $console = $data['console'];
+
+                        try {
+                            Artisan::call("scrape:{$console}");
+                            $output = Artisan::output();
+
+                            Notification::make()
+                                ->title('Scraping Started')
+                                ->body("eBay scraping for {$console} completed. Check storage/app/scraped_data_{$console}.json")
+                                ->success()
+                                ->send();
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title('Scraping Failed')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
                 Action::make('import_scraped')
                     ->label('Import Scraped Data')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -76,10 +110,10 @@ class ListingsTable
                             ->options([
                                 'gbc' => 'Game Boy Color',
                                 'gba' => 'Game Boy Advance',
-                                'ds' => 'Nintendo DS',
+                                'ds' => 'Nintendo DS (processed)',
                             ])
                             ->required()
-                            ->helperText('Select which console data to import from storage/app/scraped_data_[console].json'),
+                            ->helperText('Import from storage/app/scraped_data_[console].json'),
                     ])
                     ->action(function (array $data) {
                         $console = $data['console'];
@@ -88,7 +122,7 @@ class ListingsTable
                         if (!file_exists($filePath)) {
                             Notification::make()
                                 ->title('Import Failed')
-                                ->body("File not found: scraped_data_{$console}.json. Run 'php artisan scrape:{$console}' first.")
+                                ->body("File not found: scraped_data_{$console}.json")
                                 ->danger()
                                 ->send();
                             return;
@@ -151,11 +185,47 @@ class ListingsTable
                                 ->send();
                         }
                     }),
-            ]) */;
+            ])
+            ->bulkActions([
+                BulkAction::make('approve')
+                    ->label('Approve Selected')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(function (Collection $records) {
+                        $records->each(function ($record) {
+                            $record->update([
+                                'status' => 'approved',
+                                'reviewed_at' => now(),
+                            ]);
+                        });
 
-        // Bulk actions removed - edit listings individually or use Artisan commands
-        // To approve: Click into listing and change status
-        // To bulk approve: php artisan listings:approve --status=pending
+                        Notification::make()
+                            ->title('Listings Approved')
+                            ->body("Approved {$records->count()} listings")
+                            ->success()
+                            ->send();
+                    }),
+                BulkAction::make('reject')
+                    ->label('Reject Selected')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->action(function (Collection $records) {
+                        $records->each(function ($record) {
+                            $record->update([
+                                'status' => 'rejected',
+                                'reviewed_at' => now(),
+                            ]);
+                        });
+
+                        Notification::make()
+                            ->title('Listings Rejected')
+                            ->body("Rejected {$records->count()} listings")
+                            ->danger()
+                            ->send();
+                    }),
+            ]);
 
         return $table;
     }
