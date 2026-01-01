@@ -5,18 +5,20 @@ namespace App\Filament\Pages;
 use App\Models\Console;
 use App\Models\Listing;
 use App\Models\Variant;
+use BackedEnum;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\DB;
 
 class SortListings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-funnel';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFunnel;
 
     protected static string $view = 'filament.pages.sort-listings';
 
