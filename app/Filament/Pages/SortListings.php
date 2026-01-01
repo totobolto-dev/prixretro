@@ -20,11 +20,11 @@ class SortListings extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFunnel;
 
-    protected static string $view = 'filament.pages.sort-listings';
-
     protected static ?string $navigationLabel = 'Sort Listings';
 
     protected static ?int $navigationSort = 2;
+
+    protected string $view = 'filament.pages.sort-listings';
 
     public $listings = [];
     public $currentIndex = 0;
