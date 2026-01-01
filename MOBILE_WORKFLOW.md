@@ -2,79 +2,93 @@
 
 Complete workflow for scraping, sorting, and publishing data from your mobile phone.
 
-## 📱 Mobile-Friendly Workflow
+## 📱 Mobile-Friendly Workflow (New & Improved!)
 
-### Option 1: DS Data Sorting (Current Task)
+### Universal Workflow: Scrape → Import → Sort → Publish
 
-**Status**: 1,257 DS items scraped, ready to sort
-
-#### Step 1: Sort DS Data (Mobile Browser)
-1. Visit: **https://www.prixretro.com/ds_sorter.html**
-2. For each item:
-   - Select **Console Type** (DS Lite, DSi, 3DS, etc.)
-   - Select **Variant** (color/edition)
-   - Click **Keep** or **Reject**
-3. Progress auto-saves to your browser
-4. When done, click **Export JSON**
-5. Download saves as `ds_sorted_data.json`
-
-#### Step 2: Process Sorted Data (Laptop)
-```bash
-# Move downloaded file to project
-mv ~/Downloads/ds_sorted_data.json /path/to/prixretro/storage/app/
-
-# Process the sorted data
-python3 scripts/process_ds_sorted.py
-
-# This creates: storage/app/scraped_data_ds_processed.json
-```
-
-#### Step 3: Import to Database (Admin Panel or SSH)
-```bash
-# Via SSH/Terminal
-php artisan import:scraped storage/app/scraped_data_ds_processed.json
-
-# OR via Admin Panel
-# Login to: https://www.prixretro.com/admin/listings
-# Click: "Import Scraped Data" button
-# Select: "Nintendo DS (processed)"
-```
-
-#### Step 4: Review & Publish (Mobile/Desktop)
-1. Visit: **https://www.prixretro.com/admin/listings**
-2. Review imported listings
-3. Bulk approve/reject as needed
-4. Click **Sync to Production** button
+**✨ Everything works from mobile now - progress syncs between devices!**
 
 ---
 
-### Option 2: Scrape & Import GBC/GBA (Admin Panel)
+### Step 1: Scrape eBay Data
 
-**Perfect for mobile - no terminal needed!**
-
-#### From Admin Panel (Mobile-Friendly)
+**From Admin Panel (Mobile):**
 1. Login: **https://www.prixretro.com/admin/listings**
+2. Click **"Scrape eBay"** button
+3. Select console (GBC/GBA/DS)
+4. Wait for completion notification
 
-2. **Scrape eBay**:
-   - Click "Scrape eBay" button
-   - Select console (GBC/GBA/DS)
-   - Wait for completion notification
+**From Terminal (if preferred):**
+```bash
+php artisan scrape:gbc   # Game Boy Color
+php artisan scrape:gba   # Game Boy Advance
+php artisan scrape:ds    # Nintendo DS
+```
 
-3. **Import Scraped Data**:
-   - Click "Import Scraped Data" button
-   - Select console
-   - Confirm import
+---
 
-4. **Review Listings**:
-   - Filter by "Pending Only"
-   - Click into each listing
-   - Change status to "Approved" or "Rejected"
-   - OR: Select multiple → Bulk Actions → Approve/Reject
+### Step 2: Import Raw Data
 
-5. **Sync to Production**:
-   - Click "Sync to Production" button
-   - Confirm sync
-   - Done!
+**Two Import Options:**
+
+#### Option A: Pre-sorted Data (GBC/GBA)
+For data that already has variants assigned:
+1. Click **"Import Scraped Data"** button
+2. Select console
+3. Done - items go straight to Listings for review
+
+#### Option B: Raw Unsorted Data (DS, Mixed Data)
+For data that needs console/variant classification:
+1. Click **"Import Raw Data (for sorting)"** button
+2. Select file (e.g., Nintendo DS raw)
+3. Items imported as "unclassified" status
+4. **Go to Sort Listings page** (next step)
+
+---
+
+### Step 3: Sort & Classify Items
+
+**Visit: https://www.prixretro.com/admin/sort-listings**
+
+**Features:**
+- ✅ **Server-side progress** - Resume on any device (mobile/laptop)
+- ✅ **Mobile-optimized** interface
+- ✅ **Real-time filtering** by status, console, search
+- ✅ **Progress bar** shows completion percentage
+
+**For Each Item:**
+1. Select **Console Type** (DS Lite, DSi, 3DS, etc.)
+2. Select **Variant** (color/edition)
+3. Click **Save & Next** or **Reject & Next**
+4. Progress auto-saves to database
+
+**Keyboard Shortcuts (Desktop):**
+- `Enter`: Save & Next
+- `Space`: Skip
+- `←`: Previous
+- `R`: Reject
+
+---
+
+### Step 4: Review & Approve
+
+**Visit: https://www.prixretro.com/admin/listings**
+
+1. Filter by **"Pending Only"**
+2. Review classified listings
+3. **Bulk Actions:**
+   - Select multiple rows
+   - Click **Approve Selected** or **Reject Selected**
+4. Or edit individually
+
+---
+
+### Step 5: Publish to Production
+
+**From Admin Panel:**
+1. Click **"Sync to Production"** button
+2. Confirm sync
+3. Done! 🎉
 
 ---
 
@@ -189,5 +203,22 @@ If something breaks:
 
 ---
 
+## 🔍 Google Search Console - Sitemap Submission
+
+**Yes, you should manually submit your sitemap:**
+
+1. Visit: https://search.google.com/search-console
+2. Select your property (prixretro.com)
+3. Go to: **Sitemaps** (left sidebar)
+4. Enter: `https://www.prixretro.com/sitemap.xml`
+5. Click **Submit**
+
+**Status Check:**
+- Sitemap updated: ✅ 2026-01-01
+- URLs in sitemap: 23 (9 GBC + 13 GBA + homepage)
+- Google will crawl within 24-48 hours
+
+---
+
 **Last Updated**: 2026-01-01
-**Current Phase**: DS data sorting + Mobile workflow setup
+**Current Phase**: Server-side sorting workflow + Mobile-first admin panel

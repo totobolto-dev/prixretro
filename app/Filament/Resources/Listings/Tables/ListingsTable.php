@@ -113,7 +113,7 @@ class ListingsTable
                                 'ds' => 'Nintendo DS (processed)',
                             ])
                             ->required()
-                            ->helperText('Import from storage/app/scraped_data_[console].json'),
+                            ->helperText('Import pre-sorted data from storage/app/scraped_data_[console].json'),
                     ])
                     ->action(function (array $data) {
                         $console = $data['console'];
@@ -142,6 +142,58 @@ class ListingsTable
                             Notification::make()
                                 ->title('Import Completed')
                                 ->body("Imported {$importedCount} new listings, skipped {$skippedCount} existing.")
+                                ->success()
+                                ->send();
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title('Import Failed')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
+                Action::make('import_raw')
+                    ->label('Import Raw Data (for sorting)')
+                    ->icon('heroicon-o-inbox-arrow-down')
+                    ->color('warning')
+                    ->form([
+                        Select::make('file')
+                            ->label('File')
+                            ->options([
+                                'scraped_data_ds.json' => 'Nintendo DS (raw)',
+                                'scraped_data_gbc.json' => 'Game Boy Color (raw)',
+                                'scraped_data_gba.json' => 'Game Boy Advance (raw)',
+                            ])
+                            ->required()
+                            ->helperText('Import raw unsorted data. You will need to classify items in Sort Listings page.'),
+                    ])
+                    ->action(function (array $data) {
+                        $file = $data['file'];
+                        $filePath = storage_path("app/{$file}");
+
+                        if (!file_exists($filePath)) {
+                            Notification::make()
+                                ->title('Import Failed')
+                                ->body("File not found: {$file}")
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
+                        try {
+                            Artisan::call('import:raw', ['file' => $filePath]);
+                            $output = Artisan::output();
+
+                            // Parse results
+                            preg_match('/Would import: (\d+)/', $output, $imported);
+                            preg_match('/Skipped: (\d+)/', $output, $skipped);
+
+                            $importedCount = $imported[1] ?? 0;
+                            $skippedCount = $skipped[1] ?? 0;
+
+                            Notification::make()
+                                ->title('Import Completed')
+                                ->body("Imported {$importedCount} unclassified listings. Visit Sort Listings page to classify them.")
                                 ->success()
                                 ->send();
                         } catch (\Exception $e) {
