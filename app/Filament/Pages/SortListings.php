@@ -182,4 +182,89 @@ class SortListings extends Page implements HasForms
         // Reset variant when console changes
         $this->selectedVariant = '';
     }
+
+    public function updateItemVariant($listingId, $variantId): void
+    {
+        $listing = Listing::find($listingId);
+
+        if (!$listing) {
+            Notification::make()
+                ->title('Error')
+                ->body('Listing not found')
+                ->danger()
+                ->send();
+            return;
+        }
+
+        if ($variantId) {
+            $listing->update([
+                'variant_id' => $variantId,
+                'classification_status' => 'classified',
+            ]);
+
+            Notification::make()
+                ->title('Variant assigned')
+                ->body('Listing classified successfully')
+                ->success()
+                ->send();
+        }
+
+        $this->loadListings();
+        $this->updateStats();
+    }
+
+    public function quickApprove($listingId): void
+    {
+        $listing = Listing::find($listingId);
+
+        if (!$listing) {
+            return;
+        }
+
+        if (!$listing->variant_id) {
+            Notification::make()
+                ->title('Cannot approve')
+                ->body('Please select a variant first')
+                ->warning()
+                ->send();
+            return;
+        }
+
+        $listing->update([
+            'status' => 'approved',
+            'reviewed_at' => now(),
+        ]);
+
+        $this->loadListings();
+        $this->updateStats();
+
+        Notification::make()
+            ->title('Approved')
+            ->body('Listing approved successfully')
+            ->success()
+            ->send();
+    }
+
+    public function quickReject($listingId): void
+    {
+        $listing = Listing::find($listingId);
+
+        if (!$listing) {
+            return;
+        }
+
+        $listing->update([
+            'status' => 'rejected',
+            'reviewed_at' => now(),
+        ]);
+
+        $this->loadListings();
+        $this->updateStats();
+
+        Notification::make()
+            ->title('Rejected')
+            ->body('Listing rejected')
+            ->danger()
+            ->send();
+    }
 }
