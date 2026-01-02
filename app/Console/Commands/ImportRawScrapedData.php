@@ -62,7 +62,8 @@ class ImportRawScrapedData extends Command
                     'url' => $item['url'] ?? null,
                     'thumbnail_url' => $item['thumbnail_url'] ?? null,
                     'source' => 'ebay',
-                    'status' => 'unclassified',  // Needs sorting
+                    'status' => 'pending',  // Will need review after classification
+                    'classification_status' => 'unclassified',  // Needs sorting first
                     'is_outlier' => false,
                 ]);
 

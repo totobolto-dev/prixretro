@@ -50,10 +50,10 @@ class SortListings extends Page implements HasForms
     {
         $query = Listing::query()
             ->whereNull('variant_id')  // Items not yet assigned to a variant
-            ->orWhere('status', 'unclassified');
+            ->orWhere('classification_status', 'unclassified');
 
         if ($this->filterStatus && $this->filterStatus !== 'all') {
-            $query->where('status', $this->filterStatus);
+            $query->where('classification_status', $this->filterStatus);
         }
 
         if ($this->filterConsole) {
@@ -71,7 +71,7 @@ class SortListings extends Page implements HasForms
     {
         $this->stats = [
             'total' => Listing::whereNull('variant_id')->count(),
-            'unclassified' => Listing::where('status', 'unclassified')->count(),
+            'unclassified' => Listing::where('classification_status', 'unclassified')->count(),
             'classified' => Listing::whereNotNull('console_slug')->whereNull('variant_id')->count(),
         ];
     }
