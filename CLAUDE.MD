@@ -413,12 +413,167 @@ Based on peer-reviewed industry data and case studies from 2025-2026:
 
 ---
 
+## 🛍️ AMAZON AFFILIATE STRATEGY (Collector-Focused Products)
+
+**Your Amazon ID:** prixretro-21
+**Status:** ✅ Approved - Ready to use
+**Commission:** 4% on physical products
+
+### Product Categories (Quality Over Garbage)
+
+#### 1. Storage & Protection (High Conversion)
+**Why collectors buy:** Protect their €60-150 investment
+
+- **Hard EVA Carrying Cases** for Game Boy/GBA/DS ([Example on Amazon](https://www.amazon.com/handheld-game-console-case/s?k=handheld+game+console+case))
+  - Search terms: "Game Boy carrying case", "Nintendo DS hard case"
+  - Price range: €10-25
+  - Commission: €0.40-1.00 per sale
+
+- **Universal Game Cartridge Cases** ([RetroSix example](https://retrosix.co.uk/Universal-Game-Cases-Game-Boy-Color-Advance-p158344576))
+  - Protect loose carts (common collector need)
+  - Search: "Game Boy cartridge case", "DS game case replacement"
+  - Price: €15-30 for multi-packs
+  - Commission: €0.60-1.20
+
+- **Display Cases (Premium)** ([Japanese Game Cases](https://japanesegamecases.com/), [BitLounger](https://bitlounger.com/))
+  - UV-resistant acrylic (90%+ UV protection)
+  - For serious collectors displaying rare variants
+  - Price: €20-50 per case
+  - Commission: €0.80-2.00
+
+#### 2. Maintenance & Cleaning (Recurring Purchases)
+**Why collectors buy:** Keep consoles in pristine condition
+
+- **1UPcard Cleaning Kit** ([Amazon listing](https://www.amazon.com/Game-Boy-Cleaning-Kit-1UPcard-Cartridge/dp/B07KMPSDCH))
+  - Compatible with GB/GBC/GBA/DS
+  - Cleans cartridge contacts
+  - Price: €10-15
+  - Commission: €0.40-0.60
+
+- **Screen Protectors** (eBay/Amazon)
+  - Essential for collectors keeping screens pristine
+  - Search: "Game Boy Color screen protector"
+  - Price: €5-10
+  - Commission: €0.20-0.40
+
+- **Microfiber Cleaning Cloths** (generic but useful)
+  - Bundled with other purchases
+  - Price: €5-8
+  - Commission: €0.20-0.32
+
+#### 3. Replacement Parts (Legitimate Collector Need)
+**Why collectors buy:** Restore/maintain original hardware
+
+- **Replacement Batteries** (GBA SP rechargeable)
+  - Original batteries die after 15-20 years
+  - Search: "GBA SP battery replacement"
+  - Price: €10-20
+  - Commission: €0.40-0.80
+
+- **Replacement Shells** (IPS screen kits)
+  - Popular modding trend for collectors
+  - Search: "Game Boy Color IPS kit", "GBA backlight mod"
+  - Price: €30-60
+  - Commission: €1.20-2.40
+
+- **Tri-Wing Screwdrivers** (Nintendo-specific)
+  - Needed to open consoles for repairs/mods
+  - Price: €5-10
+  - Commission: €0.20-0.40
+
+#### 4. Books & Guides (Higher Commission: 4.5%)
+**Why collectors buy:** Learn about their hobby
+
+- **"The Ultimate History of Video Games"** by Steven L. Kent
+  - Price: €15-25
+  - Commission: €0.68-1.13 (4.5%)
+
+- **Nintendo Buying Guides** (if available in French)
+  - "Guide du collectionneur Game Boy"
+  - Price: €20-30
+  - Commission: €0.90-1.35
+
+### Where to Place Links (UX-Friendly)
+
+1. **Variant Pages** (Bottom section):
+   ```html
+   <section class="collector-tools">
+     <h3>🛡️ Protégez votre collection</h3>
+     <p>Accessoires recommandés pour conserver votre [Variant Name] en parfait état :</p>
+     <ul>
+       <li>Housse de protection rigide (Amazon link)</li>
+       <li>Kit de nettoyage pour cartouches (Amazon link)</li>
+       <li>Boîtier d'exposition UV (Amazon link)</li>
+     </ul>
+   </section>
+   ```
+
+2. **Buying Guides** (Natural fit):
+   - "Meilleur Game Boy Color à acheter en 2026"
+   - Section: "Accessoires essentiels pour collectors"
+   - 3-5 product recommendations with affiliate links
+
+3. **Blog Posts** (If you add content):
+   - "Comment nettoyer votre Game Boy Color"
+   - "Guide d'entretien Game Boy Advance SP"
+   - "Protéger sa collection de consoles rétro"
+
+### Expected Revenue (Conservative)
+
+**Scenario: 5,000 monthly visitors**
+- 1.5% click-through to Amazon = 75 clicks
+- 20% purchase rate = 15 sales/month
+- Average basket: €30
+- Average commission: €1.20 per sale
+- **Monthly revenue: €18-180** (depends on which products)
+
+**Optimistic Scenario: 10,000 visitors**
+- 150 clicks → 30 sales → €36-360/month
+
+### Implementation Steps
+
+1. **Create Amazon affiliate links** (30 min)
+   - Log into partenaires.amazon.fr
+   - Use "SiteStripe" browser extension
+   - Generate links for products above
+
+2. **Add to variant template** (1 hour)
+   - Create reusable HTML component
+   - 3-5 products per console type
+   - Test on 2-3 variant pages
+
+3. **Write 1 buying guide** (2 hours)
+   - "Accessoires essentiels Game Boy Color 2026"
+   - Amazon products naturally integrated
+   - SEO optimized
+
+### Sources
+- [Amazon Handheld Console Cases](https://www.amazon.com/handheld-game-console-case/s?k=handheld+game+console+case)
+- [1UPcard Cleaning Kit](https://www.amazon.com/Game-Boy-Cleaning-Kit-1UPcard-Cartridge/dp/B07KMPSDCH)
+- [RetroSix Universal Game Cases](https://retrosix.co.uk/Universal-Game-Cases-Game-Boy-Color-Advance-p158344576)
+- [Japanese Game Cases (Display)](https://japanesegamecases.com/)
+- [BitLounger Storage Solutions](https://bitlounger.com/)
+- [RetroGaming Storage Guide - RacketBoy](https://racketboy.com/journal/compact-protective-console-game-storage-from-retroescape)
+
+---
+
 ## 🎯 PRIORITY ACTIONS (This Week)
 
 ### Critical Path to €1,200/month:
-1. **Sign up AdSense + Amazon** (TODAY - 1 hour)
-2. **Create 3 buying guides** (This week - 4 hours)
-3. **Export rejected IDs, commit to git** (Done - maintain)
+1. ✅ **Sign up AdSense + Amazon** (DONE)
+   - AdSense: pub-2791408282004471 (under review, 2-4 weeks)
+   - Amazon: prixretro-21 (approved, ready to use)
+2. **Implement Amazon affiliate links** (THIS WEEK - 3 hours)
+   - See "Amazon Affiliate Strategy" section above for product list
+   - Create SiteStripe links for 10-15 products
+   - Add to 3-5 variant pages as test
+3. **Create AdSense placeholders** (30 min)
+   - Wait for approval, but prepare template
+   - Header + sidebar ad positions
+4. **Write 1 buying guide** (2 hours)
+   - "Accessoires essentiels Game Boy Color 2026"
+   - Include 5-7 Amazon affiliate products from list above
+   - SEO optimized
 
 ### Why These 3?
 - AdSense + Amazon = foundational revenue (€200-400/month potential)
