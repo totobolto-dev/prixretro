@@ -61,8 +61,12 @@ class SortListings extends Page implements HasForms, HasTable
         return $table
             ->query(
                 Listing::query()
-                    ->whereNull('variant_id')
-                    ->orWhere('classification_status', 'unclassified')
+                    ->where('status', '!=', 'rejected')
+                    ->where('status', '!=', 'approved')
+                    ->where(function ($query) {
+                        $query->whereNull('variant_id')
+                            ->orWhere('classification_status', 'unclassified');
+                    })
             )
             ->columns([
                 TextColumn::make('id')
