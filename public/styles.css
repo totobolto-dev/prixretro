@@ -828,3 +828,316 @@ footer p {
         font-size: 0.9rem;
     }
 }
+
+/* Content Pages - Ranking & Data-driven Articles */
+.content-intro {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    line-height: 1.8;
+}
+
+.content-intro p {
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.content-intro p:last-child {
+    margin-bottom: 0;
+}
+
+/* Ranking Table */
+.ranking-section {
+    margin: 3rem 0;
+}
+
+.ranking-table {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-top: 1.5rem;
+}
+
+.ranking-header-row {
+    background: var(--bg-secondary);
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 60px 1fr 100px 120px 140px;
+    gap: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.ranking-row {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 60px 1fr 100px 120px 140px;
+    gap: 1rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ranking-row:hover {
+    background: rgba(0, 217, 255, 0.05);
+}
+
+.ranking-row:last-child {
+    border-bottom: none;
+}
+
+.rank-col {
+    text-align: center;
+}
+
+.rank-badge {
+    display: inline-block;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.rank-badge.rank-1 {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #0f1419;
+}
+
+.rank-badge.rank-2 {
+    background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+    color: #0f1419;
+}
+
+.rank-badge.rank-3 {
+    background: linear-gradient(135deg, #CD7F32, #8B4513);
+    color: #ffffff;
+}
+
+.rank-badge.rank-4,
+.rank-badge.rank-5 {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.variant-col {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge-special {
+    display: inline-block;
+    background: var(--accent-secondary);
+    color: #ffffff;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.sales-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.sales-count {
+    font-weight: 700;
+    color: var(--accent-primary);
+    font-size: 1.1rem;
+}
+
+.sales-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.price-col {
+    text-align: right;
+}
+
+.avg-price {
+    font-weight: 600;
+    color: var(--success);
+    font-size: 1rem;
+}
+
+.range-col {
+    text-align: right;
+}
+
+.price-range {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Insights Section */
+.insights-section {
+    margin: 3rem 0;
+}
+
+.insight-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.insight-card h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.insight-card p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+/* Amazon Affiliate Section */
+.protection-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(123, 97, 255, 0.05));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.protection-section h2 {
+    margin-bottom: 1rem;
+}
+
+.protection-section > p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.amazon-product {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.amazon-product-content h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.amazon-product-content > p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.product-features {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.product-features li {
+    color: var(--text-secondary);
+    padding: 0.4rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.product-features li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success);
+    font-weight: bold;
+}
+
+.product-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.price-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.price-value {
+    color: var(--success);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.amazon-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF9900, #FF6600);
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.amazon-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+}
+
+.affiliate-note {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+/* Responsive - Content Pages */
+@media (max-width: 768px) {
+    .ranking-header-row,
+    .ranking-row {
+        grid-template-columns: 50px 1fr 80px;
+        gap: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .price-col,
+    .range-col {
+        display: none;
+    }
+
+    .ranking-header-row .price-col,
+    .ranking-header-row .range-col {
+        display: none;
+    }
+
+    .protection-section {
+        padding: 1.5rem;
+    }
+
+    .amazon-product {
+        padding: 1rem;
+    }
+
+    .product-price {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}

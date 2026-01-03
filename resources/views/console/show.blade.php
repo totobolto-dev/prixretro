@@ -19,6 +19,14 @@
             {{ $console->variants->count() }} variantes •
             {{ $console->variants->sum('listings_count') }} ventes analysées
         </div>
+
+        @if($console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3)
+        <div class="cta-section" style="margin-top: 1.5rem;">
+            <a href="/{{ $console->slug }}/classement" class="cta-button">
+                🏆 Voir le classement des variantes les plus vendues
+            </a>
+        </div>
+        @endif
     </div>
 
     @php

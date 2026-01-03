@@ -66,6 +66,9 @@
         <div class="container">
             <p>&copy; {{ date('Y') }} PrixRetro - Tracker de prix pour le rétrogaming</p>
             <p>Prix moyens basés sur les ventes eBay récentes. Données mises à jour quotidiennement.</p>
+            <p style="font-size: 0.8rem; color: #6b7280; margin-top: 0.5rem;">
+                Ce site contient des liens affiliés Amazon et eBay. Nous touchons une petite commission si vous achetez via ces liens, sans surcoût pour vous.
+            </p>
         </div>
     </footer>
 

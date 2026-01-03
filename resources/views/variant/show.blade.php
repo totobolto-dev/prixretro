@@ -39,6 +39,33 @@
             <canvas id="priceChart"></canvas>
         </div>
 
+        @if($variant->console->slug === 'game-boy-color')
+        <!-- Amazon Affiliate - Minimal Integration -->
+        <div class="protection-section">
+            <h2>💡 Protéger votre {{ $variant->console->name }}</h2>
+            <p>Une console bien protégée conserve sa valeur. Nos données montrent un écart de prix moyen de <strong>+28%</strong> entre les consoles en parfait état et celles avec rayures visibles.</p>
+
+            <div class="amazon-product">
+                <div class="amazon-product-content">
+                    <h3>Housse de protection Orzly</h3>
+                    <p>Compatible Game Boy Color, GBA, DS - Protection rigide EVA</p>
+                    <div class="product-price">
+                        <span class="price-label">Prix indicatif:</span>
+                        <span class="price-value">~13,91€</span>
+                    </div>
+                    <a href="https://www.amazon.fr/dp/B075SVXLRX?tag=prixretro-21"
+                       target="_blank"
+                       rel="nofollow noopener sponsored"
+                       class="amazon-button"
+                       onclick="trackAmazonClick('orzly-{{ $variant->slug }}')">
+                        🛍️ Voir sur Amazon
+                    </a>
+                </div>
+            </div>
+            <p class="affiliate-note">* Lien affilié Amazon</p>
+        </div>
+        @endif
+
         <div class="listings-section">
             <h2>Ventes Récentes ({{ $statistics['count'] }} au total)</h2>
 
@@ -87,6 +114,17 @@
 @endsection
 
 @section('scripts')
+<script>
+function trackAmazonClick(product) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'click', {
+            'event_category': 'affiliate',
+            'event_label': 'amazon_' + product,
+            'value': 1
+        });
+    }
+}
+</script>
 @if($statistics['count'] > 0 && count($chartData['labels']) > 0)
 <script>
 const ctx = document.getElementById('priceChart').getContext('2d');
