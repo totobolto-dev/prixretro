@@ -16,19 +16,24 @@ class CurrentListingsTable
         return $table
             ->columns([
                 TextColumn::make('variant.name')
-                    ->searchable(),
-                TextColumn::make('item_id')
-                    ->searchable(),
+                    ->searchable()
+                    ->width('150px')
+                    ->badge()
+                    ->color('success'),
                 TextColumn::make('title')
-                    ->searchable(),
-                TextColumn::make('price')
-                    ->money()
-                    ->sortable(),
+                    ->searchable()
+                    ->wrap()
+                    ->description(fn ($record) =>
+                        ($record->price ? number_format($record->price, 2) . '€' : '') .
+                        ' • ID: ' . $record->item_id
+                    ),
                 IconColumn::make('is_sold')
-                    ->boolean(),
+                    ->boolean()
+                    ->width('60px'),
                 TextColumn::make('last_seen_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->width('150px'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

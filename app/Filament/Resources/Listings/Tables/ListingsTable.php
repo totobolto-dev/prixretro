@@ -18,28 +18,34 @@ class ListingsTable
         return $table
             ->columns([
                 TextColumn::make('variant.name')
-                    ->searchable(),
-                TextColumn::make('item_id')
-                    ->searchable(),
+                    ->searchable()
+                    ->width('150px')
+                    ->badge()
+                    ->color('success'),
                 TextColumn::make('title')
-                    ->searchable(),
-                TextColumn::make('price')
-                    ->money()
-                    ->sortable(),
-                TextColumn::make('sold_date')
-                    ->date()
-                    ->sortable(),
-                TextColumn::make('condition')
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap()
+                    ->description(fn ($record) =>
+                        ($record->price ? number_format($record->price, 2) . '€' : '') .
+                        ($record->sold_date ? ' • ' . $record->sold_date : '') .
+                        ($record->condition ? ' • ' . $record->condition : '')
+                    ),
                 TextColumn::make('source')
-                    ->searchable(),
-                IconColumn::make('is_outlier')
-                    ->boolean(),
-                TextColumn::make('status')
+                    ->searchable()
+                    ->width('80px')
                     ->badge(),
+                IconColumn::make('is_outlier')
+                    ->boolean()
+                    ->width('60px')
+                    ->label('Outlier'),
+                TextColumn::make('status')
+                    ->badge()
+                    ->width('100px'),
                 TextColumn::make('reviewed_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->width('150px')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

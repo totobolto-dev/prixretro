@@ -15,26 +15,33 @@ class ConsolesTable
     {
         return $table
             ->columns([
-                TextColumn::make('slug')
-                    ->searchable(),
                 TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('short_name')
-                    ->searchable(),
+                    ->searchable()
+                    ->description(fn ($record) =>
+                        $record->slug .
+                        ($record->short_name ? ' • ' . $record->short_name : '')
+                    ),
                 TextColumn::make('search_term')
-                    ->searchable(),
-                TextColumn::make('ebay_category_id')
-                    ->searchable(),
+                    ->searchable()
+                    ->width('200px')
+                    ->wrap()
+                    ->description(fn ($record) =>
+                        ($record->ebay_category_id ? 'eBay: ' . $record->ebay_category_id : '')
+                    ),
                 TextColumn::make('release_year')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->width('80px'),
                 TextColumn::make('manufacturer')
-                    ->searchable(),
+                    ->searchable()
+                    ->width('120px'),
                 IconColumn::make('is_active')
-                    ->boolean(),
+                    ->boolean()
+                    ->width('60px'),
                 TextColumn::make('display_order')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->width('80px'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

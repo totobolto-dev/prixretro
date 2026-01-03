@@ -17,20 +17,25 @@ class VariantsTable
         return $table
             ->columns([
                 TextColumn::make('console.name')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
+                    ->searchable()
+                    ->width('150px')
+                    ->badge(),
                 TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('full_slug')
-                    ->searchable(),
-                ImageColumn::make('image_filename'),
+                    ->searchable()
+                    ->description(fn ($record) => $record->full_slug),
+                ImageColumn::make('image_filename')
+                    ->width('80px'),
                 TextColumn::make('rarity_level')
-                    ->searchable(),
-                TextColumn::make('region')
-                    ->searchable(),
+                    ->searchable()
+                    ->width('100px')
+                    ->badge()
+                    ->description(fn ($record) =>
+                        ($record->region ? $record->region : '')
+                    ),
                 IconColumn::make('is_special_edition')
-                    ->boolean(),
+                    ->boolean()
+                    ->width('60px')
+                    ->label('Special'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
