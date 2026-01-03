@@ -110,6 +110,18 @@ def scrape_ebay_console(search_term, console_slug, max_pages=50):
     all_items = []
     seen_ids = set()
 
+    # Load rejected item IDs to skip
+    rejected_ids_file = 'scrapers/rejected_item_ids.json'
+    try:
+        with open(rejected_ids_file, 'r') as f:
+            rejected_ids = json.load(f)
+            seen_ids.update(rejected_ids)
+            print(f"📋 Loaded {len(rejected_ids)} rejected item IDs to skip")
+            print()
+    except FileNotFoundError:
+        print("ℹ️  No rejected items file found (first run)")
+        print()
+
     # Browser headers
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
