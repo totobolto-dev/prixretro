@@ -14,6 +14,59 @@
 
     <h1>{{ $variant->console->name }} {{ $variant->name }}</h1>
 
+    @php
+        // Get other variants for navigation
+        $otherVariants = $variant->console->variants()
+            ->where('id', '!=', $variant->id)
+            ->withCount('listings')
+            ->orderBy('name')
+            ->get();
+
+        // Check if ranking page is available
+        $hasRanking = $variant->console->variants()
+            ->whereHas('listings', function($q) {
+                $q->where('status', 'approved');
+            })
+            ->count() >= 3;
+
+        // Get current eBay listings for this variant
+        $currentListings = \App\Models\CurrentListing::where('variant_id', $variant->id)
+            ->where('is_sold', false)
+            ->orderBy('price', 'asc')
+            ->take(6)
+            ->get();
+
+        // eBay Partner Network affiliate parameters
+        $ebayAffiliateParams = 'mkcid=1&mkrid=709-53476-19255-0&campid=5339134703';
+    @endphp
+
+    @if($hasRanking || $otherVariants->count() > 0)
+    <div class="variant-navigation">
+        @if($hasRanking)
+        <a href="/{{ $variant->console->slug }}/classement" class="ranking-link">
+            🏆 Classement des variantes
+        </a>
+        @endif
+
+        @if($otherVariants->count() > 0)
+        <div class="variant-selector">
+            <label for="variant-select">Autres variantes:</label>
+            <select id="variant-select" onchange="if(this.value) window.location.href=this.value">
+                <option value="">{{ $variant->name }} (actuelle)</option>
+                @foreach($otherVariants as $otherVariant)
+                <option value="/{{ $variant->console->slug }}/{{ $otherVariant->slug }}">
+                    {{ $otherVariant->name }}
+                    @if($otherVariant->listings_count > 0)
+                        ({{ $otherVariant->listings_count }} ventes)
+                    @endif
+                </option>
+                @endforeach
+            </select>
+        </div>
+        @endif
+    </div>
+    @endif
+
     @if($statistics['count'] > 0)
         <div class="stats-grid">
             <div class="stat-card">
@@ -39,16 +92,45 @@
             <canvas id="priceChart"></canvas>
         </div>
 
-        @if($variant->console->slug === 'game-boy-color')
+        @if($currentListings->count() > 0)
+        <div class="current-listings-section">
+            <h2>🛒 Actuellement en vente sur eBay ({{ $currentListings->count() }})</h2>
+            <div class="current-listings-grid">
+                @foreach($currentListings as $listing)
+                <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
+                   class="current-listing-card"
+                   target="_blank"
+                   rel="nofollow noopener"
+                   onclick="trackEbayClick('current-{{ $variant->slug }}')">
+                    <div class="current-listing-content">
+                        <div class="current-listing-title">{{ $listing->title }}</div>
+                        <div class="current-listing-meta">
+                            <div class="current-listing-price">{{ number_format($listing->price, 0) }}€</div>
+                            <div class="current-listing-badge">En vente</div>
+                        </div>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        @if(str_starts_with($variant->console->slug, 'game-boy') || str_starts_with($variant->console->slug, 'nintendo-ds') || str_starts_with($variant->console->slug, 'nintendo-2ds') || str_starts_with($variant->console->slug, 'nintendo-3ds'))
         <!-- Amazon Affiliate - Minimal Integration -->
         <div class="protection-section">
             <h2>💡 Protéger votre {{ $variant->console->name }}</h2>
             <p>Une console bien protégée conserve sa valeur. Nos données montrent un écart de prix moyen de <strong>+28%</strong> entre les consoles en parfait état et celles avec rayures visibles.</p>
 
             <div class="amazon-product">
+                <div class="amazon-product-image">
+                    <a href="https://www.amazon.fr/dp/B075SVXLRX?tag=prixretro-21" target="_blank" rel="nofollow noopener sponsored">
+                        <img src="https://m.media-amazon.com/images/I/71VkVLUOR9L._AC_SL1500_.jpg"
+                             alt="Housse de protection Orzly pour Nintendo">
+                    </a>
+                </div>
                 <div class="amazon-product-content">
                     <h3>Housse de protection Orzly</h3>
-                    <p>Compatible Game Boy Color, GBA, DS - Protection rigide EVA</p>
+                    <p>Compatible New Nintendo 2DS XL, 3DS, New 3DS, Original DS, DSi, DS Lite - Protection rigide EVA</p>
                     <div class="product-price">
                         <span class="price-label">Prix indicatif:</span>
                         <span class="price-value">~13,91€</span>
@@ -70,12 +152,12 @@
             <h2>Ventes Récentes ({{ $statistics['count'] }} au total)</h2>
 
             <div class="cta-section">
-                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode(implode(' ', $variant->search_terms ?? [$variant->name])) }}&_sop=10"
+                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode(implode(' ', $variant->search_terms ?? [$variant->name])) }}&_sop=10&{{ $ebayAffiliateParams }}"
                    target="_blank"
                    rel="nofollow noopener"
                    class="cta-button"
-                   onclick="trackEbayClick('{{ $variant->slug }}')">
-                    🔍 Voir les annonces actuelles sur eBay
+                   onclick="trackEbayClick('search-{{ $variant->slug }}')">
+                    🔍 Voir plus d'annonces sur eBay
                 </a>
             </div>
 
@@ -89,7 +171,7 @@
                 </div>
 
                 @foreach($recentListings as $listing)
-                <a href="{{ $listing->url }}" class="listing-row" target="_blank" rel="nofollow noopener">
+                <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}" class="listing-row" target="_blank" rel="nofollow noopener">
                     <div class="listing-title-compact">{{ $listing->title }}</div>
                     <div class="listing-price-compact">{{ number_format($listing->price, 0) }}€</div>
                     <div class="listing-date-compact">{{ $listing->sold_date?->format('d/m/Y') ?? 'N/A' }}</div>
@@ -102,7 +184,7 @@
     @else
         <div class="no-data">
             <p>Aucune donnée de prix disponible pour ce modèle pour le moment.</p>
-            <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode(implode(' ', $variant->search_terms ?? [$variant->name])) }}"
+            <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode(implode(' ', $variant->search_terms ?? [$variant->name])) }}&{{ $ebayAffiliateParams }}"
                target="_blank"
                rel="nofollow noopener"
                class="btn-primary">
@@ -203,8 +285,7 @@ new Chart(ctx, {
                 callbacks: {
                     title: function(context) {
                         const index = context[0].dataIndex;
-                        const title = chartData.titles[index];
-                        return title.length > 50 ? title.substring(0, 50) + '...' : title;
+                        return chartData.titles[index];
                     },
                     label: function(context) {
                         return context.parsed.y + '€';

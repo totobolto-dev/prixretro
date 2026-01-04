@@ -1,7 +1,6 @@
 @extends('layout')
 
 @section('title', 'PrixRetro - Tracker de Prix Retrogaming')
-@section('meta_description', 'Suivez les prix du marché de l\'occasion pour vos consoles retrogaming préférées. Game Boy Color, Game Boy Advance, Nintendo DS et plus encore.')
 
 @section('content')
 <div class="container">
@@ -19,12 +18,24 @@
     @foreach($consoles as $console)
     <div class="console-section">
         <div class="console-header">
-            <h2>🎮 {{ $console->name }}</h2>
+            <h2><a href="/{{ $console->slug }}" style="color: inherit; text-decoration: none; transition: color 0.2s;">🎮 {{ $console->name }}</a></h2>
             <div class="console-stats">
                 {{ $console->variants->count() }} variantes •
                 {{ $console->variants->sum('listings_count') }} ventes
             </div>
         </div>
+
+        @php
+            $hasEnoughDataForRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+        @endphp
+
+        @if($hasEnoughDataForRanking)
+        <div class="ranking-link-section">
+            <a href="/{{ $console->slug }}/classement" class="ranking-link-home">
+                🏆 Voir le classement des variantes
+            </a>
+        </div>
+        @endif
 
         <div class="variant-grid">
             @foreach($console->variants->sortByDesc('listings_count')->take(9) as $variant)

@@ -147,8 +147,8 @@ nav a:hover {
 /* Hero Section - NO gradients */
 .hero {
     text-align: center;
-    padding: 3rem 0;
-    background: var(--bg-secondary);
+    padding: 1.2rem 0;
+    background: var(--bg-primary);
     border-bottom: 1px solid var(--border);
     margin-bottom: 0;
 }
@@ -197,6 +197,10 @@ h1 {
     color: var(--text-primary);
 }
 
+.console-header h2 a:hover {
+    color: var(--accent-primary);
+}
+
 .console-stats {
     font-size: 0.9rem;
     color: var(--text-muted);
@@ -213,7 +217,7 @@ h1 {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.5rem;
+    padding: 0.6rem;
     transition: all 0.2s;
     text-decoration: none;
     color: inherit;
@@ -226,18 +230,18 @@ h1 {
 }
 
 .variant-name {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .variant-stats {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
-    margin-top: 1rem;
+    margin-top: 0.4rem;
 }
 
 .variant-stats .price {
@@ -282,7 +286,7 @@ h1 {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1rem;
+    padding: 0.4rem 0.6rem;
     text-align: left;
     /* NO hover effect - stats aren't interactive */
 }
@@ -295,13 +299,13 @@ h1 {
 
 .stat-label {
     color: var(--text-secondary);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 400;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
 }
 
 .stat-value {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
 }
@@ -321,19 +325,19 @@ h1 {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.5rem;
-    margin: 2rem 0;
+    padding: 0.6rem;
+    margin: 1rem 0;
 }
 
 .chart-container h2 {
     color: var(--text-primary);
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
 }
 
 .chart-container canvas {
-    max-height: 300px;
-    height: 300px !important;
+    max-height: 120px;
+    height: 120px !important;
     width: 100% !important;
 }
 
@@ -434,17 +438,27 @@ h2 {
     margin-bottom: 0.4rem;
 }
 
-/* Current Listings (FOR SALE) - Bulky with images */
+/* Current Listings Section */
+.current-listings-section {
+    margin: 2rem 0;
+}
+
+.current-listings-section h2 {
+    margin-bottom: 1rem;
+}
+
+/* Current Listings (FOR SALE) - Compact cards */
 .current-listings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 2rem;
 }
 
 .current-listing-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
+    border-left: 3px solid var(--success);
     border-radius: var(--radius);
     overflow: hidden;
     transition: all 0.2s;
@@ -454,59 +468,49 @@ h2 {
 }
 
 .current-listing-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent-primary);
-}
-
-.current-listing-image {
-    width: 100%;
-    height: 180px;
-    object-fit: contain;
-    background: var(--bg-primary);
+    transform: translateY(-2px);
+    border-left-color: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(0, 217, 255, 0.2);
 }
 
 .current-listing-content {
-    padding: 1rem;
+    padding: 0.6rem;
 }
 
 .current-listing-title {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--text-primary);
-    line-height: 1.4;
-    margin-bottom: 0.75rem;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: 2.6rem;
 }
 
 .current-listing-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
 }
 
 .current-listing-price {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--success);
 }
 
-.current-listing-condition {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
 .current-listing-badge {
     display: inline-block;
-    background: var(--accent-primary);
-    color: var(--bg-primary);
-    padding: 0.25rem 0.5rem;
+    background: rgba(0, 255, 136, 0.15);
+    color: var(--success);
+    padding: 0.2rem 0.4rem;
     border-radius: var(--radius);
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
     text-transform: uppercase;
+    border: 1px solid rgba(0, 255, 136, 0.3);
 }
 
 /* Listings Section */
@@ -1006,42 +1010,153 @@ footer p {
     line-height: 1.7;
 }
 
+/* Variant Navigation */
+.variant-navigation {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.ranking-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: opacity 0.2s;
+}
+
+.ranking-link:hover {
+    opacity: 0.9;
+}
+
+.variant-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.variant-selector label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.variant-selector select {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.variant-selector select:hover {
+    border-color: var(--accent-primary);
+}
+
+.variant-selector select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+/* Ranking Link on Home Page */
+.ranking-link-section {
+    margin: 1rem 0 1.5rem;
+}
+
+.ranking-link-home {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    background: var(--bg-card);
+    color: var(--accent-primary);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.ranking-link-home:hover {
+    border-color: var(--accent-primary);
+    background: rgba(0, 217, 255, 0.05);
+}
+
 /* Amazon Affiliate Section */
 .protection-section {
-    margin: 3rem 0;
-    padding: 2rem;
+    margin: 1.5rem 0;
+    padding: 0.8rem;
     background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(123, 97, 255, 0.05));
     border: 1px solid var(--border);
     border-radius: var(--radius);
 }
 
 .protection-section h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
 }
 
 .protection-section > p {
     color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+    font-size: 0.8rem;
 }
 
 .amazon-product {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.5rem;
-    margin: 1.5rem 0;
+    padding: 0.6rem;
+    margin: 0.6rem 0;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+}
+
+.amazon-product-image {
+    flex-shrink: 0;
+}
+
+.amazon-product-image img {
+    transition: transform 0.2s;
+    max-width: 80px;
+    height: auto;
+    border-radius: 4px;
+}
+
+.amazon-product-image a:hover img {
+    transform: scale(1.05);
+}
+
+.amazon-product-content {
+    flex: 1;
 }
 
 .amazon-product-content h3 {
     color: var(--text-primary);
-    margin-bottom: 0.75rem;
-    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
 }
 
 .amazon-product-content > p {
     color: var(--text-secondary);
-    margin-bottom: 1rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.8rem;
 }
 
 .product-features {
@@ -1068,18 +1183,18 @@ footer p {
 .product-price {
     display: flex;
     align-items: baseline;
-    gap: 0.75rem;
-    margin: 1.5rem 0;
+    gap: 0.4rem;
+    margin: 0.6rem 0;
 }
 
 .price-label {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 }
 
 .price-value {
     color: var(--success);
-    font-size: 1.5rem;
+    font-size: 0.85rem;
     font-weight: 700;
 }
 
@@ -1087,13 +1202,14 @@ footer p {
     display: inline-block;
     background: linear-gradient(135deg, #FF9900, #FF6600);
     color: #ffffff;
-    padding: 0.75rem 1.5rem;
+    padding: 0.4rem 0.8rem;
     border-radius: var(--radius);
     text-decoration: none;
     font-weight: 600;
     transition: all 0.2s;
     border: none;
     cursor: pointer;
+    font-size: 0.8rem;
 }
 
 .amazon-button:hover {
@@ -1103,8 +1219,8 @@ footer p {
 
 .affiliate-note {
     color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: 1rem;
+    font-size: 0.65rem;
+    margin-top: 0.4rem;
     font-style: italic;
 }
 
@@ -1133,11 +1249,35 @@ footer p {
 
     .amazon-product {
         padding: 1rem;
+        flex-direction: column;
+    }
+
+    .amazon-product-image {
+        text-align: center;
+        width: 100%;
+    }
+
+    .amazon-product-image img {
+        max-width: 150px !important;
     }
 
     .product-price {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.25rem;
+    }
+
+    .variant-navigation {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .variant-selector {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .variant-selector select {
+        width: 100%;
     }
 }

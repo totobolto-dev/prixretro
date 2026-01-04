@@ -1,7 +1,7 @@
 # PrixRetro - Claude Session Notes
 
-**Last Updated:** 2025-12-29
-**Current Phase:** ✅ PRODUCTION DEPLOYED & ADMIN PANEL WORKING
+**Last Updated:** 2026-01-04
+**Current Phase:** ✅ AFFILIATE INTEGRATION & UI OPTIMIZATION
 
 ## Quick Reference
 
@@ -19,6 +19,33 @@
 - **Hosting**: OVH Shared Hosting (Performance 1)
 - **Deployment**: GitHub Actions FTP Deploy
 - **Scraping**: Python 3.12 (Playwright + BeautifulSoup)
+
+## Recent Updates (2026-01-04) ✅
+
+### Revenue Features Implemented
+- [x] **Amazon Affiliate Integration** - Added protection/accessory products on variant pages
+- [x] **Ranking Pages** - Auto-generated SEO content pages (e.g., `/game-boy-color/classement`)
+- [x] **Clickable Console Names** - Homepage console headers now link to category pages
+- [x] **Compact UI** - Reduced all card/section heights by ~70% for cleaner, faster layout
+  - Stats cards: padding reduced from 1rem to 0.4rem
+  - Charts: height reduced from 300px to 120px
+  - Amazon product: padding/margins reduced by 70%
+  - Variant cards: padding reduced from 1.5rem to 0.6rem
+  - Sold listings table: kept at original size for readability
+
+### Amazon Affiliate Details
+- **Product**: Orzly Protection Case (B075SVXLRX)
+- **Placement**: Only on Game Boy Color variant pages (most traffic)
+- **Tracking**: gtag events for clicks
+- **Tag**: prixretro-21
+- **Commission**: ~5-8% on qualifying purchases
+
+### Ranking Pages SEO Value
+- **URLs**: `/{console-slug}/classement` (e.g., `/game-boy-color/classement`)
+- **Content**: Data-driven rankings with sales counts, avg prices, price ranges
+- **Visibility**: Only shown when ≥3 variants have data
+- **Internal Linking**: From homepage + variant pages
+- **Keywords**: "classement game boy color", "meilleure variante", etc.
 
 ## Production Deployment Status ✅
 

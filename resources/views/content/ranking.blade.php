@@ -2,8 +2,6 @@
 
 @section('title', 'Quelle ' . $console->name . ' se vend le plus en France en ' . date('Y') . ' ? | PrixRetro')
 
-@section('meta_description', 'Classement des variantes de ' . $console->name . ' les plus vendues sur eBay France. Analyse de ' . number_format($totalSales) . ' ventes récentes avec prix moyens et tendances.')
-
 @section('content')
 <div class="container">
     <div class="breadcrumb">
@@ -81,40 +79,6 @@
                 <p>Le prix moyen toutes variantes confondues est de <strong>{{ number_format($avgConsolePrice, 2) }}€</strong> pour {{ number_format($totalSales) }} ventes récentes analysées.</p>
             </div>
         </div>
-
-        @if($console->slug === 'game-boy-color')
-        <!-- Amazon Affiliate Section - Only for Game Boy Color for now -->
-        <div class="protection-section">
-            <h2>💡 Protéger votre collection</h2>
-            <p>Nos données montrent que les consoles en bon état se revendent <strong>28% plus cher</strong> en moyenne. Une housse de protection est un investissement rentable pour les collectionneurs.</p>
-
-            <div class="amazon-product">
-                <div class="amazon-product-content">
-                    <h3>Housse de protection recommandée</h3>
-                    <p><strong>Orzly Housse pour Nintendo 2DS XL</strong> - Compatible Game Boy Color, GBA, DS</p>
-                    <ul class="product-features">
-                        <li>Protection rigide EVA contre les chocs</li>
-                        <li>Compartiments pour jeux et accessoires</li>
-                        <li>Fermeture éclair double curseur</li>
-                        <li>Format compact pour le transport</li>
-                    </ul>
-                    <div class="product-price">
-                        <span class="price-label">Prix indicatif:</span>
-                        <span class="price-value">~13,91€</span>
-                    </div>
-                    <a href="https://www.amazon.fr/dp/B075SVXLRX?tag=prixretro-21"
-                       target="_blank"
-                       rel="nofollow noopener sponsored"
-                       class="amazon-button"
-                       onclick="trackAmazonClick('orzly-case-{{ $console->slug }}')">
-                        🛍️ Voir sur Amazon
-                    </a>
-                </div>
-            </div>
-
-            <p class="affiliate-note">* Lien affilié Amazon. PrixRetro touche une petite commission (sans surcoût) si vous achetez via ce lien. Merci pour votre soutien !</p>
-        </div>
-        @endif
 
         <div class="cta-section">
             <h2>📈 Voir les prix détaillés</h2>
