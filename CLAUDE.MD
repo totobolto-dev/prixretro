@@ -1,7 +1,7 @@
 # 🎯 PRIXRETRO - AI CONTEXT & BUSINESS PLAN
 
-**Last Updated:** 2026-01-03
-**Project Status:** ✅ Production Live + Admin Panel Operational
+**Last Updated:** 2026-01-04
+**Project Status:** ✅ Production Live + Amazon Affiliate LIVE
 **Business Phase:** Early Revenue Generation (Month 3)
 **12-Month Goal:** €1,200-1,800/month passive income
 
@@ -164,6 +164,59 @@ git push
 **Solution:** Use `Action::make()` for all contexts, `->recordActions([])` for table rows
 **Reference:** All table files updated, pattern documented
 
+### Fix 7: Auto-Generated Content & Amazon Affiliate Integration (Jan 4, 2026) ✅
+**Problem:** Needed revenue diversification + ethical Amazon integration
+**Solution:** Implemented auto-generated ranking pages + minimal affiliate integration
+
+**What was built:**
+1. **Ranking Pages** (`/{console}/classement`)
+   - Auto-generated "Top 5 Variants" from real sales data
+   - Example: "Quelle Game Boy Color se vend le plus en France en 2026?"
+   - Dynamic insights: sales volume %, price gaps, market averages
+   - SEO-optimized with meta descriptions and sitemap entries
+
+2. **Amazon Affiliate Integration**
+   - Tag: `prixretro-21` (approved, ready to use)
+   - Single product: Orzly protective case (~€13.91)
+   - Only on Game Boy Color pages (test first, expand later)
+   - Data-driven justification: +28% price for well-maintained consoles
+   - Transparent disclosure in footer + on product sections
+
+3. **Navigation Enhancements**
+   - Prominent ranking link on console pages (when 3+ variants with data)
+   - Breadcrumb navigation on all content pages
+   - Google Analytics tracking for all affiliate clicks
+
+**Files Created:**
+- `app/Http/Controllers/ContentController.php` - Ranking page controller
+- `resources/views/content/ranking.blade.php` - Ranking template
+
+**Files Modified:**
+- `routes/web.php` - Added `/{console}/classement` route
+- `public/styles.css` - Added 333 lines for ranking tables, Amazon cards, insights
+- `resources/views/variant/show.blade.php` - Amazon section (GBC only)
+- `resources/views/console/show.blade.php` - Ranking page link
+- `resources/views/layout.blade.php` - Affiliate disclosure footer
+- `public/sitemap.xml` - Added ranking pages (priority 0.9)
+
+**Testing Results:**
+- ✅ Ranking page works: 55 sales analyzed for GBC
+- ✅ Top 5 with gold/silver/bronze badges
+- ✅ Amazon affiliate link tracked via gtag
+- ✅ Responsive design on mobile
+- ✅ Footer disclosure on all pages
+
+**Impact:**
+- New revenue stream: Amazon affiliate (4% commission on €13.91 = €0.56 per sale)
+- SEO boost: High-value content pages with real data
+- User value: Actual insights from sales data, not fake reviews
+- Ethical approach: Transparent, quality product, data-driven content
+
+**Next Steps:**
+- Monitor Amazon conversion rate for 2 weeks
+- Expand to other consoles if GBC performs well (GBA, DS)
+- Add more products only if relevant (cleaning kits, display cases)
+
 ---
 
 ## 💰 REALISTIC 12-MONTH BUSINESS PLAN (Evidence-Based)
@@ -216,34 +269,35 @@ Based on peer-reviewed industry data and case studies from 2025-2026:
 - [x] Rejected item tracking (909 items)
 - [x] 14 consoles configured
 - [x] Deployment pipeline (GitHub Actions)
+- [x] **Amazon Partenaires FR signup** (DONE Jan 4)
+  - Tag: `prixretro-21` (approved)
+- [x] **Amazon affiliate implementation** (DONE Jan 4)
+  - Orzly case on all GBC pages
+  - Footer disclosure site-wide
+  - Google Analytics tracking
+- [x] **Auto-generated ranking pages** (DONE Jan 4)
+  - "Quelle Game Boy Color se vend le plus en France en 2026?"
+  - SEO-optimized, real data, ethical approach
+  - Routes, templates, CSS complete
 
 #### This Month (Jan 2026) 🔄
 - [ ] **Sign up Google AdSense** (30 min)
   - Go to google.com/adsense
   - Add prixretro.com
   - Wait 1-2 weeks for approval
+  - **Status:** AdSense tag already in `<head>`, waiting for approval
   - **Impact:** +€200-400/month once traffic scales
 
-- [ ] **Sign up Amazon Partenaires FR** (30 min)
-  - Go to partenaires.amazon.fr
-  - Add website, get affiliate links
-  - **Impact:** +€100-300/month with buying guides
-
-- [ ] **Deploy code placeholders** (2 hours)
-  - Add AdSense code to templates (header, sidebar)
-  - Create Amazon affiliate link structure
-  - Test on 1-2 pages before rolling out
-
-- [ ] **Create 3 buying guide pages** (SEO content) (4 hours)
-  - "Meilleur Game Boy Color à acheter en 2026"
-  - "Guide d'achat Game Boy Advance SP"
-  - "Quelle Nintendo DS choisir en 2026?"
-  - Include Amazon affiliate links for games/accessories
-  - Optimize for SEO (keywords, meta, schema.org)
+- [ ] **Monitor Amazon conversion** (passive, 2 weeks)
+  - Track clicks via Google Analytics
+  - Check Amazon dashboard for sales
+  - If good: expand to GBA, DS
+  - If poor: adjust product/placement
 
 #### Success Metrics Month 3
-- [ ] AdSense approved & code live
-- [ ] Amazon affiliate active with 3 buying guides
+- [ ] AdSense approved & code live (pending approval)
+- [x] Amazon affiliate active (DONE - GBC pages live)
+- [ ] Expand ranking pages to 3+ consoles
 - [ ] 2,000-3,000 monthly visitors (currently ~1,000)
 - [ ] €50-150/month revenue (eBay + Amazon starting)
 
@@ -416,8 +470,36 @@ Based on peer-reviewed industry data and case studies from 2025-2026:
 ## 🛍️ AMAZON AFFILIATE STRATEGY (Collector-Focused Products)
 
 **Your Amazon ID:** prixretro-21
-**Status:** ✅ Approved - Ready to use
+**Status:** ✅ LIVE - Implemented Jan 4, 2026
 **Commission:** 4% on physical products
+
+### Currently Live ✅
+**Product:** Orzly Housse for Nintendo 2DS XL (B075SVXLRX)
+- **Price:** ~€13.91
+- **Where:** All Game Boy Color variant pages + GBC ranking page
+- **Commission per sale:** €0.56
+- **Integration:** Minimal, data-driven ("+28% price for well-maintained consoles")
+- **Disclosure:** Footer site-wide + section-level notes
+- **Tracking:** Google Analytics gtag events
+
+**Template Used:**
+```html
+<div class="protection-section">
+  <h2>💡 Protéger votre Game Boy Color</h2>
+  <p>Une console bien protégée conserve sa valeur...</p>
+  <div class="amazon-product">
+    <a href="https://www.amazon.fr/dp/B075SVXLRX?tag=prixretro-21"
+       rel="nofollow noopener sponsored">
+      🛍️ Voir sur Amazon
+    </a>
+  </div>
+</div>
+```
+
+**Next Expansion Plans:**
+- Monitor for 2 weeks
+- If conversion rate >0.5%: expand to GBA, DS
+- If <0.5%: try different product or remove
 
 ### Product Categories (Quality Over Garbage)
 
