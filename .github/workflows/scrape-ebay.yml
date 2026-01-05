@@ -19,20 +19,20 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install playwright beautifulsoup4 mysql-connector-python python-dotenv
+          pip install playwright python-dotenv
           playwright install chromium
           playwright install-deps
 
       - name: Run scraper
-        env:
-          DB_HOST: ba2247864-001.eu.clouddb.ovh.net
-          DB_PORT: 35831
-          DB_DATABASE: prixretro
-          DB_USERNAME: prixretro_user
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           cd scripts
-          python3 scrape_current_listings_db.py
+          python3 scrape_current_by_console.py
+
+      - name: Upload scraped data
+        uses: actions/upload-artifact@v3
+        with:
+          name: current-listings
+          path: scripts/current_listings_*.json
 
       - name: Notify completion
         if: success()
