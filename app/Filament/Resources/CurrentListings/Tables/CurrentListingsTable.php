@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources\CurrentListings\Tables;
 
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 use App\Models\Variant;
-use App\Filament\Resources\CurrentListings\CurrentListingResource;
+use Illuminate\Database\Eloquent\Collection;
 
 class CurrentListingsTable
 {
@@ -59,14 +59,9 @@ class CurrentListingsTable
             ->filters([
                 //
             ])
-            ->actions([
-                Action::make('edit')
-                    ->url(fn ($record) => CurrentListingResource::getUrl('edit', ['record' => $record]))
-                    ->icon('heroicon-o-pencil'),
-            ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
-                    Action::make('assign_variant')
+                    BulkAction::make('assign_variant')
                         ->label('Assign Variant')
                         ->icon('heroicon-o-tag')
                         ->color('info')
@@ -77,35 +72,49 @@ class CurrentListingsTable
                                 ->searchable()
                                 ->required(),
                         ])
-                        ->action(function ($records, array $data): void {
-                            foreach ($records as $record) {
+                        ->action(function (Collection $records, array $data): void {
+                            $records->each(function ($record) use ($data) {
                                 $record->update(['variant_id' => $data['variant_id']]);
-                            }
-                        })
-                        ->deselectRecordsAfterCompletion(),
-                    Action::make('approve')
+                            });
+
+                            Notification::make()
+                                ->title('Variants Assigned')
+                                ->body("Assigned variant to {$records->count()} listings")
+                                ->success()
+                                ->send();
+                        }),
+                    BulkAction::make('approve')
                         ->label('Approve Selected')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->requiresConfirmation()
-                        ->action(function ($records): void {
-                            foreach ($records as $record) {
+                        ->action(function (Collection $records): void {
+                            $records->each(function ($record) {
                                 $record->update(['status' => 'approved']);
-                            }
-                        })
-                        ->deselectRecordsAfterCompletion(),
-                    Action::make('reject')
+                            });
+
+                            Notification::make()
+                                ->title('Listings Approved')
+                                ->body("Approved {$records->count()} listings")
+                                ->success()
+                                ->send();
+                        }),
+                    BulkAction::make('reject')
                         ->label('Reject Selected')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->action(function ($records): void {
-                            foreach ($records as $record) {
+                        ->action(function (Collection $records): void {
+                            $records->each(function ($record) {
                                 $record->update(['status' => 'rejected']);
-                            }
-                        })
-                        ->deselectRecordsAfterCompletion(),
-                    DeleteBulkAction::make(),
+                            });
+
+                            Notification::make()
+                                ->title('Listings Rejected')
+                                ->body("Rejected {$records->count()} listings")
+                                ->danger()
+                                ->send();
+                        }),
                 ]),
             ]);
     }
