@@ -19,12 +19,16 @@ load_dotenv()
 
 def get_db_connection():
     """Connect to MySQL database using environment variables"""
+    db_port = os.getenv('DB_PORT', '35831')
+    # Handle empty string from env vars
+    db_port = int(db_port) if db_port and db_port.strip() else 35831
+
     return mysql.connector.connect(
-        host=os.getenv('DB_HOST', 'ba2247864-001.eu.clouddb.ovh.net'),
-        port=int(os.getenv('DB_PORT', '35831')),
-        user=os.getenv('DB_USERNAME', 'prixretro_user'),
-        password=os.getenv('DB_PASSWORD', 'f5bxVvfQUvkapKgNtjy5'),
-        database=os.getenv('DB_DATABASE', 'prixretro'),
+        host=os.getenv('DB_HOST') or 'ba2247864-001.eu.clouddb.ovh.net',
+        port=db_port,
+        user=os.getenv('DB_USERNAME') or 'prixretro_user',
+        password=os.getenv('DB_PASSWORD') or 'f5bxVvfQUvkapKgNtjy5',
+        database=os.getenv('DB_DATABASE') or 'prixretro',
         charset='utf8mb4',
         collation='utf8mb4_unicode_ci'
     )
