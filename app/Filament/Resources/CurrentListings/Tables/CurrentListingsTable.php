@@ -5,9 +5,12 @@ namespace App\Filament\Resources\CurrentListings\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
+use App\Models\Variant;
 
 class CurrentListingsTable
 {
@@ -15,11 +18,21 @@ class CurrentListingsTable
     {
         return $table
             ->columns([
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'gray',
+                        'approved' => 'success',
+                        'rejected' => 'danger',
+                    })
+                    ->sortable()
+                    ->width('100px'),
                 TextColumn::make('variant.name')
                     ->searchable()
                     ->width('150px')
                     ->badge()
-                    ->color('success'),
+                    ->color('info')
+                    ->default('Not assigned'),
                 TextColumn::make('title')
                     ->searchable()
                     ->wrap()
@@ -51,6 +64,45 @@ class CurrentListingsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('assign_variant')
+                        ->label('Assign Variant')
+                        ->icon('heroicon-o-tag')
+                        ->color('info')
+                        ->form([
+                            Select::make('variant_id')
+                                ->label('Variant')
+                                ->options(Variant::all()->pluck('name', 'id'))
+                                ->searchable()
+                                ->required(),
+                        ])
+                        ->action(function ($records, array $data): void {
+                            foreach ($records as $record) {
+                                $record->update(['variant_id' => $data['variant_id']]);
+                            }
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('approve')
+                        ->label('Approve Selected')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function ($records): void {
+                            foreach ($records as $record) {
+                                $record->update(['status' => 'approved']);
+                            }
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('reject')
+                        ->label('Reject Selected')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function ($records): void {
+                            foreach ($records as $record) {
+                                $record->update(['status' => 'rejected']);
+                            }
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),
                 ]),
             ]);
