@@ -29,7 +29,7 @@ jobs:
           python3 scrape_current_by_console.py
 
       - name: Upload scraped data
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: current-listings
           path: scripts/current_listings_*.json
