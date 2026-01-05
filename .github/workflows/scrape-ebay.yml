@@ -1,0 +1,43 @@
+name: Scrape eBay (Direct from GitHub Actions)
+
+on:
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright beautifulsoup4 mysql-connector-python python-dotenv
+          playwright install chromium
+          playwright install-deps
+
+      - name: Run scraper
+        env:
+          DB_HOST: ba2247864-001.eu.clouddb.ovh.net
+          DB_PORT: 35831
+          DB_DATABASE: prixretro
+          DB_USERNAME: prixretro_user
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          cd scripts
+          python3 scrape_current_listings_db.py
+
+      - name: Notify completion
+        if: success()
+        run: echo "✅ Scraping completed successfully"
+
+      - name: Notify failure
+        if: failure()
+        run: echo "❌ Scraping failed - check logs"
