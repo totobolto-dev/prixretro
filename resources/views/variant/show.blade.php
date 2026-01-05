@@ -122,20 +122,14 @@
             <p>Une console bien protégée conserve sa valeur. Nos données montrent un écart de prix moyen de <strong>+28%</strong> entre les consoles en parfait état et celles avec rayures visibles.</p>
 
             <div class="amazon-product">
-                <div class="amazon-product-image">
-                    <a href="https://www.amazon.fr/dp/B075SVXLRX?tag=prixretro-21" target="_blank" rel="nofollow noopener sponsored">
-                        <img src="https://m.media-amazon.com/images/I/71VkVLUOR9L._AC_SL1500_.jpg"
-                             alt="Housse de protection Orzly pour Nintendo">
-                    </a>
-                </div>
                 <div class="amazon-product-content">
-                    <h3>Housse de protection Orzly</h3>
-                    <p>Compatible New Nintendo 2DS XL, 3DS, New 3DS, Original DS, DSi, DS Lite - Protection rigide EVA</p>
+                    <h3>💡 Housse de protection recommandée</h3>
+                    <p><strong>Orzly pour Nintendo</strong> - Compatible New Nintendo 2DS XL, 3DS, New 3DS, Original DS, DSi, DS Lite, Game Boy Advance - Protection rigide EVA</p>
                     <div class="product-price">
                         <span class="price-label">Prix indicatif:</span>
                         <span class="price-value">~13,91€</span>
                     </div>
-                    <a href="https://www.amazon.fr/dp/B075SVXLRX?tag=prixretro-21"
+                    <a href="https://amzn.to/3Z0Y2mN"
                        target="_blank"
                        rel="nofollow noopener sponsored"
                        class="amazon-button"

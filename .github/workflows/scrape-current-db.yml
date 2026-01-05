@@ -1,0 +1,47 @@
+name: Scrape Current Listings to Database
+
+on:
+  # Run every 6 hours
+  schedule:
+    - cron: '30 */6 * * *'  # At minute 30 past every 6th hour (00:30, 06:30, 12:30, 18:30 UTC)
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  scrape-to-database:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        pip install beautifulsoup4 requests mysql-connector-python python-dotenv
+
+    - name: Create .env file with database credentials
+      run: |
+        cat > .env << EOF
+        DB_HOST=${{ secrets.DB_HOST }}
+        DB_PORT=${{ secrets.DB_PORT }}
+        DB_DATABASE=${{ secrets.DB_DATABASE }}
+        DB_USERNAME=${{ secrets.DB_USERNAME }}
+        DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+        EOF
+
+    - name: Run current listings scraper
+      run: |
+        python3 scripts/scrape_current_listings_db.py
+        echo "✅ Current listings scraped and saved to database"
+
+    - name: Cleanup
+      if: always()
+      run: |
+        rm -f .env
+        echo "🧹 Cleaned up temporary files"
