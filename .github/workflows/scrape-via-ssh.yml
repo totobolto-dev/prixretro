@@ -1,0 +1,33 @@
+name: Scrape Current Listings via SSH
+
+on:
+  # Run every 6 hours
+  schedule:
+    - cron: '30 */6 * * *'  # At 00:30, 06:30, 12:30, 18:30 UTC
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  scrape-on-production:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.OVH_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.FTP_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Run scraper on OVH
+      run: |
+        ssh -i ~/.ssh/id_rsa ${{ secrets.FTP_USERNAME }}@${{ secrets.FTP_HOST }} << 'ENDSSH'
+        cd /home/pwagrad/prixretro
+        php artisan scrape:current-listings --max-per-variant=10
+        echo "✅ Scraper completed on production"
+        ENDSSH
+
+    - name: Cleanup
+      if: always()
+      run: rm -f ~/.ssh/id_rsa
