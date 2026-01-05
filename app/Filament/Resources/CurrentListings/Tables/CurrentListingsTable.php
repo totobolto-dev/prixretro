@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\CurrentListings\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -62,9 +62,9 @@ class CurrentListingsTable
             ->recordActions([
                 EditAction::make(),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
-                    BulkAction::make('assign_variant')
+                    Action::make('assign_variant')
                         ->label('Assign Variant')
                         ->icon('heroicon-o-tag')
                         ->color('info')
@@ -81,7 +81,7 @@ class CurrentListingsTable
                             }
                         })
                         ->deselectRecordsAfterCompletion(),
-                    BulkAction::make('approve')
+                    Action::make('approve')
                         ->label('Approve Selected')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
@@ -92,7 +92,7 @@ class CurrentListingsTable
                             }
                         })
                         ->deselectRecordsAfterCompletion(),
-                    BulkAction::make('reject')
+                    Action::make('reject')
                         ->label('Reject Selected')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
