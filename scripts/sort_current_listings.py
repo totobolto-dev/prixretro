@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Create sorting interface for current listings
-Sorts by variant and filters out bundles/parts/broken items
+Create sorting interface for current listings (uses proven variant sorter design)
 """
 import json
 import sys
@@ -25,7 +24,7 @@ def load_variants_from_db():
 
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
-        SELECT v.id, v.slug, v.name, c.slug as console_slug
+        SELECT v.id, v.slug, v.name, c.slug as console_slug, c.name as console_name
         FROM variants v
         JOIN consoles c ON v.console_id = c.id
         ORDER BY c.id, v.id
@@ -37,7 +36,7 @@ def load_variants_from_db():
     return variants
 
 def create_sorter_html(json_file):
-    """Create HTML sorting interface"""
+    """Create HTML sorting interface using proven variant sorter design"""
 
     # Load scraped data
     with open(json_file, 'r', encoding='utf-8') as f:
@@ -46,166 +45,359 @@ def create_sorter_html(json_file):
     # Load variants from DB
     variants = load_variants_from_db()
 
-    # Group variants by console
-    variants_by_console = {}
+    # Build variant options by console
+    variant_options_by_console = {}
     for v in variants:
         console = v['console_slug']
-        if console not in variants_by_console:
-            variants_by_console[console] = []
-        variants_by_console[console].append(v)
+        if console not in variant_options_by_console:
+            variant_options_by_console[console] = []
+        variant_options_by_console[console].append({
+            'id': v['id'],
+            'slug': v['slug'],
+            'name': v['name']
+        })
 
     # Flatten all items
     all_items = []
     for console_slug, console_data in data.items():
         for listing in console_data['listings']:
             all_items.append({
-                'item_id': listing['item_id'],
+                'id': listing['item_id'],
                 'title': listing['title'],
                 'price': listing['price'],
                 'url': listing['url'],
                 'image_url': listing.get('image_url', ''),
                 'console_slug': console_slug,
-                'variant_id': '',
+                'console_name': console_data['console_name'],
+                'assigned_variant': '',  # variant ID
                 'status': 'pending'  # pending, keep, reject
             })
 
-    # Build variant options HTML
-    variant_options = {}
-    for console_slug, variants_list in variants_by_console.items():
-        options_html = '<option value="">-- Choose variant --</option>'
-        for v in variants_list:
-            options_html += f'<option value="{v["id"]}">{v["name"]}</option>'
-        variant_options[console_slug] = options_html
-
-    variant_options_json = json.dumps(variant_options)
-    items_json = json.dumps(all_items)
+    variant_map_json = json.dumps(variant_options_by_console)
+    items_json = json.dumps(all_items, ensure_ascii=False)
 
     html = f'''<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Sort Current Listings - PrixRetro</title>
+    <title>PrixRetro - Sort Current Listings</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{ font-family: system-ui; background: #0a0e27; color: #e0e0e0; }}
-        .header {{ background: #1a1f2e; padding: 1rem; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #00d9ff; }}
-        .stats {{ display: flex; gap: 2rem; margin-top: 0.5rem; font-size: 0.9rem; }}
-        .stat {{ display: flex; align-items: center; gap: 0.5rem; }}
-        .badge {{ padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: bold; }}
-        .badge.pending {{ background: #555; }}
-        .badge.keep {{ background: #00ff88; color: #000; }}
-        .badge.reject {{ background: #ff4444; }}
-        .container {{ padding: 2rem; max-width: 1400px; margin: 0 auto; }}
-        .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }}
-        .card {{ background: #1a1f2e; border-radius: 8px; padding: 1rem; border: 2px solid transparent; transition: all 0.2s; }}
-        .card.keep {{ border-color: #00ff88; }}
-        .card.reject {{ border-color: #ff4444; opacity: 0.5; }}
-        .card img {{ width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 0.75rem; }}
-        .card h3 {{ font-size: 0.95rem; margin-bottom: 0.5rem; color: #00d9ff; line-height: 1.4; }}
-        .card .price {{ font-size: 1.25rem; font-weight: bold; color: #00ff88; margin-bottom: 0.75rem; }}
-        .card .controls {{ display: flex; gap: 0.5rem; flex-direction: column; }}
-        .card select {{ padding: 0.5rem; border-radius: 4px; background: #0a0e27; color: #e0e0e0; border: 1px solid #333; width: 100%; }}
-        .card .actions {{ display: flex; gap: 0.5rem; }}
-        .card button {{ flex: 1; padding: 0.5rem; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s; }}
-        .btn-keep {{ background: #00ff88; color: #000; }}
-        .btn-keep:hover {{ background: #00cc70; }}
-        .btn-reject {{ background: #ff4444; color: #fff; }}
-        .btn-reject:hover {{ background: #cc3333; }}
-        .btn-save {{ background: #00d9ff; color: #000; padding: 0.75rem 2rem; border: none; border-radius: 4px; font-weight: bold; font-size: 1rem; cursor: pointer; }}
-        .btn-save:hover {{ background: #00b3d9; }}
-        a {{ color: #00d9ff; text-decoration: none; }}
-        a:hover {{ text-decoration: underline; }}
+        :root {{
+            --bg-dark: #0f1419;
+            --bg-card: #1a1f2e;
+            --accent: #00d9ff;
+            --text-light: #e4e6eb;
+            --text-muted: #a0a3a8;
+            --keep: #00ff88;
+            --reject: #ff4444;
+        }}
+        body {{ font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-dark); color: var(--text-light); line-height: 1.6; }}
+        .header {{ background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }}
+        .controls {{ display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.5rem; }}
+        .filter-group {{ display: flex; gap: 0.5rem; align-items: center; }}
+        select, input {{ background: var(--bg-dark); border: 1px solid #333; color: var(--text-light); padding: 0.5rem; border-radius: 4px; }}
+        .stats {{ color: var(--text-muted); font-size: 0.9rem; }}
+        .container {{ max-width: 1600px; margin: 0 auto; padding: 1rem; }}
+        .item-card {{ background: var(--bg-card); margin-bottom: 1px; padding: 1rem; display: grid; grid-template-columns: 50px 1fr 300px; gap: 1rem; align-items: start; transition: background-color 0.1s; }}
+        .item-card:hover {{ background: #242936; }}
+        .item-card.status-keep {{ border-left: 3px solid var(--keep); }}
+        .item-card.status-reject {{ border-left: 3px solid var(--reject); }}
+        .item-card.active {{ background: #2a3a4a !important; box-shadow: 0 0 0 2px var(--accent); }}
+        .item-number {{ font-size: 0.9rem; color: var(--text-muted); text-align: center; }}
+        .item-info {{ display: flex; flex-direction: column; gap: 0.5rem; }}
+        .item-title {{ font-size: 1rem; color: var(--text-light); cursor: pointer; }}
+        .item-title:hover {{ color: var(--accent); text-decoration: underline; }}
+        .item-meta {{ display: flex; gap: 1rem; font-size: 0.85rem; color: var(--text-muted); }}
+        .price {{ color: var(--keep); font-weight: 600; }}
+        .item-controls {{ display: flex; flex-direction: column; gap: 0.5rem; }}
+        .variant-select {{ flex: 1; min-width: 150px; }}
+        .status-buttons {{ display: flex; gap: 0.5rem; }}
+        .status-btn {{ flex: 1; padding: 0.5rem; border: none; border-radius: 4px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.1s; }}
+        .status-btn.keep {{ background: var(--keep); color: black; }}
+        .status-btn.reject {{ background: var(--reject); color: white; }}
+        .status-btn:hover {{ transform: scale(1.05); }}
+        .status-btn.active {{ box-shadow: 0 0 0 2px white; }}
+        .progress {{ background: #333; height: 4px; border-radius: 2px; overflow: hidden; margin-top: 0.5rem; }}
+        .progress-bar {{ background: var(--accent); height: 100%; transition: width 0.3s; }}
+        .export-btn {{ background: var(--accent); color: black; border: none; padding: 0.5rem 1.5rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 1rem; }}
+        .export-btn:hover {{ background: #00b8d9; }}
+        .keyboard-hints {{ position: fixed; bottom: 1rem; right: 1rem; background: var(--bg-card); padding: 1rem; border-radius: 8px; font-size: 0.75rem; border: 1px solid #333; max-width: 250px; }}
+        .keyboard-hints h4 {{ margin-bottom: 0.5rem; color: var(--accent); }}
+        .keyboard-hints div {{ margin: 0.25rem 0; }}
+        .key {{ background: #333; padding: 0.1rem 0.3rem; border-radius: 3px; font-weight: 600; }}
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🎮 Sort Current Listings</h1>
-        <div class="stats">
-            <div class="stat">Total: <span class="badge" id="total">0</span></div>
-            <div class="stat">Pending: <span class="badge pending" id="pending">0</span></div>
-            <div class="stat">Keep: <span class="badge keep" id="keep">0</span></div>
-            <div class="stat">Reject: <span class="badge reject" id="reject">0</span></div>
+        <div class="controls">
+            <div class="stats" id="stats">
+                Total: <span id="total">0</span> |
+                Keep: <span id="keep-count">0</span> |
+                Reject: <span id="reject-count">0</span> |
+                Progress: <span id="progress-percent">0%</span>
+            </div>
+            <div class="filter-group">
+                <label>Status:</label>
+                <select id="status-filter" onchange="applyFilters()">
+                    <option value="">All items</option>
+                    <option value="pending">Pending only</option>
+                    <option value="keep">Keep only</option>
+                    <option value="reject">Reject only</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Console:</label>
+                <select id="console-filter" onchange="applyFilters()">
+                    <option value="">All consoles</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Search:</label>
+                <input type="text" id="search-input" placeholder="Title..." oninput="applyFilters()">
+            </div>
+            <button class="export-btn" onclick="saveProgress()" style="background: #666;">💾 Save Progress</button>
+            <button class="export-btn" onclick="exportData()">📤 Export Final</button>
         </div>
-        <button class="btn-save" onclick="saveResults()" style="margin-top: 1rem;">💾 Save Sorted Data</button>
+        <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+        <div style="padding: 0.5rem 1rem; font-size: 0.8rem; color: var(--text-muted);">
+            <span id="save-status">Auto-save enabled • Last saved: <span id="last-saved">Never</span></span>
+        </div>
     </div>
-
-    <div class="container">
-        <div class="grid" id="items"></div>
+    <div class="container" id="items-container"></div>
+    <div class="keyboard-hints">
+        <h4>⌨️ Shortcuts</h4>
+        <div><span class="key">K</span> Keep</div>
+        <div><span class="key">R</span> Reject</div>
+        <div><span class="key">1-9</span> Quick variant</div>
+        <div><span class="key">Enter</span> Open eBay</div>
+        <div><span class="key">↑/↓</span> Navigate</div>
     </div>
-
     <script>
-        const variantOptions = {variant_options_json};
-        let items = {items_json};
+        const variantMap = {variant_map_json};
+        let allItems = {items_json};
+        let currentItemIndex = 0;
 
-        function render() {{
-            const grid = document.getElementById('items');
-            grid.innerHTML = items.map((item, idx) => `
-                <div class="card ${{item.status}}" data-idx="${{idx}}">
-                    <img src="${{item.image_url || 'https://via.placeholder.com/400x200?text=No+Image'}}" alt="Item">
-                    <h3>${{item.title}}</h3>
-                    <div class="price">${{item.price.toFixed(2)}} €</div>
-                    <div class="controls">
-                        <select onchange="setVariant(${{idx}}, this.value)">
-                            ${{variantOptions[item.console_slug] || '<option>No variants</option>'}}
-                        </select>
-                        <div class="actions">
-                            <button class="btn-keep" onclick="setStatus(${{idx}}, 'keep')">✅ Keep</button>
-                            <button class="btn-reject" onclick="setStatus(${{idx}}, 'reject')">❌ Reject</button>
+        function init() {{
+            loadFromLocalStorage();
+            updateConsoleFilter();
+            renderItems();
+            updateStats();
+            setupKeyboardShortcuts();
+            setupAutoSave();
+        }}
+
+        function updateConsoleFilter() {{
+            const filter = document.getElementById('console-filter');
+            const consoles = [...new Set(allItems.map(i => i.console_slug))];
+            consoles.forEach(c => {{
+                const option = document.createElement('option');
+                option.value = c;
+                option.textContent = allItems.find(i => i.console_slug === c).console_name;
+                filter.appendChild(option);
+            }});
+        }}
+
+        function renderItems() {{
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+            allItems.forEach((item, index) => {{
+                if (!isItemVisible(item)) return;
+                const card = document.createElement('div');
+                card.className = `item-card status-${{item.status}}`;
+                card.id = `item-${{index}}`;
+
+                const variants = variantMap[item.console_slug] || [];
+                const variantOptions = variants.map(v =>
+                    `<option value="${{v.id}}" ${{item.assigned_variant == v.id ? 'selected' : ''}}>${{v.name}}</option>`
+                ).join('');
+
+                card.innerHTML = `
+                    <div class="item-number">#${{index + 1}}</div>
+                    <div class="item-info">
+                        <div class="item-title" onclick="openEbay(${{index}})">${{item.title}}</div>
+                        <div class="item-meta">
+                            <span class="price">${{item.price.toFixed(2)}}€</span>
+                            <span>${{item.console_name}}</span>
                         </div>
                     </div>
-                    <a href="${{item.url}}" target="_blank" style="margin-top: 0.5rem; display: block; font-size: 0.85rem;">View on eBay →</a>
-                </div>
-            `).join('');
+                    <div class="item-controls">
+                        <select class="variant-select" onchange="setVariant(${{index}}, this.value)">
+                            <option value="">Select variant...</option>
+                            ${{variantOptions}}
+                        </select>
+                        <div class="status-buttons">
+                            <button class="status-btn keep ${{item.status === 'keep' ? 'active' : ''}}" onclick="setStatus(${{index}}, 'keep')">Keep</button>
+                            <button class="status-btn reject ${{item.status === 'reject' ? 'active' : ''}}" onclick="setStatus(${{index}}, 'reject')">Reject</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            }});
+        }}
 
+        function isItemVisible(item) {{
+            const statusFilter = document.getElementById('status-filter').value;
+            const consoleFilter = document.getElementById('console-filter').value;
+            const searchText = document.getElementById('search-input').value.toLowerCase();
+            if (statusFilter && item.status !== statusFilter) return false;
+            if (consoleFilter && item.console_slug !== consoleFilter) return false;
+            if (searchText && !item.title.toLowerCase().includes(searchText)) return false;
+            return true;
+        }}
+
+        function setVariant(index, variantId) {{
+            allItems[index].assigned_variant = variantId;
             updateStats();
+            saveToLocalStorage();
         }}
 
-        function setVariant(idx, variantId) {{
-            items[idx].variant_id = variantId;
-            localStorage.setItem('sorted_items', JSON.stringify(items));
+        function setStatus(index, status) {{
+            allItems[index].status = status;
+            renderItems();
+            updateStats();
+            saveToLocalStorage();
+            const nextPending = allItems.findIndex((item, i) => i > index && item.status === 'pending');
+            if (nextPending !== -1) scrollToItem(nextPending);
         }}
 
-        function setStatus(idx, status) {{
-            items[idx].status = status;
-            localStorage.setItem('sorted_items', JSON.stringify(items));
-            render();
+        function openEbay(index) {{ window.open(allItems[index].url, '_blank'); }}
+
+        function scrollToItem(index) {{
+            document.querySelectorAll('.item-card').forEach(el => el.classList.remove('active'));
+            const element = document.getElementById(`item-${{index}}`);
+            if (element) {{
+                element.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
+                element.classList.add('active');
+                currentItemIndex = index;
+            }}
         }}
+
+        function applyFilters() {{ renderItems(); }}
 
         function updateStats() {{
-            document.getElementById('total').textContent = items.length;
-            document.getElementById('pending').textContent = items.filter(i => i.status === 'pending').length;
-            document.getElementById('keep').textContent = items.filter(i => i.status === 'keep').length;
-            document.getElementById('reject').textContent = items.filter(i => i.status === 'reject').length;
+            const keepCount = allItems.filter(i => i.status === 'keep').length;
+            const rejectCount = allItems.filter(i => i.status === 'reject').length;
+            const processed = keepCount + rejectCount;
+            const progress = Math.round((processed / allItems.length) * 100);
+            document.getElementById('total').textContent = allItems.length;
+            document.getElementById('keep-count').textContent = keepCount;
+            document.getElementById('reject-count').textContent = rejectCount;
+            document.getElementById('progress-percent').textContent = progress + '%';
+            document.getElementById('progress-bar').style.width = progress + '%';
         }}
 
-        function saveResults() {{
-            const kept = items.filter(i => i.status === 'keep' && i.variant_id);
+        function setupKeyboardShortcuts() {{
+            document.addEventListener('keydown', (e) => {{
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+                const visibleItems = allItems.map((item, index) => ({{ item, index }})).filter(({{ item }}) => isItemVisible(item));
+                if (!visibleItems.length) return;
+                const currentVisible = visibleItems.findIndex(({{ index }}) => index === currentItemIndex);
 
-            if (kept.length === 0) {{
+                switch(e.key.toLowerCase()) {{
+                    case 'k':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) setStatus(visibleItems[currentVisible].index, 'keep');
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) setStatus(visibleItems[currentVisible].index, 'reject');
+                        break;
+                    case 'enter':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) openEbay(visibleItems[currentVisible].index);
+                        break;
+                    case 'arrowup':
+                        e.preventDefault();
+                        if (currentVisible > 0) scrollToItem(visibleItems[currentVisible - 1].index);
+                        break;
+                    case 'arrowdown':
+                        e.preventDefault();
+                        if (currentVisible < visibleItems.length - 1) scrollToItem(visibleItems[currentVisible + 1].index);
+                        break;
+                    case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+                        e.preventDefault();
+                        if (visibleItems[currentVisible]) {{
+                            const item = allItems[visibleItems[currentVisible].index];
+                            const variants = variantMap[item.console_slug] || [];
+                            const variantIndex = parseInt(e.key) - 1;
+                            if (variantIndex < variants.length) {{
+                                setVariant(visibleItems[currentVisible].index, variants[variantIndex].id);
+                                const select = document.querySelector(`#item-${{visibleItems[currentVisible].index}} .variant-select`);
+                                if (select) select.value = variants[variantIndex].id;
+                            }}
+                        }}
+                        break;
+                }}
+            }});
+        }}
+
+        function exportData() {{
+            const kept = allItems.filter(i => i.status === 'keep' && i.assigned_variant);
+            if (!kept.length) {{
                 alert('⚠️ No items marked as "keep" with variants assigned!');
                 return;
             }}
-
             const blob = new Blob([JSON.stringify(kept, null, 2)], {{ type: 'application/json' }});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'sorted_current_listings.json';
+            a.download = 'sorted_current_listings_' + new Date().toISOString().split('T')[0] + '.json';
             a.click();
-
-            alert(`✅ Saved ${{kept.length}} items to sorted_current_listings.json`);
+            URL.revokeObjectURL(url);
+            alert(`✅ Exported ${{kept.length}} items`);
         }}
 
-        // Load from localStorage if available
-        const saved = localStorage.getItem('sorted_items');
-        if (saved) {{
-            items = JSON.parse(saved);
+        function saveProgress() {{
+            const data = {{ items: allItems, index: currentItemIndex, timestamp: new Date().toISOString() }};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: 'application/json' }});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sorting_progress_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Progress saved to file!');
         }}
 
-        render();
+        function saveToLocalStorage() {{
+            try {{
+                const data = {{ items: allItems, index: currentItemIndex, timestamp: new Date().toISOString() }};
+                localStorage.setItem('current_sorter_progress', JSON.stringify(data));
+                document.getElementById('last-saved').textContent = new Date().toLocaleTimeString('fr-FR', {{ hour: '2-digit', minute: '2-digit' }});
+            }} catch (e) {{
+                console.error('Save failed:', e);
+            }}
+        }}
+
+        function loadFromLocalStorage() {{
+            try {{
+                const saved = localStorage.getItem('current_sorter_progress');
+                if (!saved) return;
+                const data = JSON.parse(saved);
+                const savedIds = new Set(data.items.map(i => i.id));
+                const currentIds = new Set(allItems.map(i => i.id));
+                const match = savedIds.size === currentIds.size && [...savedIds].every(id => currentIds.has(id));
+                if (match) {{
+                    allItems = data.items;
+                    currentItemIndex = data.index || 0;
+                    const sortedCount = allItems.filter(i => i.status !== 'pending').length;
+                    document.getElementById('save-status').innerHTML = `✅ Progress restored: ${{sortedCount}} items sorted • Saved ${{new Date(data.timestamp).toLocaleString()}}`;
+                }}
+            }} catch (e) {{
+                console.error('Load failed:', e);
+            }}
+        }}
+
+        function setupAutoSave() {{
+            setInterval(() => saveToLocalStorage(), 30000);
+            window.addEventListener('beforeunload', () => saveToLocalStorage());
+        }}
+
+        init();
     </script>
 </body>
-</html>'''.replace('{variant_options_json}', variant_options_json).replace('{items_json}', items_json)
+</html>'''.replace('{variant_map_json}', variant_map_json).replace('{items_json}', items_json)
 
     output_file = 'sort_current_listings.html'
     with open(output_file, 'w', encoding='utf-8') as f:
@@ -214,6 +406,7 @@ def create_sorter_html(json_file):
     print(f"✅ Created: {output_file}")
     print(f"📊 Total items to sort: {len(all_items)}")
     print(f"\n🌐 Open {output_file} in your browser to start sorting")
+    print(f"\n⌨️  Shortcuts: K(eep) R(eject) | 1-9 quick variant | ↑/↓ navigate | Enter = open eBay")
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
