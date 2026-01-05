@@ -4,13 +4,13 @@ namespace App\Filament\Resources\CurrentListings\Tables;
 
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Select;
 use App\Models\Variant;
+use App\Filament\Resources\CurrentListings\CurrentListingResource;
 
 class CurrentListingsTable
 {
@@ -59,8 +59,10 @@ class CurrentListingsTable
             ->filters([
                 //
             ])
-            ->recordActions([
-                EditAction::make(),
+            ->actions([
+                Action::make('edit')
+                    ->url(fn ($record) => CurrentListingResource::getUrl('edit', ['record' => $record]))
+                    ->icon('heroicon-o-pencil'),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
