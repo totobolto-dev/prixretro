@@ -75,13 +75,13 @@ class SortListings extends Page implements HasForms, HasTable
                 TextColumn::make('title')
                     ->searchable()
                     ->wrap()
-                    ->url(fn ($record) => $record->url, shouldOpenInNewTab: true)
-                    ->description(fn ($record) =>
-                        ($record->price ? number_format($record->price, 2) . '€' : '') .
-                        ' • ' .
-                        ($record->sold_date ? $record->sold_date : '') .
-                        ' • ' .
-                        ($record->condition ? $record->condition : '')
+                    ->url(fn($record) => $record->url, shouldOpenInNewTab: true)
+                    ->description(
+                        fn($record) => ($record->price ? number_format($record->price, 2) . '€' : '') .
+                            ' • ' .
+                            ($record->sold_date ? $record->sold_date : '') .
+                            ' • ' .
+                            ($record->condition ? $record->condition : '')
                     ),
                 TextColumn::make('console_slug')
                     ->label('Console')
@@ -109,7 +109,7 @@ class SortListings extends Page implements HasForms, HasTable
                             ->options(Console::pluck('name', 'slug')->toArray())
                             ->required()
                             ->live()
-                            ->afterStateUpdated(fn ($state, callable $set) => $set('variant_id', null)),
+                            ->afterStateUpdated(fn($state, callable $set) => $set('variant_id', null)),
                         FormSelect::make('variant_id')
                             ->label('Select Existing Variant')
                             ->options(function (callable $get) {
@@ -117,18 +117,18 @@ class SortListings extends Page implements HasForms, HasTable
                                     return [];
                                 }
                                 return Variant::query()
-                                    ->whereHas('console', fn ($q) => $q->where('slug', $get('console_slug')))
+                                    ->whereHas('console', fn($q) => $q->where('slug', $get('console_slug')))
                                     ->pluck('name', 'id')
                                     ->toArray();
                             })
-                            ->disabled(fn (callable $get) => !$get('console_slug'))
-                            ->helperText(fn (callable $get) => !$get('console_slug') ? 'Select a console first' : 'Or create a new variant below'),
+                            ->disabled(fn(callable $get) => !$get('console_slug'))
+                            ->helperText(fn(callable $get) => !$get('console_slug') ? 'Select a console first' : 'Or create a new variant below'),
                         TextInput::make('new_variant_name')
                             ->label('Or Create New Variant')
                             ->helperText('Leave empty to use selected variant above')
-                            ->disabled(fn (callable $get) => !$get('console_slug')),
+                            ->disabled(fn(callable $get) => !$get('console_slug')),
                     ])
-                    ->fillForm(fn (Listing $record) => [
+                    ->fillForm(fn(Listing $record) => [
                         'console_slug' => $record->console_slug,
                         'variant_id' => $record->variant_id,
                     ])
@@ -326,7 +326,7 @@ class SortListings extends Page implements HasForms, HasTable
         // Update variant if selected
         if ($this->selectedVariant) {
             $updates['variant_id'] = $this->selectedVariant;
-            $updates['status'] = 'pending'; // Ready for review
+            $updates['status'] = 'keep'; // Ready for review
         }
 
         // Update status
