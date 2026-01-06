@@ -41,14 +41,26 @@ class ListCurrentListings extends ListRecords
                         return;
                     }
 
-                    // Filament stores uploads in storage/app/public by default
-                    // We need to use the public disk
-                    $fullPath = Storage::disk('public')->path($filePath);
+                    // Try multiple possible storage locations
+                    $possiblePaths = [
+                        Storage::disk('public')->path($filePath),
+                        Storage::disk('local')->path($filePath),
+                        storage_path('app/livewire-tmp/' . $filePath),
+                        storage_path('app/public/' . $filePath),
+                    ];
 
-                    if (!file_exists($fullPath)) {
+                    $fullPath = null;
+                    foreach ($possiblePaths as $path) {
+                        if (file_exists($path)) {
+                            $fullPath = $path;
+                            break;
+                        }
+                    }
+
+                    if (!$fullPath) {
                         Notification::make()
                             ->title('Error')
-                            ->body("File not found: {$filePath}")
+                            ->body("File not found. Tried: " . basename($filePath))
                             ->danger()
                             ->send();
                         return;
@@ -94,7 +106,7 @@ class ListCurrentListings extends ListRecords
                     }
 
                     // Clean up uploaded file
-                    Storage::disk('public')->delete($filePath);
+                    @unlink($fullPath);
 
                     Notification::make()
                         ->title('Import Complete')
