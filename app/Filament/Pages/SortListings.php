@@ -326,7 +326,7 @@ class SortListings extends Page implements HasForms, HasTable
         // Update variant if selected
         if ($this->selectedVariant) {
             $updates['variant_id'] = $this->selectedVariant;
-            $updates['status'] = 'keep'; // Ready for review
+            $updates['status'] = 'approved'; // Ready for review
         }
 
         // Update status
