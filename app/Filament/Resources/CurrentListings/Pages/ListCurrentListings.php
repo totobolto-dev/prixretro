@@ -68,14 +68,25 @@ class ListCurrentListings extends ListRecords
 
                     // Read and parse JSON directly
                     $jsonContent = file_get_contents($fullPath);
-                    $data = json_decode($jsonContent, true);
+                    $jsonData = json_decode($jsonContent, true);
 
-                    if (!$data) {
+                    if (json_last_error() !== JSON_ERROR_NONE) {
                         Notification::make()
                             ->title('Error')
-                            ->body('Invalid JSON file')
+                            ->body('Invalid JSON: ' . json_last_error_msg())
                             ->danger()
                             ->send();
+                        @unlink($fullPath);
+                        return;
+                    }
+
+                    if (!$jsonData || !is_array($jsonData)) {
+                        Notification::make()
+                            ->title('Error')
+                            ->body('JSON file is empty or not an array')
+                            ->danger()
+                            ->send();
+                        @unlink($fullPath);
                         return;
                     }
 
@@ -83,7 +94,11 @@ class ListCurrentListings extends ListRecords
                     $imported = 0;
                     $skipped = 0;
 
-                    foreach ($data as $consoleSlug => $consoleData) {
+                    foreach ($jsonData as $consoleSlug => $consoleData) {
+                        if (!isset($consoleData['listings']) || !is_array($consoleData['listings'])) {
+                            continue;
+                        }
+
                         foreach ($consoleData['listings'] as $item) {
                             if (\App\Models\CurrentListing::where('item_id', $item['item_id'])->exists()) {
                                 $skipped++;
