@@ -113,22 +113,24 @@ class ScrapeCurrentListings extends Command
     {
         $listings = collect([]);
 
-        // Simple regex parsing for eBay listings
-        // Match .s-item divs
-        preg_match_all('/<div class="s-item[^"]*"[^>]*>(.*?)<\/div>\s*<\/div>\s*<\/div>/s', $html, $items);
+        // Match .s-card elements (new eBay structure)
+        preg_match_all('/<li[^>]*class="[^"]*s-card[^"]*"[^>]*data-listingid="([^"]+)"[^>]*>(.*?)<\/li>/s', $html, $items, PREG_SET_ORDER);
 
         $searchTerms = is_array($variant->search_terms) ? $variant->search_terms : (json_decode($variant->search_terms, true) ?? []);
 
-        foreach ($items[1] as $itemHtml) {
+        foreach ($items as $item) {
             if ($listings->count() >= $maxItems) {
                 break;
             }
 
-            // Extract title
-            if (!preg_match('/<span role="heading"[^>]*>(.*?)<\/span>/s', $itemHtml, $titleMatch)) {
+            $itemId = $item[1];
+            $itemHtml = $item[2];
+
+            // Extract title (new structure: <span class="su-styled-text primary default">)
+            if (!preg_match('/<span class="su-styled-text primary default">([^<]+)<\/span>/s', $itemHtml, $titleMatch)) {
                 continue;
             }
-            $title = strip_tags($titleMatch[1]);
+            $title = html_entity_decode(trim($titleMatch[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
             // Skip shop headers
             if (str_contains($title, 'Shop on eBay') || empty($title)) {
@@ -158,24 +160,17 @@ class ScrapeCurrentListings extends Command
                 }
             }
 
-            // Extract URL and item ID
-            if (!preg_match('/<a[^>]+href="([^"]+\/itm\/[^"]+)"/', $itemHtml, $urlMatch)) {
+            // Extract URL
+            if (!preg_match('/<a class="s-card__link"[^>]+href="([^"]+)"/', $itemHtml, $urlMatch)) {
                 continue;
             }
-            $itemUrl = $urlMatch[1];
-            $itemUrl = explode('?', $itemUrl)[0]; // Remove query params
+            $itemUrl = explode('?', $urlMatch[1])[0]; // Remove query params
 
-            // Extract item ID from URL
-            if (!preg_match('/\/itm\/(\d+)/', $itemUrl, $idMatch)) {
+            // Extract price (new structure: <span class="su-styled-text primary bold large-1 s-card__price">)
+            if (!preg_match('/<span class="[^"]*s-card__price[^"]*">([^<]+)<\/span>/', $itemHtml, $priceMatch)) {
                 continue;
             }
-            $itemId = $idMatch[1];
-
-            // Extract price
-            if (!preg_match('/<span class="s-item__price">([^<]+)<\/span>/', $itemHtml, $priceMatch)) {
-                continue;
-            }
-            $priceText = strip_tags($priceMatch[1]);
+            $priceText = trim($priceMatch[1]);
             $priceText = str_replace(['EUR', ',', ' '], ['', '.', ''], $priceText);
 
             // Handle price ranges - take first price
