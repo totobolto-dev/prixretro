@@ -114,7 +114,8 @@ class ScrapeCurrentListings extends Command
         $listings = collect([]);
 
         // Match .s-card elements (new eBay structure)
-        preg_match_all('/<li[^>]*class="[^"]*s-card[^"]*"[^>]*data-listingid="([^"]+)"[^>]*>(.*?)<\/li>/s', $html, $items, PREG_SET_ORDER);
+        // data-listingid can come before or after class attribute
+        preg_match_all('/<li[^>]*data-listingid="([^"]+)"[^>]*class="[^"]*s-card[^"]*"[^>]*>(.*?)<\/li>/s', $html, $items, PREG_SET_ORDER);
 
         $searchTerms = is_array($variant->search_terms) ? $variant->search_terms : (json_decode($variant->search_terms, true) ?? []);
 
