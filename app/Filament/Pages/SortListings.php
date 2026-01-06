@@ -179,6 +179,8 @@ class SortListings extends Page implements HasForms, HasTable
                             'console_slug' => $data['console_slug'],
                             'variant_id' => $variantId,
                             'classification_status' => 'classified',
+                            'status' => 'approved',
+                            'reviewed_at' => now(),
                         ]);
 
                         Notification::make()
@@ -416,6 +418,8 @@ class SortListings extends Page implements HasForms, HasTable
             $listing->update([
                 'variant_id' => $variantId,
                 'classification_status' => 'classified',
+                'status' => 'approved',
+                'reviewed_at' => now(),
             ]);
         }
 
