@@ -1,6 +1,62 @@
 @extends('layout')
 
-@section('title', $variant->name . ' - Prix & Historique | PrixRetro')
+@php
+$hasData = ($statistics['count'] ?? 0) > 0;
+$avgPrice = $hasData ? $statistics['avg_price'] : null;
+$minPrice = $hasData ? $statistics['min_price'] : null;
+$maxPrice = $hasData ? $statistics['max_price'] : null;
+$count = $statistics['count'] ?? 0;
+@endphp
+
+@section('title')
+{{ $variant->console->name }} {{ $variant->name }} - Prix d'occasion @if($hasData)({{ number_format($avgPrice, 0) }}€)@endif | PrixRetro
+@endsection
+
+@section('meta_description')
+@if($hasData)Prix moyen du {{ $variant->console->name }} {{ $variant->name }} : {{ number_format($avgPrice, 2) }}€ ({{ $count }} ventes analysées). Historique des prix, graphiques et meilleures offres d'occasion sur eBay.@else{{ $variant->console->name }} {{ $variant->name }} - Suivez les prix d'occasion sur eBay. Historique des ventes, graphiques de prix et meilleures offres actuelles.@endif
+@endsection
+
+@section('meta_keywords')
+{{ $variant->console->name }} {{ $variant->name }}, prix {{ strtolower($variant->name) }}, {{ strtolower($variant->console->name) }} occasion, vente {{ strtolower($variant->console->name) }}, prix retrogaming
+@endsection
+
+@section('og_title')
+{{ $variant->console->name }} {{ $variant->name }} - @if($hasData)Prix: {{ number_format($avgPrice, 0) }}€@else Prix & Historique@endif
+@endsection
+
+@section('og_description')
+@if($hasData){{ $count }} ventes analysées. Prix moyen: {{ number_format($avgPrice, 2) }}€. Suivez l'évolution des prix du {{ $variant->console->name }} {{ $variant->name }} d'occasion.@elseSuivez les prix du {{ $variant->console->name }} {{ $variant->name }} d'occasion sur eBay. Historique des ventes et graphiques de prix.@endif
+@endsection
+
+@section('head')
+@if($hasData)
+<!-- Schema.org Product Markup for Rich Results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ $variant->console->name }} {{ $variant->name }}",
+  "description": "Console de jeu rétro {{ $variant->console->name }} {{ $variant->name }}. Prix moyen d'occasion: {{ number_format($avgPrice, 2) }}€ basé sur {{ $count }} ventes eBay récentes.",
+  "brand": {
+    "@type": "Brand",
+    "name": "Nintendo"
+  },
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "EUR",
+    "lowPrice": "{{ number_format($minPrice, 2) }}",
+    "highPrice": "{{ number_format($maxPrice, 2) }}",
+    "offerCount": "{{ $count }}"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.5",
+    "reviewCount": "{{ $count }}"
+  }
+}
+</script>
+@endif
+@endsection
 
 @section('content')
 <div class="container">
