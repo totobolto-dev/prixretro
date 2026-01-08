@@ -1,6 +1,12 @@
 @extends('layout')
 
-@section('title', $variant->name . ' - Prix & Historique | PrixRetro')
+@section('title')
+{{ $variant->console->name }} {{ $variant->name }}@if(isset($statistics['count']) && $statistics['count'] > 0) - Prix ({{ number_format($statistics['avg_price'], 0) }}€)@endif | PrixRetro
+@endsection
+
+@section('meta_description')
+@if(isset($statistics['count']) && $statistics['count'] > 0)Prix moyen {{ $variant->console->name }} {{ $variant->name }}: {{ number_format($statistics['avg_price'], 2) }}€ ({{ $statistics['count'] }} ventes). Historique et meilleures offres eBay.@else{{ $variant->console->name }} {{ $variant->name }} - Suivez les prix d'occasion sur eBay.@endif
+@endsection
 
 @section('content')
 <div class="container">
