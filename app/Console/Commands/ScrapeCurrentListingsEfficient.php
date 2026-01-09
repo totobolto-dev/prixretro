@@ -103,45 +103,53 @@ class ScrapeCurrentListingsEfficient extends Command
         $listings = collect([]);
 
         // eBay embeds listing data in JSON format within the page
-        // Extract all listingId + associated data from embedded JSON
+        // Extract all listingId from the page
         preg_match_all('/"listingId":"(\d+)"/', $html, $idMatches);
 
         if (empty($idMatches[1])) {
             return $listings;
         }
 
-        // For each listing ID, try to extract the full details
-        foreach ($idMatches[1] as $itemId) {
-            // Find the JSON block containing this listing
-            // Pattern: look for title, price, and URL near this listingId
-            $pattern = '/"listingId":"' . preg_quote($itemId, '/') . '"[^}]{0,2000}/';
+        // Get unique IDs
+        $uniqueIds = array_unique($idMatches[1]);
 
-            if (!preg_match($pattern, $html, $blockMatch)) {
+        // For each listing ID, search for title and price in surrounding context
+        foreach ($uniqueIds as $itemId) {
+            // Find position of this listingId
+            $pos = strpos($html, '"listingId":"' . $itemId . '"');
+            if ($pos === false) {
                 continue;
             }
 
-            $block = $blockMatch[0];
+            // Extract a large chunk around this ID (10000 chars before and after)
+            $start = max(0, $pos - 10000);
+            $length = 20000;
+            $chunk = substr($html, $start, $length);
 
-            // Extract title from the JSON block
-            if (!preg_match('/"title":"([^"]+)"/', $block, $titleMatch)) {
+            // Look for title in this chunk
+            if (!preg_match('/"title":"([^"]+)"/', $chunk, $titleMatch)) {
                 continue;
             }
 
             $title = $this->decodeUnicode($titleMatch[1]);
             $title = html_entity_decode($title, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-            // Skip sponsored headers or empty titles
+            // Skip empty or invalid titles
             if (empty($title) || str_contains(strtolower($title), 'shop on ebay')) {
                 continue;
             }
 
-            // Extract price - look for convertedCurrentPrice or similar
+            // Look for price in this chunk
             $price = null;
-            if (preg_match('/"convertedCurrentPrice":\{"value":([0-9.]+)/', $block, $priceMatch)) {
+
+            // Try various price patterns
+            if (preg_match('/"convertedCurrentPrice":\{"value":([0-9.]+)/', $chunk, $priceMatch)) {
                 $price = (float) $priceMatch[1];
-            } elseif (preg_match('/"price":\{"value":([0-9.]+)/', $block, $priceMatch)) {
+            } elseif (preg_match('/"price":\{"value":([0-9.]+)/', $chunk, $priceMatch)) {
                 $price = (float) $priceMatch[1];
-            } elseif (preg_match('/([0-9]+[,.]?[0-9]*)\s*EUR/', $block, $priceMatch)) {
+            } elseif (preg_match('/"currentPrice":\{"value":([0-9.]+)/', $chunk, $priceMatch)) {
+                $price = (float) $priceMatch[1];
+            } elseif (preg_match('/([0-9]+[,.]?[0-9]*)\s*EUR/', $chunk, $priceMatch)) {
                 $priceText = str_replace(',', '.', $priceMatch[1]);
                 $price = (float) $priceText;
             }
@@ -162,8 +170,7 @@ class ScrapeCurrentListingsEfficient extends Command
             ]);
         }
 
-        // Remove duplicates by item_id
-        return $listings->unique('item_id')->values();
+        return $listings;
     }
 
     private function decodeUnicode($str)

@@ -7,9 +7,9 @@
     <div class="hero">
         <h1>PrixRetro</h1>
         <p class="tagline">
-            Prix du marché pour consoles retrogaming Nintendo<br>
+            Prix du marché pour consoles retrogaming d'occasion<br>
             <span style="color: var(--text-muted); font-size: 0.95rem;">
-                Basé sur {{ $consoles->sum(fn($c) => $c->variants->count()) }} variantes •
+                {{ $consoles->sum(fn($c) => $c->variants->count()) }} variantes •
                 {{ $consoles->sum(fn($c) => $c->variants->sum('listings_count')) }} ventes analysées
             </span>
         </p>

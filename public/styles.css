@@ -1117,111 +1117,93 @@ footer p {
     font-size: 0.8rem;
 }
 
-.amazon-product {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.6rem;
-    margin: 0.6rem 0;
-    display: flex;
-    gap: 0.8rem;
-    align-items: flex-start;
-}
-
-.amazon-product-image {
-    flex-shrink: 0;
-}
-
-.amazon-product-image img {
-    transition: transform 0.2s;
-    max-width: 80px;
-    height: auto;
-    border-radius: 4px;
-}
-
-.amazon-product-image a:hover img {
-    transform: scale(1.05);
-}
-
-.amazon-product-content {
-    flex: 1;
-}
-
-.amazon-product-content h3 {
-    color: var(--text-primary);
-    margin-bottom: 0.3rem;
-    font-size: 0.9rem;
-}
-
-.amazon-product-content > p {
-    color: var(--text-secondary);
-    margin-bottom: 0.4rem;
-    font-size: 0.8rem;
-}
-
-.product-features {
-    list-style: none;
-    padding: 0;
+/* Amazon Affiliate Card - Modern Design */
+.amazon-product-card {
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.05), rgba(255, 102, 0, 0.05));
+    border: 1px solid rgba(255, 153, 0, 0.2);
+    border-radius: 8px;
+    padding: 1.25rem;
     margin: 1rem 0;
-}
-
-.product-features li {
-    color: var(--text-secondary);
-    padding: 0.4rem 0;
-    padding-left: 1.5rem;
     position: relative;
 }
 
-.product-features li:before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: var(--success);
-    font-weight: bold;
-}
-
-.product-price {
-    display: flex;
-    align-items: baseline;
-    gap: 0.4rem;
-    margin: 0.6rem 0;
-}
-
-.price-label {
-    color: var(--text-muted);
-    font-size: 0.7rem;
-}
-
-.price-value {
-    color: var(--success);
-    font-size: 0.85rem;
-    font-weight: 700;
-}
-
-.amazon-button {
+.amazon-badge {
     display: inline-block;
     background: linear-gradient(135deg, #FF9900, #FF6600);
     color: #ffffff;
-    padding: 0.4rem 0.8rem;
-    border-radius: var(--radius);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.3rem 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+}
+
+.amazon-product-card h3 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.amazon-description {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.amazon-details {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.amazon-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+}
+
+.amazon-price-label {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+.amazon-price-value {
+    color: var(--success);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.amazon-cta {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #FF9900, #FF6600);
+    color: #ffffff;
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.9rem;
     transition: all 0.2s;
     border: none;
     cursor: pointer;
-    font-size: 0.8rem;
+    box-shadow: 0 2px 8px rgba(255, 153, 0, 0.25);
 }
 
-.amazon-button:hover {
+.amazon-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(255, 153, 0, 0.35);
 }
 
-.affiliate-note {
+.amazon-disclaimer {
     color: var(--text-muted);
-    font-size: 0.65rem;
-    margin-top: 0.4rem;
+    font-size: 0.7rem;
     font-style: italic;
+    margin: 0;
 }
 
 /* Responsive - Content Pages */

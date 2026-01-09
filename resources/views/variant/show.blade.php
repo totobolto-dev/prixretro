@@ -132,30 +132,32 @@
         </div>
         @endif
 
-        @if(str_starts_with($variant->console->slug, 'game-boy') || str_starts_with($variant->console->slug, 'nintendo-ds') || str_starts_with($variant->console->slug, 'nintendo-2ds') || str_starts_with($variant->console->slug, 'nintendo-3ds'))
-        <!-- Amazon Affiliate - Minimal Integration -->
+        @if((str_starts_with($variant->console->slug, 'game-boy') || str_starts_with($variant->console->slug, 'nintendo-ds') || str_starts_with($variant->console->slug, 'new-nintendo-2ds-xl') || str_starts_with($variant->console->slug, 'nintendo-3ds')) && $variant->console->slug !== 'nintendo-2ds')
+        <!-- Amazon Affiliate -->
         <div class="protection-section">
             <h2>💡 Protéger votre {{ $variant->console->name }}</h2>
-            <p>Une console bien protégée conserve sa valeur. Nos données montrent un écart de prix moyen de <strong>+28%</strong> entre les consoles en parfait état et celles avec rayures visibles.</p>
+            <p>Une console bien protégée conserve sa valeur. Les consoles en excellent état se vendent en moyenne <strong>28% plus cher</strong> que celles avec des rayures visibles.</p>
 
-            <div class="amazon-product">
-                <div class="amazon-product-content">
-                    <h3>💡 Housse de protection recommandée</h3>
-                    <p><strong>Orzly pour Nintendo</strong> - Compatible New Nintendo 2DS XL, 3DS, New 3DS, Original DS, DSi, DS Lite, Game Boy Advance - Protection rigide EVA</p>
-                    <div class="product-price">
-                        <span class="price-label">Prix indicatif:</span>
-                        <span class="price-value">~13,91€</span>
+            <div class="amazon-product-card">
+                <div class="amazon-badge">Recommandation</div>
+                <h3>Housse de protection Orzly</h3>
+                <p class="amazon-description">Protection rigide EVA compatible avec Game Boy Advance, DS, DS Lite, DSi, 3DS, New 3DS, et 2DS XL. Matériau anti-choc avec compartiments pour jeux.</p>
+
+                <div class="amazon-details">
+                    <div class="amazon-price">
+                        <span class="amazon-price-label">Prix</span>
+                        <span class="amazon-price-value">~14€</span>
                     </div>
                     <a href="https://amzn.to/3Z0Y2mN"
                        target="_blank"
                        rel="nofollow noopener sponsored"
-                       class="amazon-button"
+                       class="amazon-cta"
                        onclick="trackAmazonClick('orzly-{{ $variant->slug }}')">
-                        🛍️ Voir sur Amazon
+                        Voir sur Amazon
                     </a>
                 </div>
+                <p class="amazon-disclaimer">Lien affilié • Commission sans surcoût pour vous</p>
             </div>
-            <p class="affiliate-note">* Lien affilié Amazon</p>
         </div>
         @endif
 
