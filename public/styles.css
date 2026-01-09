@@ -144,20 +144,35 @@ nav a:hover {
     color: var(--accent-primary);
 }
 
-/* Hero Section - NO gradients */
+/* Hero Section - Impactful header */
 .hero {
     text-align: center;
-    padding: 1.2rem 0;
-    background: var(--bg-primary);
+    padding: 3rem 0 2.5rem;
+    background: linear-gradient(180deg, var(--bg-secondary), var(--bg-primary));
     border-bottom: 1px solid var(--border);
     margin-bottom: 0;
+    position: relative;
 }
 
-/* H1 - NO gradients */
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+}
+
+/* Typography - Strong hierarchy */
 h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: 2.75rem;
+    margin-bottom: 1.5rem;
     color: var(--text-primary);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
 }
 
 .tagline {
@@ -216,42 +231,64 @@ h1 {
 .variant-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.6rem;
-    transition: all 0.2s;
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
     text-decoration: none;
     color: inherit;
     display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.variant-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.variant-card:hover::before {
+    transform: scaleX(1);
 }
 
 .variant-card:hover {
     border-color: var(--accent-primary);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .variant-name {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.75rem;
 }
 
 .variant-stats {
     display: flex;
     justify-content: space-between;
-    font-size: 0.8rem;
+    align-items: center;
+    font-size: 0.85rem;
     color: var(--text-muted);
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
 }
 
 .variant-stats .price {
     color: var(--success);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 
 .variant-stats .no-data {
     color: var(--text-muted);
     font-style: italic;
+    font-size: 0.8rem;
 }
 
 .view-all {
@@ -274,105 +311,247 @@ h1 {
     opacity: 0.9;
 }
 
-/* Stats Grid - calm and trustworthy */
+/* Stats Grid - Eye-catching data presentation */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin-top: 1.5rem;
+    gap: 1.25rem;
+    margin: 2rem 0;
 }
 
 .stat-card {
     background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.4rem 0.6rem;
-    text-align: left;
-    /* NO hover effect - stats aren't interactive */
+    border: 2px solid transparent;
+    background-image:
+        linear-gradient(var(--bg-card), var(--bg-card)),
+        linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    opacity: 0.8;
 }
 
 @media (max-width: 768px) {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
     }
 }
 
 .stat-label {
     color: var(--text-secondary);
-    font-size: 0.7rem;
-    font-weight: 400;
-    margin-bottom: 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
 }
 
 .stat-value {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.75rem;
+    font-weight: 700;
     color: var(--text-primary);
+    line-height: 1.2;
 }
 
 .stat-value.success {
-    color: var(--success);
+    background: linear-gradient(135deg, var(--success), #00d9ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .stat-note {
     color: var(--text-muted);
     font-size: 0.75rem;
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
 }
 
-/* Chart Container */
+/* Chart Container - Make data visualization impressive */
 .chart-container {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.6rem;
-    margin: 1rem 0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2.5rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .chart-container h2 {
     color: var(--text-primary);
-    font-size: 1rem;
-    margin-bottom: 0.6rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chart-container h2::before {
+    content: '📊';
+    font-size: 1.5rem;
 }
 
 .chart-container canvas {
-    max-height: 120px;
-    height: 120px !important;
+    max-height: 280px;
+    height: 280px !important;
     width: 100% !important;
 }
 
-/* CTA Button - simple and trustworthy */
+@media (max-width: 768px) {
+    .chart-container canvas {
+        max-height: 220px;
+        height: 220px !important;
+    }
+}
+
+/* CTA Button - Impossible to miss */
 .cta-section {
     text-align: center;
     padding: 2rem 0;
+    margin: 2rem 0;
 }
 
 .cta-button {
-    display: inline-block;
-    background: var(--accent-primary);
-    color: var(--bg-primary);
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: #ffffff;
+    padding: 1rem 2rem;
+    border-radius: 8px;
     text-decoration: none;
-    font-weight: 500;
-    font-size: 0.875rem;
-    transition: opacity 0.2s;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 217, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.cta-button:hover::before {
+    left: 100%;
 }
 
 .cta-button:hover {
-    opacity: 0.9;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 24px rgba(0, 217, 255, 0.4);
+}
+
+.cta-button::after {
+    content: '→';
+    font-size: 1.25rem;
+    transition: transform 0.3s;
+}
+
+.cta-button:hover::after {
+    transform: translateX(4px);
 }
 
 /* Content Sections */
 .content-section {
-    padding: 2rem 0;
+    padding: 2.5rem 0;
 }
 
 h2 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
     color: var(--text-primary);
-    font-weight: 500;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Value Proposition Banner */
+.value-prop-banner {
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(123, 97, 255, 0.08));
+    border: 1px solid rgba(0, 217, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.value-prop-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.value-prop-content h3 {
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+}
+
+.value-prop-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .value-prop-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Variant Description Section */
+.variant-description {
+    background: var(--bg-card);
+    border-left: 4px solid var(--accent-primary);
+    border-radius: 8px;
+    padding: 1.75rem;
+    margin: 2rem 0;
+}
+
+.variant-description h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.variant-description p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.variant-description h3 {
+    color: var(--accent-secondary);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
 }
 
 /* Price Graph */

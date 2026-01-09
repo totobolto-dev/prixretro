@@ -20,6 +20,16 @@
 
     <h1>{{ $variant->console->name }} {{ $variant->name }}</h1>
 
+    @if($statistics['count'] > 0)
+    <div class="value-prop-banner">
+        <div class="value-prop-icon">💰</div>
+        <div class="value-prop-content">
+            <h3>Prix basés sur des ventes réelles</h3>
+            <p>Nos données proviennent de <strong>{{ $statistics['count'] }} ventes analysées</strong> sur eBay France. Évitez de payer trop cher en consultant les prix du marché avant d'acheter.</p>
+        </div>
+    </div>
+    @endif
+
     @php
         // Get other variants for navigation
         $otherVariants = $variant->console->variants()
@@ -170,7 +180,7 @@
                    rel="nofollow noopener"
                    class="cta-button"
                    onclick="trackEbayClick('search-{{ $variant->slug }}')">
-                    🔍 Voir plus d'annonces sur eBay
+                    Voir les meilleures offres sur eBay
                 </a>
             </div>
 
