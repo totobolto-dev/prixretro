@@ -20,8 +20,8 @@
 
     <title>@yield('title', 'PrixRetro - Tracker Prix Retrogaming')</title>
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="{{ url()->current() }}">
+    <!-- Canonical URL - Force HTTPS -->
+    <link rel="canonical" href="https://www.prixretro.com{{ request()->getPathInfo() }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">

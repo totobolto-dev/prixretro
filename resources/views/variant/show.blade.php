@@ -73,6 +73,17 @@
     </div>
     @endif
 
+    {{-- Auto-generated SEO description --}}
+    <div class="variant-description">
+        <h2>À propos de {{ $variant->console->name }} {{ $variant->name }}</h2>
+        <p>{{ $autoDescription }}</p>
+
+        @if($statistics['count'] > 0)
+        <h3>Guide d'achat</h3>
+        <p>Sur le marché de l'occasion, l'état de la console est le facteur principal influençant le prix. Vérifiez toujours l'état de l'écran, le fonctionnement des boutons, et la présence de tous les accessoires d'origine.</p>
+        @endif
+    </div>
+
     @if($statistics['count'] > 0)
         <div class="stats-grid">
             <div class="stat-card">

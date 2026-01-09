@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Console;
 use App\Models\Variant;
+use App\Services\VariantDescriptionGenerator;
 use Illuminate\Support\Facades\DB;
 
 class VariantController extends Controller
@@ -31,11 +32,15 @@ class VariantController extends Controller
 
         $chartData = $this->prepareChartData($listings);
 
+        // Generate auto description
+        $autoDescription = VariantDescriptionGenerator::generate($variant, $statistics);
+
         return view('variant.show', compact(
             'variant',
             'statistics',
             'recentListings',
-            'chartData'
+            'chartData',
+            'autoDescription'
         ));
     }
 
