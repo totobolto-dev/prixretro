@@ -1514,3 +1514,270 @@ footer p {
         width: 100%;
     }
 }
+
+/* Console Families Navigation - Quick Overview */
+.console-families-nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.family-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.family-nav-link:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 217, 255, 0.2);
+}
+
+/* Console Family Section */
+.console-family-section {
+    margin: 4rem 0;
+    scroll-margin-top: 100px;
+}
+
+.family-header {
+    font-size: 2rem;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+    border-bottom: 3px solid var(--accent-primary);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.family-description {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+/* Console Grid - Shows console-level cards */
+.console-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Console Card */
+.console-card {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.console-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.console-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+    border-bottom: 1px solid var(--border);
+}
+
+.console-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.console-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.console-name {
+    font-size: 1.2rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+}
+
+.console-name a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.console-name a:hover {
+    color: var(--accent-primary);
+}
+
+.console-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.variant-count, .sales-count {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.expand-toggle {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.expand-toggle:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #000;
+}
+
+.expand-icon {
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+/* Console Variants - Expandable section */
+.console-variants {
+    padding: 1rem;
+    background: var(--bg-primary);
+}
+
+.variants-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.variant-row-compact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+}
+
+.variant-row-compact:hover {
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
+    transform: translateX(4px);
+}
+
+.variant-name-compact {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.variant-data-compact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+.price-compact {
+    color: var(--success);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.sales-compact {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.no-data-compact {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.ranking-link-compact {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+}
+
+.ranking-link-compact a {
+    display: inline-block;
+    color: var(--accent-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.ranking-link-compact a:hover {
+    background: var(--bg-card);
+    color: var(--accent-primary);
+}
+
+.no-variants {
+    padding: 2rem;
+    text-align: center;
+}
+
+.no-variants p {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .console-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .console-families-nav {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .family-nav-link {
+        justify-content: center;
+    }
+
+    .console-card-header {
+        flex-wrap: wrap;
+    }
+
+    .variant-data-compact {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+    }
+}
