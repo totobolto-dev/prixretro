@@ -108,6 +108,21 @@ nav a:hover {
     margin-bottom: 1rem;
 }
 
+.console-description-box {
+    background: var(--bg-card);
+    border-left: 4px solid var(--accent-primary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.console-description-box p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
 .console-page-header .console-stats {
     color: var(--text-muted);
     font-size: 0.9rem;
@@ -1187,6 +1202,63 @@ footer p {
 .insight-card p {
     color: var(--text-secondary);
     line-height: 1.7;
+}
+
+/* Buying Guide Section */
+.buying-guide-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 3rem 0;
+}
+
+.buying-guide-section h2 {
+    margin-bottom: 1.5rem;
+}
+
+.guide-content h3 {
+    color: var(--accent-secondary);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.guide-content h3:first-child {
+    margin-top: 0;
+}
+
+.guide-content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.guide-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.guide-content ul li {
+    color: var(--text-secondary);
+    padding: 0.75rem 0;
+    padding-left: 2rem;
+    position: relative;
+    line-height: 1.6;
+    border-bottom: 1px solid var(--border);
+}
+
+.guide-content ul li:last-child {
+    border-bottom: none;
+}
+
+.guide-content ul li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success);
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 
 /* Variant Navigation */

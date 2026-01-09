@@ -12,9 +12,11 @@
 
     <div class="console-page-header">
         <h1>{{ $console->name }}</h1>
-        @if($console->description)
-        <p class="console-description">{{ $console->description }}</p>
-        @endif
+
+        <div class="console-description-box">
+            <p>{{ $autoDescription }}</p>
+        </div>
+
         <div class="console-stats">
             {{ $console->variants->count() }} variantes •
             {{ $console->variants->sum('listings_count') }} ventes analysées

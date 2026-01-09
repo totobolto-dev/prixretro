@@ -80,9 +80,42 @@
             </div>
         </div>
 
+        <div class="buying-guide-section">
+            <h2>💡 Guide d'achat {{ $console->name }}</h2>
+
+            <div class="guide-content">
+                <h3>Facteurs qui influencent le prix</h3>
+                <p>Le prix d'une {{ $console->name }} d'occasion varie selon plusieurs critères :</p>
+                <ul>
+                    <li><strong>La couleur/édition</strong> : Les variantes rares ou éditions limitées se vendent généralement plus cher que les couleurs standards.</li>
+                    <li><strong>L'état général</strong> : Une console en excellent état cosmétique vaut significativement plus qu'une console rayée ou abîmée.</li>
+                    <li><strong>L'état de l'écran</strong> : Pour les consoles portables, l'écran est le composant le plus important à vérifier.</li>
+                    <li><strong>Les accessoires inclus</strong> : Boîte d'origine, chargeur, stylet et manuels augmentent la valeur.</li>
+                    <li><strong>La région</strong> : Les consoles japonaises ou américaines peuvent avoir des prix différents des versions européennes.</li>
+                </ul>
+
+                <h3>Conseils pour acheter au meilleur prix</h3>
+                <ul>
+                    <li><strong>Comparez les prix</strong> : Utilisez notre historique pour identifier si une offre est dans la moyenne du marché.</li>
+                    <li><strong>Privilégiez les photos détaillées</strong> : Les vendeurs sérieux montrent l'état réel avec plusieurs angles.</li>
+                    <li><strong>Lisez la description complètement</strong> : Vérifiez ce qui est inclus et les éventuels défauts mentionnés.</li>
+                    <li><strong>Évitez les prix trop bas</strong> : Méfiez-vous des offres bien en-dessous du marché, souvent signe de problèmes cachés.</li>
+                    <li><strong>Considérez les frais de port</strong> : Ajoutez-les au prix affiché pour calculer le coût réel.</li>
+                </ul>
+
+                <h3>Tendances du marché {{ date('Y') }}</h3>
+                <p>Basé sur {{ number_format($totalSales) }} ventes analysées, le marché {{ $console->name }} en France montre :</p>
+                <ul>
+                    <li>Un prix moyen de <strong>{{ number_format($avgConsolePrice, 0) }}€</strong> toutes variantes confondues.</li>
+                    <li>Une préférence pour <strong>{{ $rankedVariants->first()['variant']->name }}</strong> qui domine le marché avec {{ number_format($rankedVariants->first()['sales_count']) }} ventes.</li>
+                    <li>Des écarts de prix pouvant atteindre <strong>{{ number_format((($rankedVariants->max('avg_price') - $rankedVariants->min('avg_price')) / $rankedVariants->min('avg_price')) * 100, 0) }}%</strong> selon la variante choisie.</li>
+                </ul>
+            </div>
+        </div>
+
         <div class="cta-section">
-            <h2>📈 Voir les prix détaillés</h2>
-            <p>Cliquez sur une variante ci-dessus pour accéder à l'historique complet des prix, le graphique d'évolution, et les ventes récentes.</p>
+            <h2>📈 Voir les prix détaillés par variante</h2>
+            <p>Cliquez sur une variante ci-dessus pour accéder à l'historique complet des prix, le graphique d'évolution, et les ventes récentes détaillées.</p>
             <a href="/{{ $console->slug }}" class="cta-button">
                 ← Retour à {{ $console->name }}
             </a>

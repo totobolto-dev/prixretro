@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Console;
+use App\Services\ConsoleDescriptionGenerator;
 
 class ConsoleController extends Controller
 {
@@ -24,6 +25,9 @@ class ConsoleController extends Controller
             $query->withCount('listings');
         }]);
 
-        return view('console.show', compact('console'));
+        // Generate auto description
+        $autoDescription = ConsoleDescriptionGenerator::generate($console);
+
+        return view('console.show', compact('console', 'autoDescription'));
     }
 }

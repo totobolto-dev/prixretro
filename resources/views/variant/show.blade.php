@@ -175,7 +175,12 @@
             <h2>Ventes Récentes ({{ $statistics['count'] }} au total)</h2>
 
             <div class="cta-section">
-                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode(implode(' ', $variant->search_terms ?? [$variant->name])) }}&_sop=10&{{ $ebayAffiliateParams }}"
+                @php
+                    $searchQuery = $variant->search_terms
+                        ? implode(' ', $variant->search_terms)
+                        : $variant->console->name . ' ' . $variant->name;
+                @endphp
+                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($searchQuery) }}&_sop=10&{{ $ebayAffiliateParams }}"
                    target="_blank"
                    rel="nofollow noopener"
                    class="cta-button"
@@ -207,7 +212,12 @@
     @else
         <div class="no-data">
             <p>Aucune donnée de prix disponible pour ce modèle pour le moment.</p>
-            <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode(implode(' ', $variant->search_terms ?? [$variant->name])) }}&{{ $ebayAffiliateParams }}"
+            @php
+                $searchQuery = $variant->search_terms
+                    ? implode(' ', $variant->search_terms)
+                    : $variant->console->name . ' ' . $variant->name;
+            @endphp
+            <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($searchQuery) }}&{{ $ebayAffiliateParams }}"
                target="_blank"
                rel="nofollow noopener"
                class="btn-primary">
