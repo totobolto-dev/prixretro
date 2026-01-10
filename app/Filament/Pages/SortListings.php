@@ -71,29 +71,28 @@ class SortListings extends Page implements HasForms, HasTable
             ->columns([
                 TextColumn::make('id')
                     ->label('#')
-                    ->width('50px'),
+                    ->width('50px')
+                    ->sortable(),
                 TextColumn::make('title')
                     ->searchable()
+                    ->sortable()
                     ->wrap()
-                    ->url(fn($record) => $record->url, shouldOpenInNewTab: true)
-                    ->description(
-                        fn($record) => ($record->price ? number_format($record->price, 2) . '€' : '') .
-                            ' • ' .
-                            ($record->sold_date ? $record->sold_date : '') .
-                            ' • ' .
-                            ($record->condition ? $record->condition : '')
-                    ),
-                TextColumn::make('console_slug')
-                    ->label('Console')
+                    ->url(fn($record) => $record->url, shouldOpenInNewTab: true),
+                TextColumn::make('price')
+                    ->label('Prix')
+                    ->money('EUR')
+                    ->sortable()
+                    ->width('100px'),
+                TextColumn::make('sold_date')
+                    ->label('Date')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->width('100px'),
+                TextColumn::make('condition')
+                    ->label('État')
                     ->badge()
-                    ->width('120px')
-                    ->default('Not set'),
-                TextColumn::make('variant.name')
-                    ->label('Variant')
-                    ->badge()
-                    ->color('success')
-                    ->width('150px')
-                    ->default('Not set'),
+                    ->sortable()
+                    ->width('120px'),
             ])
             ->filters([
                 // Filters
@@ -188,31 +187,6 @@ class SortListings extends Page implements HasForms, HasTable
                             ->success()
                             ->send();
                     }),
-                Action::make('approve')
-                    ->label('Keep')
-                    ->icon('heroicon-o-check-circle')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->action(function (Listing $record) {
-                        if (!$record->variant_id) {
-                            Notification::make()
-                                ->title('Cannot approve')
-                                ->body('Please classify this listing first')
-                                ->warning()
-                                ->send();
-                            return;
-                        }
-
-                        $record->update([
-                            'status' => 'approved',
-                            'reviewed_at' => now(),
-                        ]);
-
-                        Notification::make()
-                            ->title('Listing approved')
-                            ->success()
-                            ->send();
-                    }),
                 Action::make('reject')
                     ->label('Reject')
                     ->icon('heroicon-o-x-circle')
@@ -230,6 +204,31 @@ class SortListings extends Page implements HasForms, HasTable
                             ->send();
                     }),
             ])
+            ->bulkActions([
+                \Filament\Tables\Actions\BulkAction::make('bulk_reject')
+                    ->label('Reject Selected')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->action(function ($records) {
+                        $count = $records->count();
+
+                        foreach ($records as $record) {
+                            $record->update([
+                                'status' => 'rejected',
+                                'reviewed_at' => now(),
+                            ]);
+                        }
+
+                        Notification::make()
+                            ->title('Bulk Rejection Complete')
+                            ->body("Rejected {$count} listings")
+                            ->danger()
+                            ->send();
+                    }),
+                \Filament\Tables\Actions\DeleteBulkAction::make(),
+            ])
+            ->selectCurrentPageOnly()
             ->defaultSort('created_at', 'desc')
             ->paginated([25, 50, 100]);
     }

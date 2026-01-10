@@ -158,12 +158,12 @@ def scrape_ebay_console(search_term, console_slug, max_pages=50):
     for page_num in range(1, max_pages + 1):
         print(f"📄 Page {page_num}")
 
-        # eBay URL with sold/completed filters
+        # eBay URL with sold filter and console category
         url = (
             f"https://www.ebay.fr/sch/i.html?"
             f"_nkw={encoded_term}&"
+            f"_sacat=139971&"  # Category: Consoles de jeux vidéo
             f"LH_Sold=1&"
-            f"LH_Complete=1&"
             f"_sop=10&"
             f"_ipg=240&"
             f"_pgn={page_num}"
@@ -281,7 +281,9 @@ def scrape_ebay_console(search_term, console_slug, max_pages=50):
                     condition_elems = item.select('.su-styled-text.secondary')
                     for elem in condition_elems:
                         text = elem.get_text().strip()
-                        if 'neuf' in text.lower() or 'occasion' in text.lower():
+                        text_lower = text.lower()
+                        # Look for condition keywords
+                        if any(word in text_lower for word in ['neuf', 'occasion', 'reconditionné', 'pour pièces', 'ne fonctionne pas']):
                             condition = text
                             break
 
