@@ -106,7 +106,7 @@ class SortListings extends Page implements HasForms, HasTable
                     ->form([
                         FormSelect::make('console_slug')
                             ->label('Console')
-                            ->options(Console::pluck('name', 'slug')->toArray())
+                            ->options(Console::orderBy('display_order')->pluck('name', 'slug')->toArray())
                             ->required()
                             ->live()
                             ->afterStateUpdated(fn($state, callable $set) => $set('variant_id', null)),
@@ -286,7 +286,7 @@ class SortListings extends Page implements HasForms, HasTable
 
     public function getConsoles(): array
     {
-        return Console::pluck('name', 'slug')->toArray();
+        return Console::orderBy('display_order')->pluck('name', 'slug')->toArray();
     }
 
     public function getVariants(): array
