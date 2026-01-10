@@ -13,7 +13,7 @@ return new class extends Migration
         DB::table('consoles')->where('slug', 'game-boy-color')->update(['display_order' => 105]);
         DB::table('consoles')->where('slug', 'game-boy-advance')->update(['display_order' => 106]);
         DB::table('consoles')->where('slug', 'game-boy-advance-sp')->update(['display_order' => 107]);
-        DB::table('consoles')->where('slug', 'game-boy-advance-micro')->update(['display_order' => 108]);
+        DB::table('consoles')->where('slug', 'game-boy-micro')->update(['display_order' => 108]);
 
         // Insert new consoles
         DB::table('consoles')->insert([
@@ -75,6 +75,6 @@ return new class extends Migration
         DB::table('consoles')->where('slug', 'game-boy-color')->update(['display_order' => 101]);
         DB::table('consoles')->where('slug', 'game-boy-advance')->update(['display_order' => 102]);
         DB::table('consoles')->where('slug', 'game-boy-advance-sp')->update(['display_order' => 103]);
-        DB::table('consoles')->where('slug', 'game-boy-advance-micro')->update(['display_order' => 104]);
+        DB::table('consoles')->where('slug', 'game-boy-micro')->update(['display_order' => 104]);
     }
 };
