@@ -155,3 +155,29 @@ php artisan view:clear
 - 🔄 **TODO**: Expand affiliate links to GBA/DS
 - 🔄 **TODO**: Google Analytics + AdSense
 - 🔄 **TODO**: SEO meta tags + structured data
+
+## Filament v4 Common Errors (CRITICAL!)
+
+### Bulk Actions - Use Filament\Actions, NOT Filament\Tables\Actions
+**This error has occurred 12+ times - always check existing code first!**
+
+```php
+// ❌ WRONG - Will cause "Class not found" error
+use Filament\Tables\Actions\BulkAction;
+\Filament\Tables\Actions\BulkAction::make('name')
+
+// ✅ CORRECT - Filament v4
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+
+->bulkActions([
+    BulkActionGroup::make([
+        BulkAction::make('name')
+            ->action(function ($records) { ... }),
+        DeleteBulkAction::make(),
+    ]),
+])
+```
+
+**Reference**: See `app/Filament/Resources/Listings/Tables/ListingsTable.php` for working examples.

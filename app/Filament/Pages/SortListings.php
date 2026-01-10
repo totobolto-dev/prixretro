@@ -13,6 +13,9 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\Select as FormSelect;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
@@ -205,28 +208,30 @@ class SortListings extends Page implements HasForms, HasTable
                     }),
             ])
             ->bulkActions([
-                \Filament\Tables\Actions\BulkAction::make('bulk_reject')
-                    ->label('Reject Selected')
-                    ->icon('heroicon-o-x-circle')
-                    ->color('danger')
-                    ->requiresConfirmation()
-                    ->action(function ($records) {
-                        $count = $records->count();
+                BulkActionGroup::make([
+                    BulkAction::make('bulk_reject')
+                        ->label('Reject Selected')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            $count = $records->count();
 
-                        foreach ($records as $record) {
-                            $record->update([
-                                'status' => 'rejected',
-                                'reviewed_at' => now(),
-                            ]);
-                        }
+                            foreach ($records as $record) {
+                                $record->update([
+                                    'status' => 'rejected',
+                                    'reviewed_at' => now(),
+                                ]);
+                            }
 
-                        Notification::make()
-                            ->title('Bulk Rejection Complete')
-                            ->body("Rejected {$count} listings")
-                            ->danger()
-                            ->send();
-                    }),
-                \Filament\Tables\Actions\DeleteBulkAction::make(),
+                            Notification::make()
+                                ->title('Bulk Rejection Complete')
+                                ->body("Rejected {$count} listings")
+                                ->danger()
+                                ->send();
+                        }),
+                    DeleteBulkAction::make(),
+                ]),
             ])
             ->selectCurrentPageOnly()
             ->defaultSort('created_at', 'desc')
