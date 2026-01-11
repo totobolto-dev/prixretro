@@ -4,60 +4,6 @@
 
 @section('content')
 <div class="container">
-    {{-- Compact Highlights Tickers --}}
-    <div class="highlights-tickers">
-        <div class="ticker-row">
-            <span class="ticker-label">🕒 Dernières ventes</span>
-            <div class="ticker-scroll">
-                <div class="ticker-content">
-                    @foreach($latestSales->take(15) as $listing)
-                    <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="ticker-item">
-                        <span class="ticker-title">{{ $listing->title }}</span>
-                        <span class="ticker-price">{{ number_format($listing->price, 0) }}€</span>
-                    </a>
-                    @endforeach
-                    {{-- Duplicate for seamless loop --}}
-                    @foreach($latestSales->take(15) as $listing)
-                    <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="ticker-item">
-                        <span class="ticker-title">{{ $listing->title }}</span>
-                        <span class="ticker-price">{{ number_format($listing->price, 0) }}€</span>
-                    </a>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <div class="ticker-row">
-            <span class="ticker-label">💰 Records</span>
-            <div class="ticker-scroll">
-                <div class="ticker-content">
-                    @php
-                        $allRecords = collect();
-                        foreach($priceRecords as $record) {
-                            foreach($record['listings'] as $listing) {
-                                $allRecords->push($listing);
-                            }
-                        }
-                        $topRecords = $allRecords->sortByDesc('price')->take(15);
-                    @endphp
-                    @foreach($topRecords as $listing)
-                    <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="ticker-item">
-                        <span class="ticker-title">{{ $listing->title }}</span>
-                        <span class="ticker-price ticker-price-highlight">{{ number_format($listing->price, 0) }}€</span>
-                    </a>
-                    @endforeach
-                    {{-- Duplicate for seamless loop --}}
-                    @foreach($topRecords as $listing)
-                    <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="ticker-item">
-                        <span class="ticker-title">{{ $listing->title }}</span>
-                        <span class="ticker-price ticker-price-highlight">{{ number_format($listing->price, 0) }}€</span>
-                    </a>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="hero">
         <h1>PrixRetro</h1>
         <p class="tagline">
@@ -67,6 +13,42 @@
                 {{ $consoles->sum(fn($c) => $c->variants->sum('listings_count')) }} ventes analysées
             </span>
         </p>
+    </div>
+
+    {{-- Compact Highlights Tables --}}
+    <div class="highlights-compact">
+        <div class="compact-table">
+            <h3 class="compact-title">🕒 Dernières ventes</h3>
+            <div class="compact-list">
+                @foreach($latestSales->take(10) as $listing)
+                <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="compact-row">
+                    <span class="compact-name">{{ $listing->title }}</span>
+                    <span class="compact-price">{{ number_format($listing->price, 0) }}€</span>
+                </a>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="compact-table">
+            <h3 class="compact-title">💰 Records de prix</h3>
+            <div class="compact-list">
+                @php
+                    $allRecords = collect();
+                    foreach($priceRecords as $record) {
+                        foreach($record['listings'] as $listing) {
+                            $allRecords->push($listing);
+                        }
+                    }
+                    $topRecords = $allRecords->sortByDesc('price')->take(10);
+                @endphp
+                @foreach($topRecords as $listing)
+                <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="compact-row">
+                    <span class="compact-name">{{ $listing->title }}</span>
+                    <span class="compact-price compact-price-highlight">{{ number_format($listing->price, 0) }}€</span>
+                </a>
+                @endforeach
+            </div>
+        </div>
     </div>
 
     {{-- Quick Navigation Overview --}}
