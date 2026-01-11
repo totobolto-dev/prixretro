@@ -1781,3 +1781,111 @@ footer p {
         gap: 0.25rem;
     }
 }
+
+/* Highlights Section */
+.highlights-section {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 2px solid var(--border);
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+}
+
+.highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.highlight-widget {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.widget-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.widget-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.widget-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.widget-item:hover {
+    background: var(--bg-hover);
+    border-color: var(--text-link);
+    transform: translateX(4px);
+}
+
+.widget-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.widget-item-name {
+    font-weight: 500;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.widget-item-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.widget-item-price {
+    font-weight: 700;
+    color: var(--text-link);
+    font-size: 1.1rem;
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+.highlight-price {
+    color: #d97706;
+}
+
+@media (max-width: 768px) {
+    .highlights-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .widget-item-name {
+        font-size: 0.9rem;
+    }
+    
+    .widget-item-price {
+        font-size: 1rem;
+    }
+}

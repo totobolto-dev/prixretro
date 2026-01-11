@@ -230,6 +230,54 @@
         </div>
     </div>
     @endif
+
+    {{-- Highlights Section --}}
+    <div class="highlights-section">
+        <h2 class="section-title">📊 En ce moment</h2>
+
+        <div class="highlights-grid">
+            {{-- Latest Sales Widget --}}
+            <div class="highlight-widget">
+                <h3 class="widget-title">🕒 Dernières Ventes</h3>
+                <div class="widget-list">
+                    @foreach($latestSales->take(10) as $listing)
+                    <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="widget-item">
+                        <div class="widget-item-info">
+                            <span class="widget-item-name">{{ Str::limit($listing->title, 40) }}</span>
+                            <span class="widget-item-meta">{{ $listing->variant->console->name }} • {{ $listing->sold_date->format('d/m/Y') }}</span>
+                        </div>
+                        <span class="widget-item-price">{{ number_format($listing->price, 0) }}€</span>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Price Records Widget --}}
+            <div class="highlight-widget">
+                <h3 class="widget-title">💰 Records de Prix</h3>
+                <div class="widget-list">
+                    @php
+                        $allRecords = collect();
+                        foreach($priceRecords as $record) {
+                            foreach($record['listings'] as $listing) {
+                                $allRecords->push($listing);
+                            }
+                        }
+                        $topRecords = $allRecords->sortByDesc('price')->take(10);
+                    @endphp
+                    @foreach($topRecords as $listing)
+                    <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="widget-item">
+                        <div class="widget-item-info">
+                            <span class="widget-item-name">{{ Str::limit($listing->title, 40) }}</span>
+                            <span class="widget-item-meta">{{ $listing->variant->console->name }}</span>
+                        </div>
+                        <span class="widget-item-price highlight-price">{{ number_format($listing->price, 0) }}€</span>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
