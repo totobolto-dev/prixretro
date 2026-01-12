@@ -82,20 +82,6 @@ class SortListings extends Page implements HasForms, HasTable
                     ->searchable()
                     ->sortable()
                     ->wrap()
-                    ->description(function ($record) {
-                        $status = $record->url_validation_status;
-                        $statusBadge = match ($status) {
-                            'valid' => '✓ Valid',
-                            'invalid' => '✗ Invalid',
-                            'captcha' => '⚠ CAPTCHA',
-                            'error' => '✗ Error',
-                            default => '○ Not Checked',
-                        };
-
-                        $actions = 'Actions: Classify | Reject | Validate URL';
-
-                        return $statusBadge . ' • ' . $actions;
-                    })
                     ->url(fn($record) => $record->url, shouldOpenInNewTab: true),
                 TextColumn::make('price')
                     ->label('Price')
@@ -111,6 +97,27 @@ class SortListings extends Page implements HasForms, HasTable
                     ->label('Condition')
                     ->badge()
                     ->sortable()
+                    ->width('120px'),
+                TextColumn::make('url_validation_status')
+                    ->label('URL Status')
+                    ->badge()
+                    ->sortable()
+                    ->color(fn (string|null $state): string => match ($state) {
+                        'valid' => 'success',
+                        'invalid' => 'danger',
+                        'captcha' => 'warning',
+                        'error' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string|null $state): string => match ($state) {
+                        'valid' => 'Valid',
+                        'invalid' => 'Invalid',
+                        'captcha' => 'CAPTCHA',
+                        'error' => 'Error',
+                        'pending' => 'Pending',
+                        default => 'Not Checked',
+                    })
+                    ->tooltip(fn ($record) => $record->url_validation_error)
                     ->width('120px'),
             ])
             ->filters([
@@ -352,6 +359,7 @@ class SortListings extends Page implements HasForms, HasTable
                     DeleteBulkAction::make(),
                 ]),
             ])
+            ->actionsColumnLabel('Actions')
             ->selectCurrentPageOnly()
             ->defaultSort('created_at', 'desc')
             ->paginated([25, 50, 100]);
