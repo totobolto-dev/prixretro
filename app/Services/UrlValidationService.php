@@ -26,7 +26,9 @@ class UrlValidationService
             $effectiveUrl = null;
 
             // Use HEAD request to minimize load on eBay
-            $response = Http::timeout(10)
+            $response = Http::timeout(20)
+                ->connectTimeout(10)
+                ->retry(2, 1000)
                 ->withHeaders([
                     'User-Agent' => $this->getRandomUserAgent(),
                     'Accept-Language' => 'fr-FR,fr;q=0.9,en;q=0.8',
@@ -40,6 +42,7 @@ class UrlValidationService
                     'on_stats' => function ($stats) use (&$effectiveUrl) {
                         $effectiveUrl = (string) $stats->getEffectiveUri();
                     },
+                    'verify' => true,
                 ])
                 ->head($url);
 
@@ -174,11 +177,11 @@ class UrlValidationService
     {
         // Redirects to homepage or category pages indicate removed item
         $errorPatterns = [
-            'ebay\.fr/?$',           // Homepage
-            'ebay\.fr/\?',           // Homepage with params
-            'ebay\.fr/b/',           // Category browse
-            'ebay\.fr/sch/',         // Search page
-            'ebay\.fr/n/',           // Category hub
+            'ebay\.fr\/?$',           // Homepage
+            'ebay\.fr\/\?',           // Homepage with params
+            'ebay\.fr\/b\/',          // Category browse
+            'ebay\.fr\/sch\/',        // Search page
+            'ebay\.fr\/n\/',          // Category hub
         ];
 
         foreach ($errorPatterns as $pattern) {

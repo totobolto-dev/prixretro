@@ -12,7 +12,10 @@ class ValidateListingUrls extends Command
                             {--limit= : Maximum number of listings to validate}
                             {--delay=2000 : Delay between requests in milliseconds (default: 2000)}
                             {--only-pending : Only validate listings without validation status}
-                            {--auto-reject : Automatically reject listings with invalid URLs}';
+                            {--auto-reject : Automatically reject listings with invalid URLs}
+                            {--id= : Validate specific eBay item ID}
+                            {--range= : Validate DB ID range (e.g., "100-200")}
+                            {--reverse : Process newest listings first (default: oldest first)}';
 
     protected $description = 'Validate eBay listing URLs to detect redirects and dead links';
 
@@ -31,10 +34,36 @@ class ValidateListingUrls extends Command
         // Build query
         $query = Listing::query();
 
+        // Filter by specific item ID
+        if ($itemId = $this->option('id')) {
+            $query->where('item_id', $itemId);
+        }
+
+        // Filter by DB ID range
+        if ($range = $this->option('range')) {
+            if (preg_match('/^(\d+)-(\d+)$/', $range, $matches)) {
+                $start = (int) $matches[1];
+                $end = (int) $matches[2];
+                $query->whereBetween('id', [$start, $end]);
+            } else {
+                $this->error('Invalid range format. Use: --range="100-200"');
+                return Command::FAILURE;
+            }
+        }
+
+        // Filter by validation status
         if ($this->option('only-pending')) {
             $query->urlNotValidated();
         }
 
+        // Sort order
+        if ($this->option('reverse')) {
+            $query->orderByDesc('id');
+        } else {
+            $query->orderBy('id');
+        }
+
+        // Apply limit
         if ($limit = $this->option('limit')) {
             $query->limit((int) $limit);
         }

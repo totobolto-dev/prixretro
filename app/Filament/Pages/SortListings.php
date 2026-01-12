@@ -74,16 +74,31 @@ class SortListings extends Page implements HasForms, HasTable
             )
             ->columns([
                 TextColumn::make('id')
-                    ->label('#')
+                    ->label('ID')
                     ->width('50px')
                     ->sortable(),
                 TextColumn::make('title')
+                    ->label('Title')
                     ->searchable()
                     ->sortable()
                     ->wrap()
+                    ->description(function ($record) {
+                        $status = $record->url_validation_status;
+                        $statusBadge = match ($status) {
+                            'valid' => '✓ Valid',
+                            'invalid' => '✗ Invalid',
+                            'captcha' => '⚠ CAPTCHA',
+                            'error' => '✗ Error',
+                            default => '○ Not Checked',
+                        };
+
+                        $actions = 'Actions: Classify | Reject | Validate URL';
+
+                        return $statusBadge . ' • ' . $actions;
+                    })
                     ->url(fn($record) => $record->url, shouldOpenInNewTab: true),
                 TextColumn::make('price')
-                    ->label('Prix')
+                    ->label('Price')
                     ->money('EUR')
                     ->sortable()
                     ->width('100px'),
@@ -93,29 +108,9 @@ class SortListings extends Page implements HasForms, HasTable
                     ->sortable()
                     ->width('100px'),
                 TextColumn::make('condition')
-                    ->label('État')
+                    ->label('Condition')
                     ->badge()
                     ->sortable()
-                    ->width('120px'),
-                TextColumn::make('url_validation_status')
-                    ->label('URL Status')
-                    ->badge()
-                    ->color(fn (string|null $state): string => match ($state) {
-                        'valid' => 'success',
-                        'invalid' => 'danger',
-                        'captcha' => 'warning',
-                        'error' => 'danger',
-                        default => 'gray',
-                    })
-                    ->formatStateUsing(fn (string|null $state): string => match ($state) {
-                        'valid' => 'Valid',
-                        'invalid' => 'Invalid',
-                        'captcha' => 'CAPTCHA',
-                        'error' => 'Error',
-                        'pending' => 'Pending',
-                        default => 'Not Checked',
-                    })
-                    ->tooltip(fn ($record) => $record->url_validation_error)
                     ->width('120px'),
             ])
             ->filters([
