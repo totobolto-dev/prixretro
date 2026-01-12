@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\Console;
 use App\Models\Listing;
 use App\Models\Variant;
+use App\Services\UrlValidationService;
 use BackedEnum;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -95,6 +96,26 @@ class SortListings extends Page implements HasForms, HasTable
                     ->label('État')
                     ->badge()
                     ->sortable()
+                    ->width('120px'),
+                TextColumn::make('url_validation_status')
+                    ->label('URL Status')
+                    ->badge()
+                    ->color(fn (string|null $state): string => match ($state) {
+                        'valid' => 'success',
+                        'invalid' => 'danger',
+                        'captcha' => 'warning',
+                        'error' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string|null $state): string => match ($state) {
+                        'valid' => 'Valid',
+                        'invalid' => 'Invalid',
+                        'captcha' => 'CAPTCHA',
+                        'error' => 'Error',
+                        'pending' => 'Pending',
+                        default => 'Not Checked',
+                    })
+                    ->tooltip(fn ($record) => $record->url_validation_error)
                     ->width('120px'),
             ])
             ->filters([
@@ -190,6 +211,53 @@ class SortListings extends Page implements HasForms, HasTable
                             ->success()
                             ->send();
                     }),
+                Action::make('validate_url')
+                    ->label('Validate URL')
+                    ->icon('heroicon-o-link')
+                    ->color('warning')
+                    ->action(function (Listing $record) {
+                        $validator = app(UrlValidationService::class);
+                        $result = $validator->validateUrl($record->url, $record->item_id);
+
+                        $record->update([
+                            'url_validation_status' => $result['status'],
+                            'url_redirect_target' => $result['redirect_target'],
+                            'url_validation_error' => $result['error'],
+                            'url_validated_at' => now(),
+                        ]);
+
+                        // Auto-reject if URL is invalid
+                        if ($result['status'] === 'invalid') {
+                            $record->update([
+                                'status' => 'rejected',
+                                'reviewed_at' => now(),
+                            ]);
+
+                            Notification::make()
+                                ->title('URL Invalid - Auto-Rejected')
+                                ->body($result['error'])
+                                ->danger()
+                                ->send();
+                        } elseif ($result['status'] === 'captcha') {
+                            Notification::make()
+                                ->title('CAPTCHA Challenge')
+                                ->body('Cannot validate - eBay requires CAPTCHA. Try again later.')
+                                ->warning()
+                                ->send();
+                        } elseif ($result['status'] === 'error') {
+                            Notification::make()
+                                ->title('Validation Error')
+                                ->body($result['error'])
+                                ->danger()
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->title('URL Valid')
+                                ->body('This listing URL is valid and accessible.')
+                                ->success()
+                                ->send();
+                        }
+                    }),
                 Action::make('reject')
                     ->label('Reject')
                     ->icon('heroicon-o-x-circle')
@@ -209,6 +277,62 @@ class SortListings extends Page implements HasForms, HasTable
             ])
             ->bulkActions([
                 BulkActionGroup::make([
+                    BulkAction::make('bulk_validate_urls')
+                        ->label('Validate URLs')
+                        ->icon('heroicon-o-link')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->modalHeading('Validate URLs')
+                        ->modalDescription('This will validate all selected listings and auto-reject invalid ones. Delay of 2 seconds between requests.')
+                        ->action(function ($records) {
+                            $validator = app(UrlValidationService::class);
+                            $stats = [
+                                'valid' => 0,
+                                'invalid' => 0,
+                                'captcha' => 0,
+                                'error' => 0,
+                            ];
+
+                            foreach ($records as $record) {
+                                $result = $validator->validateUrl($record->url, $record->item_id);
+
+                                $record->update([
+                                    'url_validation_status' => $result['status'],
+                                    'url_redirect_target' => $result['redirect_target'],
+                                    'url_validation_error' => $result['error'],
+                                    'url_validated_at' => now(),
+                                ]);
+
+                                // Auto-reject if URL is invalid
+                                if ($result['status'] === 'invalid') {
+                                    $record->update([
+                                        'status' => 'rejected',
+                                        'reviewed_at' => now(),
+                                    ]);
+                                }
+
+                                $stats[$result['status']]++;
+
+                                // Throttle to avoid bot detection (2 seconds between requests)
+                                if (!$records->last()->is($record)) {
+                                    $validator->throttle(2000);
+                                }
+                            }
+
+                            $message = sprintf(
+                                'Valid: %d | Invalid: %d | CAPTCHA: %d | Errors: %d',
+                                $stats['valid'],
+                                $stats['invalid'],
+                                $stats['captcha'],
+                                $stats['error']
+                            );
+
+                            Notification::make()
+                                ->title('Bulk URL Validation Complete')
+                                ->body($message)
+                                ->success()
+                                ->send();
+                        }),
                     BulkAction::make('bulk_reject')
                         ->label('Reject Selected')
                         ->icon('heroicon-o-x-circle')
