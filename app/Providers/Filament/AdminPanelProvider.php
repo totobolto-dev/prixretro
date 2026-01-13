@@ -29,11 +29,10 @@ class AdminPanelProvider extends PanelProvider
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
             fn (): string => Blade::render('<style>
-                .fi-sidebar { width: 14rem !important; }
-                .fi-sidebar-nav { width: 14rem !important; }
-                @media (min-width: 1024px) {
-                    .fi-main { margin-left: 14rem !important; }
-                }
+                /* Compact table font sizes */
+                .fi-ta-table { font-size: 0.875rem !important; }
+                .fi-ta-text { font-size: 0.875rem !important; }
+                .fi-ta-header-cell { font-size: 0.75rem !important; text-transform: uppercase; }
             </style>')
         );
     }
