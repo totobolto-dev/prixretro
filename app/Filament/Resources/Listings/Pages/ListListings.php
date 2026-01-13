@@ -9,6 +9,7 @@ use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 class ListListings extends ListRecords
 {
@@ -108,47 +109,60 @@ class ListListings extends ListRecords
                 ->icon('heroicon-o-inbox-arrow-down')
                 ->color('warning')
                 ->form([
-                    Select::make('file')
-                        ->label('File')
-                        ->options([
-                            'scraped_data_ds.json' => 'Nintendo DS (raw)',
-                            'scraped_data_gbc.json' => 'Game Boy Color (raw)',
-                            'scraped_data_gba.json' => 'Game Boy Advance (raw)',
-                        ])
+                    Select::make('files')
+                        ->label('JSON Files')
+                        ->options(function () {
+                            $storageDir = storage_path('app');
+                            $jsonFiles = File::glob($storageDir . '/*.json');
+
+                            $options = [];
+                            foreach ($jsonFiles as $file) {
+                                $filename = basename($file);
+                                $size = round(filesize($file) / 1024, 2);
+                                $options[$filename] = "{$filename} ({$size} KB)";
+                            }
+
+                            return $options;
+                        })
+                        ->multiple()
                         ->required()
-                        ->helperText('Import raw unsorted data. Classify in Sort Listings page.'),
+                        ->helperText('Select one or more JSON files to bulk import. All files will be imported as unclassified.'),
                 ])
                 ->action(function (array $data) {
-                    $file = $data['file'];
-                    $filePath = storage_path("app/{$file}");
+                    $files = $data['files'];
+                    $totalImported = 0;
+                    $failedFiles = [];
 
-                    if (!file_exists($filePath)) {
-                        Notification::make()
-                            ->title('Import Failed')
-                            ->body("File not found: {$file}")
-                            ->danger()
-                            ->send();
-                        return;
+                    foreach ($files as $file) {
+                        $filePath = storage_path("app/{$file}");
+
+                        if (!file_exists($filePath)) {
+                            $failedFiles[] = $file;
+                            continue;
+                        }
+
+                        try {
+                            Artisan::call('import:raw', ['file' => $filePath]);
+                            $output = Artisan::output();
+
+                            preg_match('/Would import: (\d+)/', $output, $imported);
+                            $totalImported += (int)($imported[1] ?? 0);
+                        } catch (\Exception $e) {
+                            $failedFiles[] = "{$file} ({$e->getMessage()})";
+                        }
                     }
 
-                    try {
-                        Artisan::call('import:raw', ['file' => $filePath]);
-                        $output = Artisan::output();
-
-                        preg_match('/Would import: (\d+)/', $output, $imported);
-
-                        $importedCount = $imported[1] ?? 0;
-
+                    if (count($failedFiles) > 0) {
                         Notification::make()
-                            ->title('Import Completed')
-                            ->body("Imported {$importedCount} unclassified listings. Visit Sort Listings to classify.")
-                            ->success()
+                            ->title('Import Partially Failed')
+                            ->body("Imported {$totalImported} listings. Failed: " . implode(', ', $failedFiles))
+                            ->warning()
                             ->send();
-                    } catch (\Exception $e) {
+                    } else {
                         Notification::make()
-                            ->title('Import Failed')
-                            ->body($e->getMessage())
-                            ->danger()
+                            ->title('Bulk Import Completed')
+                            ->body("Imported {$totalImported} unclassified listings from " . count($files) . " file(s). Visit Sort Listings to classify.")
+                            ->success()
                             ->send();
                     }
                 }),
