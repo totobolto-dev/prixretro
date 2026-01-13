@@ -26,8 +26,17 @@ class GenerateSitemap extends Command
         $consoles = Console::with('variants')->where('is_active', true)->get();
 
         $variantCount = 0;
+        $rankingCount = 0;
 
         foreach ($consoles as $console) {
+            // Console page
+            $xml .= $this->addUrl(
+                "https://www.prixretro.com/{$console->slug}",
+                '0.9',
+                'weekly',
+                now()->toDateString()
+            );
+
             // Ranking page (if console has 3+ variants with data)
             $variantsWithData = $console->variants()
                 ->whereHas('listings', function($q) {
@@ -38,17 +47,18 @@ class GenerateSitemap extends Command
             if ($variantsWithData >= 3) {
                 $xml .= $this->addUrl(
                     "https://www.prixretro.com/{$console->slug}/classement",
-                    '0.9',
+                    '0.8',
                     'weekly',
                     now()->toDateString()
                 );
+                $rankingCount++;
             }
 
             // Variant pages
             foreach ($console->variants as $variant) {
                 $xml .= $this->addUrl(
                     "https://www.prixretro.com/{$console->slug}/{$variant->slug}",
-                    '0.8',
+                    '0.7',
                     'weekly',
                     now()->toDateString()
                 );
@@ -63,9 +73,10 @@ class GenerateSitemap extends Command
         File::put($path, $xml);
 
         $this->info("✅ Sitemap generated successfully!");
-        $this->info("📊 Total URLs: " . ($variantCount + $consoles->count() + 1));
+        $this->info("📊 Total URLs: " . ($variantCount + $consoles->count() + $rankingCount + 1));
         $this->info("   - Homepage: 1");
-        $this->info("   - Ranking pages: " . $consoles->count());
+        $this->info("   - Console pages: " . $consoles->count());
+        $this->info("   - Ranking pages: {$rankingCount}");
         $this->info("   - Variant pages: {$variantCount}");
         $this->info("📍 Location: {$path}");
 
