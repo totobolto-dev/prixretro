@@ -25,7 +25,6 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\HtmlString;
 
 class SortListings extends Page implements HasForms, HasTable
 {
@@ -100,37 +99,26 @@ class SortListings extends Page implements HasForms, HasTable
                     ->sortable()
                     ->width('120px'),
                 TextColumn::make('url_validation_status')
-                    ->label('URL Status / Actions')
+                    ->label('URL Status')
+                    ->badge()
                     ->sortable()
-                    ->formatStateUsing(function ($record) {
-                        $status = $record->url_validation_status;
-                        $badge = match ($status) {
-                            'valid' => '<span class="fi-badge fi-badge-success">Valid</span>',
-                            'invalid' => '<span class="fi-badge fi-badge-danger">Invalid</span>',
-                            'captcha' => '<span class="fi-badge fi-badge-warning">CAPTCHA</span>',
-                            'error' => '<span class="fi-badge fi-badge-danger">Error</span>',
-                            'pending' => '<span class="fi-badge fi-badge-gray">Pending</span>',
-                            default => '<span class="fi-badge fi-badge-gray">Not Checked</span>',
-                        };
-
-                        return new HtmlString('
-                            <div>' . $badge . '</div>
-                            <div class="flex gap-1 mt-2">
-                                <button type="button" wire:click="mountTableAction(\'classify\', \'' . $record->id . '\')" class="fi-link fi-link-size-sm">
-                                    Classify
-                                </button>
-                                <button type="button" wire:click="mountTableAction(\'reject\', \'' . $record->id . '\')" class="fi-link fi-link-size-sm text-danger-600">
-                                    Reject
-                                </button>
-                                <button type="button" wire:click="mountTableAction(\'validate_url\', \'' . $record->id . '\')" class="fi-link fi-link-size-sm text-warning-600">
-                                    Validate
-                                </button>
-                            </div>
-                        ');
+                    ->color(fn (string|null $state): string => match ($state) {
+                        'valid' => 'success',
+                        'invalid' => 'danger',
+                        'captcha' => 'warning',
+                        'error' => 'danger',
+                        default => 'gray',
                     })
-                    ->html()
+                    ->formatStateUsing(fn (string|null $state): string => match ($state) {
+                        'valid' => 'Valid',
+                        'invalid' => 'Invalid',
+                        'captcha' => 'CAPTCHA',
+                        'error' => 'Error',
+                        'pending' => 'Pending',
+                        default => 'Not Checked',
+                    })
                     ->tooltip(fn ($record) => $record->url_validation_error)
-                    ->width('180px'),
+                    ->width('120px'),
             ])
             ->filters([
                 // Filters
@@ -371,6 +359,7 @@ class SortListings extends Page implements HasForms, HasTable
                     DeleteBulkAction::make(),
                 ]),
             ])
+            ->actionsColumnLabel('Actions')
             ->selectCurrentPageOnly()
             ->defaultSort('created_at', 'desc')
             ->paginated([25, 50, 100]);
