@@ -83,24 +83,26 @@ class SortListings extends Page implements HasForms, HasTable
                     ->searchable()
                     ->sortable()
                     ->wrap()
-                    ->description(fn($record) => new HtmlString('
-                        <div class="flex gap-2 mt-1" onclick="event.stopPropagation()">
-                            <span class="text-xs font-medium text-blue-600 dark:text-blue-400 cursor-pointer hover:underline"
+                    ->formatStateUsing(fn($record) => new HtmlString('
+                        <a href="' . $record->url . '" target="_blank" style="color: #3b82f6; text-decoration: underline;">
+                            ' . e($record->title) . '
+                        </a>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.25rem;">
+                            <span style="font-size: 0.75rem; font-weight: 600; color: #2563eb; cursor: pointer; text-decoration: underline;"
                                   wire:click="mountTableAction(\'classify\', \'' . $record->id . '\')">
                                 📝 Classify
                             </span>
-                            <span class="text-xs font-medium text-red-600 dark:text-red-400 cursor-pointer hover:underline"
+                            <span style="font-size: 0.75rem; font-weight: 600; color: #dc2626; cursor: pointer; text-decoration: underline;"
                                   wire:click="mountTableAction(\'reject\', \'' . $record->id . '\')">
                                 ❌ Reject
                             </span>
-                            <span class="text-xs font-medium text-yellow-600 dark:text-yellow-400 cursor-pointer hover:underline"
+                            <span style="font-size: 0.75rem; font-weight: 600; color: #ca8a04; cursor: pointer; text-decoration: underline;"
                                   wire:click="mountTableAction(\'validate_url\', \'' . $record->id . '\')">
-                                🔗 Validate URL
+                                🔗 Validate
                             </span>
                         </div>
                     '))
-                    ->html()
-                    ->url(fn($record) => $record->url, shouldOpenInNewTab: true),
+                    ->html(),
                 TextColumn::make('price')
                     ->label('Price')
                     ->money('EUR')
@@ -377,7 +379,6 @@ class SortListings extends Page implements HasForms, HasTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->actionsColumnLabel('Actions')
             ->selectCurrentPageOnly()
             ->defaultSort('created_at', 'desc')
             ->paginated([25, 50, 100]);

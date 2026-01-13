@@ -33,6 +33,9 @@ class AdminPanelProvider extends PanelProvider
                 .fi-ta-table { font-size: 0.875rem !important; }
                 .fi-ta-text { font-size: 0.875rem !important; }
                 .fi-ta-header-cell { font-size: 0.75rem !important; text-transform: uppercase; }
+                /* Hide actions column */
+                .fi-ta-actions { display: none !important; }
+                .fi-ta-header-cell-actions { display: none !important; }
             </style>')
         );
     }
