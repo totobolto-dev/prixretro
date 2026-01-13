@@ -83,26 +83,7 @@ class SortListings extends Page implements HasForms, HasTable
                     ->searchable()
                     ->sortable()
                     ->wrap()
-                    ->formatStateUsing(fn($record) => new HtmlString('
-                        <a href="' . $record->url . '" target="_blank" style="color: #3b82f6; text-decoration: underline;">
-                            ' . e($record->title) . '
-                        </a>
-                        <div style="display: flex; gap: 0.5rem; margin-top: 0.25rem;">
-                            <span style="font-size: 0.75rem; font-weight: 600; color: #2563eb; cursor: pointer; text-decoration: underline;"
-                                  wire:click="mountTableAction(\'classify\', \'' . $record->id . '\')">
-                                📝 Classify
-                            </span>
-                            <span style="font-size: 0.75rem; font-weight: 600; color: #dc2626; cursor: pointer; text-decoration: underline;"
-                                  wire:click="mountTableAction(\'reject\', \'' . $record->id . '\')">
-                                ❌ Reject
-                            </span>
-                            <span style="font-size: 0.75rem; font-weight: 600; color: #ca8a04; cursor: pointer; text-decoration: underline;"
-                                  wire:click="mountTableAction(\'validate_url\', \'' . $record->id . '\')">
-                                🔗 Validate
-                            </span>
-                        </div>
-                    '))
-                    ->html(),
+                    ->url(fn($record) => $record->url, shouldOpenInNewTab: true),
                 TextColumn::make('price')
                     ->label('Price')
                     ->money('EUR')
@@ -119,26 +100,37 @@ class SortListings extends Page implements HasForms, HasTable
                     ->sortable()
                     ->width('120px'),
                 TextColumn::make('url_validation_status')
-                    ->label('URL Status')
-                    ->badge()
+                    ->label('URL Status / Actions')
                     ->sortable()
-                    ->color(fn (string|null $state): string => match ($state) {
-                        'valid' => 'success',
-                        'invalid' => 'danger',
-                        'captcha' => 'warning',
-                        'error' => 'danger',
-                        default => 'gray',
+                    ->formatStateUsing(function ($record) {
+                        $status = $record->url_validation_status;
+                        $badge = match ($status) {
+                            'valid' => '<span class="fi-badge fi-badge-success">Valid</span>',
+                            'invalid' => '<span class="fi-badge fi-badge-danger">Invalid</span>',
+                            'captcha' => '<span class="fi-badge fi-badge-warning">CAPTCHA</span>',
+                            'error' => '<span class="fi-badge fi-badge-danger">Error</span>',
+                            'pending' => '<span class="fi-badge fi-badge-gray">Pending</span>',
+                            default => '<span class="fi-badge fi-badge-gray">Not Checked</span>',
+                        };
+
+                        return new HtmlString('
+                            <div>' . $badge . '</div>
+                            <div class="flex gap-1 mt-2">
+                                <button type="button" wire:click="mountTableAction(\'classify\', \'' . $record->id . '\')" class="fi-link fi-link-size-sm">
+                                    Classify
+                                </button>
+                                <button type="button" wire:click="mountTableAction(\'reject\', \'' . $record->id . '\')" class="fi-link fi-link-size-sm text-danger-600">
+                                    Reject
+                                </button>
+                                <button type="button" wire:click="mountTableAction(\'validate_url\', \'' . $record->id . '\')" class="fi-link fi-link-size-sm text-warning-600">
+                                    Validate
+                                </button>
+                            </div>
+                        ');
                     })
-                    ->formatStateUsing(fn (string|null $state): string => match ($state) {
-                        'valid' => 'Valid',
-                        'invalid' => 'Invalid',
-                        'captcha' => 'CAPTCHA',
-                        'error' => 'Error',
-                        'pending' => 'Pending',
-                        default => 'Not Checked',
-                    })
+                    ->html()
                     ->tooltip(fn ($record) => $record->url_validation_error)
-                    ->width('120px'),
+                    ->width('180px'),
             ])
             ->filters([
                 // Filters

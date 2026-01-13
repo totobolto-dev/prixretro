@@ -54,19 +54,16 @@ Detection Logic:
 
 1. Redirects to different items:
 
-
     - Original: ebay.fr/itm/123456789
     - Redirects to: ebay.fr/itm/987654321
     - → REJECTED (different item ID)
 
 2. Redirects to error pages:
 
-
     - Redirects to homepage, category, or search
     - → REJECTED (item removed)
 
 3. CAPTCHA challenges:
-
 
     - Detects /splashui/captcha, /verify, HTTP 503
     - → MARKED AS CAPTCHA (try again later)
@@ -74,5 +71,22 @@ Detection Logic:
 
 4. 404 errors:
 
-
     - → REJECTED (item not found)
+
+5. New validation command options:
+
+# Validate specific eBay item ID
+
+php artisan listings:validate-urls --id=168020599855
+
+# Validate DB ID range
+
+php artisan listings:validate-urls --range="100-200"
+
+# Process newest first (reverse order)
+
+php artisan listings:validate-urls --reverse --limit=50
+
+# Combine options
+
+php artisan listings:validate-urls --range="2400-2500" --reverse --auto-reject
