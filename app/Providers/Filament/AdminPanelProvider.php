@@ -29,15 +29,10 @@ class AdminPanelProvider extends PanelProvider
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
             fn (): string => Blade::render('<style>
-                /* Reduce overall font size to 80% */
-                .fi-ta-table { font-size: 0.7rem !important; }
-                .fi-ta-text { font-size: 0.7rem !important; }
-                .fi-ta-header-cell { font-size: 0.65rem !important; text-transform: uppercase; }
-                .fi-badge { font-size: 0.65rem !important; padding: 0.125rem 0.375rem !important; }
-                .fi-link { font-size: 0.65rem !important; }
-                /* Hide actions column */
-                .fi-ta-actions { display: none !important; }
-                .fi-ta-header-cell-actions { display: none !important; }
+                /* Compact table font sizes */
+                .fi-ta-table { font-size: 0.875rem !important; }
+                .fi-ta-text { font-size: 0.875rem !important; }
+                .fi-ta-header-cell { font-size: 0.75rem !important; text-transform: uppercase; }
             </style>')
         );
     }

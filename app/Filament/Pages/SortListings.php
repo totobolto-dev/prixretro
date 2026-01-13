@@ -25,7 +25,6 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\HtmlString;
 
 class SortListings extends Page implements HasForms, HasTable
 {
@@ -83,23 +82,6 @@ class SortListings extends Page implements HasForms, HasTable
                     ->searchable()
                     ->sortable()
                     ->wrap()
-                    ->description(fn($record) => new HtmlString('
-                        <div class="flex gap-2 mt-1" onclick="event.stopPropagation()">
-                            <span class="text-xs font-medium text-blue-600 dark:text-blue-400 cursor-pointer hover:underline"
-                                  wire:click="mountTableAction(\'classify\', \'' . $record->id . '\')">
-                                📝 Classify
-                            </span>
-                            <span class="text-xs font-medium text-red-600 dark:text-red-400 cursor-pointer hover:underline"
-                                  wire:click="mountTableAction(\'reject\', \'' . $record->id . '\')">
-                                ❌ Reject
-                            </span>
-                            <span class="text-xs font-medium text-yellow-600 dark:text-yellow-400 cursor-pointer hover:underline"
-                                  wire:click="mountTableAction(\'validate_url\', \'' . $record->id . '\')">
-                                🔗 Validate URL
-                            </span>
-                        </div>
-                    '))
-                    ->html()
                     ->url(fn($record) => $record->url, shouldOpenInNewTab: true),
                 TextColumn::make('price')
                     ->label('Price')
