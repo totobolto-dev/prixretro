@@ -56,7 +56,9 @@
 
     @foreach($orderedCategories as $category)
         @if($categorized->has($category))
-            <h3 class="variant-category-title">{{ $category }}</h3>
+            @if($category !== 'Standard' || $orderedCategories->count() > 1)
+                <h3 class="variant-category-title">{{ $category }}</h3>
+            @endif
             <div class="variant-grid">
                 @foreach($categorized[$category]->sortByDesc('listings_count') as $variant)
                 <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-card">

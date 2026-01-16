@@ -11,7 +11,9 @@ class ConsoleController extends Controller
     public function index()
     {
         $consoles = Console::with(['variants' => function ($query) {
-            $query->withCount('listings');
+            $query->withCount(['listings' => function ($q) {
+                $q->where('status', 'approved');
+            }]);
         }])
             ->where('is_active', true)
             ->orderBy('display_order')
@@ -52,7 +54,9 @@ class ConsoleController extends Controller
     public function show(Console $console)
     {
         $console->load(['variants' => function ($query) {
-            $query->withCount('listings');
+            $query->withCount(['listings' => function ($q) {
+                $q->where('status', 'approved');
+            }]);
         }]);
 
         // Generate auto description
