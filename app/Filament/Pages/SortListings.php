@@ -191,7 +191,44 @@ class SortListings extends Page implements HasForms, HasTable
                                 ->send();
                         }
 
-                        // Variant is now optional - allow null for default/original consoles
+                        // If no variant selected, auto-create default variant
+                        if (!$variantId) {
+                            $console = Console::where('slug', $data['console_slug'])->first();
+
+                            if (!$console) {
+                                Notification::make()
+                                    ->title('Error')
+                                    ->body('Console not found')
+                                    ->danger()
+                                    ->send();
+                                return;
+                            }
+
+                            // Check if default variant already exists
+                            $defaultVariant = Variant::where('console_id', $console->id)
+                                ->where('is_default', true)
+                                ->first();
+
+                            if (!$defaultVariant) {
+                                // Create default variant with same name as console
+                                $defaultVariant = Variant::create([
+                                    'console_id' => $console->id,
+                                    'name' => $console->name,
+                                    'slug' => $console->slug,
+                                    'full_slug' => $console->slug . '/' . $console->slug,
+                                    'is_default' => true,
+                                ]);
+
+                                Notification::make()
+                                    ->title('Default variant created')
+                                    ->body("Created default variant for {$console->name}")
+                                    ->info()
+                                    ->send();
+                            }
+
+                            $variantId = $defaultVariant->id;
+                        }
+
                         $record->update([
                             'console_slug' => $data['console_slug'],
                             'variant_id' => $variantId,
