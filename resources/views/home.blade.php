@@ -59,6 +59,7 @@
         <a href="#xbox" class="family-nav-link">Xbox</a>
         <a href="#wii" class="family-nav-link">Wii</a>
         <a href="#psp" class="family-nav-link">PSP</a>
+        <a href="#vita" class="family-nav-link">PS Vita</a>
         <a href="#atari" class="family-nav-link">Atari</a>
         <a href="#neo-geo" class="family-nav-link">Neo Geo</a>
         <a href="#pc-engine" class="family-nav-link">PC Engine</a>
@@ -75,7 +76,8 @@
         $sega = $consoles->filter(fn($c) => $c->display_order >= 30 && $c->display_order < 40);
         $xbox = $consoles->filter(fn($c) => $c->display_order >= 40 && $c->display_order < 50);
         $wii = $consoles->filter(fn($c) => $c->display_order >= 50 && $c->display_order < 60);
-        $psp = $consoles->filter(fn($c) => $c->display_order >= 60 && $c->display_order < 70);
+        $psp = $consoles->filter(fn($c) => $c->display_order >= 60 && $c->display_order < 62);
+        $vita = $consoles->filter(fn($c) => $c->display_order >= 62 && $c->display_order < 70);
         $gameGear = $consoles->filter(fn($c) => $c->display_order >= 70 && $c->display_order < 80);
         $atari = $consoles->filter(fn($c) => $c->display_order >= 80 && $c->display_order < 90);
         $neoGeo = $consoles->filter(fn($c) => $c->display_order >= 90 && $c->display_order < 100);
@@ -118,7 +120,7 @@
                     <div class="variants-table">
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->name }}</span>
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
                             <div class="variant-stats-compact">
                                 <span class="variant-price-compact">{{ number_format($variant->avg_price ?? 0, 0) }}€</span>
                                 <span class="variant-count-compact">{{ $variant->listings_count ?? 0 }}</span>
@@ -165,7 +167,7 @@
                     <div class="variants-table">
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->name }}</span>
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
                             <div class="variant-stats-compact">
                                 <span class="variant-price-compact">{{ number_format($variant->avg_price ?? 0, 0) }}€</span>
                                 <span class="variant-count-compact">{{ $variant->listings_count ?? 0 }}</span>
@@ -212,7 +214,7 @@
                     <div class="variants-table">
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->name }}</span>
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
                             <div class="variant-stats-compact">
                                 <span class="variant-price-compact">{{ number_format($variant->avg_price ?? 0, 0) }}€</span>
                                 <span class="variant-count-compact">{{ $variant->listings_count ?? 0 }}</span>
@@ -287,6 +289,32 @@
         <p class="family-description">Les consoles portables de Sony (2004-2009)</p>
         <div class="console-grid">
             @foreach($psp as $console)
+            <div class="console-card" data-console-slug="{{ $console->slug }}">
+                <div class="console-card-header">
+                    <div class="console-info">
+                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
+                        <div class="console-meta">
+                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
+                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
+                        </div>
+                    </div>
+                    @if($console->variants->count() > 0)
+                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- PS Vita --}}
+    @if($vita->count() > 0)
+    <div class="console-family-section" id="vita">
+        <h2 class="family-header">PlayStation Vita</h2>
+        <p class="family-description">Console portable HD de Sony (2011-2013)</p>
+        <div class="console-grid">
+            @foreach($vita as $console)
             <div class="console-card" data-console-slug="{{ $console->slug }}">
                 <div class="console-card-header">
                     <div class="console-info">
@@ -415,7 +443,7 @@
                     <div class="variants-table">
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->name }}</span>
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
                             <span class="variant-data-compact">
                                 @if($variant->listings_count > 0)
                                     @php
@@ -484,7 +512,7 @@
                     <div class="variants-table">
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->name }}</span>
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
                             <span class="variant-data-compact">
                                 @if($variant->listings_count > 0)
                                     @php
@@ -549,7 +577,7 @@
                     <div class="variants-table">
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->name }}</span>
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
                             <span class="variant-data-compact">
                                 @if($variant->listings_count > 0)
                                     @php

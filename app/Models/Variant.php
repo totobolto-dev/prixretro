@@ -18,11 +18,13 @@ class Variant extends Model
         'rarity_level',
         'region',
         'is_special_edition',
+        'is_default',
     ];
 
     protected $casts = [
         'search_terms' => 'array',
         'is_special_edition' => 'boolean',
+        'is_default' => 'boolean',
     ];
 
     public function console(): BelongsTo
@@ -53,5 +55,27 @@ class Variant extends Model
     public function scrapeJobs(): HasMany
     {
         return $this->hasMany(ScrapeJob::class);
+    }
+
+    /**
+     * Get the full display name for this variant (for page titles, etc.).
+     * If it's the default variant, show only the console name.
+     * Otherwise, show console name + variant name.
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->is_default
+            ? $this->console->name
+            : $this->console->name . ' ' . $this->name;
+    }
+
+    /**
+     * Get the short display name for this variant (for lists, cards, etc.).
+     * If it's the default variant, show only the console name.
+     * Otherwise, show just the variant name.
+     */
+    public function getShortNameAttribute(): string
+    {
+        return $this->is_default ? $this->console->name : $this->name;
     }
 }

@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-{{ $variant->console->name }} {{ $variant->name }}@if(isset($statistics['count']) && $statistics['count'] > 0) - Prix ({{ number_format($statistics['avg_price'], 0) }}€)@endif | PrixRetro
+{{ $variant->display_name }}@if(isset($statistics['count']) && $statistics['count'] > 0) - Prix ({{ number_format($statistics['avg_price'], 0) }}€)@endif | PrixRetro
 @endsection
 
 @section('meta_description')
-@if(isset($statistics['count']) && $statistics['count'] > 0)Prix moyen {{ $variant->console->name }} {{ $variant->name }}: {{ number_format($statistics['avg_price'], 2) }}€ ({{ $statistics['count'] }} ventes). Historique et meilleures offres eBay.@else{{ $variant->console->name }} {{ $variant->name }} - Suivez les prix d'occasion sur eBay.@endif
+@if(isset($statistics['count']) && $statistics['count'] > 0)Prix moyen {{ $variant->display_name }}: {{ number_format($statistics['avg_price'], 2) }}€ ({{ $statistics['count'] }} ventes). Historique et meilleures offres eBay.@else{{ $variant->display_name }} - Suivez les prix d'occasion sur eBay.@endif
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
         <span>{{ $variant->name }}</span>
     </div>
 
-    <h1>{{ $variant->console->name }} {{ $variant->name }}</h1>
+    <h1>{{ $variant->display_name }}</h1>
 
     @if($statistics['count'] > 0)
     <div class="value-prop-banner">
@@ -85,7 +85,7 @@
 
     {{-- Auto-generated SEO description --}}
     <div class="variant-description">
-        <h2>À propos de {{ $variant->console->name }} {{ $variant->name }}</h2>
+        <h2>À propos de {{ $variant->display_name }}</h2>
         <p>{{ $autoDescription }}</p>
 
         @if($statistics['count'] > 0)
@@ -178,7 +178,7 @@
                 @php
                     $searchQuery = $variant->search_terms
                         ? implode(' ', $variant->search_terms)
-                        : $variant->console->name . ' ' . $variant->name;
+                        : $variant->display_name;
                 @endphp
                 <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($searchQuery) }}&_sop=10&{{ $ebayAffiliateParams }}"
                    target="_blank"

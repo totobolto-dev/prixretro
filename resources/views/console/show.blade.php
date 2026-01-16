@@ -60,7 +60,7 @@
             <div class="variant-grid">
                 @foreach($categorized[$category]->sortByDesc('listings_count') as $variant)
                 <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-card">
-                    <div class="variant-name">{{ $variant->name }}</div>
+                    <div class="variant-name">{{ $variant->short_name }}</div>
                     <div class="variant-stats">
                         @if($variant->listings_count > 0)
                             @php
