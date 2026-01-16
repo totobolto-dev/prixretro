@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Listings\Schemas;
 
+use App\Models\Console;
+use App\Models\Variant;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -16,9 +18,25 @@ class ListingForm
     {
         return $schema
             ->components([
+                Select::make('console_slug')
+                    ->label('Console')
+                    ->options(Console::orderBy('display_order')->pluck('name', 'slug')->toArray())
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(fn($state, callable $set) => $set('variant_id', null)),
                 Select::make('variant_id')
-                    ->relationship('variant', 'name')
-                    ->required(),
+                    ->label('Variant')
+                    ->options(function (callable $get) {
+                        if (!$get('console_slug')) {
+                            return [];
+                        }
+                        return Variant::query()
+                            ->whereHas('console', fn($q) => $q->where('slug', $get('console_slug')))
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
+                    ->disabled(fn(callable $get) => !$get('console_slug'))
+                    ->helperText(fn(callable $get) => !$get('console_slug') ? 'Select a console first' : 'Optional - leave empty for default/original console'),
                 TextInput::make('item_id')
                     ->required(),
                 TextInput::make('title')

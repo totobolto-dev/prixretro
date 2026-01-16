@@ -147,7 +147,7 @@ class SortListings extends Page implements HasForms, HasTable
                                     ->toArray();
                             })
                             ->disabled(fn(callable $get) => !$get('console_slug'))
-                            ->helperText(fn(callable $get) => !$get('console_slug') ? 'Select a console first' : 'Or create a new variant below'),
+                            ->helperText(fn(callable $get) => !$get('console_slug') ? 'Select a console first' : 'Optional - leave empty for default/original console, or create a new variant below'),
                         TextInput::make('new_variant_name')
                             ->label('Or Create New Variant')
                             ->helperText('Leave empty to use selected variant above')
@@ -191,15 +191,7 @@ class SortListings extends Page implements HasForms, HasTable
                                 ->send();
                         }
 
-                        if (!$variantId) {
-                            Notification::make()
-                                ->title('Error')
-                                ->body('Please select a variant or create a new one')
-                                ->warning()
-                                ->send();
-                            return;
-                        }
-
+                        // Variant is now optional - allow null for default/original consoles
                         $record->update([
                             'console_slug' => $data['console_slug'],
                             'variant_id' => $variantId,

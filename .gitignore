@@ -28,6 +28,9 @@ Thumbs.db
 /_archive/
 /_cleanup/
 
+# Scraper debug files
+scrapers/debug_*.html
+
 # Database backups
 /database/*.sqlite
 /database/*.sqlite-*
