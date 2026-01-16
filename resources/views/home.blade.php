@@ -53,12 +53,19 @@
 
     {{-- Quick Navigation Overview --}}
     <div class="console-families-nav">
-        <a href="#nintendo-home" class="family-nav-link">🏠 Nintendo (salon)</a>
-        <a href="#playstation" class="family-nav-link">🎮 PlayStation</a>
-        <a href="#sega" class="family-nav-link">💎 Sega</a>
-        <a href="#game-boy-family" class="family-nav-link">📱 Game Boy</a>
-        <a href="#ds-family" class="family-nav-link">📱 DS</a>
-        <a href="#3ds-family" class="family-nav-link">📱 3DS</a>
+        <a href="#nintendo-home" class="family-nav-link">Nintendo (salon)</a>
+        <a href="#playstation" class="family-nav-link">PlayStation</a>
+        <a href="#sega" class="family-nav-link">Sega</a>
+        <a href="#xbox" class="family-nav-link">Xbox</a>
+        <a href="#wii" class="family-nav-link">Wii</a>
+        <a href="#psp" class="family-nav-link">PSP</a>
+        <a href="#atari" class="family-nav-link">Atari</a>
+        <a href="#neo-geo" class="family-nav-link">Neo Geo</a>
+        <a href="#pc-engine" class="family-nav-link">PC Engine</a>
+        <a href="#game-boy-family" class="family-nav-link">Game Boy</a>
+        <a href="#ds-family" class="family-nav-link">DS</a>
+        <a href="#3ds-family" class="family-nav-link">3DS</a>
+        <a href="#other" class="family-nav-link">Autres</a>
     </div>
 
     @php
@@ -66,23 +73,30 @@
         $nintendoHome = $consoles->filter(fn($c) => $c->display_order >= 10 && $c->display_order < 20);
         $playstation = $consoles->filter(fn($c) => $c->display_order >= 20 && $c->display_order < 30);
         $sega = $consoles->filter(fn($c) => $c->display_order >= 30 && $c->display_order < 40);
-        $gameWatch = $consoles->filter(fn($c) => $c->display_order >= 90 && $c->display_order < 100);
-        $gameBoyFamily = $consoles->filter(fn($c) => $c->display_order >= 100 && $c->display_order < 200);
-        $dsFamily = $consoles->filter(fn($c) => $c->display_order >= 200 && $c->display_order < 300);
-        $threeDsFamily = $consoles->filter(fn($c) => $c->display_order >= 300 && $c->display_order < 400);
+        $xbox = $consoles->filter(fn($c) => $c->display_order >= 40 && $c->display_order < 50);
+        $wii = $consoles->filter(fn($c) => $c->display_order >= 50 && $c->display_order < 60);
+        $psp = $consoles->filter(fn($c) => $c->display_order >= 60 && $c->display_order < 70);
+        $gameGear = $consoles->filter(fn($c) => $c->display_order >= 70 && $c->display_order < 80);
+        $atari = $consoles->filter(fn($c) => $c->display_order >= 80 && $c->display_order < 90);
+        $neoGeo = $consoles->filter(fn($c) => $c->display_order >= 90 && $c->display_order < 100);
+        $pcEngine = $consoles->filter(fn($c) => $c->display_order >= 96 && $c->display_order < 98);
+        $wonderswan = $consoles->filter(fn($c) => $c->display_order >= 98 && $c->display_order < 100);
+        $gameBoyFamily = $consoles->filter(fn($c) => $c->display_order >= 100 && $c->display_order < 120);
+        $dsFamily = $consoles->filter(fn($c) => $c->display_order >= 120 && $c->display_order < 140);
+        $threeDsFamily = $consoles->filter(fn($c) => $c->display_order >= 140 && $c->display_order < 160);
+        $otherConsoles = $consoles->filter(fn($c) => $c->display_order >= 160);
     @endphp
 
     {{-- Nintendo Home Consoles --}}
     @if($nintendoHome->count() > 0)
     <div class="console-family-section" id="nintendo-home">
-        <h2 class="family-header">🏠 Consoles Nintendo de salon</h2>
+        <h2 class="family-header">Consoles Nintendo de salon</h2>
         <p class="family-description">Les consoles de salon classiques de Nintendo (1985-2002)</p>
 
         <div class="console-grid">
             @foreach($nintendoHome as $console)
             <div class="console-card" data-console-slug="{{ $console->slug }}">
                 <div class="console-card-header">
-                    <div class="console-icon">🏠</div>
                     <div class="console-info">
                         <h3 class="console-name">
                             <a href="/{{ $console->slug }}">{{ $console->name }}</a>
@@ -123,14 +137,13 @@
     {{-- PlayStation Family --}}
     @if($playstation->count() > 0)
     <div class="console-family-section" id="playstation">
-        <h2 class="family-header">🎮 Famille PlayStation</h2>
-        <p class="family-description">Les consoles PlayStation de Sony (1995-2000)</p>
+        <h2 class="family-header">Famille PlayStation</h2>
+        <p class="family-description">Les consoles PlayStation de Sony (1995-2006)</p>
 
         <div class="console-grid">
             @foreach($playstation as $console)
             <div class="console-card" data-console-slug="{{ $console->slug }}">
                 <div class="console-card-header">
-                    <div class="console-icon">🎮</div>
                     <div class="console-info">
                         <h3 class="console-name">
                             <a href="/{{ $console->slug }}">{{ $console->name }}</a>
@@ -171,14 +184,13 @@
     {{-- Sega Family --}}
     @if($sega->count() > 0)
     <div class="console-family-section" id="sega">
-        <h2 class="family-header">💎 Famille Sega</h2>
+        <h2 class="family-header">Famille Sega</h2>
         <p class="family-description">Les consoles légendaires de Sega (1986-1999)</p>
 
         <div class="console-grid">
             @foreach($sega as $console)
             <div class="console-card" data-console-slug="{{ $console->slug }}">
                 <div class="console-card-header">
-                    <div class="console-icon">💎</div>
                     <div class="console-info">
                         <h3 class="console-name">
                             <a href="/{{ $console->slug }}">{{ $console->name }}</a>
@@ -216,17 +228,172 @@
     </div>
     @endif
 
+    {{-- Xbox Family --}}
+    @if($xbox->count() > 0)
+    <div class="console-family-section" id="xbox">
+        <h2 class="family-header">Famille Xbox</h2>
+        <p class="family-description">Les consoles Xbox de Microsoft (2001-2005)</p>
+        <div class="console-grid">
+            @foreach($xbox as $console)
+            <div class="console-card" data-console-slug="{{ $console->slug }}">
+                <div class="console-card-header">
+                    <div class="console-info">
+                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
+                        <div class="console-meta">
+                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
+                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
+                        </div>
+                    </div>
+                    @if($console->variants->count() > 0)
+                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- Wii --}}
+    @if($wii->count() > 0)
+    <div class="console-family-section" id="wii">
+        <h2 class="family-header">Nintendo Wii</h2>
+        <p class="family-description">Console révolutionnaire avec détection de mouvement (2006)</p>
+        <div class="console-grid">
+            @foreach($wii as $console)
+            <div class="console-card" data-console-slug="{{ $console->slug }}">
+                <div class="console-card-header">
+                    <div class="console-info">
+                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
+                        <div class="console-meta">
+                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
+                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
+                        </div>
+                    </div>
+                    @if($console->variants->count() > 0)
+                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- PSP Family --}}
+    @if($psp->count() > 0)
+    <div class="console-family-section" id="psp">
+        <h2 class="family-header">PlayStation Portable</h2>
+        <p class="family-description">Les consoles portables de Sony (2004-2009)</p>
+        <div class="console-grid">
+            @foreach($psp as $console)
+            <div class="console-card" data-console-slug="{{ $console->slug }}">
+                <div class="console-card-header">
+                    <div class="console-info">
+                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
+                        <div class="console-meta">
+                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
+                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
+                        </div>
+                    </div>
+                    @if($console->variants->count() > 0)
+                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- Atari Family --}}
+    @if($atari->count() > 0)
+    <div class="console-family-section" id="atari">
+        <h2 class="family-header">Famille Atari</h2>
+        <p class="family-description">Les consoles pionnières d'Atari (1977-1993)</p>
+        <div class="console-grid">
+            @foreach($atari as $console)
+            <div class="console-card" data-console-slug="{{ $console->slug }}">
+                <div class="console-card-header">
+                    <div class="console-info">
+                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
+                        <div class="console-meta">
+                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
+                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
+                        </div>
+                    </div>
+                    @if($console->variants->count() > 0)
+                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- Neo Geo Family --}}
+    @if($neoGeo->count() > 0)
+    <div class="console-family-section" id="neo-geo">
+        <h2 class="family-header">Famille Neo Geo</h2>
+        <p class="family-description">Les systèmes Neo Geo de SNK (1990-1999)</p>
+        <div class="console-grid">
+            @foreach($neoGeo as $console)
+            <div class="console-card" data-console-slug="{{ $console->slug }}">
+                <div class="console-card-header">
+                    <div class="console-info">
+                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
+                        <div class="console-meta">
+                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
+                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
+                        </div>
+                    </div>
+                    @if($console->variants->count() > 0)
+                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- PC Engine --}}
+    @if($pcEngine->count() > 0)
+    <div class="console-family-section" id="pc-engine">
+        <h2 class="family-header">PC Engine / TurboGrafx</h2>
+        <p class="family-description">Console 16-bit de NEC (1987)</p>
+        <div class="console-grid">
+            @foreach($pcEngine as $console)
+            <div class="console-card" data-console-slug="{{ $console->slug }}">
+                <div class="console-card-header">
+                    <div class="console-info">
+                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
+                        <div class="console-meta">
+                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
+                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
+                        </div>
+                    </div>
+                    @if($console->variants->count() > 0)
+                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     {{-- Game Boy Family --}}
     @if($gameBoyFamily->count() > 0)
     <div class="console-family-section" id="game-boy-family">
-        <h2 class="family-header">🎮 Famille Game Boy</h2>
+        <h2 class="family-header">Famille Game Boy</h2>
         <p class="family-description">Les consoles portables qui ont révolutionné le jeu nomade (1989-2008)</p>
 
         <div class="console-grid">
             @foreach($gameBoyFamily as $console)
             <div class="console-card" data-console-slug="{{ $console->slug }}">
                 <div class="console-card-header">
-                    <div class="console-icon">🎮</div>
                     <div class="console-info">
                         <h3 class="console-name">
                             <a href="/{{ $console->slug }}">{{ $console->name }}</a>
@@ -289,14 +456,13 @@
     {{-- DS Family --}}
     @if($dsFamily->count() > 0)
     <div class="console-family-section" id="ds-family">
-        <h2 class="family-header">📱 Famille Nintendo DS</h2>
+        <h2 class="family-header">Famille Nintendo DS</h2>
         <p class="family-description">Les consoles à double écran tactile (2004-2013)</p>
 
         <div class="console-grid">
             @foreach($dsFamily as $console)
             <div class="console-card" data-console-slug="{{ $console->slug }}">
                 <div class="console-card-header">
-                    <div class="console-icon">📱</div>
                     <div class="console-info">
                         <h3 class="console-name">
                             <a href="/{{ $console->slug }}">{{ $console->name }}</a>
@@ -355,14 +521,13 @@
     {{-- 3DS Family --}}
     @if($threeDsFamily->count() > 0)
     <div class="console-family-section" id="3ds-family">
-        <h2 class="family-header">🎯 Famille Nintendo 3DS</h2>
+        <h2 class="family-header">Famille Nintendo 3DS</h2>
         <p class="family-description">Les consoles avec effet 3D sans lunettes (2011-2020)</p>
 
         <div class="console-grid">
             @foreach($threeDsFamily as $console)
             <div class="console-card" data-console-slug="{{ $console->slug }}">
                 <div class="console-card-header">
-                    <div class="console-icon">🎯</div>
                     <div class="console-info">
                         <h3 class="console-name">
                             <a href="/{{ $console->slug }}">{{ $console->name }}</a>
@@ -412,6 +577,32 @@
                     @endif
                 </div>
                 @endif
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    {{-- Other Consoles --}}
+    @if($otherConsoles->count() > 0)
+    <div class="console-family-section" id="other">
+        <h2 class="family-header">Autres Consoles</h2>
+        <p class="family-description">Consoles rares et collectors (1978-2000)</p>
+        <div class="console-grid">
+            @foreach($otherConsoles as $console)
+            <div class="console-card" data-console-slug="{{ $console->slug }}">
+                <div class="console-card-header">
+                    <div class="console-info">
+                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
+                        <div class="console-meta">
+                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
+                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
+                        </div>
+                    </div>
+                    @if($console->variants->count() > 0)
+                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
+                    @endif
+                </div>
             </div>
             @endforeach
         </div>
