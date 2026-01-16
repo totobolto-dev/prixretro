@@ -17,11 +17,24 @@ class ListingsTable
     {
         return $table
             ->columns([
-                TextColumn::make('variant.name')
+                TextColumn::make('variant.console.name')
+                    ->label('Console')
                     ->searchable()
-                    ->width('150px')
+                    ->width('120px')
+                    ->badge()
+                    ->color('info'),
+                TextColumn::make('variant.name')
+                    ->label('Variant')
+                    ->searchable()
+                    ->width('120px')
                     ->badge()
                     ->color('success'),
+                TextColumn::make('console_slug')
+                    ->label('Console Slug')
+                    ->searchable()
+                    ->width('120px')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->description(fn ($record) => 'variant_id: ' . ($record->variant_id ?? 'NULL')),
                 TextColumn::make('title')
                     ->searchable()
                     ->wrap()
