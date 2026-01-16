@@ -30,6 +30,10 @@ class VariantForm
                 TextInput::make('region'),
                 Toggle::make('is_special_edition')
                     ->required(),
+                Toggle::make('is_default')
+                    ->label('Default Variant')
+                    ->helperText('Default variants display as the console name (e.g., "Nintendo 64" instead of "Nintendo 64 Black")')
+                    ->default(false),
             ]);
     }
 }

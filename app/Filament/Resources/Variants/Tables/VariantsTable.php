@@ -36,6 +36,10 @@ class VariantsTable
                     ->boolean()
                     ->width('60px')
                     ->label('Special'),
+                IconColumn::make('is_default')
+                    ->boolean()
+                    ->width('60px')
+                    ->label('Default'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
