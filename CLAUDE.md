@@ -156,7 +156,7 @@ php artisan view:clear
 - 🔄 **TODO**: Google Analytics + AdSense
 - 🔄 **TODO**: SEO meta tags + structured data
 
-## Filament v4 Common Errors (CRITICAL!)
+## Filament v4 Common Patterns (CRITICAL!)
 
 ### Bulk Actions - Use Filament\Actions, NOT Filament\Tables\Actions
 **This error has occurred 12+ times - always check existing code first!**
@@ -170,14 +170,54 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Components\Select;
 
 ->bulkActions([
     BulkActionGroup::make([
-        BulkAction::make('name')
+        BulkAction::make('approve')
             ->action(function ($records) { ... }),
+        BulkAction::make('change_variant')
+            ->form([
+                Select::make('console_slug')
+                    ->options(...)
+                    ->required()
+                    ->live(),
+                Select::make('variant_id')
+                    ->options(function (callable $get) { ... })
+                    ->required(),
+            ])
+            ->action(function (Collection $records, array $data) { ... }),
         DeleteBulkAction::make(),
     ]),
 ])
+```
+
+### Filter Customization
+```php
+SelectFilter::make('variant')
+    ->relationship('variant', 'name')
+    ->searchable()
+    ->getOptionLabelFromRecordUsing(fn ($record) =>
+        $record->console->name . ' - ' . $record->name
+    )
+```
+
+### Preserve Query Parameters on Edit
+```php
+// In EditRecord page
+public function mount(int | string $record): void {
+    parent::mount($record);
+    $referrer = request()->headers->get('referer');
+    if ($referrer && str_contains($referrer, '/admin/listings')) {
+        session(['listings_return_url' => $referrer]);
+    }
+}
+
+protected function getRedirectUrl(): string {
+    $returnUrl = session('listings_return_url');
+    session()->forget('listings_return_url');
+    return $returnUrl ?? $this->getResource()::getUrl('index');
+}
 ```
 
 **Reference**: See `app/Filament/Resources/Listings/Tables/ListingsTable.php` for working examples.
