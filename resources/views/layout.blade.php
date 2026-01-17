@@ -24,6 +24,7 @@
     <link rel="canonical" href="https://www.prixretro.com{{ request()->getPathInfo() }}">
 
     <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
     <!-- Google Analytics -->
@@ -52,7 +53,10 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <a href="/" class="logo">PrixRetro</a>
+                <a href="/" class="logo">
+                    <img src="/images/prixretro-logo.png" alt="PrixRetro" class="logo-image">
+                    <span class="logo-text">PrixRetro</span>
+                </a>
                 <nav>
                     <a href="/">Accueil</a>
                 </nav>
