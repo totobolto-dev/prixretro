@@ -19,16 +19,31 @@ class EditListing extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        // Pre-populate console_slug from variant relationship
+        // Pre-populate console_slug from either variant relationship or existing value
         if (isset($data['variant_id']) && $data['variant_id']) {
             $variant = \App\Models\Variant::find($data['variant_id']);
             if ($variant && $variant->console) {
                 $data['console_slug'] = $variant->console->slug;
             }
-        } elseif (isset($data['console_slug']) && !empty($data['console_slug'])) {
-            // console_slug already exists (for listings classified without variant)
-            // Keep it as is
         }
+        // If variant_id is NULL but console_slug exists, keep it
+        // (This handles listings classified without variant)
+
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        // Ensure console_slug is saved from the form
+        // If variant is selected, also set console_slug from variant
+        if (isset($data['variant_id']) && $data['variant_id']) {
+            $variant = \App\Models\Variant::find($data['variant_id']);
+            if ($variant && $variant->console) {
+                $data['console_slug'] = $variant->console->slug;
+            }
+        }
+        // If no variant selected, console_slug should be set from form dropdown
+        // It's already in $data['console_slug'] from the form
 
         return $data;
     }
