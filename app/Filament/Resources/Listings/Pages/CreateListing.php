@@ -11,16 +11,37 @@ class CreateListing extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Ensure console_slug is saved from the form
-        // If variant is selected, also set console_slug from variant
+        // If variant is selected, set console_slug from variant
         if (isset($data['variant_id']) && $data['variant_id']) {
             $variant = \App\Models\Variant::find($data['variant_id']);
             if ($variant && $variant->console) {
                 $data['console_slug'] = $variant->console->slug;
             }
         }
-        // If no variant selected, console_slug should be set from form dropdown
-        // It's already in $data['console_slug'] from the form
+        // If no variant selected but console is, auto-create default variant
+        elseif (isset($data['console_slug']) && !empty($data['console_slug']) && empty($data['variant_id'])) {
+            $console = \App\Models\Console::where('slug', $data['console_slug'])->first();
+
+            if ($console) {
+                // Check if default variant already exists
+                $defaultVariant = \App\Models\Variant::where('console_id', $console->id)
+                    ->where('is_default', true)
+                    ->first();
+
+                if (!$defaultVariant) {
+                    // Create default variant with same name as console
+                    $defaultVariant = \App\Models\Variant::create([
+                        'console_id' => $console->id,
+                        'name' => $console->name,
+                        'slug' => $console->slug,
+                        'full_slug' => $console->slug . '/' . $console->slug,
+                        'is_default' => true,
+                    ]);
+                }
+
+                $data['variant_id'] = $defaultVariant->id;
+            }
+        }
 
         return $data;
     }
