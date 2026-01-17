@@ -68,4 +68,10 @@ class EditListing extends EditRecord
 
         return $data;
     }
+
+    protected function getRedirectUrl(): string
+    {
+        // Redirect back to the listings index after saving
+        return $this->getResource()::getUrl('index');
+    }
 }
