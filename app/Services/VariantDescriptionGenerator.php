@@ -63,17 +63,16 @@ class VariantDescriptionGenerator
         string $rarity,
         string $priceRange
     ): string {
-        $console = $variant->console;
-        $name = $variant->name;
-        $consoleName = $console->name;
+        // Use display_name to avoid "Console Console" for default variants
+        $fullName = $variant->display_name;
 
         if ($count == 0) {
-            return "La {$consoleName} {$name} est actuellement suivie sur PrixRetro. " .
+            return "La {$fullName} est actuellement suivie sur PrixRetro. " .
                    "Nous collectons les données du marché de l'occasion pour vous offrir " .
                    "les meilleures informations sur les prix.";
         }
 
-        $desc = "La {$consoleName} {$name} a été vendue en moyenne à " .
+        $desc = "La {$fullName} a été vendue en moyenne à " .
                 number_format($avgPrice, 0) . "€ sur eBay, " .
                 "avec des prix variant de " . number_format($minPrice, 0) . "€ " .
                 "à " . number_format($maxPrice, 0) . "€ selon l'état. ";

@@ -121,13 +121,31 @@
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
                             <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <div class="variant-stats-compact">
-                                <span class="variant-price-compact">{{ number_format($variant->avg_price ?? 0, 0) }}€</span>
-                                <span class="variant-count-compact">{{ $variant->listings_count ?? 0 }}</span>
-                            </div>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
                         </a>
                         @endforeach
                     </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
                 </div>
                 @endif
             </div>
@@ -168,13 +186,31 @@
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
                             <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <div class="variant-stats-compact">
-                                <span class="variant-price-compact">{{ number_format($variant->avg_price ?? 0, 0) }}€</span>
-                                <span class="variant-count-compact">{{ $variant->listings_count ?? 0 }}</span>
-                            </div>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
                         </a>
                         @endforeach
                     </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
                 </div>
                 @endif
             </div>
@@ -215,13 +251,31 @@
                         @foreach($console->variants->sortByDesc('listings_count') as $variant)
                         <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
                             <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <div class="variant-stats-compact">
-                                <span class="variant-price-compact">{{ number_format($variant->avg_price ?? 0, 0) }}€</span>
-                                <span class="variant-count-compact">{{ $variant->listings_count ?? 0 }}</span>
-                            </div>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
                         </a>
                         @endforeach
                     </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
                 </div>
                 @endif
             </div>
@@ -250,6 +304,40 @@
                     <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
                     @endif
                 </div>
+
+                @if($console->variants->count() > 0)
+                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
+                    <div class="variants-table">
+                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
+                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
@@ -276,6 +364,40 @@
                     <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
                     @endif
                 </div>
+
+                @if($console->variants->count() > 0)
+                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
+                    <div class="variants-table">
+                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
+                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
@@ -302,6 +424,40 @@
                     <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
                     @endif
                 </div>
+
+                @if($console->variants->count() > 0)
+                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
+                    <div class="variants-table">
+                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
+                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
@@ -328,6 +484,40 @@
                     <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
                     @endif
                 </div>
+
+                @if($console->variants->count() > 0)
+                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
+                    <div class="variants-table">
+                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
+                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
@@ -354,6 +544,40 @@
                     <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
                     @endif
                 </div>
+
+                @if($console->variants->count() > 0)
+                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
+                    <div class="variants-table">
+                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
+                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
@@ -380,6 +604,40 @@
                     <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
                     @endif
                 </div>
+
+                @if($console->variants->count() > 0)
+                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
+                    <div class="variants-table">
+                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
+                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
@@ -406,6 +664,40 @@
                     <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
                     @endif
                 </div>
+
+                @if($console->variants->count() > 0)
+                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
+                    <div class="variants-table">
+                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
+                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
@@ -631,6 +923,40 @@
                     <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
                     @endif
                 </div>
+
+                @if($console->variants->count() > 0)
+                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
+                    <div class="variants-table">
+                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
+                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
+                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
+                            <span class="variant-data-compact">
+                                @if($variant->listings_count > 0)
+                                    @php
+                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->avg('price');
+                                    @endphp
+                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
+                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
+                                @else
+                                    <span class="no-data-compact">Pas de données</span>
+                                @endif
+                            </span>
+                        </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
+                    @endphp
+                    @if($hasRanking)
+                    <div class="ranking-link-compact">
+                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
+                    </div>
+                    @endif
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
