@@ -10,6 +10,8 @@ class Listing extends Model
 {
     protected $fillable = [
         'variant_id',
+        'console_slug',
+        'classification_status',
         'item_id',
         'title',
         'price',
