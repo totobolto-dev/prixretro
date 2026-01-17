@@ -10,6 +10,17 @@ class EditListing extends EditRecord
 {
     protected static string $resource = ListingResource::class;
 
+    public function mount(int | string $record): void
+    {
+        parent::mount($record);
+
+        // Store the referrer URL to preserve query parameters
+        $referrer = request()->headers->get('referer');
+        if ($referrer && str_contains($referrer, '/admin/listings')) {
+            session(['listings_return_url' => $referrer]);
+        }
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -71,7 +82,13 @@ class EditListing extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        // Redirect back to the listings index after saving
-        return $this->getResource()::getUrl('index');
+        // Redirect back to the listings index with preserved query parameters
+        $returnUrl = session('listings_return_url');
+
+        // Clear the session
+        session()->forget('listings_return_url');
+
+        // If we have a stored return URL, use it, otherwise fall back to index
+        return $returnUrl ?? $this->getResource()::getUrl('index');
     }
 }

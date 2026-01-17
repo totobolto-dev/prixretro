@@ -75,7 +75,7 @@ class ListingsTable
                         'approved' => 'Approved',
                         'rejected' => 'Rejected',
                     ])
-                    ->default('pending'),
+                    ->default('approved'),
                 SelectFilter::make('variant')
                     ->relationship('variant', 'name')
                     ->searchable(),
