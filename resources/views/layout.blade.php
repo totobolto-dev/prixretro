@@ -55,7 +55,6 @@
             <div class="header-content">
                 <a href="/" class="logo">
                     <img src="/images/prixretro-logo.png" alt="PrixRetro" class="logo-image">
-                    <span class="logo-text">PrixRetro</span>
                 </a>
                 <nav>
                     <a href="/">Accueil</a>

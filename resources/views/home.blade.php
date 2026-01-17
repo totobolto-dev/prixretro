@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <div class="hero">
-        <h1>PrixRetro</h1>
+        <img src="/images/prixretro-logo.png" alt="PrixRetro" class="hero-logo">
         <p class="tagline">
             Prix du marché pour consoles retrogaming d'occasion<br>
             <span style="color: var(--text-muted); font-size: 0.95rem;">
