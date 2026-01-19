@@ -27,7 +27,7 @@ Console (GBC, GBA, DS)
   - Currently: Only Game Boy Color variant pages
   - TODO: Expand to ALL high-traffic variants (GBA, DS)
 - **Ranking Pages**: `/{console-slug}/classement` for SEO
-- **Sitemap**: `/public/sitemap.xml` (31 pages, regenerate after adding variants)
+- **Sitemap**: `/public/sitemap.xml` (auto-regenerated daily at 3 AM UTC via GitHub Actions)
 
 ## Critical Technical Patterns
 
@@ -62,6 +62,11 @@ class User extends Authenticatable implements FilamentUser {
 ```bash
 git add . && git commit -m "Message" && git push  # Auto-deploys via GitHub Actions
 ```
+
+### Sitemap Regeneration
+- **Automatic**: Daily at 3 AM UTC via `.github/workflows/sitemap.yml`
+- **Manual**: `php artisan sitemap:generate` (requires database access)
+- **Manual trigger**: GitHub Actions → sitemap workflow → Run workflow
 
 ### Scraping & Data Import
 ```bash
