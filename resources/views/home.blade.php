@@ -2,6 +2,8 @@
 
 @section('title', 'PrixRetro - Tracker de Prix Retrogaming')
 
+@section('meta_description', 'Suivez les prix du marché des consoles retrogaming d\'occasion. Historique de ' . $consoles->sum(fn($c) => $c->variants->sum('listings_count')) . ' ventes analysées sur eBay pour Game Boy, PlayStation, Nintendo, Sega et plus.')
+
 @section('content')
 <div class="container">
     <div class="hero">

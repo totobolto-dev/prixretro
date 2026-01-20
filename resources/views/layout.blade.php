@@ -12,11 +12,19 @@
     <meta name="google-adsense-account" content="ca-pub-2791408282004471">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="@yield('og_title', 'PrixRetro - Tracker Prix Retrogaming')">
-    <meta property="og:description" content="@yield('og_description', 'Prix et historique des ventes de consoles retrogaming')">
+    <meta property="og:title" content="@yield('title', 'PrixRetro - Tracker Prix Retrogaming')">
+    <meta property="og:description" content="@yield('meta_description', 'Prix et historique des ventes de consoles retrogaming d\'occasion. Suivez le marché eBay pour Game Boy, PlayStation, Nintendo, Sega et plus.')">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:site_name" content="PrixRetro - Tracker Prix Retrogaming">
+    <meta property="og:site_name" content="PrixRetro">
+    <meta property="og:image" content="{{ asset('images/prixretro-logo.png') }}">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="@yield('title', 'PrixRetro - Tracker Prix Retrogaming')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Prix et historique des ventes de consoles retrogaming d\'occasion.')">
+    <meta name="twitter:image" content="{{ asset('images/prixretro-logo.png') }}">
 
     <title>@yield('title', 'PrixRetro - Tracker Prix Retrogaming')</title>
 

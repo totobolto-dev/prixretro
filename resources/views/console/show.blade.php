@@ -2,6 +2,10 @@
 
 @section('title', $console->name . ' - Prix & Historique | PrixRetro')
 
+@section('meta_description')
+@if(isset($statistics['count']) && $statistics['count'] > 0)Prix moyen {{ $console->name }}: {{ number_format($statistics['avg_price'], 0) }}€ ({{ $statistics['count'] }} ventes analysées). Historique complet du marché {{ $console->name }} d'occasion avec graphiques et tendances.@else{{ $console->name }} - Suivez les prix d'occasion et l'évolution du marché retrogaming.@endif
+@endsection
+
 @section('content')
 <div class="container">
     <div class="breadcrumb">

@@ -2,6 +2,8 @@
 
 @section('title', 'Quelle ' . $console->name . ' se vend le plus en France en ' . date('Y') . ' ? | PrixRetro')
 
+@section('meta_description', 'Classement ' . date('Y') . ' des variantes ' . $console->name . ' les plus vendues en France. Analyse de ' . number_format($totalSales) . ' ventes eBay réelles avec prix moyens et tendances du marché.')
+
 @section('content')
 <div class="container">
     <div class="breadcrumb">

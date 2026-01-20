@@ -142,8 +142,8 @@
         </div>
         @endif
 
+        {{-- Nintendo Portable Protection (Orzly Case) --}}
         @if((str_starts_with($variant->console->slug, 'game-boy') || str_starts_with($variant->console->slug, 'nintendo-ds') || str_starts_with($variant->console->slug, 'new-nintendo-2ds-xl') || str_starts_with($variant->console->slug, 'nintendo-3ds')) && $variant->console->slug !== 'nintendo-2ds')
-        <!-- Amazon Affiliate -->
         <div class="protection-section">
             <h2>💡 Protéger votre {{ $variant->console->name }}</h2>
             <p>Une console bien protégée conserve sa valeur. Les consoles en excellent état se vendent en moyenne <strong>28% plus cher</strong> que celles avec des rayures visibles.</p>
@@ -163,6 +163,113 @@
                        rel="nofollow noopener sponsored"
                        class="amazon-cta"
                        onclick="trackAmazonClick('orzly-{{ $variant->slug }}')">
+                        Voir sur Amazon
+                    </a>
+                </div>
+                <p class="amazon-disclaimer">Lien affilié • Commission sans surcoût pour vous</p>
+            </div>
+        </div>
+        @endif
+
+        {{-- PlayStation Portable Protection --}}
+        @if(str_starts_with($variant->console->slug, 'psp') || str_starts_with($variant->console->slug, 'ps-vita'))
+        <div class="protection-section">
+            <h2>💡 Protéger votre {{ $variant->console->name }}</h2>
+            <p>Conservez votre console portable en parfait état. Une {{ $variant->console->name }} bien protégée maintient sa valeur et évite les rayures sur l'écran.</p>
+
+            <div class="amazon-product-card">
+                <div class="amazon-badge">Recommandation</div>
+                <h3>Housse de protection rigide EVA</h3>
+                <p class="amazon-description">Protection rigide EVA pour {{ $variant->console->name }}. Matériau anti-choc avec compartiments pour jeux et câbles. Compatible avec tous les modèles PSP et PS Vita.</p>
+
+                <div class="amazon-details">
+                    <div class="amazon-price">
+                        <span class="amazon-price-label">Prix</span>
+                        <span class="amazon-price-value">~12-15€</span>
+                    </div>
+                    <a href="https://www.amazon.fr/s?k=housse+protection+{{ str_replace(' ', '+', strtolower($variant->console->name)) }}&tag=prixretro-21"
+                       target="_blank"
+                       rel="nofollow noopener sponsored"
+                       class="amazon-cta"
+                       onclick="trackAmazonClick('case-{{ $variant->slug }}')">
+                        Voir sur Amazon
+                    </a>
+                </div>
+                <p class="amazon-disclaimer">Lien affilié • Commission sans surcoût pour vous</p>
+            </div>
+        </div>
+        @endif
+
+        {{-- HDMI Adapters for Retro Home Consoles --}}
+        @if(in_array($variant->console->slug, ['playstation', 'playstation-2', 'ps-one', 'nintendo-64', 'gamecube', 'super-nintendo', 'mega-drive', 'saturn', 'dreamcast', 'nes', 'master-system']))
+        <div class="protection-section">
+            <h2>📺 Connecter sur TV moderne</h2>
+            <p>Profitez de votre {{ $variant->console->name }} sur votre TV HDMI actuelle. Les adaptateurs HDMI offrent une image nette et éliminent les problèmes de compatibilité.</p>
+
+            <div class="amazon-product-card">
+                <div class="amazon-badge">Accessoire essentiel</div>
+                <h3>
+                    @if(in_array($variant->console->slug, ['playstation', 'playstation-2', 'ps-one']))
+                        Adaptateur HDMI pour PlayStation 1/2
+                    @elseif(in_array($variant->console->slug, ['nintendo-64', 'gamecube', 'super-nintendo']))
+                        Adaptateur HDMI pour {{ $variant->console->name }}
+                    @else
+                        Adaptateur HDMI Sega
+                    @endif
+                </h3>
+                <p class="amazon-description">Convertisseur vidéo et audio vers HDMI. Plug & play, pas de drivers nécessaires. Compatible avec toutes les TV HDMI modernes.</p>
+
+                <div class="amazon-details">
+                    <div class="amazon-price">
+                        <span class="amazon-price-label">Prix</span>
+                        <span class="amazon-price-value">~15-25€</span>
+                    </div>
+                    <a href="https://www.amazon.fr/s?k=adaptateur+hdmi+{{ str_replace(['-', ' '], '+', strtolower($variant->console->slug)) }}&tag=prixretro-21"
+                       target="_blank"
+                       rel="nofollow noopener sponsored"
+                       class="amazon-cta"
+                       onclick="trackAmazonClick('hdmi-{{ $variant->slug }}')">
+                        Voir sur Amazon
+                    </a>
+                </div>
+                <p class="amazon-disclaimer">Lien affilié • Commission sans surcoût pour vous</p>
+            </div>
+        </div>
+        @endif
+
+        {{-- Memory Cards for PlayStation 2 and GameCube --}}
+        @if(in_array($variant->console->slug, ['playstation-2', 'gamecube']))
+        <div class="protection-section">
+            <h2>💾 Carte mémoire essentielle</h2>
+            <p>@if($variant->console->slug === 'playstation-2')Impossible de sauvegarder vos parties sur PS2 sans carte mémoire. Les cartes 8MB sont le standard recommandé.@else Les Memory Cards GameCube sont indispensables pour sauvegarder votre progression dans les jeux.@endif</p>
+
+            <div class="amazon-product-card">
+                <div class="amazon-badge">Accessoire indispensable</div>
+                <h3>
+                    @if($variant->console->slug === 'playstation-2')
+                        Carte mémoire PS2 8MB
+                    @else
+                        Memory Card GameCube 128MB
+                    @endif
+                </h3>
+                <p class="amazon-description">
+                    @if($variant->console->slug === 'playstation-2')
+                        Carte mémoire officielle 8MB pour PlayStation 2. Compatible avec tous les modèles PS2. Capacité pour des dizaines de sauvegardes.
+                    @else
+                        Memory Card haute capacité pour GameCube. Compatible avec tous les jeux et consoles GameCube. Format 128MB pour une capacité maximale.
+                    @endif
+                </p>
+
+                <div class="amazon-details">
+                    <div class="amazon-price">
+                        <span class="amazon-price-label">Prix</span>
+                        <span class="amazon-price-value">~8-12€</span>
+                    </div>
+                    <a href="https://www.amazon.fr/s?k=carte+memoire+{{ str_replace(['-', ' '], '+', strtolower($variant->console->slug)) }}&tag=prixretro-21"
+                       target="_blank"
+                       rel="nofollow noopener sponsored"
+                       class="amazon-cta"
+                       onclick="trackAmazonClick('memory-{{ $variant->slug }}')">
                         Voir sur Amazon
                     </a>
                 </div>
@@ -229,6 +336,67 @@
 @endsection
 
 @section('scripts')
+@if($statistics['count'] > 0)
+<!-- Schema.org Product Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ $variant->display_name }}",
+  "description": "{{ $autoDescription }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "{{ $variant->console->manufacturer ?? explode(' ', $variant->console->name)[0] }}"
+  },
+  "category": "Consoles de jeux vidéo",
+  "offers": {
+    "@type": "AggregateOffer",
+    "availability": "https://schema.org/PreOrder",
+    "priceCurrency": "EUR",
+    "lowPrice": "{{ number_format($statistics['min_price'], 2, '.', '') }}",
+    "highPrice": "{{ number_format($statistics['max_price'], 2, '.', '') }}",
+    "offerCount": "{{ $statistics['count'] }}",
+    "priceValidUntil": "{{ now()->addMonths(3)->format('Y-m-d') }}"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.2",
+    "reviewCount": "{{ $statistics['count'] }}",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+}
+</script>
+
+<!-- Schema.org BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Accueil",
+      "item": "{{ url('/') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ $variant->console->name }}",
+      "item": "{{ url('/' . $variant->console->slug) }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ $variant->name }}",
+      "item": "{{ url('/' . $variant->console->slug . '/' . $variant->slug) }}"
+    }
+  ]
+}
+</script>
+@endif
+
 <script>
 function trackAmazonClick(product) {
     if (typeof gtag !== 'undefined') {

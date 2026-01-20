@@ -24,8 +24,20 @@ Console (GBC, GBA, DS)
 
 ## Revenue Features
 - **Amazon Affiliates**: Tag `prixretro-21`, 5-8% commission
-  - Currently: Only Game Boy Color variant pages
-  - TODO: Expand to ALL high-traffic variants (GBA, DS)
+  - **Portable Consoles Protection**:
+    - Nintendo: Game Boy (all), DS (all), 3DS (all) → Orzly case (~14€)
+    - Sony: PSP, PS Vita → EVA hard cases (~12-15€)
+  - **Home Consoles HDMI Adapters**:
+    - PlayStation 1/2, Nintendo 64, GameCube, Super Nintendo
+    - Sega: Mega Drive, Saturn, Dreamcast, Master System
+    - Price range: ~15-25€
+  - **Memory Cards**:
+    - PlayStation 2 (8MB cards ~8-12€)
+    - GameCube (128MB cards ~8-12€)
+- **eBay Partner Network**: `mkcid=1&mkrid=709-53476-19255-0&campid=5339134703`
+  - All sold listings clickable with affiliate params
+  - Search links to eBay with pre-filled queries
+  - Current listings section (up to 6 per variant)
 - **Ranking Pages**: `/{console-slug}/classement` for SEO
 - **Sitemap**: `/public/sitemap.xml` (auto-regenerated daily at 3 AM UTC via GitHub Actions)
 
