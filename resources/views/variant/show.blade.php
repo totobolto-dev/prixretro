@@ -4,10 +4,6 @@
 {{ $variant->display_name }}@if(isset($statistics['count']) && $statistics['count'] > 0) - Prix ({{ number_format($statistics['avg_price'], 0) }}€)@endif | PrixRetro
 @endsection
 
-@section('meta_description')
-@if(isset($statistics['count']) && $statistics['count'] > 0)Prix moyen {{ $variant->display_name }}: {{ number_format($statistics['avg_price'], 2) }}€ ({{ $statistics['count'] }} ventes). Historique et meilleures offres eBay.@else{{ $variant->display_name }} - Suivez les prix d'occasion sur eBay.@endif
-@endsection
-
 @section('content')
 <div class="container">
     <div class="breadcrumb">
@@ -336,67 +332,6 @@
 @endsection
 
 @section('scripts')
-@if($statistics['count'] > 0)
-<!-- Schema.org Product Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": "{{ $variant->display_name }}",
-  "description": "{{ $autoDescription }}",
-  "brand": {
-    "@type": "Brand",
-    "name": "{{ $variant->console->manufacturer ?? explode(' ', $variant->console->name)[0] }}"
-  },
-  "category": "Consoles de jeux vidéo",
-  "offers": {
-    "@type": "AggregateOffer",
-    "availability": "https://schema.org/PreOrder",
-    "priceCurrency": "EUR",
-    "lowPrice": "{{ number_format($statistics['min_price'], 2, '.', '') }}",
-    "highPrice": "{{ number_format($statistics['max_price'], 2, '.', '') }}",
-    "offerCount": "{{ $statistics['count'] }}",
-    "priceValidUntil": "{{ now()->addMonths(3)->format('Y-m-d') }}"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.2",
-    "reviewCount": "{{ $statistics['count'] }}",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
-}
-</script>
-
-<!-- Schema.org BreadcrumbList -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Accueil",
-      "item": "{{ url('/') }}"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "{{ $variant->console->name }}",
-      "item": "{{ url('/' . $variant->console->slug) }}"
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": "{{ $variant->name }}",
-      "item": "{{ url('/' . $variant->console->slug . '/' . $variant->slug) }}"
-    }
-  ]
-}
-</script>
-@endif
-
 <script>
 function trackAmazonClick(product) {
     if (typeof gtag !== 'undefined') {
