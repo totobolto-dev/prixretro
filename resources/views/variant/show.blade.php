@@ -332,6 +332,18 @@
 @endsection
 
 @section('scripts')
+@if($schemaData)
+<!-- Schema.org Product Structured Data -->
+<script type="application/ld+json">
+@json($schemaData['product'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+</script>
+
+<!-- Schema.org BreadcrumbList -->
+<script type="application/ld+json">
+@json($schemaData['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+</script>
+@endif
+
 <script>
 function trackAmazonClick(product) {
     if (typeof gtag !== 'undefined') {

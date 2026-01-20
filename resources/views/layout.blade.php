@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PrixRetro - Tracker de prix pour le rétrogaming">
+    <meta name="description" content="{{ $metaDescription ?? 'PrixRetro - Tracker de prix pour le rétrogaming' }}">
     <meta name="keywords" content="retrogaming, prix, occasion, nintendo, game boy">
     <meta name="author" content="PrixRetro - Prix du Rétrogaming">
     <meta name="robots" content="index, follow">
@@ -12,11 +12,19 @@
     <meta name="google-adsense-account" content="ca-pub-2791408282004471">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="PrixRetro - Tracker Prix Retrogaming">
-    <meta property="og:description" content="Prix et historique des ventes de consoles retrogaming">
+    <meta property="og:title" content="@yield('title', 'PrixRetro - Tracker Prix Retrogaming')">
+    <meta property="og:description" content="{{ $metaDescription ?? 'Prix et historique des ventes de consoles retrogaming' }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="PrixRetro">
+    <meta property="og:image" content="{{ asset('images/prixretro-logo.png') }}">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="@yield('title', 'PrixRetro - Tracker Prix Retrogaming')">
+    <meta name="twitter:description" content="{{ $metaDescription ?? 'Prix et historique des ventes de consoles retrogaming' }}">
+    <meta name="twitter:image" content="{{ asset('images/prixretro-logo.png') }}">
 
     <title>@yield('title', 'PrixRetro - Tracker Prix Retrogaming')</title>
 

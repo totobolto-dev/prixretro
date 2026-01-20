@@ -42,11 +42,15 @@ class ContentController extends Controller
         $totalSales = $rankedVariants->sum('sales_count');
         $avgConsolePrice = $rankedVariants->avg('avg_price');
 
+        // Build meta description
+        $metaDescription = "Classement " . date('Y') . " des variantes {$console->name} les plus vendues en France. Analyse de " . number_format($totalSales) . " ventes eBay réelles avec prix moyens et tendances du marché.";
+
         return view('content.ranking', compact(
             'console',
             'rankedVariants',
             'totalSales',
-            'avgConsolePrice'
+            'avgConsolePrice',
+            'metaDescription'
         ));
     }
 }

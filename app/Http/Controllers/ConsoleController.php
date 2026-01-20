@@ -48,7 +48,11 @@ class ConsoleController extends Controller
             }
         }
 
-        return view('home', compact('consoles', 'latestSales', 'priceRecords'));
+        // Build meta description
+        $totalSales = $consoles->sum(fn($c) => $c->variants->sum('listings_count'));
+        $metaDescription = "Suivez les prix du marché des consoles retrogaming d'occasion. Historique de " . number_format($totalSales) . " ventes analysées sur eBay pour Game Boy, PlayStation, Nintendo, Sega et plus.";
+
+        return view('home', compact('consoles', 'latestSales', 'priceRecords', 'metaDescription'));
     }
 
     public function show(Console $console)
@@ -87,7 +91,12 @@ class ConsoleController extends Controller
         // Generate auto description
         $autoDescription = ConsoleDescriptionGenerator::generate($console);
 
-        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData'));
+        // Build meta description
+        $metaDescription = $statistics['count'] > 0
+            ? "Prix moyen {$console->name}: " . number_format($statistics['avg_price'], 0) . "€ ({$statistics['count']} ventes analysées). Historique complet du marché {$console->name} d'occasion avec graphiques et tendances."
+            : "{$console->name} - Suivez les prix d'occasion et l'évolution du marché retrogaming.";
+
+        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription'));
     }
 
     private function calculateMedian($prices)
