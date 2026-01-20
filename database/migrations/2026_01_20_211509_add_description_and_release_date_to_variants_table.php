@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('variants', function (Blueprint $table) {
-            //
+            $table->text('description')->nullable()->after('is_default');
+            $table->string('release_date', 50)->nullable()->after('description');
         });
     }
 
@@ -22,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('variants', function (Blueprint $table) {
-            //
+            $table->dropColumn(['description', 'release_date']);
         });
     }
 };

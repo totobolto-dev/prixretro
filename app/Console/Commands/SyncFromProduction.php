@@ -140,7 +140,13 @@ class SyncFromProduction extends Command
                 [
                     'name' => $prodVariant->name,
                     'full_slug' => $localConsole->slug . '/' . $prodVariant->slug,
+                    'is_default' => $prodVariant->is_default ?? false,
+                    'description' => $prodVariant->description,
+                    'release_date' => $prodVariant->release_date,
                     'search_terms' => json_decode($prodVariant->search_terms),
+                    'image_filename' => $prodVariant->image_filename,
+                    'rarity_level' => $prodVariant->rarity_level,
+                    'region' => $prodVariant->region,
                     'is_special_edition' => $prodVariant->is_special_edition,
                     'is_active' => $prodVariant->is_active,
                     'sort_order' => $prodVariant->sort_order,
