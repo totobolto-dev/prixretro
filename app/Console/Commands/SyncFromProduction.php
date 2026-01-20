@@ -99,14 +99,14 @@ class SyncFromProduction extends Command
                 ['slug' => $consoleSlug],
                 [
                     'name' => $prodConsole->name,
-                    'short_name' => $prodConsole->short_name,
-                    'search_term' => $prodConsole->search_term,
-                    'ebay_category_id' => $prodConsole->ebay_category_id,
-                    'description' => $prodConsole->description,
-                    'manufacturer' => $prodConsole->manufacturer,
-                    'release_year' => $prodConsole->release_year,
-                    'display_order' => $prodConsole->display_order,
-                    'is_active' => $prodConsole->is_active,
+                    'short_name' => $prodConsole->short_name ?? $prodConsole->name,
+                    'search_term' => $prodConsole->search_term ?? $prodConsole->name,
+                    'ebay_category_id' => $prodConsole->ebay_category_id ?? null,
+                    'description' => $prodConsole->description ?? null,
+                    'manufacturer' => $prodConsole->manufacturer ?? null,
+                    'release_year' => $prodConsole->release_year ?? null,
+                    'display_order' => $prodConsole->display_order ?? 0,
+                    'is_active' => $prodConsole->is_active ?? true,
                 ]
             );
         } else {
