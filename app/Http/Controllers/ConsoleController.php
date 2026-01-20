@@ -59,9 +59,68 @@ class ConsoleController extends Controller
             }]);
         }]);
 
+        // Get ALL approved listings for ALL variants of this console (aggregate data)
+        $allListings = Listing::whereHas('variant', function ($query) use ($console) {
+            $query->where('console_id', $console->id);
+        })
+            ->where('status', 'approved')
+            ->orderBy('sold_date', 'desc')
+            ->get();
+
+        $prices = $allListings->pluck('price')->sort()->values();
+
+        // Calculate aggregate statistics for the entire console
+        $statistics = [
+            'count' => $allListings->count(),
+            'avg_price' => $prices->avg(),
+            'min_price' => $prices->min(),
+            'max_price' => $prices->max(),
+            'median_price' => $this->calculateMedian($prices),
+        ];
+
+        // Recent listings (last 10 across all variants)
+        $recentListings = $allListings->take(10);
+
+        // Prepare chart data (price over time for all variants)
+        $chartData = $this->prepareChartData($allListings);
+
         // Generate auto description
         $autoDescription = ConsoleDescriptionGenerator::generate($console);
 
-        return view('console.show', compact('console', 'autoDescription'));
+        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData'));
+    }
+
+    private function calculateMedian($prices)
+    {
+        $count = $prices->count();
+
+        if ($count === 0) {
+            return null;
+        }
+
+        $middle = (int) floor($count / 2);
+
+        if ($count % 2 === 0) {
+            return ($prices[$middle - 1] + $prices[$middle]) / 2;
+        }
+
+        return $prices[$middle];
+    }
+
+    private function prepareChartData($listings)
+    {
+        // Reverse to show oldest to newest on chart
+        $sortedListings = $listings->sortBy('sold_date');
+
+        return [
+            'labels' => $sortedListings->map(function ($listing) {
+                return $listing->sold_date?->format('d M') ?? 'N/A';
+            })->values(),
+            'prices' => $sortedListings->map(function ($listing) {
+                return (float) $listing->price;
+            })->values(),
+            'urls' => $sortedListings->pluck('url')->values(),
+            'titles' => $sortedListings->pluck('title')->values(),
+        ];
     }
 }

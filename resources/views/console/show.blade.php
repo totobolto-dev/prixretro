@@ -13,6 +13,16 @@
     <div class="console-page-header">
         <h1>{{ $console->name }}</h1>
 
+        @if($statistics['count'] > 0)
+        <div class="value-prop-banner">
+            <div class="value-prop-icon">💰</div>
+            <div class="value-prop-content">
+                <h3>Marché global {{ $console->name }}</h3>
+                <p>Vue d'ensemble basée sur <strong>{{ $statistics['count'] }} ventes analysées</strong> pour toutes les variantes {{ $console->name }}. Découvrez les tendances du marché avant d'acheter.</p>
+            </div>
+        </div>
+        @endif
+
         <div class="console-description-box">
             <p>{{ $autoDescription }}</p>
         </div>
@@ -30,6 +40,59 @@
         </div>
         @endif
     </div>
+
+    @if($statistics['count'] > 0)
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Prix Moyen</div>
+                <div class="stat-value">{{ number_format($statistics['avg_price'], 2) }}€</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Prix Min</div>
+                <div class="stat-value">{{ number_format($statistics['min_price'], 2) }}€</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Prix Max</div>
+                <div class="stat-value">{{ number_format($statistics['max_price'], 2) }}€</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Ventes Analysées</div>
+                <div class="stat-value">{{ $statistics['count'] }}</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Évolution du Prix (Toutes Variantes)</h2>
+            <canvas id="priceChart"></canvas>
+        </div>
+
+        <div class="listings-section">
+            <h2>Ventes Récentes ({{ $statistics['count'] }} au total)</h2>
+
+            <div class="listings-table">
+                <div class="listings-header-row">
+                    <div>Article vendu</div>
+                    <div>Prix</div>
+                    <div class="listing-date-compact">Date</div>
+                    <div class="listing-source-compact">Source</div>
+                </div>
+
+                @foreach($recentListings as $listing)
+                @php
+                    $ebayAffiliateParams = 'mkcid=1&mkrid=709-53476-19255-0&campid=5339134703';
+                @endphp
+                <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}" class="listing-row" target="_blank" rel="nofollow noopener">
+                    <div class="listing-title-compact">{{ $listing->title }}</div>
+                    <div class="listing-price-compact">{{ number_format($listing->price, 0) }}€</div>
+                    <div class="listing-date-compact">{{ $listing->sold_date?->format('d/m/Y') ?? 'N/A' }}</div>
+                    <div class="listing-source-compact">{{ ucfirst($listing->source ?? 'eBay') }}</div>
+                </a>
+                @endforeach
+            </div>
+        </div>
+
+        <h2 style="margin-top: 3rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">Explorer par Variante</h2>
+    @endif
 
     @php
         // Group variants by category for better organization
@@ -86,4 +149,127 @@
         <a href="/">← Retour à l'accueil</a>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+@if(isset($statistics) && $statistics['count'] > 0 && count($chartData['labels']) > 0)
+<script>
+const ctx = document.getElementById('priceChart').getContext('2d');
+const chartData = @json($chartData);
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: chartData.labels,
+        datasets: [{
+            label: 'Prix de vente',
+            data: chartData.prices,
+            borderColor: '#00ff88',
+            backgroundColor: 'rgba(0, 255, 136, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointBackgroundColor: '#00ff88',
+            pointBorderColor: '#0f1419',
+            pointBorderWidth: 2,
+            pointHoverRadius: 7,
+            pointHoverBorderWidth: 3,
+            pointHoverBackgroundColor: '#00ff88',
+            pointHoverBorderColor: '#00d9ff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
+        },
+        onClick: (event, activeElements) => {
+            if (activeElements.length > 0) {
+                const index = activeElements[0].index;
+                const url = chartData.urls[index];
+                if (url) {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                }
+            }
+        },
+        layout: {
+            padding: {
+                top: 15,
+                right: 15,
+                bottom: 5,
+                left: 5
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                enabled: true,
+                mode: 'nearest',
+                intersect: false,
+                backgroundColor: '#1a1f29',
+                titleColor: '#ffffff',
+                bodyColor: '#00ff88',
+                borderColor: '#2a2f39',
+                borderWidth: 1,
+                padding: 12,
+                displayColors: false,
+                titleFont: {
+                    size: 11,
+                    weight: 'normal'
+                },
+                bodyFont: {
+                    size: 14,
+                    weight: '600'
+                },
+                callbacks: {
+                    title: function(context) {
+                        const index = context[0].dataIndex;
+                        return chartData.titles[index];
+                    },
+                    label: function(context) {
+                        return context.parsed.y + '€';
+                    },
+                    afterLabel: function(context) {
+                        const index = context.dataIndex;
+                        return chartData.labels[index] + ' • Cliquer pour voir';
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: {
+                    display: false,
+                    drawBorder: false
+                },
+                ticks: {
+                    color: '#6b7280',
+                    maxRotation: 0,
+                    autoSkipPadding: 20
+                }
+            },
+            y: {
+                beginAtZero: false,
+                grid: {
+                    color: '#2a2f39',
+                    drawBorder: false
+                },
+                ticks: {
+                    color: '#6b7280',
+                    callback: function(value) {
+                        return value + '€';
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+@endif
 @endsection
