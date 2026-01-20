@@ -139,6 +139,7 @@ class SyncFromProduction extends Command
                 ],
                 [
                     'name' => $prodVariant->name,
+                    'full_slug' => $localConsole->slug . '/' . $prodVariant->slug,
                     'search_terms' => json_decode($prodVariant->search_terms),
                     'is_special_edition' => $prodVariant->is_special_edition,
                     'is_active' => $prodVariant->is_active,
