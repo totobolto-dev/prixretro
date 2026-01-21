@@ -62,21 +62,13 @@ class ListingForm
                     ])
                     ->placeholder('Non défini')
                     ->helperText('Loose = console seule | CIB = complet avec boîte et accessoires | Sealed = neuf jamais ouvert'),
-                Grid::make(12)
-                    ->schema([
-                        Textarea::make('url')
-                            ->label('URL eBay')
-                            ->required()
-                            ->rows(2)
-                            ->columnSpan(10),
-                        Placeholder::make('url_link')
-                            ->label('Lien')
-                            ->content(fn ($record) => $record && $record->url
-                                ? new HtmlString('<a href="' . e($record->url) . '" target="_blank" rel="noopener noreferrer" style="color: rgb(0, 217, 255); text-decoration: underline;">Ouvrir eBay →</a>')
-                                : new HtmlString('<span style="color: rgb(107, 114, 128);">Enregistrez d\'abord</span>'))
-                            ->columnSpan(2),
-                    ])
-                    ->columnSpanFull(),
+                Textarea::make('url')
+                    ->label('URL eBay')
+                    ->required()
+                    ->rows(2)
+                    ->helperText(fn ($record) => $record?->url
+                        ? new HtmlString('<a href="' . e($record->url) . '" target="_blank" rel="noopener noreferrer" style="color: rgb(0, 217, 255); text-decoration: underline; font-weight: 600;">→ Ouvrir dans eBay</a>')
+                        : 'Enregistrez pour voir le lien'),
                 Textarea::make('thumbnail_url')
                     ->columnSpanFull(),
                 TextInput::make('source')

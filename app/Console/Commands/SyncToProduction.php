@@ -80,11 +80,13 @@ class SyncToProduction extends Command
             // Insert into production
             $productionDb->table('listings')->insert([
                 'variant_id' => $prodVariant->id,
+                'console_slug' => $listing->console_slug,
                 'item_id' => $listing->item_id,
                 'title' => $listing->title,
                 'price' => $listing->price,
                 'sold_date' => $listing->sold_date,
-                'condition' => $listing->condition,
+                'item_condition' => $listing->item_condition,
+                'completeness' => $listing->completeness,
                 'url' => $listing->url,
                 'thumbnail_url' => $listing->thumbnail_url,
                 'source' => $listing->source ?? 'ebay',
