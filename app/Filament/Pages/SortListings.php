@@ -93,11 +93,27 @@ class SortListings extends Page implements HasForms, HasTable
                     ->date('d/m/Y')
                     ->sortable()
                     ->width('100px'),
-                TextColumn::make('condition')
+                TextColumn::make('item_condition')
                     ->label('Condition')
                     ->badge()
                     ->sortable()
                     ->width('120px'),
+                TextColumn::make('completeness')
+                    ->label('État')
+                    ->badge()
+                    ->width('90px')
+                    ->color(fn (string $state = null): string => match ($state) {
+                        'loose' => 'gray',
+                        'cib' => 'info',
+                        'sealed' => 'warning',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state = null): string => match ($state) {
+                        'loose' => 'Loose',
+                        'cib' => 'CIB',
+                        'sealed' => 'Sealed',
+                        default => '-',
+                    }),
                 TextColumn::make('url_validation_status')
                     ->label('URL Status')
                     ->badge()
@@ -152,10 +168,20 @@ class SortListings extends Page implements HasForms, HasTable
                             ->label('Or Create New Variant')
                             ->helperText('Leave empty to use selected variant above')
                             ->disabled(fn(callable $get) => !$get('console_slug')),
+                        FormSelect::make('completeness')
+                            ->label('Complétude')
+                            ->options([
+                                'loose' => 'Loose (console seule)',
+                                'cib' => 'CIB (complet en boîte)',
+                                'sealed' => 'Sealed (neuf scellé)',
+                            ])
+                            ->placeholder('Non défini')
+                            ->helperText('Loose = console seule | CIB = complet avec boîte et accessoires | Sealed = neuf jamais ouvert'),
                     ])
                     ->fillForm(fn(Listing $record) => [
                         'console_slug' => $record->console_slug,
                         'variant_id' => $record->variant_id,
+                        'completeness' => $record->completeness,
                     ])
                     ->action(function (Listing $record, array $data) {
                         $variantId = $data['variant_id'] ?? null;
@@ -232,6 +258,7 @@ class SortListings extends Page implements HasForms, HasTable
                         $record->update([
                             'console_slug' => $data['console_slug'],
                             'variant_id' => $variantId,
+                            'completeness' => $data['completeness'] ?? null,
                             'classification_status' => 'classified',
                             'status' => 'approved',
                             'reviewed_at' => now(),

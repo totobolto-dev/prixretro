@@ -42,8 +42,24 @@ class ListingsTable
                     ->description(fn ($record) =>
                         ($record->price ? number_format($record->price, 2) . '€' : '') .
                         ($record->sold_date ? ' • ' . $record->sold_date : '') .
-                        ($record->condition ? ' • ' . $record->condition : '')
+                        ($record->item_condition ? ' • ' . $record->item_condition : '')
                     ),
+                TextColumn::make('completeness')
+                    ->label('État')
+                    ->badge()
+                    ->width('90px')
+                    ->color(fn (string $state = null): string => match ($state) {
+                        'loose' => 'gray',
+                        'cib' => 'info',
+                        'sealed' => 'warning',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state = null): string => match ($state) {
+                        'loose' => 'Loose',
+                        'cib' => 'CIB',
+                        'sealed' => 'Sealed',
+                        default => '-',
+                    }),
                 TextColumn::make('source')
                     ->searchable()
                     ->width('80px')
@@ -77,6 +93,13 @@ class ListingsTable
                         'rejected' => 'Rejected',
                     ])
                     ->default('approved'),
+                SelectFilter::make('completeness')
+                    ->label('Complétude')
+                    ->options([
+                        'loose' => 'Loose',
+                        'cib' => 'CIB',
+                        'sealed' => 'Sealed',
+                    ]),
                 SelectFilter::make('variant')
                     ->relationship('variant', 'name')
                     ->searchable()

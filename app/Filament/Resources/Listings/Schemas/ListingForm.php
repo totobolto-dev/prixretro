@@ -6,11 +6,15 @@ use App\Models\Console;
 use App\Models\Variant;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Grid;
 use Filament\Schemas\Schema;
+use Illuminate\Support\HtmlString;
 
 class ListingForm
 {
@@ -46,9 +50,32 @@ class ListingForm
                     ->numeric()
                     ->prefix('$'),
                 DatePicker::make('sold_date'),
-                TextInput::make('condition'),
-                Textarea::make('url')
-                    ->required()
+                TextInput::make('item_condition')
+                    ->label('État (occasion/neuf)')
+                    ->placeholder('Ex: Occasion, Neuf, Used, New'),
+                Select::make('completeness')
+                    ->label('Complétude')
+                    ->options([
+                        'loose' => 'Loose (console seule)',
+                        'cib' => 'CIB (complet en boîte)',
+                        'sealed' => 'Sealed (neuf scellé)',
+                    ])
+                    ->placeholder('Non défini')
+                    ->helperText('Loose = console seule | CIB = complet avec boîte et accessoires | Sealed = neuf jamais ouvert'),
+                Grid::make(12)
+                    ->schema([
+                        Textarea::make('url')
+                            ->label('URL eBay')
+                            ->required()
+                            ->rows(2)
+                            ->columnSpan(10),
+                        Placeholder::make('url_link')
+                            ->label('Lien')
+                            ->content(fn ($record) => $record && $record->url
+                                ? new HtmlString('<a href="' . e($record->url) . '" target="_blank" rel="noopener noreferrer" style="color: rgb(0, 217, 255); text-decoration: underline;">Ouvrir eBay →</a>')
+                                : new HtmlString('<span style="color: rgb(107, 114, 128);">Enregistrez d\'abord</span>'))
+                            ->columnSpan(2),
+                    ])
                     ->columnSpanFull(),
                 Textarea::make('thumbnail_url')
                     ->columnSpanFull(),
