@@ -58,7 +58,7 @@ abbr[title] {
         <p style="margin-bottom: 1.5rem;">
             Contrairement à la <abbr title="Game Boy Advance">GBA</abbr> <abbr title="Special - Version améliorée">SP</abbr>, la <abbr title="Game Boy Color">GBC</abbr> n'a pas de <abbr title="Écran éclairé par l'arrière pour jouer dans le noir">rétroéclairage</abbr>, ce qui la rend
             moins pratique en conditions de faible luminosité. Cependant, elle reste très populaire
-            auprès des collectionneurs pour ses couleurs translucides emblématiques.
+            auprès des collectionneurs pour sa variété de couleurs emblématiques.
         </p>
 
         <h2 style="margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">Les différentes variantes : laquelle choisir ?</h2>
@@ -70,11 +70,12 @@ abbr[title] {
             sont identiques sur tous les modèles, seule la couleur change.
         </p>
 
-        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--accent-primary);">Variantes translucides (70-120€)</h3>
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--accent-primary);">Variantes colorées recherchées (70-120€)</h3>
         <p style="margin-bottom: 1rem;">
-            <strong>Atomic Purple</strong> est la variante la plus recherchée et culte.
-            Les modèles transparents (<strong>Teal</strong>, <strong>Kiwi</strong>, <strong>Grape</strong>)
-            permettent de voir les composants internes, ce qui plaît beaucoup aux collectionneurs.
+            <strong>Atomic Purple</strong> est la variante la plus recherchée et culte. Son plastique translucide
+            permet de voir les composants internes, ce qui plaît énormément aux collectionneurs.
+            D'autres couleurs populaires comme <strong>Teal</strong>, <strong>Kiwi</strong> et <strong>Grape</strong>
+            sont également prisées pour leur rareté.
             Comptez 20-30€ de plus qu'un modèle standard.
         </p>
 
