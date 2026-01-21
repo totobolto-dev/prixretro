@@ -145,6 +145,22 @@
         @endif
     @endforeach
 
+    @if($relatedConsoles->count() > 0)
+    <div class="related-consoles-section">
+        <h2 style="margin-top: 3rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">Consoles similaires</h2>
+        <div class="variant-grid">
+            @foreach($relatedConsoles as $relatedConsole)
+            <a href="/{{ $relatedConsole->slug }}" class="variant-card">
+                <div class="variant-name">{{ $relatedConsole->name }}</div>
+                <div class="variant-stats">
+                    <span>{{ $relatedConsole->variants_count }} variantes</span>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     <div class="back-link">
         <a href="/">← Retour à l'accueil</a>
     </div>

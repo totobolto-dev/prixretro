@@ -1,12 +1,30 @@
+# Allow all good bots
 User-agent: *
 Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin
+Disallow: /admin/*
 
 # Sitemap
 Sitemap: https://www.prixretro.com/sitemap.xml
 
-# Block common crawlers we don't want
+# Block SEO tools and aggressive crawlers
 User-agent: AhrefsBot
 Disallow: /
 
 User-agent: MJ12bot
 Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Crawl-delay for slower bots
+User-agent: Baiduspider
+Crawl-delay: 5
+
+User-agent: Yandex
+Crawl-delay: 2

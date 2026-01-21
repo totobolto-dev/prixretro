@@ -96,7 +96,28 @@ class ConsoleController extends Controller
             ? "Prix moyen {$console->name}: " . number_format($statistics['avg_price'], 0) . "€ ({$statistics['count']} ventes analysées). Historique complet du marché {$console->name} d'occasion avec graphiques et tendances."
             : "{$console->name} - Suivez les prix d'occasion et l'évolution du marché retrogaming.";
 
-        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription'));
+        // Get related consoles (same manufacturer or similar name)
+        $relatedConsoles = Console::where('is_active', true)
+            ->where('id', '!=', $console->id)
+            ->where(function($query) use ($console) {
+                // Same manufacturer
+                if ($console->manufacturer) {
+                    $query->where('manufacturer', $console->manufacturer);
+                }
+                // Or similar name patterns (e.g., "Game Boy" family)
+                $baseName = explode(' ', $console->name)[0] . ' ' . (explode(' ', $console->name)[1] ?? '');
+                $query->orWhere('name', 'like', $baseName . '%');
+            })
+            ->withCount(['variants' => function ($q) {
+                $q->whereHas('listings', function($listing) {
+                    $listing->where('status', 'approved');
+                });
+            }])
+            ->having('variants_count', '>', 0)
+            ->limit(4)
+            ->get();
+
+        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription', 'relatedConsoles'));
     }
 
     private function calculateMedian($prices)

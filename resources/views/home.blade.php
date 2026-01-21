@@ -966,6 +966,21 @@
 @endsection
 
 @section('scripts')
+<!-- Schema.org WebSite for homepage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PrixRetro",
+  "url": "https://www.prixretro.com",
+  "description": "Tracker de prix pour consoles retrogaming d'occasion. Historique des ventes eBay pour Game Boy, PlayStation, Nintendo, Sega et plus.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "PrixRetro"
+  }
+}
+</script>
+
 <script>
 function toggleVariants(consoleSlug) {
     const variantsDiv = document.getElementById('variants-' + consoleSlug);
