@@ -55,6 +55,19 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="/styles.css">
 
+    <!-- Schema.org Organization (site-wide) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "PrixRetro",
+      "url": "https://www.prixretro.com",
+      "logo": "https://www.prixretro.com/images/prixretro-logo.png",
+      "description": "Tracker de prix pour consoles retrogaming d'occasion",
+      "sameAs": []
+    }
+    </script>
+
     @yield('head')
 </head>
 <body>
