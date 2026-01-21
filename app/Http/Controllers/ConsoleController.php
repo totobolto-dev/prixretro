@@ -117,7 +117,15 @@ class ConsoleController extends Controller
             ->limit(4)
             ->get();
 
-        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription', 'relatedConsoles'));
+        // Map console slugs to guide URLs
+        $guideMap = [
+            'game-boy-color' => '/guides/guide-achat-game-boy-color',
+            'game-boy-advance' => '/guides/guide-achat-game-boy-advance',
+            'ps-vita' => '/guides/ps-vita-occasion-guide',
+        ];
+        $guideUrl = $guideMap[$console->slug] ?? null;
+
+        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription', 'relatedConsoles', 'guideUrl'));
     }
 
     private function calculateMedian($prices)

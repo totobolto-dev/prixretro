@@ -105,6 +105,14 @@ class VariantController extends Controller
             ];
         }
 
+        // Map console slugs to guide URLs
+        $guideMap = [
+            'game-boy-color' => '/guides/guide-achat-game-boy-color',
+            'game-boy-advance' => '/guides/guide-achat-game-boy-advance',
+            'ps-vita' => '/guides/ps-vita-occasion-guide',
+        ];
+        $guideUrl = $guideMap[$variant->console->slug] ?? null;
+
         return view('variant.show', compact(
             'variant',
             'statistics',
@@ -113,7 +121,8 @@ class VariantController extends Controller
             'chartData',
             'autoDescription',
             'metaDescription',
-            'schemaData'
+            'schemaData',
+            'guideUrl'
         ));
     }
 

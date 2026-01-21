@@ -90,6 +90,21 @@
         @endif
     </div>
 
+    @if(isset($guideUrl))
+    <div style="margin: 1.5rem 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--accent-primary); border-radius: var(--radius);">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="font-size: 1.5rem;">📖</span>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; margin-bottom: 0.25rem;">Guide d'achat {{ $variant->console->name }}</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">Comment choisir sa variante, éviter les arnaques, et trouver les meilleures offres</div>
+            </div>
+            <a href="{{ $guideUrl }}" style="background: var(--accent-primary); color: var(--bg-primary); padding: 0.5rem 1rem; border-radius: var(--radius); text-decoration: none; font-weight: 600; white-space: nowrap;">
+                Lire le guide →
+            </a>
+        </div>
+    </div>
+    @endif
+
     @if($statistics['count'] > 0)
         <div class="stats-grid">
             <div class="stat-card">
@@ -116,7 +131,7 @@
             <div class="stats-grid">
                 @if(isset($statsByCompleteness['loose']))
                 <div class="stat-card">
-                    <div class="stat-label">🔓 Loose (console seule)</div>
+                    <div class="stat-label">⚪ Loose (console seule)</div>
                     <div class="stat-value">{{ number_format($statsByCompleteness['loose']['avg_price'], 0) }}€</div>
                     <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
                         {{ $statsByCompleteness['loose']['count'] }} ventes • {{ number_format($statsByCompleteness['loose']['min_price'], 0) }}-{{ number_format($statsByCompleteness['loose']['max_price'], 0) }}€
@@ -145,7 +160,7 @@
                 @endif
             </div>
             <p style="margin-top: 1rem; margin-bottom: 0; color: var(--text-secondary); font-size: 0.85rem;">
-                💡 <strong>Loose</strong> = Console seule • <strong>CIB</strong> = Complet avec boîte et accessoires • <strong>Sealed</strong> = Neuf jamais ouvert
+                💡 <strong>⚪ Loose</strong> = Console seule • <strong>📦 CIB</strong> = Complet avec boîte et accessoires • <strong>🔒 Sealed</strong> = Neuf jamais ouvert
             </p>
         </div>
         @endif
@@ -349,7 +364,7 @@
                     <div class="listing-source-compact">{{ ucfirst($listing->source ?? 'eBay') }}</div>
                     <div class="listing-condition-compact">
                         @if($listing->completeness)
-                            @if($listing->completeness === 'loose')🔓 Loose
+                            @if($listing->completeness === 'loose')⚪ Loose
                             @elseif($listing->completeness === 'cib')📦 CIB
                             @elseif($listing->completeness === 'sealed')🔒 Sealed
                             @endif

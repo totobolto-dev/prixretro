@@ -27,6 +27,21 @@
             <p>{{ $autoDescription }}</p>
         </div>
 
+        @if(isset($guideUrl))
+        <div style="margin: 1.5rem 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--accent-primary); border-radius: var(--radius);">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="font-size: 1.5rem;">📖</span>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; margin-bottom: 0.25rem;">Guide d'achat complet</div>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary);">Comment choisir sa {{ $console->name }}, éviter les arnaques, et trouver les meilleures offres</div>
+                </div>
+                <a href="{{ $guideUrl }}" style="background: var(--accent-primary); color: var(--bg-primary); padding: 0.5rem 1rem; border-radius: var(--radius); text-decoration: none; font-weight: 600; white-space: nowrap;">
+                    Lire le guide →
+                </a>
+            </div>
+        </div>
+        @endif
+
         <div class="console-stats">
             {{ $console->variants->count() }} variantes •
             {{ $console->variants->sum('listings_count') }} ventes analysées
