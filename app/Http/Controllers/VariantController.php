@@ -28,6 +28,21 @@ class VariantController extends Controller
             'median_price' => $this->calculateMedian($prices),
         ];
 
+        // Calculate statistics by completeness type
+        $statsByCompleteness = [];
+        foreach (['loose', 'cib', 'sealed'] as $completeness) {
+            $filtered = $listings->where('completeness', $completeness);
+            if ($filtered->count() >= 5) {
+                $filteredPrices = $filtered->pluck('price')->sort()->values();
+                $statsByCompleteness[$completeness] = [
+                    'count' => $filtered->count(),
+                    'avg_price' => $filteredPrices->avg(),
+                    'min_price' => $filteredPrices->min(),
+                    'max_price' => $filteredPrices->max(),
+                ];
+            }
+        }
+
         $recentListings = $listings->take(10);
 
         $chartData = $this->prepareChartData($listings);
@@ -93,6 +108,7 @@ class VariantController extends Controller
         return view('variant.show', compact(
             'variant',
             'statistics',
+            'statsByCompleteness',
             'recentListings',
             'chartData',
             'autoDescription',

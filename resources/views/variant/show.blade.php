@@ -110,6 +110,46 @@
             </div>
         </div>
 
+        @if(!empty($statsByCompleteness) && count($statsByCompleteness) > 0)
+        <div class="completeness-stats-section" style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius); border: 1px solid var(--border); margin: 2rem 0;">
+            <h2 style="margin-bottom: 1.5rem;">Prix par état de conservation</h2>
+            <div class="stats-grid">
+                @if(isset($statsByCompleteness['loose']))
+                <div class="stat-card">
+                    <div class="stat-label">🔓 Loose (console seule)</div>
+                    <div class="stat-value">{{ number_format($statsByCompleteness['loose']['avg_price'], 0) }}€</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        {{ $statsByCompleteness['loose']['count'] }} ventes • {{ number_format($statsByCompleteness['loose']['min_price'], 0) }}-{{ number_format($statsByCompleteness['loose']['max_price'], 0) }}€
+                    </div>
+                </div>
+                @endif
+
+                @if(isset($statsByCompleteness['cib']))
+                <div class="stat-card">
+                    <div class="stat-label">📦 CIB (complet en boîte)</div>
+                    <div class="stat-value">{{ number_format($statsByCompleteness['cib']['avg_price'], 0) }}€</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        {{ $statsByCompleteness['cib']['count'] }} ventes • {{ number_format($statsByCompleteness['cib']['min_price'], 0) }}-{{ number_format($statsByCompleteness['cib']['max_price'], 0) }}€
+                    </div>
+                </div>
+                @endif
+
+                @if(isset($statsByCompleteness['sealed']))
+                <div class="stat-card">
+                    <div class="stat-label">🔒 Sealed (neuf scellé)</div>
+                    <div class="stat-value">{{ number_format($statsByCompleteness['sealed']['avg_price'], 0) }}€</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        {{ $statsByCompleteness['sealed']['count'] }} ventes • {{ number_format($statsByCompleteness['sealed']['min_price'], 0) }}-{{ number_format($statsByCompleteness['sealed']['max_price'], 0) }}€
+                    </div>
+                </div>
+                @endif
+            </div>
+            <p style="margin-top: 1rem; margin-bottom: 0; color: var(--text-secondary); font-size: 0.85rem;">
+                💡 <strong>Loose</strong> = Console seule • <strong>CIB</strong> = Complet avec boîte et accessoires • <strong>Sealed</strong> = Neuf jamais ouvert
+            </p>
+        </div>
+        @endif
+
         <div class="chart-container">
             <h2>Évolution du Prix</h2>
             <canvas id="priceChart"></canvas>
@@ -307,7 +347,15 @@
                     <div class="listing-price-compact">{{ number_format($listing->price, 0) }}€</div>
                     <div class="listing-date-compact">{{ $listing->sold_date?->format('d/m/Y') ?? 'N/A' }}</div>
                     <div class="listing-source-compact">{{ ucfirst($listing->source ?? 'eBay') }}</div>
-                    <div class="listing-condition-compact">{{ $listing->condition ?? 'N/A' }}</div>
+                    <div class="listing-condition-compact">
+                        @if($listing->completeness)
+                            @if($listing->completeness === 'loose')🔓 Loose
+                            @elseif($listing->completeness === 'cib')📦 CIB
+                            @elseif($listing->completeness === 'sealed')🔒 Sealed
+                            @endif
+                        @else{{ $listing->item_condition ?? 'N/A' }}
+                        @endif
+                    </div>
                 </a>
                 @endforeach
             </div>
