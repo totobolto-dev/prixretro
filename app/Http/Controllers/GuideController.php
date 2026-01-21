@@ -87,19 +87,27 @@ class GuideController extends Controller
 
     public function showBestConsoles2026()
     {
-        $consoles = Console::where('is_active', true)
-            ->with(['variants' => function($query) {
-                $query->withCount(['listings' => function($q) {
-                    $q->where('status', 'approved');
-                }]);
+        // Get consoles with price data (20+ sales)
+        $consolesWithData = Console::where('is_active', true)
+            ->with(['variants.listings' => function($query) {
+                $query->where('status', 'approved');
             }])
             ->get()
-            ->filter(function($console) {
-                return $console->variants->sum('listings_count') > 0;
+            ->mapWithKeys(function($console) {
+                $allListings = $console->variants->flatMap->listings;
+                $count = $allListings->count();
+
+                if ($count >= 20) {
+                    return [$console->slug => [
+                        'avg_price' => round($allListings->avg('price')),
+                        'count' => $count
+                    ]];
+                }
+                return [];
             });
 
         $metaDescription = "Top 10 des meilleures consoles retrogaming à acheter en 2026 entre 50€ et 200€. Sélection basée sur l'analyse de milliers de ventes réelles.";
 
-        return view('guides.best-consoles-2026', compact('consoles', 'metaDescription'));
+        return view('guides.best-consoles-2026', compact('consolesWithData', 'metaDescription'));
     }
 }
