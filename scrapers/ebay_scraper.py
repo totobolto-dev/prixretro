@@ -243,10 +243,10 @@ def scrape_ebay_console(search_term, console_slug, max_pages=50):
                     price_text = price_elem.get_text().strip()
 
                     try:
-                        price_clean = price_text.replace('EUR', '').replace(',', '.').strip()
+                        # Remove EUR, replace French comma decimal with period, remove spaces (thousands separator)
+                        price_clean = price_text.replace('EUR', '').replace(',', '.').replace(' ', '').strip()
                         if 'à' in price_clean:
                             price_clean = price_clean.split('à')[0].strip()
-                        price_clean = price_clean.split()[0] if price_clean else '0'
                         price = float(price_clean)
                     except:
                         continue
