@@ -22,6 +22,25 @@ class GenerateSitemap extends Command
         // Homepage
         $xml .= $this->addUrl('https://www.prixretro.com/', '1.0', 'daily', now()->toDateString());
 
+        // Guide pages
+        $guides = [
+            '/guides',
+            '/guides/game-boy-color',
+            '/guides/ps-vita',
+            '/guides/game-boy-advance',
+            '/guides/fake-detection',
+            '/guides/best-consoles-2026',
+        ];
+
+        foreach ($guides as $guide) {
+            $xml .= $this->addUrl(
+                "https://www.prixretro.com{$guide}",
+                '0.9',
+                'monthly',
+                now()->toDateString()
+            );
+        }
+
         // Get all consoles with their variants
         $consoles = Console::with('variants')->where('is_active', true)->get();
 
@@ -72,9 +91,13 @@ class GenerateSitemap extends Command
         $path = public_path('sitemap.xml');
         File::put($path, $xml);
 
+        $guideCount = count($guides);
+        $totalUrls = 1 + $guideCount + $consoles->count() + $rankingCount + $variantCount;
+
         $this->info("✅ Sitemap generated successfully!");
-        $this->info("📊 Total URLs: " . ($variantCount + $consoles->count() + $rankingCount + 1));
+        $this->info("📊 Total URLs: {$totalUrls}");
         $this->info("   - Homepage: 1");
+        $this->info("   - Guide pages: {$guideCount}");
         $this->info("   - Console pages: " . $consoles->count());
         $this->info("   - Ranking pages: {$rankingCount}");
         $this->info("   - Variant pages: {$variantCount}");
