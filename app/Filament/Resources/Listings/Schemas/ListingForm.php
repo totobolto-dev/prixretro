@@ -70,6 +70,11 @@ class ListingForm
                         ? new HtmlString('<a href="' . e($record->url) . '" target="_blank" rel="noopener noreferrer" style="color: rgb(0, 217, 255); text-decoration: underline; font-weight: 600;">→ Ouvrir dans eBay</a>')
                         : 'Enregistrez pour voir le lien'),
                 Textarea::make('thumbnail_url')
+                    ->label('Thumbnail URL')
+                    ->rows(2)
+                    ->helperText(fn ($record) => $record?->thumbnail_url
+                        ? new HtmlString('<img src="' . e($record->thumbnail_url) . '" style="max-width: 200px; max-height: 200px; margin-top: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" />')
+                        : 'L\'image s\'affichera après enregistrement')
                     ->columnSpanFull(),
                 TextInput::make('source')
                     ->required()
