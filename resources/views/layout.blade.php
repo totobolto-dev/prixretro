@@ -66,6 +66,7 @@
                 </a>
                 <nav>
                     <a href="/">Accueil</a>
+                    <a href="/guides">Guides</a>
                 </nav>
             </div>
         </div>
