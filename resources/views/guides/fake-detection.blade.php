@@ -16,7 +16,7 @@
         <h1 style="margin-bottom: 1rem;">Comment repérer une console retrogaming contrefaite</h1>
 
         <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-            Publié le {{ date('j F Y') }} • Lecture 5 min
+            Créé le 21 janvier 2026 • Lecture 5 min
         </p>
 
         <div style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 2rem;">

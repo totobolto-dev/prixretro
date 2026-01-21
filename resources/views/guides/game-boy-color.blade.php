@@ -2,6 +2,16 @@
 
 @section('title', 'Guide d\'achat Game Boy Color 2026 - Comment choisir | PrixRetro')
 
+@section('head')
+<style>
+abbr[title] {
+    text-decoration: underline dotted;
+    cursor: help;
+    color: var(--accent-primary);
+}
+</style>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="breadcrumb">
@@ -16,7 +26,7 @@
         <h1 style="margin-bottom: 1rem;">Guide d'achat Game Boy Color - Comment choisir sa variante en 2026</h1>
 
         <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-            Publié le {{ date('j F Y') }} • Lecture 8 min
+            Créé le 21 janvier 2026 • Lecture 5 min
         </p>
 
         <div style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 2rem;">
@@ -41,14 +51,14 @@
 
         <p style="margin-bottom: 1rem;">
             La Game Boy Color reste l'une des consoles portables les plus accessibles du marché retrogaming.
-            Avec un catalogue de plus de 900 jeux et une compatibilité Game Boy originale, elle offre
-            une ludothèque immense pour un prix contenu.
+            Avec un catalogue de plus de 900 jeux et une compatibilité <abbr title="Game Boy">GB</abbr> originale, elle offre
+            une bibliothèque immense pour un prix contenu.
         </p>
 
         <p style="margin-bottom: 1.5rem;">
-            Contrairement à la Game Boy Advance SP, la GBC n'a pas de rétroéclairage, ce qui la rend
+            Contrairement à la <abbr title="Game Boy Advance">GBA</abbr> <abbr title="Special - Version améliorée">SP</abbr>, la <abbr title="Game Boy Color">GBC</abbr> n'a pas de <abbr title="Écran éclairé par l'arrière pour jouer dans le noir">rétroéclairage</abbr>, ce qui la rend
             moins pratique en conditions de faible luminosité. Cependant, elle reste très populaire
-            auprès des collectionneurs pour ses couleurs translucides iconiques.
+            auprès des collectionneurs pour ses couleurs translucides emblématiques.
         </p>
 
         <h2 style="margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">Les différentes variantes : laquelle choisir ?</h2>
@@ -62,8 +72,8 @@
 
         <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--accent-primary);">Variantes translucides (70-120€)</h3>
         <p style="margin-bottom: 1rem;">
-            <strong>Atomic Purple</strong> est la variante la plus iconique et recherchée.
-            Les modèles translucides (<strong>Teal</strong>, <strong>Kiwi</strong>, <strong>Grape</strong>)
+            <strong>Atomic Purple</strong> est la variante la plus recherchée et culte.
+            Les modèles transparents (<strong>Teal</strong>, <strong>Kiwi</strong>, <strong>Grape</strong>)
             permettent de voir les composants internes, ce qui plaît beaucoup aux collectionneurs.
             Comptez 20-30€ de plus qu'un modèle standard.
         </p>
@@ -74,12 +84,25 @@
             atteignent des prix élevés. Réservé aux collectionneurs passionnés avec un budget conséquent.
         </p>
 
-        @if($console)
+        @if($console && count($variantPrices) > 0)
         <div style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius); border: 1px solid var(--border); margin: 2rem 0;">
-            <h3 style="margin-bottom: 1rem;">📊 Prix moyens par variante</h3>
-            <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+            <h3 style="margin-bottom: 1rem;">📊 Prix moyens par variante (données réelles)</h3>
+            <ul style="list-style: none; padding: 0;">
+                @foreach($variantPrices as $slug => $price)
+                    @php
+                        $variant = $console->variants->where('slug', $slug)->first();
+                    @endphp
+                    @if($variant)
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                        <span>{{ $variant->short_name }}</span>
+                        <strong>{{ $price }}€</strong>
+                    </li>
+                    @endif
+                @endforeach
+            </ul>
+            <p style="margin-top: 1rem; margin-bottom: 0; color: var(--text-secondary); font-size: 0.85rem;">
                 <a href="/{{ $console->slug }}" style="color: var(--accent-primary);">
-                    Voir toutes les variantes Game Boy Color avec historique des prix →
+                    Voir toutes les variantes Game Boy Color avec historique complet →
                 </a>
             </p>
         </div>
@@ -89,13 +112,13 @@
 
         <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--warning);">⚠️ L'écran</h3>
         <p style="margin-bottom: 1rem;">
-            L'écran LCD se raye facilement. Vérifiez bien les photos pour détecter rayures et pixels morts.
+            L'écran <abbr title="Liquid Crystal Display - Écran à cristaux liquides">LCD</abbr> se raye facilement. Vérifiez bien les photos pour détecter rayures et pixels morts.
             Un écran rayé n'est pas rédhibitoire pour jouer, mais réduit significativement la valeur de revente.
         </p>
 
         <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--warning);">⚠️ La trappe de piles</h3>
         <p style="margin-bottom: 1rem;">
-            Beaucoup de GBC vendues ont perdu leur trappe de piles. Cela fonctionne parfaitement avec du scotch,
+            Beaucoup de <abbr title="Game Boy Color">GBC</abbr> vendues ont perdu leur trappe de piles. Cela fonctionne parfaitement avec du scotch,
             mais c'est moche et dévalorise la console. Privilégiez les modèles complets.
         </p>
 
@@ -138,7 +161,7 @@
 
         <ul style="list-style: disc; padding-left: 2rem; margin-bottom: 1.5rem;">
             <li style="margin-bottom: 0.5rem;">
-                <strong>Piles rechargeables AA</strong> : La GBC consomme beaucoup (10-15h d'autonomie).
+                <strong>Piles rechargeables AA</strong> : La <abbr title="Game Boy Color">GBC</abbr> consomme beaucoup (10-15h d'autonomie).
                 Investissez dans des piles rechargeables pour économiser sur le long terme.
             </li>
             <li style="margin-bottom: 0.5rem;">
@@ -146,7 +169,7 @@
             </li>
             <li style="margin-bottom: 0.5rem;">
                 <strong>Lampe externe</strong> : Si vous jouez souvent dans des endroits peu éclairés,
-                une lampe clip-on améliore grandement l'expérience (ou passez directement à la GBA SP).
+                une lampe clip-on améliore grandement l'expérience (ou passez directement à la <abbr title="Game Boy Advance">GBA</abbr> <abbr title="Special - Version améliorée">SP</abbr>).
             </li>
         </ul>
 
@@ -158,7 +181,7 @@
         </p>
 
         <p style="margin-bottom: 1rem;">
-            <strong>Notre recommandation</strong> : Si c'est votre première GBC, prenez un modèle standard
+            <strong>Notre recommandation</strong> : Si c'est votre première <abbr title="Game Boy Color">GBC</abbr>, prenez un modèle standard
             (Jaune, Rouge ou Bleu) en bon état avec sa trappe de piles. Vous économiserez 20-30€ par rapport
             aux modèles translucides sans perdre en expérience de jeu.
         </p>

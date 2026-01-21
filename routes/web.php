@@ -10,11 +10,11 @@ Route::get('/', [ConsoleController::class, 'index'])->name('home');
 
 // Guide pages (must be before console routes to avoid conflicts)
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
-Route::get('/guides/game-boy-color', [GuideController::class, 'showGameBoyColorGuide'])->name('guides.game-boy-color');
-Route::get('/guides/ps-vita', [GuideController::class, 'showPSVitaGuide'])->name('guides.ps-vita');
-Route::get('/guides/game-boy-advance', [GuideController::class, 'showGameBoyAdvanceGuide'])->name('guides.game-boy-advance');
-Route::get('/guides/fake-detection', [GuideController::class, 'showFakeDetectionGuide'])->name('guides.fake-detection');
-Route::get('/guides/best-consoles-2026', [GuideController::class, 'showBestConsoles2026'])->name('guides.best-consoles-2026');
+Route::get('/guides/guide-achat-game-boy-color', [GuideController::class, 'showGameBoyColorGuide'])->name('guides.game-boy-color');
+Route::get('/guides/ps-vita-occasion-guide', [GuideController::class, 'showPSVitaGuide'])->name('guides.ps-vita');
+Route::get('/guides/guide-game-boy-advance', [GuideController::class, 'showGameBoyAdvanceGuide'])->name('guides.game-boy-advance');
+Route::get('/guides/reperer-console-retrogaming-contrefaite', [GuideController::class, 'showFakeDetectionGuide'])->name('guides.fake-detection');
+Route::get('/guides/meilleures-consoles-retro-2026', [GuideController::class, 'showBestConsoles2026'])->name('guides.best-consoles-2026');
 
 // Content pages (must be before console routes to avoid conflicts)
 Route::get('/{console:slug}/classement', [ContentController::class, 'showRanking'])->name('content.ranking');

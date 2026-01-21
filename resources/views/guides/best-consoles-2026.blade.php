@@ -26,7 +26,7 @@ abbr[title] {
         <h1 style="margin-bottom: 1rem;">Meilleures consoles retrogaming à acheter en 2026</h1>
 
         <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-            Publié le {{ date('j F Y') }} • Lecture 5 min
+            Créé le 21 janvier 2026 • Lecture 5 min
         </p>
 
         <p style="margin-bottom: 2rem;">

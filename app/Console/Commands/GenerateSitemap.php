@@ -25,11 +25,11 @@ class GenerateSitemap extends Command
         // Guide pages
         $guides = [
             '/guides',
-            '/guides/game-boy-color',
-            '/guides/ps-vita',
-            '/guides/game-boy-advance',
-            '/guides/fake-detection',
-            '/guides/best-consoles-2026',
+            '/guides/guide-achat-game-boy-color',
+            '/guides/ps-vita-occasion-guide',
+            '/guides/guide-game-boy-advance',
+            '/guides/reperer-console-retrogaming-contrefaite',
+            '/guides/meilleures-consoles-retro-2026',
         ];
 
         foreach ($guides as $guide) {

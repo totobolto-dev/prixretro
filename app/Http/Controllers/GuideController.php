@@ -55,27 +55,56 @@ class GuideController extends Controller
     {
         $console = Console::where('slug', 'game-boy-color')->first();
 
+        // Get price data for variants with 20+ sales
+        $variantPrices = [];
+        if ($console) {
+            foreach ($console->variants as $variant) {
+                $listings = $variant->listings()->where('status', 'approved')->get();
+                if ($listings->count() >= 20) {
+                    $variantPrices[$variant->slug] = round($listings->avg('price'));
+                }
+            }
+        }
+
         $metaDescription = "Guide d'achat complet Game Boy Color 2026 : meilleures variantes, prix moyens, pièges à éviter. Analyse de 100+ ventes pour acheter malin.";
 
-        return view('guides.game-boy-color', compact('console', 'metaDescription'));
+        return view('guides.game-boy-color', compact('console', 'metaDescription', 'variantPrices'));
     }
 
     public function showPSVitaGuide()
     {
         $console = Console::where('slug', 'ps-vita')->first();
 
+        // Get price data
+        $avgPrice = null;
+        if ($console) {
+            $allListings = $console->variants()->with('listings')->get()->flatMap->listings->where('status', 'approved');
+            if ($allListings->count() >= 20) {
+                $avgPrice = round($allListings->avg('price'));
+            }
+        }
+
         $metaDescription = "PS Vita d'occasion : guide pour éviter les pièges. Prix des différents modèles, points de vigilance et meilleures affaires en 2026.";
 
-        return view('guides.ps-vita', compact('console', 'metaDescription'));
+        return view('guides.ps-vita', compact('console', 'metaDescription', 'avgPrice'));
     }
 
     public function showGameBoyAdvanceGuide()
     {
         $console = Console::where('slug', 'game-boy-advance')->first();
 
+        // Get price data
+        $avgPrice = null;
+        if ($console) {
+            $allListings = $console->variants()->with('listings')->get()->flatMap->listings->where('status', 'approved');
+            if ($allListings->count() >= 20) {
+                $avgPrice = round($allListings->avg('price'));
+            }
+        }
+
         $metaDescription = "Game Boy Advance : quel modèle choisir en 2026 ? Comparatif GBA, SP et Micro avec prix moyens et recommandations pour débuter votre collection.";
 
-        return view('guides.game-boy-advance', compact('console', 'metaDescription'));
+        return view('guides.game-boy-advance', compact('console', 'metaDescription', 'avgPrice'));
     }
 
     public function showFakeDetectionGuide()
