@@ -294,20 +294,24 @@
 
         // Display listing
         function displayListing(data) {
+            console.log('Listing data:', data);
+
             document.getElementById('title').textContent = data.title;
             document.getElementById('price').textContent = data.price + '€';
             document.getElementById('variant').textContent = data.variant;
 
             const img = document.getElementById('image');
-            if (data.image_url) {
-                img.src = data.image_url;
+            const imgUrl = data.image_url || data.thumbnail_url;
+
+            console.log('Image URL:', imgUrl);
+
+            if (imgUrl && imgUrl !== '' && imgUrl !== 'null') {
+                img.src = imgUrl;
                 img.style.display = 'block';
-                img.onerror = function() {
-                    // Fallback to placeholder if eBay image fails
-                    this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect fill="%230f172a" width="400" height="400"/><text x="50%" y="50%" text-anchor="middle" fill="%2394a3b8" font-size="20" font-family="sans-serif">Image indisponible</text></svg>';
-                    this.onerror = null;
-                };
+                img.style.opacity = '1';
+                console.log('Image src set to:', img.src);
             } else {
+                console.log('No image URL, hiding image');
                 img.style.display = 'none';
             }
 
