@@ -6,6 +6,7 @@ namespace App\Models;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -54,5 +55,26 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    /**
+     * Get user's console collection.
+     */
+    public function collection(): HasMany
+    {
+        return $this->hasMany(UserCollection::class);
+    }
+
+    /**
+     * Calculate total collection value.
+     */
+    public function getCollectionValue(): float
+    {
+        return $this->collection()
+            ->with('variant')
+            ->get()
+            ->sum(function ($item) {
+                return $item->getCurrentValue() ?? 0;
+            });
     }
 }
