@@ -14,6 +14,14 @@ class VariantController extends Controller
         $variant = $console->variants()->where('slug', $variant)->firstOrFail();
         $variant->load('console');
 
+        // Social proof: Count collectors tracking this variant
+        $collectorsCount = \App\Models\UserCollection::where('variant_id', $variant->id)->count();
+
+        // Social proof: Recently added (last 7 days)
+        $recentlyAddedCount = \App\Models\UserCollection::where('variant_id', $variant->id)
+            ->where('created_at', '>=', now()->subDays(7))
+            ->count();
+
         $listings = $variant->approvedListings()
             ->orderBy('sold_date', 'desc')
             ->get();
@@ -158,7 +166,9 @@ class VariantController extends Controller
             'schemaData',
             'guideUrl',
             'priceTrend',
-            'buyingInsight'
+            'buyingInsight',
+            'collectorsCount',
+            'recentlyAddedCount'
         ));
     }
 

@@ -175,7 +175,18 @@ class ConsoleController extends Controller
         ];
         $guideUrl = $guideMap[$console->slug] ?? null;
 
-        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription', 'relatedConsoles', 'guideUrl'));
+        // Social proof: Most collected variants
+        $mostCollected = $console->variants()
+            ->select('variants.*')
+            ->leftJoin('user_collections', 'variants.id', '=', 'user_collections.variant_id')
+            ->selectRaw('COUNT(user_collections.id) as collectors_count')
+            ->groupBy('variants.id')
+            ->having('collectors_count', '>', 0)
+            ->orderByDesc('collectors_count')
+            ->limit(5)
+            ->get();
+
+        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription', 'relatedConsoles', 'guideUrl', 'mostCollected'));
     }
 
     private function calculateMedian($prices)

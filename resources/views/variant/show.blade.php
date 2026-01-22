@@ -37,6 +37,26 @@
         @endauth
     </div>
 
+    {{-- Social Proof Banner --}}
+    @if($collectorsCount > 0)
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">👥</span>
+            <div>
+                <div style="font-weight: 700; font-size: 1.1rem;">{{ $collectorsCount }} {{ $collectorsCount > 1 ? 'collectionneurs' : 'collectionneur' }}</div>
+                <div style="font-size: 0.85rem; opacity: 0.9;">{{ $collectorsCount > 1 ? 'suivent' : 'suit' }} cette console</div>
+            </div>
+        </div>
+
+        @if($recentlyAddedCount > 0)
+        <div style="margin-left: auto; display: flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.2); padding: 0.5rem 1rem; border-radius: 9999px;">
+            <span style="font-size: 1.2rem;">🔥</span>
+            <span style="font-size: 0.9rem; font-weight: 600;">+{{ $recentlyAddedCount }} cette semaine</span>
+        </div>
+        @endif
+    </div>
+    @endif
+
     @if($statistics['count'] > 0)
     <div class="value-prop-banner">
         <div class="value-prop-icon">💰</div>

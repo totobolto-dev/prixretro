@@ -106,6 +106,38 @@
             </div>
         </div>
 
+        {{-- Most Collected Variants (Social Proof) --}}
+        @if($mostCollected->count() > 0)
+        <div style="margin: 3rem 0; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border-color); padding: 2rem;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                <span style="font-size: 2rem;">🔥</span>
+                <div>
+                    <h2 style="margin: 0;">Variantes Populaires</h2>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0 0; font-size: 0.95rem;">
+                        Les variantes les plus suivies par nos collectionneurs
+                    </p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                @foreach($mostCollected as $variant)
+                <a href="/{{ $console->slug }}/{{ $variant->slug }}" style="text-decoration: none; color: inherit; background: var(--bg-darker); border-radius: var(--radius); padding: 1.25rem; border: 2px solid transparent; transition: all 0.2s;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <div style="font-weight: 600; font-size: 1.05rem;">{{ $variant->name }}</div>
+                        <div style="display: flex; align-items: center; gap: 0.25rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">
+                            <span>👥</span>
+                            <span>{{ $variant->collectors_count }}</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        {{ $variant->collectors_count }} {{ $variant->collectors_count > 1 ? 'collectionneurs' : 'collectionneur' }}
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <h2 style="margin-top: 3rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">Explorer par Variante</h2>
     @endif
 
