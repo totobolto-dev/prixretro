@@ -228,7 +228,7 @@
 
         <div class="classifier" id="classifier" style="display: none;">
             <div class="listing-info">
-                <img id="image" src="" alt="Listing image" class="listing-image" onerror="this.style.display='none'">
+                <img id="image" src="" alt="Listing image" class="listing-image">
                 <div class="listing-details">
                     <div class="listing-title" id="title"></div>
                     <div class="price" id="price"></div>
@@ -302,6 +302,11 @@
             if (data.image_url) {
                 img.src = data.image_url;
                 img.style.display = 'block';
+                img.onerror = function() {
+                    // Fallback to placeholder if eBay image fails
+                    this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect fill="%230f172a" width="400" height="400"/><text x="50%" y="50%" text-anchor="middle" fill="%2394a3b8" font-size="20" font-family="sans-serif">Image indisponible</text></svg>';
+                    this.onerror = null;
+                };
             } else {
                 img.style.display = 'none';
             }
