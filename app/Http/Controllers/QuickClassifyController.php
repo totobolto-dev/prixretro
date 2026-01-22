@@ -28,7 +28,7 @@ class QuickClassifyController extends Controller
             'id' => $listing->id,
             'title' => $listing->title,
             'price' => $listing->price,
-            'image_url' => $listing->thumbnail_url,
+            'thumbnail_url' => $listing->thumbnail_url,
             'url' => $listing->url,
             'variant' => $listing->variant ? $listing->variant->display_name : 'Non assigné',
             'console' => $listing->variant ? $listing->variant->console->name : null,
