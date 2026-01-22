@@ -237,6 +237,19 @@ Guide d'achat Nintendo DS - Quelle version choisir en 2026 | PrixRetro
         <p style="margin-top: 1rem;"><strong>Impact réel :</strong> Négligeable. Les jeux DS classiques fonctionnent tous.</p>
     </div>
 
+    <h3>❌ IMPORTANT : Nintendo 3DS ≠ Nintendo DS</h3>
+
+    <div style="background: #fee2e2; color: #991b1b; padding: 1.5rem; margin: 2rem 0; border-radius: var(--radius); border: 2px solid #dc2626;">
+        <p><strong>⚠️ La famille Nintendo 3DS est ENTIÈREMENT region-locked !</strong></p>
+        <ul style="margin-top: 0.5rem;">
+            <li><strong>3DS, 3DS XL, 2DS, New 3DS, New 3DS XL, New 2DS XL :</strong> Tous region-locked</li>
+            <li>Console japonaise = jeux japonais uniquement</li>
+            <li>Console européenne = jeux européens uniquement</li>
+            <li><strong>Incompatibilité totale entre régions</strong></li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>💡 Bon à savoir :</strong> La 3DS peut lire les jeux DS (qui sont region-free), mais PAS les jeux 3DS d'autres régions.</p>
+    </div>
+
     <h3>💡 Avantages de l'import japonais</h3>
 
     <ul>
