@@ -213,6 +213,40 @@ Guide d'achat Nintendo DS - Quelle version choisir en 2026 | PrixRetro
         <li><strong>Film protecteur écran tactile :</strong> 5-8€</li>
     </ul>
 
+    <h2>🌍 Région Lock : DS est-elle region-free ?</h2>
+
+    <div style="background: #d1fae5; color: #065f46; padding: 1.5rem; margin: 2rem 0; border-radius: var(--radius);">
+        <p><strong>✅ Excellente nouvelle : La Nintendo DS est REGION-FREE !</strong></p>
+        <ul style="margin-top: 0.5rem;">
+            <li>Tous les modèles (DS, DS Lite, DSi, DSi XL) lisent les cartouches de toutes régions</li>
+            <li>Vous pouvez acheter une DS japonaise et jouer aux jeux européens/américains (et vice-versa)</li>
+            <li>Les jeux japonais sont souvent <strong>moins chers</strong> (20-40% de réduction sur imports)</li>
+            <li>Économie possible : DS Lite japonaise ~30-40€ vs 50-60€ pour version PAL</li>
+        </ul>
+    </div>
+
+    <h3>⚠️ Exceptions DSi (uniquement)</h3>
+
+    <div style="background: #fee2e2; color: #991b1b; padding: 1.5rem; margin: 2rem 0; border-radius: var(--radius);">
+        <p><strong>La DSi et DSi XL ont des restrictions limitées :</strong></p>
+        <ul style="margin-top: 0.5rem;">
+            <li><strong>DSiWare (boutique) :</strong> Region-locked (mais fermée depuis 2017, obsolète)</li>
+            <li><strong>Jeux DSi-exclusifs :</strong> ~20 jeux physiques region-locked (très rares)</li>
+            <li><strong>99% de la ludothèque DS :</strong> Reste region-free sur DSi</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>Impact réel :</strong> Négligeable. Les jeux DS classiques fonctionnent tous.</p>
+    </div>
+
+    <h3>💡 Avantages de l'import japonais</h3>
+
+    <ul>
+        <li><strong>Prix :</strong> Consoles japonaises 30-50% moins chères sur eBay.jp/Yahoo Auctions</li>
+        <li><strong>État :</strong> Culture japonaise = consoles mieux entretenues</li>
+        <li><strong>Coloris exclusifs :</strong> Éditions limitées jamais sorties en Europe</li>
+        <li><strong>Jeux importables :</strong> Pokémon, Mario, Zelda jouables en français (cartouches PAL)</li>
+        <li><strong>Risque :</strong> Notices en japonais uniquement (jeux anglophones OK)</li>
+    </ul>
+
     <h2>Jeux DS incontournables</h2>
 
     <ul>

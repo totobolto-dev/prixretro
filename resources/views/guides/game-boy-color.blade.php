@@ -174,6 +174,22 @@ abbr[title] {
             </li>
         </ul>
 
+        <h2 style="margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">🌍 Région Lock : Game Boy Color region-free</h2>
+
+        <div style="background: #d1fae5; color: #065f46; padding: 1.5rem; margin: 2rem 0; border-radius: var(--radius);">
+            <p style="margin-bottom: 1rem;"><strong>✅ La Game Boy Color est entièrement region-free !</strong></p>
+            <ul style="list-style: disc; padding-left: 2rem; margin: 0;">
+                <li style="margin-bottom: 0.5rem;">Compatible avec toutes les cartouches Game Boy et Game Boy Color du monde entier</li>
+                <li style="margin-bottom: 0.5rem;">GBC japonaise lit jeux US/EUR sans problème (et vice-versa)</li>
+                <li style="margin-bottom: 0.5rem;">Import japonais souvent <strong>30-40% moins cher</strong></li>
+                <li style="margin-bottom: 0.5rem;">Excellent état général (culture japonaise de préservation)</li>
+            </ul>
+        </div>
+
+        <p style="margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-card); border-left: 3px solid var(--accent-primary); border-radius: var(--radius);">
+            <strong>💡 Bon plan</strong> : Les coloris translucides (Atomic Purple, Ice Blue) sont souvent moins chers au Japon. Économie possible : 20-30€ vs versions PAL.
+        </p>
+
         <h2 style="margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">Verdict final</h2>
 
         <p style="margin-bottom: 1rem;">

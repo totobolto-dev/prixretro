@@ -191,6 +191,59 @@ PSP ou PS Vita - Quelle console portable Sony acheter en 2026 | PrixRetro
         <li><strong>Tearaway :</strong> Plateforme créative (10-15€)</li>
     </ul>
 
+    <h2>🌍 Région Lock : PSP et Vita sont-elles region-free ?</h2>
+
+    <h3>✅ PSP : Entièrement region-free (jeux)</h3>
+
+    <div style="background: #d1fae5; color: #065f46; padding: 1.5rem; margin: 2rem 0; border-radius: var(--radius);">
+        <p><strong>Tous les jeux UMD PSP sont region-free :</strong></p>
+        <ul style="margin-top: 0.5rem;">
+            <li>PSP japonaise lit jeux US/EUR/JAP sans problème</li>
+            <li>Import JAP souvent 30-50% moins cher (eBay.jp, Yahoo Auctions)</li>
+            <li>Jeux japonais avec anglais : Monster Hunter, Final Fantasy, MGS</li>
+            <li>Économie : PSP 3000 japonaise ~40-50€ vs 60-80€ version PAL</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>⚠️ Exception :</strong> Films UMD region-lockés (régions 1/2/3 comme DVD). Mais qui regarde des films UMD en 2026 ? 😅</p>
+    </div>
+
+    <h3>⚠️ PS Vita : Region-free MAIS compte PSN régional</h3>
+
+    <div style="background: #fef3c7; color: #92400e; padding: 1.5rem; margin: 2rem 0; border-radius: var(--radius);">
+        <p><strong>Cartouches physiques :</strong> Region-free (Vita JAP lit jeux US/EUR)</p>
+        <p style="margin-top: 1rem;"><strong>Compte PSN et DLC :</strong> Region-locked !</p>
+        <ul style="margin-top: 0.5rem;">
+            <li>Compte PSN Europe = DLC européens uniquement</li>
+            <li>Jeu US physique + compte EUR = DLC incompatibles</li>
+            <li>Changer de compte PSN = formater la Vita (perte sauvegardes)</li>
+            <li>Carte mémoire liée au compte (1 compte = 1 carte)</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>💡 Conseil :</strong> Achetez jeux de la même région que votre compte PSN pour éviter soucis DLC.</p>
+    </div>
+
+    <h3>💰 Import japonais : Bon plan ?</h3>
+
+    <table style="width: 100%; border-collapse: collapse; margin: 2rem 0;">
+        <thead style="background: var(--bg-darker);">
+            <tr>
+                <th style="padding: 1rem; text-align: left; border: 1px solid var(--border-color);">Console</th>
+                <th style="padding: 1rem; text-align: center; border: 1px solid var(--border-color);">Import JAP recommandé ?</th>
+                <th style="padding: 1rem; text-align: left; border: 1px solid var(--border-color);">Raison</th>
+            </tr>
+        </thead>
+        <tbody style="background: var(--bg-card);">
+            <tr>
+                <td style="padding: 1rem; border: 1px solid var(--border-color);"><strong>PSP</strong></td>
+                <td style="padding: 1rem; text-align: center; border: 1px solid var(--border-color);">✅ OUI</td>
+                <td style="padding: 1rem; border: 1px solid var(--border-color);">Pas de soucis région, prix -40%, excellent état</td>
+            </tr>
+            <tr>
+                <td style="padding: 1rem; border: 1px solid var(--border-color);"><strong>PS Vita</strong></td>
+                <td style="padding: 1rem; text-align: center; border: 1px solid var(--border-color);">⚠️ PRUDENT</td>
+                <td style="padding: 1rem; border: 1px solid var(--border-color);">OK si jeux physiques uniquement. Éviter si utilisation PSN/DLC prévue</td>
+            </tr>
+        </tbody>
+    </table>
+
     <h2>Prix des jeux (2026)</h2>
 
     <div style="background: var(--bg-card); padding: 1.5rem; margin: 2rem 0; border-radius: var(--radius);">

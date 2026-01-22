@@ -85,6 +85,42 @@ abbr[title] {
             collectionneurs ou fans du format ultra-portable. Pas recommandé comme première <abbr title="Game Boy Advance">GBA</abbr>.
         </p>
 
+        <h2 style="margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">🌍 Région Lock : Toutes les Game Boy sont region-free</h2>
+
+        <div style="background: #d1fae5; color: #065f46; padding: 1.5rem; margin: 2rem 0; border-radius: var(--radius);">
+            <p style="margin-bottom: 1rem;"><strong>✅ Excellente nouvelle : TOUTES les consoles Game Boy sont region-free !</strong></p>
+            <ul style="list-style: disc; padding-left: 2rem; margin: 0;">
+                <li style="margin-bottom: 0.5rem;">Game Boy (1989), Game Boy Color, <strong>Game Boy Advance</strong>, GBA SP, GBA Micro</li>
+                <li style="margin-bottom: 0.5rem;">Versions chinoises (iQue) incluses</li>
+                <li style="margin-bottom: 0.5rem;">Vous pouvez acheter une console japonaise et jouer aux jeux européens/américains sans problème</li>
+                <li style="margin-bottom: 0.5rem;">Les jeux japonais sont souvent <strong>30-50% moins chers</strong> sur eBay.jp/Yahoo Auctions</li>
+            </ul>
+        </div>
+
+        <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">💰 Avantages de l'import japonais</h3>
+
+        <ul style="list-style: disc; padding-left: 2rem; margin-bottom: 1.5rem;">
+            <li style="margin-bottom: 0.5rem;">
+                <strong>Prix :</strong> GBA SP japonaise ~50-70€ vs 80-120€ version PAL
+            </li>
+            <li style="margin-bottom: 0.5rem;">
+                <strong>État :</strong> Culture japonaise = consoles mieux entretenues, moins de rayures
+            </li>
+            <li style="margin-bottom: 0.5rem;">
+                <strong>Coloris exclusifs :</strong> Famicom Edition (NES rouge/blanc), Pearl Blue, Pearl Pink jamais sortis en Europe
+            </li>
+            <li style="margin-bottom: 0.5rem;">
+                <strong>Jeux compatibles :</strong> Pokémon, Mario, Zelda fonctionnent parfaitement (même si texte en japonais)
+            </li>
+            <li style="margin-bottom: 0.5rem;">
+                <strong>Risque :</strong> Notices en japonais uniquement, mais qui lit les notices en 2026 ? 😄
+            </li>
+        </ul>
+
+        <p style="margin-bottom: 2rem; padding: 1rem; background: var(--bg-card); border-left: 3px solid var(--accent-primary); border-radius: var(--radius);">
+            <strong>💡 Astuce</strong> : Recherchez "ゲームボーイアドバンスSP" (Game Boy Advance SP en japonais) sur eBay.jp pour trouver des offres 40-50€ en excellent état.
+        </p>
+
         <h2 style="margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">Notre recommandation</h2>
 
         <p style="margin-bottom: 1rem;">
