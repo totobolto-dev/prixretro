@@ -67,6 +67,9 @@
                 <nav>
                     <a href="/">Accueil</a>
                     <a href="/guides">Guides</a>
+                    @auth
+                        <a href="{{ route('collection.index') }}">Ma Collection</a>
+                    @endauth
                 </nav>
             </div>
         </div>

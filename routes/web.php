@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ConsoleController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\GuideController;
@@ -13,6 +14,14 @@ Route::get('/', [ConsoleController::class, 'index'])->name('home');
 Route::get('/admin/quick-classify', [QuickClassifyController::class, 'index'])->name('admin.quick-classify');
 Route::get('/admin/quick-classify/next', [QuickClassifyController::class, 'getNextListing'])->name('admin.quick-classify.next');
 Route::post('/admin/quick-classify/{listing}', [QuickClassifyController::class, 'classify'])->name('admin.quick-classify.save');
+
+// User Collection (auth required)
+Route::middleware('auth')->group(function () {
+    Route::get('/ma-collection', [CollectionController::class, 'index'])->name('collection.index');
+    Route::post('/collection/add/{variant}', [CollectionController::class, 'add'])->name('collection.add');
+    Route::delete('/collection/{collection}', [CollectionController::class, 'remove'])->name('collection.remove');
+    Route::patch('/collection/{collection}', [CollectionController::class, 'update'])->name('collection.update');
+});
 
 // Guide pages (must be before console routes to avoid conflicts)
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');

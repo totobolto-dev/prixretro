@@ -14,7 +14,28 @@
         <span>{{ $variant->name }}</span>
     </div>
 
-    <h1>{{ $variant->display_name }}</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h1 style="margin: 0;">{{ $variant->display_name }}</h1>
+
+        @auth
+            @php
+                $inCollection = Auth::user()->collection()->where('variant_id', $variant->id)->exists();
+            @endphp
+
+            @if($inCollection)
+                <a href="{{ route('collection.index') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #10b981; color: white; padding: 0.75rem 1.5rem; border-radius: var(--radius); text-decoration: none; font-weight: 600;">
+                    ✅ Dans ma collection
+                </a>
+            @else
+                <form method="POST" action="{{ route('collection.add', $variant) }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius); cursor: pointer; font-weight: 600; font-size: 1rem;">
+                        ➕ Ajouter à ma collection
+                    </button>
+                </form>
+            @endif
+        @endauth
+    </div>
 
     @if($statistics['count'] > 0)
     <div class="value-prop-banner">
