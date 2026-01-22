@@ -4,6 +4,7 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ConsoleController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\GuideController;
+use App\Http\Controllers\MarketTrendsController;
 use App\Http\Controllers\QuickClassifyController;
 use App\Http\Controllers\VariantController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/collection/{collection}', [CollectionController::class, 'remove'])->name('collection.remove');
     Route::patch('/collection/{collection}', [CollectionController::class, 'update'])->name('collection.update');
 });
+
+// Market Trends Dashboard
+Route::get('/tendances', [MarketTrendsController::class, 'index'])->name('trends.index');
 
 // Guide pages (must be before console routes to avoid conflicts)
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
