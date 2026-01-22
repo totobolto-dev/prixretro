@@ -72,6 +72,34 @@ class GuideController extends Controller
                 'console' => 'Général',
                 'image' => '/images/guides/investment.jpg'
             ],
+            [
+                'slug' => 'guide-achat-nintendo-ds',
+                'title' => 'Guide d\'achat Nintendo DS - Quelle version choisir en 2026',
+                'description' => 'DS, DS Lite, DSi ou DSi XL ? Comparatif complet des 4 modèles Nintendo DS avec prix, avantages et inconvénients pour bien choisir.',
+                'console' => 'Nintendo DS',
+                'image' => '/images/guides/ds-guide.jpg'
+            ],
+            [
+                'slug' => 'psp-ou-ps-vita-quelle-console-acheter',
+                'title' => 'PSP ou PS Vita - Quelle console portable Sony acheter en 2026',
+                'description' => 'Comparatif détaillé PSP vs PS Vita : prix, ludothèque, homebrew, écrans. Quel modèle choisir selon votre budget et vos besoins.',
+                'console' => 'Sony Portable',
+                'image' => '/images/guides/psp-vita.jpg'
+            ],
+            [
+                'slug' => 'tester-console-occasion-avant-achat',
+                'title' => 'Comment tester une console d\'occasion avant achat - Checklist 2026',
+                'description' => 'Checklist complète en 10 minutes pour tester une console d\'occasion : écran, boutons, lecteur, audio. Ne vous faites plus avoir !',
+                'console' => 'Général',
+                'image' => '/images/guides/testing.jpg'
+            ],
+            [
+                'slug' => 'estimer-valeur-collection-retrogaming',
+                'title' => 'Estimer la valeur de sa collection retrogaming - Guide 2026',
+                'description' => 'Méthodes et outils pour évaluer précisément votre collection de consoles retrogaming. Prix par état, rareté et timing de revente optimal.',
+                'console' => 'Général',
+                'image' => '/images/guides/valuation.jpg'
+            ],
         ];
 
         $metaDescription = "Guides d'achat pour consoles retrogaming d'occasion. Conseils d'experts, analyses de prix et recommandations pour bien acheter.";
@@ -194,5 +222,33 @@ class GuideController extends Controller
         $metaDescription = "Investir dans les consoles retrogaming : ROI, meilleures valeurs (GBA SP, PS Vita, Dreamcast), pièges à éviter et stratégies de revente en 2026.";
 
         return view('guides.investir-consoles-retrogaming', compact('metaDescription'));
+    }
+
+    public function showNintendoDSGuide()
+    {
+        $metaDescription = "Guide d'achat Nintendo DS 2026 : comparatif DS/DS Lite/DSi/DSi XL avec prix moyens, avantages et inconvénients. Quel modèle choisir selon votre budget.";
+
+        return view('guides.guide-achat-nintendo-ds', compact('metaDescription'));
+    }
+
+    public function showPSPVSVitaGuide()
+    {
+        $metaDescription = "PSP ou PS Vita : comparatif détaillé 2026. Prix, ludothèque, homebrew, écrans. Quel modèle portable Sony choisir selon vos besoins.";
+
+        return view('guides.psp-ou-ps-vita-quelle-console-acheter', compact('metaDescription'));
+    }
+
+    public function showTestingGuide()
+    {
+        $metaDescription = "Checklist complète pour tester une console d'occasion avant achat. Écran, boutons, lecteur, audio : ne vous faites plus avoir en 10 minutes chrono.";
+
+        return view('guides.tester-console-occasion-avant-achat', compact('metaDescription'));
+    }
+
+    public function showValuationGuide()
+    {
+        $metaDescription = "Comment estimer la valeur de votre collection retrogaming : méthodes de calcul, coefficients par état (Loose/CIB/Sealed), timing de revente optimal.";
+
+        return view('guides.estimer-valeur-collection-retrogaming', compact('metaDescription'));
     }
 }

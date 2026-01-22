@@ -38,6 +38,10 @@ Route::get('/guides/authentifier-console-retrogaming', [GuideController::class, 
 Route::get('/guides/nettoyer-console-retro-jaunie', [GuideController::class, 'showCleaningGuide'])->name('guides.cleaning');
 Route::get('/guides/pourquoi-prix-gba-ont-explose', [GuideController::class, 'showGBAPriceAnalysis'])->name('guides.gba-analysis');
 Route::get('/guides/investir-consoles-retrogaming', [GuideController::class, 'showInvestmentGuide'])->name('guides.investment');
+Route::get('/guides/guide-achat-nintendo-ds', [GuideController::class, 'showNintendoDSGuide'])->name('guides.nintendo-ds');
+Route::get('/guides/psp-ou-ps-vita-quelle-console-acheter', [GuideController::class, 'showPSPVSVitaGuide'])->name('guides.psp-vs-vita');
+Route::get('/guides/tester-console-occasion-avant-achat', [GuideController::class, 'showTestingGuide'])->name('guides.testing');
+Route::get('/guides/estimer-valeur-collection-retrogaming', [GuideController::class, 'showValuationGuide'])->name('guides.valuation');
 
 // Content pages (must be before console routes to avoid conflicts)
 Route::get('/{console:slug}/classement', [ContentController::class, 'showRanking'])->name('content.ranking');
