@@ -15,6 +15,10 @@ Route::get('/guides/ps-vita-occasion-guide', [GuideController::class, 'showPSVit
 Route::get('/guides/guide-game-boy-advance', [GuideController::class, 'showGameBoyAdvanceGuide'])->name('guides.game-boy-advance');
 Route::get('/guides/reperer-console-retrogaming-contrefaite', [GuideController::class, 'showFakeDetectionGuide'])->name('guides.fake-detection');
 Route::get('/guides/meilleures-consoles-retro-2026', [GuideController::class, 'showBestConsoles2026'])->name('guides.best-consoles-2026');
+Route::get('/guides/authentifier-console-retrogaming', [GuideController::class, 'showAuthenticationGuide'])->name('guides.authentication');
+Route::get('/guides/nettoyer-console-retro-jaunie', [GuideController::class, 'showCleaningGuide'])->name('guides.cleaning');
+Route::get('/guides/pourquoi-prix-gba-ont-explose', [GuideController::class, 'showGBAPriceAnalysis'])->name('guides.gba-analysis');
+Route::get('/guides/investir-consoles-retrogaming', [GuideController::class, 'showInvestmentGuide'])->name('guides.investment');
 
 // Content pages (must be before console routes to avoid conflicts)
 Route::get('/{console:slug}/classement', [ContentController::class, 'showRanking'])->name('content.ranking');

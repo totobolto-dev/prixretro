@@ -44,6 +44,34 @@ class GuideController extends Controller
                 'console' => 'Général',
                 'image' => '/images/guides/best-consoles.jpg'
             ],
+            [
+                'slug' => 'authentifier-console-retrogaming',
+                'title' => 'Authentifier une console retrogaming : guide technique avancé',
+                'description' => 'Apprenez à détecter les fausses consoles, identifier les reshells et vérifier l\'authenticité des composants avec nos techniques d\'experts.',
+                'console' => 'Général',
+                'image' => '/images/guides/authentication.jpg'
+            ],
+            [
+                'slug' => 'nettoyer-console-retro-jaunie',
+                'title' => 'Comment nettoyer et blanchir une console retrogaming jaunie',
+                'description' => 'Méthode Retr0bright, précautions de sécurité et prévention du jaunissement. Guide complet pour restaurer vos consoles.',
+                'console' => 'Général',
+                'image' => '/images/guides/cleaning.jpg'
+            ],
+            [
+                'slug' => 'pourquoi-prix-gba-ont-explose',
+                'title' => 'Pourquoi les prix de la Game Boy Advance ont explosé',
+                'description' => 'Analyse détaillée de la hausse +200% des prix GBA entre 2019 et 2026. Nostalgie, écran rétroéclairé, modding et émulation.',
+                'console' => 'Game Boy Advance',
+                'image' => '/images/guides/gba-analysis.jpg'
+            ],
+            [
+                'slug' => 'investir-consoles-retrogaming',
+                'title' => 'Investir dans les consoles retrogaming : ROI et perspectives 2026',
+                'description' => 'Quelles consoles acheter pour un bon retour sur investissement ? Analyse du marché 2019-2026 et prédictions pour les 5 prochaines années.',
+                'console' => 'Général',
+                'image' => '/images/guides/investment.jpg'
+            ],
         ];
 
         $metaDescription = "Guides d'achat pour consoles retrogaming d'occasion. Conseils d'experts, analyses de prix et recommandations pour bien acheter.";
@@ -138,5 +166,33 @@ class GuideController extends Controller
         $metaDescription = "Top 10 des meilleures consoles retrogaming à acheter en 2026 entre 50€ et 200€. Sélection basée sur l'analyse de milliers de ventes réelles.";
 
         return view('guides.best-consoles-2026', compact('consolesWithData', 'metaDescription'));
+    }
+
+    public function showAuthenticationGuide()
+    {
+        $metaDescription = "Guide technique avancé pour authentifier une console retrogaming. Numéros de série, vis tri-wing, reshells, composants internes et éditions limitées.";
+
+        return view('guides.authentifier-console-retrogaming', compact('metaDescription'));
+    }
+
+    public function showCleaningGuide()
+    {
+        $metaDescription = "Comment nettoyer et blanchir le plastique jauni des consoles retrogaming. Méthode Retr0bright, risques, précautions et prévention du jaunissement.";
+
+        return view('guides.nettoyer-console-retro-jaunie', compact('metaDescription'));
+    }
+
+    public function showGBAPriceAnalysis()
+    {
+        $metaDescription = "Analyse complète de la hausse +200% des prix Game Boy Advance (2019-2026). Nostalgie, écran rétroéclairé, modding, émulation et prédictions de marché.";
+
+        return view('guides.pourquoi-prix-gba-ont-explose', compact('metaDescription'));
+    }
+
+    public function showInvestmentGuide()
+    {
+        $metaDescription = "Investir dans les consoles retrogaming : ROI, meilleures valeurs (GBA SP, PS Vita, Dreamcast), pièges à éviter et stratégies de revente en 2026.";
+
+        return view('guides.investir-consoles-retrogaming', compact('metaDescription'));
     }
 }

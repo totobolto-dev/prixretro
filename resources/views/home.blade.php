@@ -51,6 +51,22 @@
         </div>
     </div>
 
+    {{-- Featured Guides Widget --}}
+    <div style="margin: 3rem auto; padding: 2rem; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); max-width: 1200px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="margin: 0; font-size: 1.5rem;">📚 Guides d'achat</h3>
+            <a href="/guides" style="color: var(--accent-primary); text-decoration: none; font-weight: 500;">Voir tous les guides →</a>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            @foreach($featuredGuides as $guide)
+            <a href="/guides/{{ $guide['slug'] }}" style="display: block; padding: 1.5rem; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); text-decoration: none; transition: transform 0.2s, border-color 0.2s;">
+                <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary); font-size: 1.1rem;">{{ $guide['title'] }}</h4>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">{{ $guide['description'] }}</p>
+            </a>
+            @endforeach
+        </div>
+    </div>
+
     {{-- Quick Navigation Overview --}}
     <div class="console-families-nav">
         <a href="#nintendo-home" class="family-nav-link">Nintendo (salon)</a>
