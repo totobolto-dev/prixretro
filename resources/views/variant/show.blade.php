@@ -189,8 +189,133 @@
         </div>
         @endif
 
+        {{-- Side-by-Side: eBay + Amazon Monetization --}}
+        <div style="margin: 3rem 0;">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 1.75rem;">Où acheter {{ $variant->display_name }} ?</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;" class="side-by-side-monetization">
+                {{-- Left: eBay Current Listings --}}
+                <div style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 2rem;">🛒</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.25rem;">eBay - Consoles d'occasion</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">Prix réels du marché</p>
+                        </div>
+                    </div>
+
+                    @if($currentListings->count() > 0)
+                        <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
+                            @foreach($currentListings->take(3) as $listing)
+                            <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
+                               target="_blank"
+                               rel="nofollow noopener"
+                               onclick="trackEbayClick('current-{{ $variant->slug }}')"
+                               style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg); border-radius: var(--radius); text-decoration: none; border: 1px solid var(--border); transition: border-color 0.2s;">
+                                <span style="color: var(--text-primary); font-size: 0.9rem; flex: 1;">{{ Str::limit($listing->title, 60) }}</span>
+                                <span style="color: var(--accent-primary); font-weight: 700; white-space: nowrap; margin-left: 1rem;">{{ number_format($listing->price, 0) }}€</span>
+                            </a>
+                            @endforeach
+                        </div>
+                        <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+                           target="_blank"
+                           rel="nofollow noopener"
+                           onclick="trackEbayClick('search-{{ $variant->slug }}')"
+                           style="display: block; width: 100%; padding: 0.75rem; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; text-align: center; border-radius: var(--radius); text-decoration: none; font-weight: 600;">
+                            Voir toutes les offres eBay →
+                        </a>
+                    @else
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Aucune annonce active actuellement</p>
+                        <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+                           target="_blank"
+                           rel="nofollow noopener"
+                           onclick="trackEbayClick('search-{{ $variant->slug }}')"
+                           style="display: block; width: 100%; padding: 0.75rem; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; text-align: center; border-radius: var(--radius); text-decoration: none; font-weight: 600;">
+                            Rechercher sur eBay →
+                        </a>
+                    @endif
+                </div>
+
+                {{-- Right: Amazon Accessories --}}
+                <div style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 2rem;">📦</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.25rem;">Amazon - Accessoires neufs</h3>
+                            <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">Protection et câbles</p>
+                        </div>
+                    </div>
+
+                    @php
+                        // Determine accessories based on console type
+                        $accessories = [];
+                        $consoleSlug = $variant->console->slug;
+
+                        // Portable consoles - Protection cases
+                        if (str_starts_with($consoleSlug, 'game-boy') ||
+                            str_starts_with($consoleSlug, 'nintendo-ds') ||
+                            str_starts_with($consoleSlug, 'nintendo-3ds') ||
+                            str_starts_with($consoleSlug, 'psp') ||
+                            str_starts_with($consoleSlug, 'ps-vita')) {
+                            $accessories[] = [
+                                'name' => 'Housse de protection rigide',
+                                'price' => '12-15€',
+                                'url' => 'https://www.amazon.fr/s?k=housse+protection+' . urlencode($variant->console->name) . '&tag=prixretro-21',
+                            ];
+                        }
+
+                        // Home consoles - HDMI adapters
+                        if (in_array($consoleSlug, ['playstation-1', 'playstation-2', 'nintendo-64', 'gamecube', 'super-nintendo', 'mega-drive', 'sega-saturn', 'dreamcast', 'master-system', 'nes'])) {
+                            $accessories[] = [
+                                'name' => 'Adaptateur HDMI',
+                                'price' => '15-25€',
+                                'url' => 'https://www.amazon.fr/s?k=adaptateur+hdmi+' . urlencode($variant->console->name) . '&tag=prixretro-21',
+                            ];
+                        }
+
+                        // Memory cards
+                        if (in_array($consoleSlug, ['playstation-2'])) {
+                            $accessories[] = [
+                                'name' => 'Carte mémoire 8MB',
+                                'price' => '8-12€',
+                                'url' => 'https://www.amazon.fr/s?k=carte+memoire+ps2&tag=prixretro-21',
+                            ];
+                        }
+
+                        if (in_array($consoleSlug, ['gamecube'])) {
+                            $accessories[] = [
+                                'name' => 'Carte mémoire 128MB',
+                                'price' => '8-12€',
+                                'url' => 'https://www.amazon.fr/s?k=carte+memoire+gamecube&tag=prixretro-21',
+                            ];
+                        }
+                    @endphp
+
+                    @if(count($accessories) > 0)
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            @foreach($accessories as $accessory)
+                            <a href="{{ $accessory['url'] }}"
+                               target="_blank"
+                               rel="nofollow noopener sponsored"
+                               onclick="trackAmazonClick('accessory-{{ $variant->slug }}')"
+                               style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg); border-radius: var(--radius); text-decoration: none; border: 1px solid var(--border); transition: border-color 0.2s;">
+                                <span style="color: var(--text-primary); font-size: 0.9rem; flex: 1;">{{ $accessory['name'] }}</span>
+                                <span style="color: #f59e0b; font-weight: 700; white-space: nowrap; margin-left: 1rem;">{{ $accessory['price'] }}</span>
+                            </a>
+                            @endforeach
+                        </div>
+                        <p style="margin-top: 1rem; margin-bottom: 0; color: var(--text-secondary); font-size: 0.75rem; text-align: center;">
+                            Lien affilié • Commission sans surcoût pour vous
+                        </p>
+                    @else
+                        <p style="color: var(--text-secondary);">Aucun accessoire recommandé pour cette console</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+
         @if($currentListings->count() > 0)
-        <div class="current-listings-section">
+        <div class="current-listings-section" style="display: none;">
             <h2>🛒 Actuellement en vente sur eBay ({{ $currentListings->count() }})</h2>
             <div class="current-listings-grid">
                 @foreach($currentListings as $listing)

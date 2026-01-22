@@ -2101,12 +2101,16 @@ footer p {
     .highlights-compact {
         grid-template-columns: 1fr;
     }
-    
+
     .compact-name {
         font-size: 0.7rem;
     }
-    
+
     .compact-price {
         font-size: 0.75rem;
+    }
+
+    .side-by-side-monetization {
+        grid-template-columns: 1fr !important;
     }
 }
