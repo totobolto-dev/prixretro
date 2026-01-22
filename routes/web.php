@@ -3,10 +3,16 @@
 use App\Http\Controllers\ConsoleController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\GuideController;
+use App\Http\Controllers\QuickClassifyController;
 use App\Http\Controllers\VariantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ConsoleController::class, 'index'])->name('home');
+
+// Quick Classify Tool (admin only)
+Route::get('/admin/quick-classify', [QuickClassifyController::class, 'index'])->name('admin.quick-classify');
+Route::get('/admin/quick-classify/next', [QuickClassifyController::class, 'getNextListing'])->name('admin.quick-classify.next');
+Route::post('/admin/quick-classify/{listing}', [QuickClassifyController::class, 'classify'])->name('admin.quick-classify.save');
 
 // Guide pages (must be before console routes to avoid conflicts)
 Route::get('/guides', [GuideController::class, 'index'])->name('guides.index');
