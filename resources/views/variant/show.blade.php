@@ -146,6 +146,88 @@
             </div>
         </div>
 
+        {{-- Condition-Based Pricing --}}
+        @if(!empty($statsByCompleteness))
+        <div style="margin: 2rem 0; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border-color); padding: 1.5rem;">
+            <h2 style="margin: 0 0 1rem 0;">💎 Prix par État</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                Les prix varient considérablement selon l'état de la console. Voici les moyennes observées :
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                @if(isset($statsByCompleteness['loose']))
+                <div style="background: var(--bg-darker); border-radius: var(--radius); padding: 1.25rem; border-left: 4px solid #64748b;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 1.5rem;">⚪</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 1.1rem;">Loose</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Console seule</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        {{ number_format($statsByCompleteness['loose']['avg_price'], 0) }}€
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        {{ $statsByCompleteness['loose']['count'] }} ventes •
+                        {{ number_format($statsByCompleteness['loose']['min_price'], 0) }}-{{ number_format($statsByCompleteness['loose']['max_price'], 0) }}€
+                    </div>
+                </div>
+                @endif
+
+                @if(isset($statsByCompleteness['cib']))
+                <div style="background: var(--bg-darker); border-radius: var(--radius); padding: 1.25rem; border-left: 4px solid #3b82f6;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 1.5rem;">📦</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 1.1rem;">CIB</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Complet en boîte</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        {{ number_format($statsByCompleteness['cib']['avg_price'], 0) }}€
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        {{ $statsByCompleteness['cib']['count'] }} ventes •
+                        {{ number_format($statsByCompleteness['cib']['min_price'], 0) }}-{{ number_format($statsByCompleteness['cib']['max_price'], 0) }}€
+                    </div>
+                </div>
+                @endif
+
+                @if(isset($statsByCompleteness['sealed']))
+                <div style="background: var(--bg-darker); border-radius: var(--radius); padding: 1.25rem; border-left: 4px solid #f59e0b;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 1.5rem;">🔒</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 1.1rem;">Sealed</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Neuf scellé</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        {{ number_format($statsByCompleteness['sealed']['avg_price'], 0) }}€
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        {{ $statsByCompleteness['sealed']['count'] }} ventes •
+                        {{ number_format($statsByCompleteness['sealed']['min_price'], 0) }}-{{ number_format($statsByCompleteness['sealed']['max_price'], 0) }}€
+                    </div>
+                </div>
+                @endif
+            </div>
+
+            @php
+                $priceMultiplier = null;
+                if (isset($statsByCompleteness['loose']) && isset($statsByCompleteness['cib'])) {
+                    $priceMultiplier = round($statsByCompleteness['cib']['avg_price'] / $statsByCompleteness['loose']['avg_price'], 1);
+                }
+            @endphp
+
+            @if($priceMultiplier && $priceMultiplier > 1)
+            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-primary); border-radius: var(--radius); font-size: 0.9rem;">
+                <strong>💡 À savoir :</strong> Une version CIB vaut en moyenne <strong>{{ $priceMultiplier }}x plus</strong> qu'une version loose.
+            </div>
+            @endif
+        </div>
+        @endif
+
         {{-- Price Chart (moved higher) --}}
         <div class="chart-container" style="margin: 2rem 0;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
