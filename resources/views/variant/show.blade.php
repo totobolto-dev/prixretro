@@ -125,6 +125,30 @@
             </div>
         </div>
 
+        {{-- Price Chart (moved higher) --}}
+        <div class="chart-container" style="margin: 2rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 style="margin: 0;">📈 Évolution du Prix</h2>
+                @if($priceTrend)
+                <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: {{ $priceTrend['direction'] === 'up' ? '#fee2e2' : '#d1fae5' }}; border-radius: var(--radius);">
+                    <span style="font-size: 1.2rem;">{{ $priceTrend['direction'] === 'up' ? '↑' : '↓' }}</span>
+                    <span style="font-weight: 600; color: {{ $priceTrend['direction'] === 'up' ? '#dc2626' : '#059669' }};">
+                        {{ $priceTrend['percentage'] > 0 ? '+' : '' }}{{ $priceTrend['percentage'] }}%
+                    </span>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);">sur 30 jours</span>
+                </div>
+                @endif
+            </div>
+
+            @if($buyingInsight)
+            <div style="padding: 1rem; background: var(--bg-card); border-left: 3px solid var(--accent-primary); margin-bottom: 1rem; border-radius: var(--radius);">
+                <strong>💡 Conseil d'achat :</strong> {{ $buyingInsight }}
+            </div>
+            @endif
+
+            <canvas id="priceChart"></canvas>
+        </div>
+
         @if(!empty($statsByCompleteness) && count($statsByCompleteness) > 0)
         <div class="completeness-stats-section" style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius); border: 1px solid var(--border); margin: 2rem 0;">
             <h2 style="margin-bottom: 1.5rem;">Prix par état de conservation</h2>
@@ -164,11 +188,6 @@
             </p>
         </div>
         @endif
-
-        <div class="chart-container">
-            <h2>Évolution du Prix</h2>
-            <canvas id="priceChart"></canvas>
-        </div>
 
         @if($currentListings->count() > 0)
         <div class="current-listings-section">

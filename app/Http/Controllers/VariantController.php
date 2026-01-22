@@ -47,6 +47,40 @@ class VariantController extends Controller
 
         $chartData = $this->prepareChartData($listings);
 
+        // Calculate price trend (last 30 days vs previous 30 days)
+        $priceTrend = null;
+        if ($listings->count() >= 10) {
+            $recentDate = now()->subDays(30);
+            $olderDate = now()->subDays(60);
+
+            $recentAvg = $listings->where('sold_date', '>=', $recentDate)->avg('price');
+            $olderAvg = $listings->whereBetween('sold_date', [$olderDate, $recentDate])->avg('price');
+
+            if ($recentAvg && $olderAvg && $olderAvg > 0) {
+                $priceTrend = [
+                    'percentage' => round((($recentAvg - $olderAvg) / $olderAvg) * 100, 1),
+                    'direction' => $recentAvg > $olderAvg ? 'up' : 'down',
+                    'recentAvg' => round($recentAvg),
+                    'olderAvg' => round($olderAvg),
+                ];
+            }
+        }
+
+        // Best time to buy insight
+        $buyingInsight = null;
+        if ($statistics['count'] >= 20) {
+            $avgPrice = $statistics['avg_price'];
+            $currentAvg = $listings->take(5)->avg('price');
+
+            if ($currentAvg < $avgPrice * 0.9) {
+                $buyingInsight = "Les prix sont actuellement en dessous de la moyenne. C'est un bon moment pour acheter.";
+            } elseif ($currentAvg > $avgPrice * 1.1) {
+                $buyingInsight = "Les prix sont actuellement au-dessus de la moyenne. Attendez une meilleure opportunité.";
+            } else {
+                $buyingInsight = "Les prix sont stables autour de la moyenne du marché.";
+            }
+        }
+
         // Generate auto description
         $autoDescription = VariantDescriptionGenerator::generate($variant, $statistics);
 
@@ -122,7 +156,9 @@ class VariantController extends Controller
             'autoDescription',
             'metaDescription',
             'schemaData',
-            'guideUrl'
+            'guideUrl',
+            'priceTrend',
+            'buyingInsight'
         ));
     }
 
