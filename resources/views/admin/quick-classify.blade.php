@@ -65,6 +65,10 @@
             margin-bottom: 2rem;
         }
 
+        .listing-info:has(img[style*="display: none"]) {
+            grid-template-columns: 1fr;
+        }
+
         .listing-image {
             width: 100%;
             height: 400px;
@@ -224,7 +228,7 @@
 
         <div class="classifier" id="classifier" style="display: none;">
             <div class="listing-info">
-                <img id="image" src="" alt="Listing image" class="listing-image">
+                <img id="image" src="" alt="Listing image" class="listing-image" onerror="this.style.display='none'">
                 <div class="listing-details">
                     <div class="listing-title" id="title"></div>
                     <div class="price" id="price"></div>
@@ -293,7 +297,15 @@
             document.getElementById('title').textContent = data.title;
             document.getElementById('price').textContent = data.price + '€';
             document.getElementById('variant').textContent = data.variant;
-            document.getElementById('image').src = data.image_url || '/images/placeholder.png';
+
+            const img = document.getElementById('image');
+            if (data.image_url) {
+                img.src = data.image_url;
+                img.style.display = 'block';
+            } else {
+                img.style.display = 'none';
+            }
+
             document.getElementById('ebay-link').href = data.url;
             document.getElementById('counter').textContent = `${data.remaining} annonces restantes`;
         }
