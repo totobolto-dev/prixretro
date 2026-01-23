@@ -146,6 +146,71 @@ class ConsoleController extends Controller
             ? "Prix moyen {$console->name}: " . number_format($statistics['avg_price'], 0) . "€ ({$statistics['count']} ventes analysées). Historique complet du marché {$console->name} d'occasion avec graphiques et tendances."
             : "{$console->name} - Suivez les prix d'occasion et l'évolution du marché retrogaming.";
 
+        // Build Schema.org structured data
+        $schemaData = null;
+        if ($statistics['count'] > 0 && $console->variants->count() > 0) {
+            // CollectionPage schema with variant list
+            $variantItems = [];
+            foreach ($console->variants as $index => $variant) {
+                if ($variant->listings_count > 0) {
+                    $variantAvgPrice = Listing::where('variant_id', $variant->id)
+                        ->where('status', 'approved')
+                        ->avg('price');
+
+                    $variantItems[] = [
+                        '@type' => 'ListItem',
+                        'position' => $index + 1,
+                        'url' => url('/' . $console->slug . '/' . $variant->slug),
+                        'name' => $variant->display_name,
+                        'item' => [
+                            '@type' => 'Product',
+                            'name' => $variant->display_name,
+                            'offers' => [
+                                '@type' => 'AggregateOffer',
+                                'priceCurrency' => 'EUR',
+                                'lowPrice' => number_format($variantAvgPrice * 0.7, 2, '.', ''),
+                                'highPrice' => number_format($variantAvgPrice * 1.3, 2, '.', ''),
+                                'offerCount' => $variant->listings_count
+                            ]
+                        ]
+                    ];
+                }
+            }
+
+            $schemaData = [
+                'collection' => [
+                    '@context' => 'https://schema.org/',
+                    '@type' => 'CollectionPage',
+                    'name' => $console->name . ' - Toutes les variantes',
+                    'description' => $autoDescription,
+                    'url' => url('/' . $console->slug),
+                    'mainEntity' => [
+                        '@type' => 'ItemList',
+                        'numberOfItems' => count($variantItems),
+                        'itemListElement' => $variantItems
+                    ]
+                ],
+                'breadcrumb' => [
+                    '@context' => 'https://schema.org/',
+                    '@type' => 'BreadcrumbList',
+                    'itemListElement' => [
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 1,
+                            'name' => 'Accueil',
+                            'item' => url('/')
+                        ],
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 2,
+                            'name' => $console->name,
+                            'item' => url('/' . $console->slug)
+                        ]
+                    ]
+                ]
+            ];
+        }
+
         // Get related consoles (same manufacturer or similar name)
         $relatedConsoles = Console::where('is_active', true)
             ->where('id', '!=', $console->id)
@@ -186,7 +251,7 @@ class ConsoleController extends Controller
             ->limit(5)
             ->get();
 
-        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription', 'relatedConsoles', 'guideUrl', 'mostCollected'));
+        return view('console.show', compact('console', 'autoDescription', 'statistics', 'recentListings', 'chartData', 'metaDescription', 'schemaData', 'relatedConsoles', 'guideUrl', 'mostCollected'));
     }
 
     private function calculateMedian($prices)

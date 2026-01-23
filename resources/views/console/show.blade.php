@@ -215,6 +215,18 @@
 @endsection
 
 @section('scripts')
+@if($schemaData)
+<!-- Schema.org CollectionPage Structured Data -->
+<script type="application/ld+json">
+@json($schemaData['collection'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+</script>
+
+<!-- Schema.org BreadcrumbList -->
+<script type="application/ld+json">
+@json($schemaData['breadcrumb'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+</script>
+@endif
+
 @if(isset($statistics) && $statistics['count'] > 0 && count($chartData['labels']) > 0)
 <script>
 const ctx = document.getElementById('priceChart').getContext('2d');
