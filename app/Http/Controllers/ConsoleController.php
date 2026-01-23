@@ -48,54 +48,9 @@ class ConsoleController extends Controller
             }
         }
 
-        // Featured guides (random 3 guides)
-        $allGuides = [
-            [
-                'slug' => 'guide-achat-game-boy-color',
-                'title' => 'Guide d\'achat Game Boy Color',
-                'description' => 'Découvrez les meilleures variantes à acheter en 2026',
-            ],
-            [
-                'slug' => 'ps-vita-occasion-guide',
-                'title' => 'PS Vita d\'occasion',
-                'description' => 'Pièges à éviter et meilleures affaires',
-            ],
-            [
-                'slug' => 'guide-game-boy-advance',
-                'title' => 'Game Boy Advance',
-                'description' => 'Quelle édition pour débuter la collection',
-            ],
-            [
-                'slug' => 'reperer-console-retrogaming-contrefaite',
-                'title' => 'Repérer une contrefaçon',
-                'description' => 'Signes qui ne trompent pas pour identifier les fausses consoles',
-            ],
-            [
-                'slug' => 'meilleures-consoles-retro-2026',
-                'title' => 'Meilleures consoles retro 2026',
-                'description' => 'Notre sélection entre 50€ et 200€',
-            ],
-            [
-                'slug' => 'authentifier-console-retrogaming',
-                'title' => 'Authentifier une console',
-                'description' => 'Guide technique avancé pour vérifier l\'authenticité',
-            ],
-            [
-                'slug' => 'nettoyer-console-retro-jaunie',
-                'title' => 'Nettoyer le plastique jauni',
-                'description' => 'Méthode Retr0bright et prévention du jaunissement',
-            ],
-            [
-                'slug' => 'pourquoi-prix-gba-ont-explose',
-                'title' => 'Prix GBA : analyse de la hausse',
-                'description' => 'Pourquoi les Game Boy Advance valent 3x plus cher',
-            ],
-            [
-                'slug' => 'investir-consoles-retrogaming',
-                'title' => 'Investir dans le retrogaming',
-                'description' => 'ROI et perspectives 2026 pour collectionneurs',
-            ],
-        ];
+        // Featured guides (random 3 from GuideController)
+        $guideController = app(GuideController::class);
+        $allGuides = $guideController->index()->getData()['guides'];
         $featuredGuides = collect($allGuides)->random(3);
 
         // Build meta description
