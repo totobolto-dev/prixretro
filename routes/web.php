@@ -42,6 +42,7 @@ Route::get('/guides/guide-achat-nintendo-ds', [GuideController::class, 'showNint
 Route::get('/guides/psp-ou-ps-vita-quelle-console-acheter', [GuideController::class, 'showPSPVSVitaGuide'])->name('guides.psp-vs-vita');
 Route::get('/guides/tester-console-occasion-avant-achat', [GuideController::class, 'showTestingGuide'])->name('guides.testing');
 Route::get('/guides/estimer-valeur-collection-retrogaming', [GuideController::class, 'showValuationGuide'])->name('guides.valuation');
+Route::get('/guides/guide-achat-playstation-1', [GuideController::class, 'showPlayStation1Guide'])->name('guides.playstation-1');
 
 // Content pages (must be before console routes to avoid conflicts)
 Route::get('/{console:slug}/classement', [ContentController::class, 'showRanking'])->name('content.ranking');

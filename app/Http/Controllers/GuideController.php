@@ -100,6 +100,13 @@ class GuideController extends Controller
                 'console' => 'Général',
                 'image' => '/images/guides/valuation.jpg'
             ],
+            [
+                'slug' => 'guide-achat-playstation-1',
+                'title' => 'Guide d\'achat PlayStation 1 - Quel modèle choisir en 2026',
+                'description' => 'PS1 originale ou PS one ? Comparatif des modèles SCPH, prix moyens et points de vigilance pour acheter la meilleure PlayStation 1.',
+                'console' => 'PlayStation 1',
+                'image' => '/images/guides/ps1-guide.jpg'
+            ],
         ];
 
         $metaDescription = "Guides d'achat pour consoles retrogaming d'occasion. Conseils d'experts, analyses de prix et recommandations pour bien acheter.";
@@ -741,5 +748,53 @@ class GuideController extends Controller
         ];
 
         return view('guides.estimer-valeur-collection-retrogaming', compact('metaDescription', 'faqSchema'));
+    }
+
+    public function showPlayStation1Guide()
+    {
+        $console = Console::where('slug', 'playstation')->first();
+
+        $metaDescription = "Guide d'achat PlayStation 1 2026 : comparatif PS1 originale vs PS one, modèles SCPH, prix moyens et points de vigilance. Quel modèle choisir pour jouer ?";
+
+        $faqSchema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le meilleur modèle de PlayStation 1 à acheter ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Pour jouer : SCPH-7502 (fiable, moddable, 50-70€). Pour le design compact : PS one SCPH-102 (60-90€). Pour petit budget : import japonais SCPH-5500 (40-60€). Évitez les SCPH-9002 (protection anti-modchip forte).'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le prix d\'une PlayStation 1 en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Prix moyens 2026 : console seule 35-60€, console + accessoires 50-80€, pack complet en boîte 120-200€. PS one SCPH-102 : 60-100€. Éditions limitées : 150-400€.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Comment savoir si le lecteur CD de ma PS1 fonctionne ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Testez avec plusieurs jeux (CD noir et argenté), vérifiez le lancement, l\'absence du message "disque non reconnu", et lancez des cinématiques FMV qui sollicitent le lecteur. Le lecteur est le point faible n°1 des PS1.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quelle différence entre PS1 et PS one ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'La PS one (2000) est 45% plus petite, avec alimentation externe et design redessiné. Elle n\'a pas de port parallèle (limite le modding). La PS1 originale est plus robuste mais volumineuse. Performances identiques.'
+                    ]
+                ]
+            ]
+        ];
+
+        return view('guides.guide-achat-playstation-1', compact('console', 'metaDescription', 'faqSchema'));
     }
 }
