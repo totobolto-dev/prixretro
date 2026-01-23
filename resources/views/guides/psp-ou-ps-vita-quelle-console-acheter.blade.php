@@ -285,3 +285,13 @@ PSP ou PS Vita - Quelle console portable Sony acheter en 2026 | PrixRetro
     </div>
 </div>
 @endsection
+
+
+@section('scripts')
+@if(isset($faqSchema))
+<!-- Schema.org FAQ Structured Data -->
+<script type="application/ld+json">
+@json($faqSchema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+</script>
+@endif
+@endsection
