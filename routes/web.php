@@ -44,6 +44,11 @@ Route::get('/guides/tester-console-occasion-avant-achat', [GuideController::clas
 Route::get('/guides/estimer-valeur-collection-retrogaming', [GuideController::class, 'showValuationGuide'])->name('guides.valuation');
 Route::get('/guides/guide-achat-playstation-1', [GuideController::class, 'showPlayStation1Guide'])->name('guides.playstation-1');
 Route::get('/guides/guide-achat-playstation-2', [GuideController::class, 'showPlayStation2Guide'])->name('guides.playstation-2');
+Route::get('/guides/guide-achat-nintendo-64', [GuideController::class, 'showNintendo64Guide'])->name('guides.nintendo-64');
+Route::get('/guides/guide-achat-gamecube', [GuideController::class, 'showGameCubeGuide'])->name('guides.gamecube');
+Route::get('/guides/guide-achat-super-nintendo', [GuideController::class, 'showSuperNintendoGuide'])->name('guides.super-nintendo');
+Route::get('/guides/guide-achat-mega-drive', [GuideController::class, 'showMegaDriveGuide'])->name('guides.mega-drive');
+Route::get('/guides/guide-achat-nes', [GuideController::class, 'showNESGuide'])->name('guides.nes');
 
 // Content pages (must be before console routes to avoid conflicts)
 Route::get('/{console:slug}/classement', [ContentController::class, 'showRanking'])->name('content.ranking');

@@ -114,6 +114,41 @@ class GuideController extends Controller
                 'console' => 'PlayStation 2',
                 'image' => '/images/guides/ps2-guide.jpg'
             ],
+            [
+                'slug' => 'guide-achat-nintendo-64',
+                'title' => 'Guide d\'achat Nintendo 64 - Comment choisir en 2026',
+                'description' => 'N64 PAL ou NTSC ? Joystick analogique, Expansion Pak, adaptateur HDMI : tout pour acheter une Nintendo 64 d\'occasion sans se tromper.',
+                'console' => 'Nintendo 64',
+                'image' => '/images/guides/n64-guide.jpg'
+            ],
+            [
+                'slug' => 'guide-achat-gamecube',
+                'title' => 'Guide d\'achat GameCube - Quel modèle choisir en 2026',
+                'description' => 'DOL-001 ou DOL-101 ? Port Digital AV, lecteur de disques, adaptateurs HDMI : tout pour acheter une GameCube d\'occasion sans regret.',
+                'console' => 'GameCube',
+                'image' => '/images/guides/gamecube-guide.jpg'
+            ],
+            [
+                'slug' => 'guide-achat-super-nintendo',
+                'title' => 'Guide d\'achat Super Nintendo (SNES) - Quel modèle choisir en 2026',
+                'description' => 'SNES PAL ou Super Famicom ? Jaunissement, RGB, adaptateurs HDMI : tout pour acheter une Super Nintendo d\'occasion au meilleur prix.',
+                'console' => 'Super Nintendo',
+                'image' => '/images/guides/snes-guide.jpg'
+            ],
+            [
+                'slug' => 'guide-achat-mega-drive',
+                'title' => 'Guide d\'achat Sega Mega Drive - Quel modèle choisir en 2026',
+                'description' => 'Mega Drive 1 ou 2 ? Révisions VA, audio YM2612, region-lock : tout pour acheter une Mega Drive / Genesis d\'occasion au meilleur prix.',
+                'console' => 'Mega Drive',
+                'image' => '/images/guides/megadrive-guide.jpg'
+            ],
+            [
+                'slug' => 'guide-achat-nes',
+                'title' => 'Guide d\'achat Nintendo NES - Quel modèle choisir en 2026',
+                'description' => 'NES front-loader ou Famicom AV ? Connecteur 72-pin, 10NES, top-loader : tout pour acheter une NES d\'occasion sans prise de tête.',
+                'console' => 'NES',
+                'image' => '/images/guides/nes-guide.jpg'
+            ],
         ];
 
         $metaDescription = "Guides d'achat pour consoles retrogaming d'occasion. Conseils d'experts, analyses de prix et recommandations pour bien acheter.";
@@ -851,5 +886,245 @@ class GuideController extends Controller
         ];
 
         return view('guides.guide-achat-playstation-2', compact('console', 'metaDescription', 'faqSchema'));
+    }
+
+    public function showNintendo64Guide()
+    {
+        $console = Console::where('slug', 'nintendo-64')->first();
+
+        $metaDescription = "Guide d'achat Nintendo 64 2026 : PAL vs NTSC, modèles à privilégier, joystick analogique, Expansion Pak et tous les accessoires indispensables.";
+
+        $faqSchema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le prix d\'une Nintendo 64 en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Prix moyens 2026 : console seule 50-80€, console + câbles + 1 manette 70-120€, pack avec 2-4 manettes 100-180€. Éditions limitées (Pikachu, Gold) : 200-500€. Ajoutez 30-50€ pour un Expansion Pak.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Le joystick de la manette N64 est-il fiable ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Non, le stick analogique s\'use systématiquement après 200-400h. Symptômes : drift, mouvements saccadés, rotation difficile. Solution : manettes modernes (Tribute64) ou remplacement du stick (kit 15-20€).'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Qu\'est-ce que l\'Expansion Pak N64 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Module qui augmente la RAM de 4MB à 8MB. Indispensable pour : Donkey Kong 64, Majora\'s Mask, Perfect Dark. La N64 inclut par défaut un Jumper Pak (4MB). Prix 2026 : 30-50€ officiel, 15-25€ tiers.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'La N64 est-elle region-lock ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Oui, mais facilement contournable : cartouche Game Genie, modification physique (découpage plastique), ou EverDrive 64. Les N64 japonaises/US sont 30-40% moins chères mais nécessitent ce déblocage.'
+                    ]
+                ]
+            ]
+        ];
+
+        return view('guides.guide-achat-nintendo-64', compact('console', 'metaDescription', 'faqSchema'));
+    }
+
+    public function showGameCubeGuide()
+    {
+        $console = Console::where('slug', 'gamecube')->first();
+
+        $metaDescription = "Guide d'achat GameCube 2026 : DOL-001 vs DOL-101, port Digital AV, adaptateurs HDMI, lecteur de disques et tous les points de vigilance.";
+
+        $faqSchema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le prix d\'une GameCube en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Prix moyens 2026 : console seule 50-80€, console + câbles + 1 manette 70-100€, pack complet en boîte 150-250€. DOL-001 (port Digital AV) vaut 10-20€ de plus que DOL-101. Manettes officielles : 30-50€.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quelle différence entre GameCube DOL-001 et DOL-101 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'DOL-001 (2002-2003) a un port Digital AV pour sortie composante/RGB. DOL-101 (2004) n\'a que l\'AV composite. Si vous voulez brancher en HDMI avec adaptateur Carby/EON, prenez la DOL-001 obligatoirement.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Comment tester le lecteur de disques d\'une GameCube ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Testez avec 2-3 jeux différents. Le Disc Read Error (DRE) se manifeste par "The disc could not be read". Écoutez les grincements anormaux. La lentille peut être nettoyée à l\'alcool isopropylique.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'La GameCube est-elle region-lock ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Oui, la GameCube est region-locked par défaut. Solutions : FreeLoader (logiciel 30€), Swiss via Action Replay + carte SD, ou modchip XenoGC avec soudure (40€ installation). La Wii RVL-001 peut aussi lire les jeux GC.'
+                    ]
+                ]
+            ]
+        ];
+
+        return view('guides.guide-achat-gamecube', compact('console', 'metaDescription', 'faqSchema'));
+    }
+
+    public function showSuperNintendoGuide()
+    {
+        $console = Console::where('slug', 'super-nintendo')->first();
+
+        $metaDescription = "Guide d'achat Super Nintendo 2026 : SNES PAL vs Super Famicom, jaunissement, RGB, flashcarts et tous les points de vigilance pour bien acheter.";
+
+        $faqSchema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le prix d\'une Super Nintendo en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Prix moyens 2026 : console seule 60-90€, console + câbles + manette 80-120€, pack complet en boîte 180-300€. Super Famicom japonaise : 40-70€ (import). Manettes officielles : 20-35€.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Faut-il acheter une SNES PAL ou une Super Famicom japonaise ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'SNES PAL : RGB natif meilleure qualité, mais 50Hz bridé (jeux 17% plus lents). Super Famicom : 60Hz vitesse correcte, 30-40% moins cher, excellent état, mais region-lock physique (cartouche adaptateur 15€ requis). Pour jouer : Super Famicom. Pour collectionner : SNES PAL.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Comment éviter le jaunissement de la Super Nintendo ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Le jaunissement est inévitable (bromure retardateur de flamme). Solutions : accepter (n\'affecte pas performances), Retr0bright (blanchiment peroxyde 4-8h), retro-painting (50-100€), ou acheter Super Famicom Junior (plastique différent, ne jaunit pas).'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'La Super Nintendo est-elle region-lock ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Oui, region-lock PHYSIQUE : les cartouches japonaises ne rentrent pas dans console PAL. Solutions : cartouche adaptateur (15-25€ plug-and-play) ou découpage plastique dans slot (irréversible, gratuit). Pas de lock logiciel, compatibilité totale après déblocage.'
+                    ]
+                ]
+            ]
+        ];
+
+        return view('guides.guide-achat-super-nintendo', compact('console', 'metaDescription', 'faqSchema'));
+    }
+
+    public function showMegaDriveGuide()
+    {
+        $console = Console::where('slug', 'mega-drive')->first();
+
+        $metaDescription = "Guide d'achat Mega Drive 2026 : Mega Drive 1 vs 2, révisions VA0-VA7, audio YM2612, region-lock et tous les points de vigilance pour bien acheter.";
+
+        $faqSchema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le prix d\'une Mega Drive en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Prix moyens 2026 : console seule 40-70€, console + câbles + manette 60-90€, pack complet en boîte 120-200€. Mega Drive 2 : 50-80€. Genesis Model 1 USA : 40-70€. Manettes 3 boutons : 15-25€, 6 boutons : 25-40€.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Faut-il acheter une Mega Drive 1 ou 2 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Mega Drive 1 : audio YM2612 original "chaud" préféré des puristes, sortie casque, plus volumineuse (60-90€). Mega Drive 2 : compacte, alimentation externe, audio légèrement différent (YM3438), meilleur rapport qualité-prix (50-80€). Pour jouer : MD2. Pour collectionner : MD1.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Qu\'est-ce que les révisions VA de la Mega Drive ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Les révisions VA (VA0 à VA7) correspondent aux différentes cartes mères. VA0-VA2 (MD1) : YM2612 original, meilleur son. VA3-VA4 : transition YM2612/YM3438. VA5-VA7 (MD2) : YM3438 ou ASIC, son plus "propre" mais moins "chaud". Identifier : ouvrir console et lire code carte mère.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'La Mega Drive est-elle region-lock ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Oui, region-lock SOFTWARE facilement contournable : switch interne (mod simple réversible), cartouche universelle bypass (20-30€), ou flashcart EverDrive (region-free natif). Mega Drive PAL lit jeux NTSC après modification.'
+                    ]
+                ]
+            ]
+        ];
+
+        return view('guides.guide-achat-mega-drive', compact('console', 'metaDescription', 'faqSchema'));
+    }
+
+    public function showNESGuide()
+    {
+        $console = Console::where('slug', 'nes')->first();
+
+        $metaDescription = "Guide d'achat NES 2026 : front-loader vs top-loader, Famicom AV, connecteur 72-pin, 10NES lockout et tous les points de vigilance pour bien acheter.";
+
+        $faqSchema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le prix d\'une NES en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Prix moyens 2026 : NES front-loader complète 70-100€, NES top-loader NES-101 USA 150-250€, Famicom japonaise 40-70€, Famicom AV 80-130€. Manette NES : 15-25€. Connecteur 72-pin neuf : 10-15€.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel modèle de NES acheter en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Meilleur choix : Famicom AV (top-loader fiable, AV natif, 80-130€). Petit budget : Famicom + mod AV (70-120€ total). Classique : NES front-loader (iconique, 70-100€, mais connecteur 72-pin s\'use). Évitez : NES avec connecteur usé (écran clignote).'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Qu\'est-ce que le problème de connecteur 72-pin de la NES ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Le connecteur 72-pin des NES front-loader se desserre avec le temps. Symptômes : écran qui clignote, besoin de pousser/souffler cartouche. Solution : remplacement connecteur (15€, nécessite démontage) ou achat top-loader/Famicom AV (connecteur fiable).'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quelle différence entre NES et Famicom ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Connecteurs incompatibles : NES 72-pin, Famicom 60-pin (adaptateur 15-25€ requis). NES PAL a puce 10NES lockout (bloque jeux non-officiels), absente sur Famicom. Famicom AV cumule avantages : top-loader fiable, AV natif, manettes amovibles, pas de 10NES.'
+                    ]
+                ]
+            ]
+        ];
+
+        return view('guides.guide-achat-nes', compact('console', 'metaDescription', 'faqSchema'));
     }
 }
