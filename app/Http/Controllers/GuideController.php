@@ -107,6 +107,13 @@ class GuideController extends Controller
                 'console' => 'PlayStation 1',
                 'image' => '/images/guides/ps1-guide.jpg'
             ],
+            [
+                'slug' => 'guide-achat-playstation-2',
+                'title' => 'Guide d\'achat PlayStation 2 - Fat ou Slim en 2026',
+                'description' => 'Comparatif complet PS2 Fat vs Slim : modèles SCPH, fiabilité, FreeMcBoot et tous les points de vigilance pour acheter serein.',
+                'console' => 'PlayStation 2',
+                'image' => '/images/guides/ps2-guide.jpg'
+            ],
         ];
 
         $metaDescription = "Guides d'achat pour consoles retrogaming d'occasion. Conseils d'experts, analyses de prix et recommandations pour bien acheter.";
@@ -796,5 +803,53 @@ class GuideController extends Controller
         ];
 
         return view('guides.guide-achat-playstation-1', compact('console', 'metaDescription', 'faqSchema'));
+    }
+
+    public function showPlayStation2Guide()
+    {
+        $console = Console::where('slug', 'playstation-2')->first();
+
+        $metaDescription = "Guide d'achat PlayStation 2 2026 : Fat ou Slim ? Comparatif des modèles SCPH, prix moyens, points de vigilance et accessoires indispensables.";
+
+        $faqSchema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'PS2 Fat ou PS2 Slim : laquelle choisir ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Pour jouer : PS2 Slim SCPH-90004 (plus fiable, silencieuse, compacte, 50-80€). Pour modder : PS2 Fat SCPH-50004 (modchip facile, support disque dur, 40-70€). La Slim est recommandée pour 95% des joueurs.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le prix d\'une PlayStation 2 en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Prix moyens 2026 : PS2 Fat 40-70€, PS2 Slim 50-80€, pack complet en boîte 80-150€. Ajoutez 10-15€ pour une carte mémoire 8MB officielle (indispensable).'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Comment vérifier le lecteur DVD d\'une PS2 d\'occasion ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Testez 3+ jeux différents (CD argentés + DVD). Vérifiez l\'absence de message "disque sale", relecture excessive, ou erreur sur DVD dual-layer (Final Fantasy X, etc.). Le lecteur est le point faible n°1 des PS2.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Qu\'est-ce que FreeMcBoot sur PS2 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'FreeMcBoot est un soft-mod gratuit qui débloque : backups USB/HDD, region-free, cheats, homebrews. Installation via carte mémoire pré-modée (10-15€) ou exploit Independence. Légal et réversible.'
+                    ]
+                ]
+            ]
+        ];
+
+        return view('guides.guide-achat-playstation-2', compact('console', 'metaDescription', 'faqSchema'));
     }
 }
