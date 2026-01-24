@@ -23,6 +23,11 @@ class QuickClassifier extends Page
 
     public string $view = 'filament.pages.quick-classifier';
 
+    public function getLayout(): string
+    {
+        return 'components.layouts.quick-classifier';
+    }
+
     public ?Listing $currentListing = null;
     public int $remainingCount = 0;
     public bool $isDone = false;
