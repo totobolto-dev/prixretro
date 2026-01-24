@@ -36,12 +36,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QPNVF0BRW"></script>
+    @if(config('services.google_analytics.id'))
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.id') }}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-4QPNVF0BRW');
+        gtag('config', '{{ config('services.google_analytics.id') }}');
 
         function trackEbayClick(variant) {
             gtag('event', 'click', {
@@ -51,6 +52,7 @@
             });
         }
     </script>
+    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="/styles.css">
