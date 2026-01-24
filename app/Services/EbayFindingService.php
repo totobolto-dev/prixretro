@@ -50,11 +50,14 @@ class EbayFindingService
             $response = Http::timeout(30)->get($this->apiUrl, $params);
 
             if ($response->failed()) {
+                $errorMsg = sprintf('API request failed: HTTP %d - %s', $response->status(), $response->body());
                 Log::error('eBay API request failed', [
                     'status' => $response->status(),
                     'body' => $response->body(),
+                    'url' => $this->apiUrl,
+                    'params' => $params,
                 ]);
-                return ['items' => [], 'error' => 'API request failed'];
+                return ['items' => [], 'error' => $errorMsg];
             }
 
             $data = $response->json();
