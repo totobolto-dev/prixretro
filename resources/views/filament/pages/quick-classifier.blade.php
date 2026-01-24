@@ -324,7 +324,12 @@
         @elseif($currentListing)
             <div class="qc-header">
                 <h1>⚡ Quick Classifier</h1>
-                <div class="qc-counter">{{ $remainingCount }} restantes</div>
+                <div class="qc-counter">
+                    {{ number_format($remainingCount) }} {{ $remainingCount > 1 ? 'restantes' : 'restante' }}
+                    @if($remainingCount > 0)
+                        • ID: {{ $currentListing->id }}
+                    @endif
+                </div>
             </div>
 
             <div class="qc-classifier">

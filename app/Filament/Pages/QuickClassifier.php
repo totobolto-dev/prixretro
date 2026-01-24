@@ -56,7 +56,9 @@ class QuickClassifier extends Page
             return;
         }
 
-        $this->remainingCount = Listing::where('status', 'pending')->count() - 1;
+        // Total pending count
+        $totalPending = Listing::where('status', 'pending')->count();
+        $this->remainingCount = $totalPending > 0 ? $totalPending - 1 : 0;
 
         // Pre-fill console and variant if already set
         $this->selectedConsole = $this->currentListing->console_slug;
@@ -67,7 +69,7 @@ class QuickClassifier extends Page
 
     public function getConsoles(): array
     {
-        return Console::orderBy('display_order')->pluck('name', 'slug')->toArray();
+        return Console::orderBy('name')->pluck('name', 'slug')->toArray();
     }
 
     public function getVariants(): array
