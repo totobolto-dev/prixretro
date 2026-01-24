@@ -49,6 +49,7 @@ Route::get('/guides/guide-achat-gamecube', [GuideController::class, 'showGameCub
 Route::get('/guides/guide-achat-super-nintendo', [GuideController::class, 'showSuperNintendoGuide'])->name('guides.super-nintendo');
 Route::get('/guides/guide-achat-mega-drive', [GuideController::class, 'showMegaDriveGuide'])->name('guides.mega-drive');
 Route::get('/guides/guide-achat-nes', [GuideController::class, 'showNESGuide'])->name('guides.nes');
+Route::get('/guides/guide-achat-nintendo-3ds', [GuideController::class, 'showNintendo3DSGuide'])->name('guides.nintendo-3ds');
 
 // Content pages (must be before console routes to avoid conflicts)
 Route::get('/{console:slug}/classement', [ContentController::class, 'showRanking'])->name('content.ranking');

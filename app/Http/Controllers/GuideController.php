@@ -149,6 +149,13 @@ class GuideController extends Controller
                 'console' => 'NES',
                 'image' => '/images/guides/nes-guide.jpg'
             ],
+            [
+                'slug' => 'guide-achat-nintendo-3ds',
+                'title' => 'Guide d\'achat Nintendo 3DS - Quel modèle choisir en 2026',
+                'description' => 'IPS vs TN, New 3DS XL vs 2DS, region-lock, CFW : tout pour acheter une Nintendo 3DS d\'occasion au meilleur prix.',
+                'console' => 'Nintendo 3DS',
+                'image' => '/images/guides/3ds-guide.jpg'
+            ],
         ];
 
         $metaDescription = "Guides d'achat pour consoles retrogaming d'occasion. Conseils d'experts, analyses de prix et recommandations pour bien acheter.";
@@ -1126,5 +1133,53 @@ class GuideController extends Controller
         ];
 
         return view('guides.guide-achat-nes', compact('console', 'metaDescription', 'faqSchema'));
+    }
+
+    public function showNintendo3DSGuide()
+    {
+        $console = Console::where('slug', 'nintendo-3ds')->first();
+
+        $metaDescription = "Guide d'achat Nintendo 3DS 2026 : IPS vs TN, New 3DS XL vs 2DS, region-lock, CFW Luma3DS et tous les points de vigilance pour bien acheter.";
+
+        $faqSchema = [
+            '@context' => 'https://schema.org/',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel est le prix d\'une Nintendo 3DS en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Prix moyens 2026 : 3DS originale 60-100€, 3DS XL 70-110€, New 3DS XL 100-150€ (dual TN) ou 150-200€ (dual IPS), 2DS 60-90€, New 2DS XL 90-140€. Éditions limitées New 3DS : 120-200€.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quelle différence entre écran IPS et TN sur 3DS ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'IPS : angles de vue larges, couleurs vives, RARE (5-10% des New 3DS XL). TN : angles étroits, couleurs ternes aux angles, COMMUN (90%). Dual IPS vaut +30-50€ mais la différence est minime en usage normal. Dual TN suffit pour la majorité des joueurs.'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Quel modèle de 3DS acheter en 2026 ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Meilleur choix : New 3DS XL (grand écran 4.88", CPU 2x rapide, 3D stabilisée, 100-150€). Budget : 2DS (robuste, pas de 3D, 60-90€). Collectionneurs : New 3DS compact éditions limitées (dual IPS fréquent, 120-200€).'
+                    ]
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'La Nintendo 3DS est-elle region-lock ?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Oui, strictement region-locked hardware ET software. Console EU lit uniquement jeux EU. Solution : Custom Firmware Luma3DS (gratuit, 30-60 min installation) débloque region-lock + permet homebrew/backups. Import japonais déconseillé sauf si CFW accepté.'
+                    ]
+                ]
+            ]
+        ];
+
+        return view('guides.guide-achat-nintendo-3ds', compact('console', 'metaDescription', 'faqSchema'));
     }
 }
