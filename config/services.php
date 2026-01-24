@@ -40,18 +40,14 @@ return [
     ],
 
     'ebay' => [
-        'app_id' => env('EBAY_SANDBOX_APP_ID') ?: env('EBAY_APP_ID'),
-        'dev_id' => env('EBAY_SANDBOX_DEV_ID') ?: env('EBAY_DEV_ID'),
-        'cert_id' => env('EBAY_SANDBOX_CERT_ID') ?: env('EBAY_CERT_ID'),
+        'app_id' => env('EBAY_APP_ID'),
+        'dev_id' => env('EBAY_DEV_ID'),
+        'cert_id' => env('EBAY_CERT_ID'),
         'verification_token' => env('EBAY_VERIFICATION_TOKEN'),
 
-        // API endpoints (use Sandbox if credentials available, else Production)
-        'finding_api_url' => env('EBAY_SANDBOX_APP_ID')
-            ? 'https://svcs.sandbox.ebay.com/services/search/FindingService/v1'
-            : 'https://svcs.ebay.com/services/search/FindingService/v1',
-        'shopping_api_url' => env('EBAY_SANDBOX_APP_ID')
-            ? 'http://open.api.sandbox.ebay.com/shopping'
-            : 'http://open.api.ebay.com/shopping',
+        // API endpoints (Production)
+        'finding_api_url' => 'https://svcs.ebay.com/services/search/FindingService/v1',
+        'shopping_api_url' => 'http://open.api.ebay.com/shopping',
 
         // Site ID for eBay France
         'site_id' => 71, // EBAY-FR
