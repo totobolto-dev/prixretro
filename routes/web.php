@@ -3,6 +3,7 @@
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ConsoleController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\EbayWebhookController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\MarketTrendsController;
 use App\Http\Controllers\QuickClassifyController;
@@ -10,6 +11,9 @@ use App\Http\Controllers\VariantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ConsoleController::class, 'index'])->name('home');
+
+// eBay Marketplace Account Deletion Webhook
+Route::post('/webhooks/ebay/account-deletion', [EbayWebhookController::class, 'handleAccountDeletion'])->name('webhooks.ebay.account-deletion');
 
 // Quick Classify Tool (admin only)
 Route::get('/admin/quick-classify', [QuickClassifyController::class, 'index'])->name('admin.quick-classify');

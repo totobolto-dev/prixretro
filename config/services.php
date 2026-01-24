@@ -39,4 +39,8 @@ return [
         'id' => env('GOOGLE_ANALYTICS_ID', 'G-4QPNVF0BRW'),
     ],
 
+    'ebay' => [
+        'verification_token' => env('EBAY_VERIFICATION_TOKEN'),
+    ],
+
 ];
