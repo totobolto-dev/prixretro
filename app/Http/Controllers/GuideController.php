@@ -1041,7 +1041,7 @@ class GuideController extends Controller
 
     public function showMegaDriveGuide()
     {
-        $console = Console::where('slug', 'mega-drive')->first();
+        $console = Console::where('slug', 'sega-mega-drive')->first();
 
         $metaDescription = "Guide d'achat Mega Drive 2026 : Mega Drive 1 vs 2, révisions VA0-VA7, audio YM2612, region-lock et tous les points de vigilance pour bien acheter.";
 

@@ -8,8 +8,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Schemas\Schema;
 
 class VariantForm
@@ -22,7 +20,7 @@ class VariantForm
                     ->relationship('console', 'name')
                     ->required()
                     ->live()
-                    ->afterStateUpdated(function (Set $set, Get $get, ?int $state) {
+                    ->afterStateUpdated(function (callable $set, callable $get, ?int $state) {
                         // Auto-update full_slug when console changes
                         if ($state && $get('slug')) {
                             $console = Console::find($state);
@@ -34,7 +32,7 @@ class VariantForm
                 TextInput::make('name')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(function (Set $set, Get $get, ?string $state) {
+                    ->afterStateUpdated(function (callable $set, callable $get, ?string $state) {
                         // Auto-generate slug from name, removing console name if present
                         if ($state && $get('console_id')) {
                             $console = Console::find($get('console_id'));

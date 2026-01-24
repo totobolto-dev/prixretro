@@ -302,7 +302,7 @@
                             </a>
                             @endforeach
                         </div>
-                        <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+                        <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->search_terms ? implode(' ', $variant->search_terms) : $variant->display_name) }}&{{ $ebayAffiliateParams }}"
                            target="_blank"
                            rel="nofollow noopener"
                            onclick="trackEbayClick('search-{{ $variant->slug }}')"
@@ -311,7 +311,7 @@
                         </a>
                     @else
                         <p style="color: var(--text-secondary); margin-bottom: 1rem;">Aucune annonce active actuellement</p>
-                        <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+                        <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->search_terms ? implode(' ', $variant->search_terms) : $variant->display_name) }}&{{ $ebayAffiliateParams }}"
                            target="_blank"
                            rel="nofollow noopener"
                            onclick="trackEbayClick('search-{{ $variant->slug }}')"
@@ -350,7 +350,7 @@
                         }
 
                         // Home consoles - HDMI adapters
-                        if (in_array($consoleSlug, ['playstation-1', 'playstation-2', 'nintendo-64', 'gamecube', 'super-nintendo', 'mega-drive', 'sega-saturn', 'dreamcast', 'master-system', 'nes'])) {
+                        if (in_array($consoleSlug, ['playstation-1', 'playstation-2', 'nintendo-64', 'gamecube', 'super-nintendo', 'sega-mega-drive', 'sega-saturn', 'sega-dreamcast', 'sega-master-system', 'nes'])) {
                             $accessories[] = [
                                 'name' => 'Adaptateur HDMI',
                                 'price' => '15-25€',
@@ -452,7 +452,7 @@
             @php
                 $searchQuery = $variant->search_terms
                     ? implode(' ', $variant->search_terms)
-                    : $variant->console->name . ' ' . $variant->name;
+                    : $variant->display_name;
             @endphp
             <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($searchQuery) }}&{{ $ebayAffiliateParams }}"
                target="_blank"
