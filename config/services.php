@@ -40,7 +40,20 @@ return [
     ],
 
     'ebay' => [
+        'app_id' => env('EBAY_APP_ID'),
+        'dev_id' => env('EBAY_DEV_ID'),
+        'cert_id' => env('EBAY_CERT_ID'),
         'verification_token' => env('EBAY_VERIFICATION_TOKEN'),
+
+        // API endpoints
+        'finding_api_url' => 'https://svcs.ebay.com/services/search/FindingService/v1',
+        'shopping_api_url' => 'http://open.api.ebay.com/shopping',
+
+        // Site ID for eBay France
+        'site_id' => 71, // EBAY-FR
+
+        // Rate limits
+        'daily_call_limit' => 5000,
     ],
 
 ];
