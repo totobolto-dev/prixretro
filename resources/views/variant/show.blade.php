@@ -27,6 +27,39 @@
     @endif
 
     @php
+        // Get current eBay listings for urgency banner
+        $urgentListings = \App\Models\CurrentListing::where('variant_id', $variant->id)
+            ->where('is_sold', false)
+            ->orderBy('price', 'asc')
+            ->take(3)
+            ->get();
+        $ebayAffiliateParams = 'mkcid=1&mkrid=709-53476-19255-0&campid=5339134703';
+    @endphp
+
+    @if($urgentListings->count() > 0)
+    <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 1rem 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
+            <span style="font-size: 1.5rem;">⚡</span>
+            <div style="font-weight: 700; font-size: 1.1rem;">{{ $urgentListings->count() }} {{ $urgentListings->count() > 1 ? 'offres disponibles' : 'offre disponible' }} maintenant sur eBay</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            @foreach($urgentListings as $listing)
+            <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
+               target="_blank"
+               rel="nofollow noopener"
+               onclick="trackEbayClick('urgent-{{ $variant->slug }}')"
+               style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; background: rgba(255, 255, 255, 0.15); border-radius: calc(var(--radius) / 2); text-decoration: none; color: white; transition: background 0.2s;"
+               onmouseover="this.style.background='rgba(255, 255, 255, 0.25)'"
+               onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'">
+                <span style="font-size: 0.9rem; flex: 1;">{{ Str::limit($listing->title, 50) }}</span>
+                <span style="font-weight: 700; white-space: nowrap; margin-left: 1rem; font-size: 1.1rem;">{{ number_format($listing->price, 0) }}€ →</span>
+            </a>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    @php
         // Get other variants for navigation
         $otherVariants = $variant->console->variants()
             ->where('id', '!=', $variant->id)
@@ -228,6 +261,16 @@
             </div>
             @endif
 
+            @if($priceTrend && $priceTrend['direction'] === 'up' && $priceTrend['percentage'] > 10)
+            <div style="padding: 1rem; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white; border-radius: var(--radius); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 1.5rem;">🔥</span>
+                <div>
+                    <div style="font-weight: 700; margin-bottom: 0.25rem;">Prix en hausse de {{ $priceTrend['percentage'] }}% ce mois</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">Les prix augmentent. Acheter maintenant peut vous faire économiser.</div>
+                </div>
+            </div>
+            @endif
+
             <canvas id="priceChart"></canvas>
         </div>
 
@@ -356,28 +399,6 @@
             </div>
         </div>
 
-        @if($currentListings->count() > 0)
-        <div class="current-listings-section" style="display: none;">
-            <h2>🛒 Actuellement en vente sur eBay ({{ $currentListings->count() }})</h2>
-            <div class="current-listings-grid">
-                @foreach($currentListings as $listing)
-                <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
-                   class="current-listing-card"
-                   target="_blank"
-                   rel="nofollow noopener"
-                   onclick="trackEbayClick('current-{{ $variant->slug }}')">
-                    <div class="current-listing-content">
-                        <div class="current-listing-title">{{ $listing->title }}</div>
-                        <div class="current-listing-meta">
-                            <div class="current-listing-price">{{ number_format($listing->price, 0) }}€</div>
-                            <div class="current-listing-badge">En vente</div>
-                        </div>
-                    </div>
-                </a>
-                @endforeach
-            </div>
-        </div>
-        @endif
 
         <div class="listings-section">
             <h2>Ventes Récentes ({{ $statistics['count'] }} au total)</h2>
