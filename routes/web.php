@@ -16,13 +16,13 @@ Route::get('/admin/quick-classify', [QuickClassifyController::class, 'index'])->
 Route::get('/admin/quick-classify/next', [QuickClassifyController::class, 'getNextListing'])->name('admin.quick-classify.next');
 Route::post('/admin/quick-classify/{listing}', [QuickClassifyController::class, 'classify'])->name('admin.quick-classify.save');
 
-// User Collection (auth required)
-Route::middleware('auth')->group(function () {
-    Route::get('/ma-collection', [CollectionController::class, 'index'])->name('collection.index');
-    Route::post('/collection/add/{variant}', [CollectionController::class, 'add'])->name('collection.add');
-    Route::delete('/collection/{collection}', [CollectionController::class, 'remove'])->name('collection.remove');
-    Route::patch('/collection/{collection}', [CollectionController::class, 'update'])->name('collection.update');
-});
+// User Collection (DISABLED - no auth system implemented)
+// Route::middleware('auth')->group(function () {
+//     Route::get('/ma-collection', [CollectionController::class, 'index'])->name('collection.index');
+//     Route::post('/collection/add/{variant}', [CollectionController::class, 'add'])->name('collection.add');
+//     Route::delete('/collection/{collection}', [CollectionController::class, 'remove'])->name('collection.remove');
+//     Route::patch('/collection/{collection}', [CollectionController::class, 'update'])->name('collection.update');
+// });
 
 // Market Trends Dashboard
 Route::get('/tendances', [MarketTrendsController::class, 'index'])->name('trends.index');

@@ -14,48 +14,7 @@
         <span>{{ $variant->name }}</span>
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h1 style="margin: 0;">{{ $variant->display_name }}</h1>
-
-        @auth
-            @php
-                $inCollection = Auth::user()->collection()->where('variant_id', $variant->id)->exists();
-            @endphp
-
-            @if($inCollection)
-                <a href="{{ route('collection.index') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #10b981; color: white; padding: 0.75rem 1.5rem; border-radius: var(--radius); text-decoration: none; font-weight: 600;">
-                    ✅ Dans ma collection
-                </a>
-            @else
-                <form method="POST" action="{{ route('collection.add', $variant) }}" style="margin: 0;">
-                    @csrf
-                    <button type="submit" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius); cursor: pointer; font-weight: 600; font-size: 1rem;">
-                        ➕ Ajouter à ma collection
-                    </button>
-                </form>
-            @endif
-        @endauth
-    </div>
-
-    {{-- Social Proof Banner --}}
-    @if($collectorsCount > 0)
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.5rem;">👥</span>
-            <div>
-                <div style="font-weight: 700; font-size: 1.1rem;">{{ $collectorsCount }} {{ $collectorsCount > 1 ? 'collectionneurs' : 'collectionneur' }}</div>
-                <div style="font-size: 0.85rem; opacity: 0.9;">{{ $collectorsCount > 1 ? 'suivent' : 'suit' }} cette console</div>
-            </div>
-        </div>
-
-        @if($recentlyAddedCount > 0)
-        <div style="margin-left: auto; display: flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.2); padding: 0.5rem 1rem; border-radius: 9999px;">
-            <span style="font-size: 1.2rem;">🔥</span>
-            <span style="font-size: 0.9rem; font-weight: 600;">+{{ $recentlyAddedCount }} cette semaine</span>
-        </div>
-        @endif
-    </div>
-    @endif
+    <h1>{{ $variant->display_name }}</h1>
 
     @if($statistics['count'] > 0)
     <div class="value-prop-banner">
@@ -271,46 +230,6 @@
 
             <canvas id="priceChart"></canvas>
         </div>
-
-        @if(!empty($statsByCompleteness) && count($statsByCompleteness) > 0)
-        <div class="completeness-stats-section" style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius); border: 1px solid var(--border); margin: 2rem 0;">
-            <h2 style="margin-bottom: 1.5rem;">Prix par état de conservation</h2>
-            <div class="stats-grid">
-                @if(isset($statsByCompleteness['loose']))
-                <div class="stat-card">
-                    <div class="stat-label">⚪ Loose (console seule)</div>
-                    <div class="stat-value">{{ number_format($statsByCompleteness['loose']['avg_price'], 0) }}€</div>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                        {{ $statsByCompleteness['loose']['count'] }} ventes • {{ number_format($statsByCompleteness['loose']['min_price'], 0) }}-{{ number_format($statsByCompleteness['loose']['max_price'], 0) }}€
-                    </div>
-                </div>
-                @endif
-
-                @if(isset($statsByCompleteness['cib']))
-                <div class="stat-card">
-                    <div class="stat-label">📦 CIB (complet en boîte)</div>
-                    <div class="stat-value">{{ number_format($statsByCompleteness['cib']['avg_price'], 0) }}€</div>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                        {{ $statsByCompleteness['cib']['count'] }} ventes • {{ number_format($statsByCompleteness['cib']['min_price'], 0) }}-{{ number_format($statsByCompleteness['cib']['max_price'], 0) }}€
-                    </div>
-                </div>
-                @endif
-
-                @if(isset($statsByCompleteness['sealed']))
-                <div class="stat-card">
-                    <div class="stat-label">🔒 Sealed (neuf scellé)</div>
-                    <div class="stat-value">{{ number_format($statsByCompleteness['sealed']['avg_price'], 0) }}€</div>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                        {{ $statsByCompleteness['sealed']['count'] }} ventes • {{ number_format($statsByCompleteness['sealed']['min_price'], 0) }}-{{ number_format($statsByCompleteness['sealed']['max_price'], 0) }}€
-                    </div>
-                </div>
-                @endif
-            </div>
-            <p style="margin-top: 1rem; margin-bottom: 0; color: var(--text-secondary); font-size: 0.85rem;">
-                💡 <strong>⚪ Loose</strong> = Console seule • <strong>📦 CIB</strong> = Complet avec boîte et accessoires • <strong>🔒 Sealed</strong> = Neuf jamais ouvert
-            </p>
-        </div>
-        @endif
 
         {{-- Side-by-Side: eBay + Amazon Monetization --}}
         <div style="margin: 3rem 0;">
