@@ -38,8 +38,11 @@ Console (GBC, GBA, DS)
   - All sold listings clickable with affiliate params
   - Search links to eBay with pre-filled queries
   - Current listings section (up to 6 per variant)
+  - **Urgency banners**: Top 3 cheapest listings shown prominently at page top
+  - **Scarcity alerts**: Warning when prices rise >10% in 30 days
 - **Ranking Pages**: `/{console-slug}/classement` for SEO
 - **Sitemap**: `/public/sitemap.xml` (auto-regenerated daily at 3 AM UTC via GitHub Actions)
+- **Collection Tracker**: DISABLED (no auth system - routes commented out, UI removed)
 
 ## Critical Technical Patterns
 
@@ -57,6 +60,21 @@ Use `Filament\Tables\Actions\Action` (NOT HeaderAction - doesn't exist in v4)
 ### Environment Variables
 - Use `config()` helper, NEVER `env()` in application code
 - Production: `CACHE_STORE=file`, `VIEW_COMPILED_PATH=/home/pwagrad/prixretro/storage/framework/views`
+
+### eBay API Credentials
+```bash
+# .env (credentials stored securely, not in repo)
+EBAY_APP_ID=your_app_id
+EBAY_DEV_ID=your_dev_id
+EBAY_CERT_ID=your_cert_id
+EBAY_VERIFICATION_TOKEN=your_verification_token
+```
+
+**APIs Available:**
+- Finding API: Search completed/active listings (what we use for scraping)
+- Shopping API: Get item details
+- Browse API: Modern REST alternative
+- **Webhook**: `/webhooks/ebay/account-deletion` (CSRF exempt, marketplace deletion compliance)
 
 ### FilamentUser Interface
 ```php
@@ -82,7 +100,10 @@ git add . && git commit -m "Message" && git push  # Auto-deploys via GitHub Acti
 
 ### Scraping & Data Import
 ```bash
-# 1. Scrape eBay (legacy Python - being migrated to Laravel)
+# 1. Scrape eBay using official Finding API (NEW - Jan 2026)
+php artisan ebay:scrape-sold-listings
+
+# OR legacy Python scraper (deprecated)
 cd legacy-python && python3 scraper_ebay.py
 
 # 2. Import via admin panel
@@ -90,6 +111,13 @@ cd legacy-python && python3 scraper_ebay.py
 # Click "Import Scraped Data" → Select console → Review → Approve
 # Click "Sync to Production" to push to CloudDB
 ```
+
+**eBay Finding API Usage:**
+- Endpoint: `https://svcs.ebay.com/services/search/FindingService/v1`
+- Operation: `findCompletedItems` (sold listings)
+- Filters: `SoldItemsOnly=true`, `ListingType=FixedPrice,Auction`
+- Rate limit: 5,000 calls/day
+- Returns: itemId, title, sellingStatus.currentPrice, listingInfo.endTime
 
 ### Local Development
 ```bash
@@ -164,14 +192,20 @@ php artisan view:clear
 ## Migration Status
 - ✅ Admin panel (Filament)
 - ✅ Data import workflow
-- ✅ Amazon affiliates (GBC only)
+- ✅ Amazon affiliates (ALL consoles - portable + home)
 - ✅ Ranking pages
-- ✅ Sitemap
-- 🔄 **TODO**: Migrate Python scrapers to Laravel commands
-- 🔄 **TODO**: Replace static HTML with Laravel views
-- 🔄 **TODO**: Expand affiliate links to GBA/DS
-- 🔄 **TODO**: Google Analytics + AdSense
-- 🔄 **TODO**: SEO meta tags + structured data
+- ✅ Sitemap (auto-regenerated daily)
+- ✅ Google Analytics 4 (configurable via .env)
+- ✅ SEO meta tags + Schema.org (Product, CollectionPage, BreadcrumbList, FAQPage)
+- ✅ 21 comprehensive buying guides
+- ✅ Conversion optimization (urgency banners, scarcity alerts)
+- ✅ eBay Developer API credentials approved
+- 🔄 **TODO**: Migrate Python scrapers to Laravel commands using eBay Finding API
+- 🔄 **TODO**: Add PropellerAds/Adsterra display ads
+- 🔄 **TODO**: Add Micromania + Fnac French affiliates
+- 🔄 **TODO**: Email price alert signup
+- ⏸️ **PAUSED**: Collection tracker (waiting for auth system)
+- ⏸️ **PAUSED**: AdSense (pending approval)
 
 ## Filament v4 Common Patterns (CRITICAL!)
 
