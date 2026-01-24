@@ -41,7 +41,8 @@ class QuickClassifier extends Page
     public function loadNext(): void
     {
         $this->currentListing = Listing::where('status', 'pending')
-            ->orderBy('id')
+            ->orderBy('sold_date', 'asc')
+            ->orderBy('id', 'asc')
             ->first();
 
         if (!$this->currentListing) {

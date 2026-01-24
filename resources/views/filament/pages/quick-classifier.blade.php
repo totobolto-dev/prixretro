@@ -1,222 +1,456 @@
 <x-filament-panels::page>
-    @if($isDone)
-        <div class="text-center py-16">
-            <div class="text-6xl mb-4">🎉</div>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Terminé !</h2>
-            <p class="text-gray-600 dark:text-gray-400">Toutes les annonces en attente ont été traitées.</p>
-            <a href="{{ route('filament.admin.resources.listings.index') }}" class="mt-4 inline-block text-primary-600 hover:underline">
-                ← Retour aux listings
-            </a>
-        </div>
-    @elseif($currentListing)
-        <div class="space-y-6">
-            {{-- Header with counter --}}
-            <div class="flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-                    Classification rapide
-                </h2>
-                <div class="text-lg font-semibold text-gray-600 dark:text-gray-400">
-                    {{ $remainingCount }} restantes
-                </div>
+    <style>
+        .quick-classifier-container {
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: -2rem;
+            padding: 2rem;
+            min-height: calc(100vh - 4rem);
+        }
+
+        .qc-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .qc-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #e2e8f0;
+        }
+
+        .qc-counter {
+            font-size: 1.25rem;
+            color: #94a3b8;
+        }
+
+        .qc-done-message {
+            text-align: center;
+            padding: 4rem;
+            font-size: 2rem;
+            color: #e2e8f0;
+        }
+
+        .qc-classifier {
+            background: #1e293b;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .qc-listing-info {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .qc-listing-image {
+            width: 100%;
+            height: 400px;
+            object-fit: contain;
+            background: #0f172a;
+            border-radius: 0.5rem;
+        }
+
+        .qc-no-image {
+            width: 100%;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            border-radius: 0.5rem;
+            color: #475569;
+            font-size: 1.2rem;
+        }
+
+        .qc-listing-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .qc-listing-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #e2e8f0;
+        }
+
+        .qc-price {
+            font-weight: 700;
+            color: #22c55e;
+            font-size: 2rem;
+        }
+
+        .qc-variant-name {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .qc-ebay-link {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .qc-ebay-link:hover {
+            text-decoration: underline;
+        }
+
+        .qc-form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .qc-form-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .qc-form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .qc-select, .qc-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 0.5rem;
+            color: #e2e8f0;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .qc-select:focus, .qc-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+        }
+
+        .qc-select:disabled, .qc-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .qc-helper {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .qc-completeness-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .qc-completeness-btn {
+            padding: 2rem 1rem;
+            background: #334155;
+            border: 3px solid #334155;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+        }
+
+        .qc-completeness-btn:hover {
+            background: #475569;
+            border-color: #475569;
+        }
+
+        .qc-completeness-btn.active-loose {
+            background: #475569;
+            border-color: #64748b;
+            color: #fff;
+        }
+
+        .qc-completeness-btn.active-cib {
+            background: #1e40af;
+            border-color: #3b82f6;
+            color: #fff;
+        }
+
+        .qc-completeness-btn.active-sealed {
+            background: #b45309;
+            border-color: #f59e0b;
+            color: #fff;
+        }
+
+        .qc-btn-emoji {
+            font-size: 3rem;
+        }
+
+        .qc-btn-label {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .qc-btn-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .qc-action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .qc-action-btn {
+            padding: 2rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fff;
+        }
+
+        .qc-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .qc-action-btn:active {
+            transform: translateY(0);
+        }
+
+        .qc-btn-approve {
+            background: #22c55e;
+        }
+
+        .qc-btn-approve:hover {
+            background: #16a34a;
+        }
+
+        .qc-btn-reject {
+            background: #ef4444;
+        }
+
+        .qc-btn-reject:hover {
+            background: #dc2626;
+        }
+
+        .qc-btn-hold {
+            background: #f59e0b;
+        }
+
+        .qc-btn-hold:hover {
+            background: #d97706;
+        }
+
+        .qc-btn-skip {
+            background: #64748b;
+        }
+
+        .qc-btn-skip:hover {
+            background: #475569;
+        }
+
+        .qc-keyboard-hint {
+            text-align: center;
+            margin-top: 1rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .qc-listing-info {
+                grid-template-columns: 1fr;
+            }
+
+            .qc-action-grid, .qc-completeness-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <div class="quick-classifier-container">
+        @if($isDone)
+            <div class="qc-done-message">
+                🎉 Terminé ! Toutes les annonces en attente ont été traitées.
+                <br><br>
+                <a href="{{ route('filament.admin.resources.listings.index') }}" class="qc-ebay-link">← Retour aux listings</a>
+            </div>
+        @elseif($currentListing)
+            <div class="qc-header">
+                <h1>⚡ Quick Classifier</h1>
+                <div class="qc-counter">{{ $remainingCount }} annonces restantes</div>
             </div>
 
-            {{-- Main content --}}
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {{-- Image Section --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow">
+            <div class="qc-classifier">
+                <div class="qc-listing-info">
                     @if($currentListing->thumbnail_url)
                         <img src="{{ $currentListing->thumbnail_url }}"
                              alt="{{ $currentListing->title }}"
-                             class="w-full h-96 object-contain rounded-lg bg-gray-100 dark:bg-gray-900">
+                             class="qc-listing-image">
                     @else
-                        <div class="w-full h-96 flex items-center justify-center bg-gray-100 dark:bg-gray-900 rounded-lg">
-                            <span class="text-gray-400 dark:text-gray-600">Pas d'image</span>
-                        </div>
+                        <div class="qc-no-image">Pas d'image</div>
                     @endif
 
-                    <div class="mt-4 space-y-2">
-                        <h3 class="font-semibold text-gray-900 dark:text-white text-lg">
-                            {{ $currentListing->title }}
-                        </h3>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold text-green-600 dark:text-green-400">
-                                {{ number_format($currentListing->price, 2) }}€
-                            </span>
-                            <a href="{{ $currentListing->url }}"
-                               target="_blank"
-                               class="text-primary-600 hover:underline text-sm">
-                                Voir sur eBay →
-                            </a>
-                        </div>
+                    <div class="qc-listing-details">
+                        <div class="qc-listing-title">{{ $currentListing->title }}</div>
+                        <div class="qc-price">{{ number_format($currentListing->price, 2) }}€</div>
+                        @if($currentListing->variant)
+                            <div class="qc-variant-name">
+                                {{ $currentListing->variant->console->name }} - {{ $currentListing->variant->name }}
+                            </div>
+                        @endif
                         @if($currentListing->sold_date)
-                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                            <div class="qc-variant-name">
                                 Vendu le {{ $currentListing->sold_date->format('d/m/Y') }}
                             </div>
                         @endif
+                        <a href="{{ $currentListing->url }}" target="_blank" class="qc-ebay-link">Voir sur eBay →</a>
                     </div>
                 </div>
 
-                {{-- Form Section --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow space-y-4">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Classification</h3>
+                {{-- Console Selection --}}
+                <div class="qc-form-section">
+                    <label class="qc-form-label">Console</label>
+                    <select wire:model.live="selectedConsole" class="qc-select">
+                        <option value="">-- Sélectionner --</option>
+                        @foreach($this->getConsoles() as $slug => $name)
+                            <option value="{{ $slug }}">{{ $name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-                    {{-- Console Select --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Console
-                        </label>
-                        <select wire:model.live="selectedConsole"
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500">
-                            <option value="">-- Sélectionner --</option>
-                            @foreach($this->getConsoles() as $slug => $name)
-                                <option value="{{ $slug }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                {{-- Variant Selection --}}
+                <div class="qc-form-section">
+                    <label class="qc-form-label">Variante</label>
+                    <select wire:model="selectedVariant" @if(!$selectedConsole) disabled @endif class="qc-select">
+                        <option value="">-- Variante par défaut --</option>
+                        @foreach($this->getVariants() as $id => $name)
+                            <option value="{{ $id }}">{{ $name }}</option>
+                        @endforeach
+                    </select>
+                    <p class="qc-helper">Laissez vide pour la variante par défaut, ou créez-en une ci-dessous</p>
+                </div>
 
-                    {{-- Variant Select --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Variante
-                        </label>
-                        <select wire:model="selectedVariant"
-                                @if(!$selectedConsole) disabled @endif
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50">
-                            <option value="">-- Variante par défaut --</option>
-                            @foreach($this->getVariants() as $id => $name)
-                                <option value="{{ $id }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            Laissez vide pour utiliser la variante par défaut, ou créez-en une ci-dessous
-                        </p>
-                    </div>
+                {{-- New Variant --}}
+                <div class="qc-form-section">
+                    <label class="qc-form-label">Ou créer une nouvelle variante</label>
+                    <input type="text"
+                           wire:model="newVariantName"
+                           @if(!$selectedConsole) disabled @endif
+                           placeholder="Ex: Atomic Purple"
+                           class="qc-input">
+                </div>
 
-                    {{-- New Variant --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Ou créer une nouvelle variante
-                        </label>
-                        <input type="text"
-                               wire:model="newVariantName"
-                               @if(!$selectedConsole) disabled @endif
-                               placeholder="Ex: Atomic Purple"
-                               class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50">
+                {{-- Completeness --}}
+                <div class="qc-form-section">
+                    <label class="qc-form-label">Complétude</label>
+                    <div class="qc-completeness-grid">
+                        <button type="button"
+                                wire:click="$set('selectedCompleteness', 'loose')"
+                                class="qc-completeness-btn {{ $selectedCompleteness === 'loose' ? 'active-loose' : '' }}">
+                            <span class="qc-btn-emoji">⚪</span>
+                            <span class="qc-btn-label">Loose</span>
+                            <span class="qc-btn-desc">Console seule</span>
+                        </button>
+                        <button type="button"
+                                wire:click="$set('selectedCompleteness', 'cib')"
+                                class="qc-completeness-btn {{ $selectedCompleteness === 'cib' ? 'active-cib' : '' }}">
+                            <span class="qc-btn-emoji">📦</span>
+                            <span class="qc-btn-label">CIB</span>
+                            <span class="qc-btn-desc">Complet en boîte</span>
+                        </button>
+                        <button type="button"
+                                wire:click="$set('selectedCompleteness', 'sealed')"
+                                class="qc-completeness-btn {{ $selectedCompleteness === 'sealed' ? 'active-sealed' : '' }}">
+                            <span class="qc-btn-emoji">🔒</span>
+                            <span class="qc-btn-label">Sealed</span>
+                            <span class="qc-btn-desc">Neuf scellé</span>
+                        </button>
                     </div>
+                    <p class="qc-helper" style="margin-top: 0.5rem;">Loose = console seule | CIB = complet boîte | Sealed = neuf scellé</p>
+                </div>
 
-                    {{-- Completeness --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Complétude
-                        </label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button type="button"
-                                    wire:click="$set('selectedCompleteness', 'loose')"
-                                    class="px-4 py-3 text-sm font-semibold rounded-lg border-2 transition
-                                           {{ $selectedCompleteness === 'loose' ? 'border-gray-500 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-gray-400' }}">
-                                <div class="text-2xl mb-1">⚪</div>
-                                Loose
-                            </button>
-                            <button type="button"
-                                    wire:click="$set('selectedCompleteness', 'cib')"
-                                    class="px-4 py-3 text-sm font-semibold rounded-lg border-2 transition
-                                           {{ $selectedCompleteness === 'cib' ? 'border-blue-500 bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100' : 'border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-blue-400' }}">
-                                <div class="text-2xl mb-1">📦</div>
-                                CIB
-                            </button>
-                            <button type="button"
-                                    wire:click="$set('selectedCompleteness', 'sealed')"
-                                    class="px-4 py-3 text-sm font-semibold rounded-lg border-2 transition
-                                           {{ $selectedCompleteness === 'sealed' ? 'border-orange-500 bg-orange-100 dark:bg-orange-900 text-orange-900 dark:text-orange-100' : 'border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-orange-400' }}">
-                                <div class="text-2xl mb-1">🔒</div>
-                                Sealed
-                            </button>
-                        </div>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            Loose = console seule | CIB = complet boîte | Sealed = neuf scellé
-                        </p>
-                    </div>
+                {{-- Action Buttons --}}
+                <div class="qc-action-grid">
+                    <button type="button" wire:click="approve" class="qc-action-btn qc-btn-approve">
+                        <div class="qc-btn-emoji">✓</div>
+                        Approuver
+                    </button>
+                    <button type="button" wire:click="reject" class="qc-action-btn qc-btn-reject">
+                        <div class="qc-btn-emoji">✗</div>
+                        Rejeter
+                    </button>
+                    <button type="button" wire:click="hold" class="qc-action-btn qc-btn-hold">
+                        <div class="qc-btn-emoji">⏸</div>
+                        Hold
+                    </button>
+                    <button type="button" wire:click="skip" class="qc-action-btn qc-btn-skip">
+                        <div class="qc-btn-emoji">→</div>
+                        Skip
+                    </button>
+                </div>
 
-                    {{-- Action Buttons --}}
-                    <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <div class="grid grid-cols-2 gap-3">
-                            <button type="button"
-                                    wire:click="approve"
-                                    class="px-6 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0">
-                                <div class="text-2xl mb-1">✓</div>
-                                Approuver
-                            </button>
-                            <button type="button"
-                                    wire:click="reject"
-                                    class="px-6 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0">
-                                <div class="text-2xl mb-1">✗</div>
-                                Rejeter
-                            </button>
-                            <button type="button"
-                                    wire:click="hold"
-                                    class="px-6 py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0">
-                                <div class="text-2xl mb-1">⏸</div>
-                                Hold
-                            </button>
-                            <button type="button"
-                                    wire:click="skip"
-                                    class="px-6 py-4 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 active:translate-y-0">
-                                <div class="text-2xl mb-1">→</div>
-                                Skip
-                            </button>
-                        </div>
-                    </div>
-
-                    {{-- Keyboard shortcuts hint --}}
-                    <div class="pt-2 text-xs text-center text-gray-500 dark:text-gray-400">
-                        Raccourcis: <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">A</kbd> Approuver •
-                        <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">R</kbd> Rejeter •
-                        <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">H</kbd> Hold •
-                        <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">S</kbd> Skip
-                    </div>
+                <div class="qc-keyboard-hint">
+                    Raccourcis : A = Approuver • R = Rejeter • H = Hold • S = Skip • 1 = Loose • 2 = CIB • 3 = Sealed
                 </div>
             </div>
-        </div>
+        @endif
+    </div>
 
-        {{-- Keyboard shortcuts --}}
-        <script>
-            document.addEventListener('keydown', function(e) {
-                // Ignore if typing in input/textarea
-                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
-                    return;
-                }
+    {{-- Keyboard shortcuts --}}
+    <script>
+        document.addEventListener('keydown', function(e) {
+            // Ignore if typing in input/textarea/select
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                return;
+            }
 
-                switch(e.key.toLowerCase()) {
-                    case 'a':
-                        e.preventDefault();
-                        @this.approve();
-                        break;
-                    case 'r':
-                        e.preventDefault();
-                        @this.reject();
-                        break;
-                    case 'h':
-                        e.preventDefault();
-                        @this.hold();
-                        break;
-                    case 's':
-                        e.preventDefault();
-                        @this.skip();
-                        break;
-                    case '1':
-                        e.preventDefault();
-                        @this.set('selectedCompleteness', 'loose');
-                        break;
-                    case '2':
-                        e.preventDefault();
-                        @this.set('selectedCompleteness', 'cib');
-                        break;
-                    case '3':
-                        e.preventDefault();
-                        @this.set('selectedCompleteness', 'sealed');
-                        break;
-                }
-            });
-        </script>
-    @endif
+            switch(e.key.toLowerCase()) {
+                case 'a':
+                    e.preventDefault();
+                    @this.approve();
+                    break;
+                case 'r':
+                    e.preventDefault();
+                    @this.reject();
+                    break;
+                case 'h':
+                    e.preventDefault();
+                    @this.hold();
+                    break;
+                case 's':
+                    e.preventDefault();
+                    @this.skip();
+                    break;
+                case '1':
+                    e.preventDefault();
+                    @this.set('selectedCompleteness', 'loose');
+                    break;
+                case '2':
+                    e.preventDefault();
+                    @this.set('selectedCompleteness', 'cib');
+                    break;
+                case '3':
+                    e.preventDefault();
+                    @this.set('selectedCompleteness', 'sealed');
+                    break;
+            }
+        });
+    </script>
 </x-filament-panels::page>
