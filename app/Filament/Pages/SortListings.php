@@ -200,7 +200,7 @@ class SortListings extends Page implements HasForms, HasTable
                             }
 
                             // Create new variant
-                            $slug = Str::slug($data['new_variant_name']);
+                            $slug = Variant::generateSlugFromName($data['new_variant_name'], $console->name);
                             $variant = Variant::create([
                                 'console_id' => $console->id,
                                 'name' => $data['new_variant_name'],

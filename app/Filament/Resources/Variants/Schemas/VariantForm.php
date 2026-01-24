@@ -2,10 +2,14 @@
 
 namespace App\Filament\Resources\Variants\Schemas;
 
+use App\Models\Console;
+use App\Models\Variant;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Schemas\Schema;
 
 class VariantForm
@@ -16,13 +20,37 @@ class VariantForm
             ->components([
                 Select::make('console_id')
                     ->relationship('console', 'name')
-                    ->required(),
-                TextInput::make('slug')
-                    ->required(),
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function (Set $set, Get $get, ?int $state) {
+                        // Auto-update full_slug when console changes
+                        if ($state && $get('slug')) {
+                            $console = Console::find($state);
+                            if ($console) {
+                                $set('full_slug', $console->slug . '/' . $get('slug'));
+                            }
+                        }
+                    }),
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Set $set, Get $get, ?string $state) {
+                        // Auto-generate slug from name, removing console name if present
+                        if ($state && $get('console_id')) {
+                            $console = Console::find($get('console_id'));
+                            if ($console) {
+                                $slug = Variant::generateSlugFromName($state, $console->name);
+                                $set('slug', $slug);
+                                $set('full_slug', $console->slug . '/' . $slug);
+                            }
+                        }
+                    }),
+                TextInput::make('slug')
+                    ->required()
+                    ->helperText('Auto-generated from name. Edit manually if needed.'),
                 TextInput::make('full_slug')
-                    ->required(),
+                    ->required()
+                    ->helperText('Auto-generated. Edit manually if needed.'),
                 TextInput::make('search_terms'),
                 FileUpload::make('image_filename')
                     ->image(),

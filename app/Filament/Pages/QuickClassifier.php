@@ -121,7 +121,7 @@ class QuickClassifier extends Page
                 return;
             }
 
-            $slug = Str::slug($this->newVariantName);
+            $slug = Variant::generateSlugFromName($this->newVariantName, $console->name);
             $variant = Variant::create([
                 'console_id' => $console->id,
                 'name' => $this->newVariantName,
