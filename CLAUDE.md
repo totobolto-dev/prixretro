@@ -2,12 +2,19 @@
 
 **CRITICAL: This is a survival project. Goal: 1000€/month passive income. Optimize for revenue, not perfection.**
 
+## Personal Context (DO NOT LOSE)
+- **Who**: Founder + partner, both in Finland (from France)
+- **Health**: Both ASD/ADHD. Founder: cerebral palsy. Partner: endometriosis + chronic conditions
+- **Employment**: Both currently jobless in foreign country
+- **Stakes**: This project is the lifeline for passive income to survive
+- **Timeline**: Need revenue in coming year (goal reduced from higher targets)
+
 ## Revenue Equation
 ```
 Traffic × Click-through × Conversion = Revenue
 ```
 
-**Current bottleneck**: LOW TRAFFIC → Priority #1 is SEO optimization
+**Current bottleneck**: LOW TRAFFIC → Priority #1 is SEO optimization (not design polish)
 
 ## Tech Stack
 - Laravel 12.44.0 (PHP 8.4+), Filament 4.3.1
