@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Console;
 use App\Models\Listing;
+use App\Models\Variant;
 use App\Services\ConsoleDescriptionGenerator;
 
 class ConsoleController extends Controller
