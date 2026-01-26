@@ -14,7 +14,6 @@ class Variant extends Model
         'name',
         'full_slug',
         'search_terms',
-        'image_filename',
         'rarity_level',
         'region',
         'is_special_edition',
@@ -89,6 +88,34 @@ class Variant extends Model
     public function getShortNameAttribute(): string
     {
         return $this->is_default ? $this->console->name : $this->name;
+    }
+
+    /**
+     * Get the image URL for this variant if it exists.
+     * Convention: public/storage/variants/{console-slug}_{variant-slug}.{ext}
+     * Checks for webp, avif, png, jpg, jpeg in that order (prefer modern formats).
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        $expectedFilename = $this->console->slug . '_' . $this->slug;
+        $extensions = ['webp', 'avif', 'png', 'jpg', 'jpeg'];
+
+        foreach ($extensions as $ext) {
+            $filename = $expectedFilename . '.' . $ext;
+            if (file_exists(public_path("storage/variants/{$filename}"))) {
+                return "/storage/variants/{$filename}";
+            }
+        }
+
+        return null; // No image found
+    }
+
+    /**
+     * Check if variant has an image.
+     */
+    public function hasImage(): bool
+    {
+        return $this->image_url !== null;
     }
 
     /**

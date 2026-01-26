@@ -19,6 +19,40 @@ class ConsoleController extends Controller
             ->orderBy('display_order')
             ->get();
 
+        // Popular variants (top 20 by sales in last 30 days with price trends)
+        $popularVariants = Variant::withCount(['listings' => function($q) {
+                $q->where('status', 'approved')
+                  ->where('sold_date', '>=', now()->subDays(30));
+            }])
+            ->with('console')
+            ->having('listings_count', '>', 0)
+            ->orderByDesc('listings_count')
+            ->limit(20)
+            ->get()
+            ->map(function($variant) {
+                // Calculate trend (last 30 days vs previous 30 days)
+                $recentAvg = Listing::where('variant_id', $variant->id)
+                    ->where('status', 'approved')
+                    ->where('sold_date', '>=', now()->subDays(30))
+                    ->avg('price');
+
+                $olderAvg = Listing::where('variant_id', $variant->id)
+                    ->where('status', 'approved')
+                    ->whereBetween('sold_date', [now()->subDays(60), now()->subDays(30)])
+                    ->avg('price');
+
+                $variant->avg_price = $recentAvg;
+                $variant->trend_percentage = null;
+                $variant->trend_direction = null;
+
+                if ($recentAvg && $olderAvg && $olderAvg > 0) {
+                    $variant->trend_percentage = round((($recentAvg - $olderAvg) / $olderAvg) * 100, 1);
+                    $variant->trend_direction = $recentAvg > $olderAvg ? 'up' : 'down';
+                }
+
+                return $variant;
+            });
+
         // Latest sales (last 20 approved listings)
         $latestSales = Listing::with(['variant.console'])
             ->where('status', 'approved')
@@ -57,7 +91,7 @@ class ConsoleController extends Controller
         $totalSales = $consoles->sum(fn($c) => $c->variants->sum('listings_count'));
         $metaDescription = "Suivez les prix du marché des consoles retrogaming d'occasion. Historique de " . number_format($totalSales) . " ventes analysées sur eBay pour Game Boy, PlayStation, Nintendo, Sega et plus.";
 
-        return view('home', compact('consoles', 'latestSales', 'priceRecords', 'featuredGuides', 'metaDescription'));
+        return view('home', compact('consoles', 'popularVariants', 'latestSales', 'priceRecords', 'featuredGuides', 'metaDescription'));
     }
 
     public function show(Console $console)

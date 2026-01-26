@@ -1,37 +1,157 @@
-@extends('layout')
+<x-layout>
+    <x-slot:title>PrixRetro - Prix des Consoles Rétro d'Occasion</x-slot:title>
+    <x-slot:description>{{ $metaDescription }}</x-slot:description>
 
-@section('title', 'PrixRetro - Tracker de Prix Retrogaming')
-
-@section('content')
-<div class="container">
-    <div class="hero">
-        <img src="/images/prixretro-logo.png" alt="PrixRetro" class="hero-logo">
-        <p class="tagline">
-            Prix du marché pour consoles retrogaming d'occasion<br>
-            <span style="color: var(--text-muted); font-size: 0.95rem;">
-                {{ $consoles->sum(fn($c) => $c->variants->count()) }} variantes •
-                {{ $consoles->sum(fn($c) => $c->variants->sum('listings_count')) }} ventes analysées
-            </span>
-        </p>
+    {{-- Hero Section --}}
+    <div class="bg-gradient-to-b from-bg-secondary to-bg-primary border-b border-white/10">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-3xl md:text-4xl font-bold mb-3 text-text-primary">
+                    Prix du Marché des Consoles Rétro
+                </h1>
+                <p class="text-base text-text-secondary mb-4 leading-relaxed">
+                    Suivez les prix du marché secondaire pour vos consoles retrogaming préférées.
+                    Historique complet des ventes eBay, tendances de prix, et guides d'achat.
+                </p>
+                <div class="flex items-center justify-center gap-6 text-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="text-accent-cyan font-bold">{{ $consoles->sum(fn($c) => $c->variants->count()) }}</span>
+                        <span class="text-text-muted">variantes</span>
+                    </div>
+                    <div class="w-1 h-4 bg-white/20"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-accent-cyan font-bold">{{ number_format($consoles->sum(fn($c) => $c->variants->sum('listings_count'))) }}</span>
+                        <span class="text-text-muted">ventes analysées</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    {{-- Compact Highlights Tables --}}
-    <div class="highlights-compact">
-        <div class="compact-table">
-            <h3 class="compact-title">🕒 Dernières ventes</h3>
-            <div class="compact-list">
-                @foreach($latestSales->take(10) as $listing)
-                <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="compact-row">
-                    <span class="compact-name">{{ $listing->title }}</span>
-                    <span class="compact-price">{{ number_format($listing->price, 0) }}€</span>
-                </a>
-                @endforeach
+    {{-- Main Content --}}
+    <div class="container mx-auto px-4 py-8">
+
+        {{-- Popular Consoles Section --}}
+        {{-- Popular Consoles Carousel --}}
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="section-heading mb-0">🔥 Consoles Populaires</h2>
+                <div class="flex gap-2">
+                    <button onclick="prevSlide()" class="px-3 py-1 bg-bg-card hover:bg-bg-hover border border-white/10 text-sm">&larr;</button>
+                    <button onclick="nextSlide()" class="px-3 py-1 bg-bg-card hover:bg-bg-hover border border-white/10 text-sm">&rarr;</button>
+                </div>
+            </div>
+
+            <div class="carousel-container overflow-hidden relative">
+                <div class="carousel-track flex transition-transform duration-300 ease-in-out">
+                    @foreach($popularVariants->chunk(5) as $slideIndex => $slideVariants)
+                    <div class="carousel-slide flex-shrink-0 w-full">
+                        <div class="grid grid-cols-5 gap-4">
+                            @foreach($slideVariants as $variant)
+                            <a href="/{{ $variant->full_slug }}" class="block bg-bg-card hover:bg-bg-hover transition shadow-box-list group overflow-hidden">
+                                {{-- Image (top half, no padding) --}}
+                                <div class="aspect-square bg-bg-darker flex items-center justify-center overflow-hidden">
+                                    @if($variant->image_url)
+                                        <img src="{{ $variant->image_url }}"
+                                             alt="{{ $variant->display_name }}"
+                                             class="w-full h-full object-contain">
+                                    @else
+                                        <span class="text-text-muted text-xs">Pas d'image</span>
+                                    @endif
+                                </div>
+
+                                {{-- Info (bottom half) --}}
+                                <div class="p-3">
+                                    <h3 class="font-semibold text-sm mb-2 line-clamp-2 leading-tight group-hover:text-accent-cyan transition">
+                                        {{ $variant->display_name }}
+                                    </h3>
+
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-bold text-base">{{ number_format($variant->avg_price, 0) }}€</span>
+
+                                        @if($variant->trend_percentage !== null)
+                                            <span class="text-xs font-medium {{ $variant->trend_direction === 'down' ? 'text-green-500' : 'text-red-500' }}">
+                                                {{ $variant->trend_direction === 'down' ? '↓' : '↑' }}{{ abs($variant->trend_percentage) }}%
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
             </div>
         </div>
 
-        <div class="compact-table">
-            <h3 class="compact-title">💰 Records de prix</h3>
-            <div class="compact-list">
+        <script>
+            let currentSlide = 0;
+            const totalSlides = {{ $popularVariants->chunk(5)->count() }};
+
+            function updateCarousel() {
+                const track = document.querySelector('.carousel-track');
+                track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateCarousel();
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateCarousel();
+            }
+        </script>
+
+        {{-- Two Column Layout: Latest Sales & Price Records --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+
+            {{-- Latest Sales --}}
+            <div>
+                <h2 class="section-heading">🕒 Dernières Ventes</h2>
+
+                <div class="space-y-2">
+                    @foreach($latestSales->take(10) as $listing)
+                        <a href="/{{ $listing->variant->full_slug }}"
+                           class="flex items-center gap-4 p-3 bg-bg-card hover:bg-bg-hover transition shadow-box-list group">
+
+                            {{-- eBay Thumbnail (no padding) --}}
+                            <div class="w-16 h-16 flex-shrink-0 bg-bg-darker flex items-center justify-center overflow-hidden">
+                                @if($listing->thumbnail_url)
+                                <img src="{{ $listing->thumbnail_url }}"
+                                     alt="{{ $listing->variant->display_name }}"
+                                     class="w-full h-full object-cover"
+                                     onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-xs text-text-muted\'>Pas d\'image</span>'">
+                                @else
+                                    <span class="text-xs text-text-muted">Pas d'image</span>
+                                @endif
+                            </div>
+
+                            {{-- Info --}}
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-sm mb-1 line-clamp-1 group-hover:text-accent-cyan transition">
+                                    {{ $listing->variant->display_name }}
+                                </h4>
+                                <div class="flex items-center gap-2 text-xs text-text-secondary">
+                                    <span>{{ $listing->sold_date ? $listing->sold_date->diffForHumans() : 'Récemment' }}</span>
+                                </div>
+                            </div>
+
+                            {{-- Price --}}
+                            <div class="flex-shrink-0">
+                                <span class="text-lg font-bold text-accent-cyan">{{ number_format($listing->price, 0) }}€</span>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Price Records --}}
+            <div>
+                <h2 class="section-heading">💰 Records de Prix</h2>
+
                 @php
                     $allRecords = collect();
                     foreach($priceRecords as $record) {
@@ -41,962 +161,91 @@
                     }
                     $topRecords = $allRecords->sortByDesc('price')->take(10);
                 @endphp
-                @foreach($topRecords as $listing)
-                <a href="/{{ $listing->variant->console->slug }}/{{ $listing->variant->slug }}" class="compact-row">
-                    <span class="compact-name">{{ $listing->title }}</span>
-                    <span class="compact-price compact-price-highlight">{{ number_format($listing->price, 0) }}€</span>
+
+                <div class="space-y-2">
+                    @foreach($topRecords as $listing)
+                        <a href="/{{ $listing->variant->full_slug }}"
+                           class="flex items-center gap-4 p-3 bg-bg-card hover:bg-bg-hover transition shadow-box-list group">
+
+                            {{-- eBay Thumbnail (no padding) --}}
+                            <div class="w-16 h-16 flex-shrink-0 bg-bg-darker flex items-center justify-center overflow-hidden">
+                                @if($listing->thumbnail_url)
+                                <img src="{{ $listing->thumbnail_url }}"
+                                     alt="{{ $listing->variant->display_name }}"
+                                     class="w-full h-full object-cover"
+                                     onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-xs text-text-muted\'>Pas d\'image</span>'">
+                                @else
+                                    <span class="text-xs text-text-muted">Pas d'image</span>
+                                @endif
+                            </div>
+
+                            {{-- Info --}}
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-semibold text-sm mb-1 line-clamp-1 group-hover:text-accent-cyan transition">
+                                    {{ $listing->variant->display_name }}
+                                </h4>
+                                <div class="flex items-center gap-2 text-xs text-text-secondary">
+                                    <span>{{ $listing->sold_date ? $listing->sold_date->diffForHumans() : 'N/A' }}</span>
+                                </div>
+                            </div>
+
+                            {{-- Price --}}
+                            <div class="flex-shrink-0">
+                                <span class="text-lg font-bold text-accent-cyan">{{ number_format($listing->price, 0) }}€</span>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
+
+        {{-- Featured Guides Section --}}
+        @if(isset($featuredGuides) && $featuredGuides->count() > 0)
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="section-heading mb-0">📚 Guides d'Achat</h2>
+                <a href="/guides" class="text-accent-cyan hover:text-accent-green transition text-sm font-semibold">
+                    Tous les guides →
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach($featuredGuides as $guide)
+                <a href="/guides/{{ $guide['slug'] }}" class="bg-bg-card p-6 hover:bg-bg-hover transition group shadow-box-list">
+                    <h3 class="text-base font-semibold mb-2 group-hover:text-accent-cyan transition">
+                        {{ $guide['title'] }}
+                    </h3>
+                    <p class="text-sm text-text-secondary">
+                        Guide complet pour acheter votre {{ $guide['console'] ?? 'console' }}
+                    </p>
                 </a>
                 @endforeach
             </div>
         </div>
-    </div>
+        @endif
 
-    {{-- Featured Guides Widget --}}
-    <div style="margin: 3rem auto; padding: 2rem; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); max-width: 1200px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h3 style="margin: 0; font-size: 1.5rem;">📚 Guides d'achat</h3>
-            <a href="/guides" style="color: var(--accent-primary); text-decoration: none; font-weight: 500;">Voir tous les guides →</a>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-            @foreach($featuredGuides as $guide)
-            <a href="/guides/{{ $guide['slug'] }}" style="display: block; padding: 1.5rem; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); text-decoration: none; transition: transform 0.2s, border-color 0.2s;">
-                <h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary); font-size: 1.1rem;">{{ $guide['title'] }}</h4>
-                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">{{ $guide['description'] }}</p>
-            </a>
-            @endforeach
-        </div>
-    </div>
+        {{-- All Consoles Grid --}}
+        <div class="mt-16">
+            <h2 class="section-heading">Toutes les Consoles</h2>
 
-    {{-- Quick Navigation Overview --}}
-    <div class="console-families-nav">
-        <a href="#nintendo-home" class="family-nav-link">Nintendo (salon)</a>
-        <a href="#playstation" class="family-nav-link">PlayStation</a>
-        <a href="#sega" class="family-nav-link">Sega</a>
-        <a href="#xbox" class="family-nav-link">Xbox</a>
-        <a href="#wii" class="family-nav-link">Wii</a>
-        <a href="#psp" class="family-nav-link">PSP</a>
-        <a href="#vita" class="family-nav-link">PS Vita</a>
-        <a href="#atari" class="family-nav-link">Atari</a>
-        <a href="#neo-geo" class="family-nav-link">Neo Geo</a>
-        <a href="#pc-engine" class="family-nav-link">PC Engine</a>
-        <a href="#game-boy-family" class="family-nav-link">Game Boy</a>
-        <a href="#ds-family" class="family-nav-link">DS</a>
-        <a href="#3ds-family" class="family-nav-link">3DS</a>
-        <a href="#other" class="family-nav-link">Autres</a>
-    </div>
-
-    @php
-        // Group consoles by family based on display_order
-        $nintendoHome = $consoles->filter(fn($c) => $c->display_order >= 10 && $c->display_order < 20);
-        $playstation = $consoles->filter(fn($c) => $c->display_order >= 20 && $c->display_order < 30);
-        $sega = $consoles->filter(fn($c) => $c->display_order >= 30 && $c->display_order < 40);
-        $xbox = $consoles->filter(fn($c) => $c->display_order >= 40 && $c->display_order < 50);
-        $wii = $consoles->filter(fn($c) => $c->display_order >= 50 && $c->display_order < 60);
-        $psp = $consoles->filter(fn($c) => $c->display_order >= 60 && $c->display_order < 62);
-        $vita = $consoles->filter(fn($c) => $c->display_order >= 62 && $c->display_order < 70);
-        $gameGear = $consoles->filter(fn($c) => $c->display_order >= 70 && $c->display_order < 80);
-        $atari = $consoles->filter(fn($c) => $c->display_order >= 80 && $c->display_order < 90);
-        $neoGeo = $consoles->filter(fn($c) => $c->display_order >= 90 && $c->display_order < 100);
-        $pcEngine = $consoles->filter(fn($c) => $c->display_order >= 96 && $c->display_order < 98);
-        $wonderswan = $consoles->filter(fn($c) => $c->display_order >= 98 && $c->display_order < 100);
-        $gameBoyFamily = $consoles->filter(fn($c) => $c->display_order >= 100 && $c->display_order < 120);
-        $dsFamily = $consoles->filter(fn($c) => $c->display_order >= 120 && $c->display_order < 140);
-        $threeDsFamily = $consoles->filter(fn($c) => $c->display_order >= 140 && $c->display_order < 160);
-        $otherConsoles = $consoles->filter(fn($c) => $c->display_order >= 160);
-    @endphp
-
-    {{-- Nintendo Home Consoles --}}
-    @if($nintendoHome->count() > 0)
-    <div class="console-family-section" id="nintendo-home">
-        <h2 class="family-header">Consoles Nintendo de salon</h2>
-        <p class="family-description">Les consoles de salon classiques de Nintendo (1985-2002)</p>
-
-        <div class="console-grid">
-            @foreach($nintendoHome as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name">
-                            <a href="/{{ $console->slug }}">{{ $console->name }}</a>
-                        </h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')">
-                        <span class="expand-icon">▶</span>
-                    </button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                @foreach($consoles as $console)
+                <a
+                    href="/{{ $console->slug }}"
+                    class="bg-bg-card p-4 hover:bg-bg-hover transition group shadow-box-list"
+                >
+                    <h3 class="font-semibold text-sm mb-2 group-hover:text-accent-cyan transition">
+                        {{ $console->name }}
+                    </h3>
+                    <p class="text-xs text-text-secondary">
+                        {{ $console->variants->sum('listings_count') }} ventes
+                    </p>
+                </a>
+                @endforeach
             </div>
-            @endforeach
         </div>
+
     </div>
-    @endif
 
-    {{-- PlayStation Family --}}
-    @if($playstation->count() > 0)
-    <div class="console-family-section" id="playstation">
-        <h2 class="family-header">Famille PlayStation</h2>
-        <p class="family-description">Les consoles PlayStation de Sony (1995-2006)</p>
-
-        <div class="console-grid">
-            @foreach($playstation as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name">
-                            <a href="/{{ $console->slug }}">{{ $console->name }}</a>
-                        </h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')">
-                        <span class="expand-icon">▶</span>
-                    </button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- Sega Family --}}
-    @if($sega->count() > 0)
-    <div class="console-family-section" id="sega">
-        <h2 class="family-header">Famille Sega</h2>
-        <p class="family-description">Les consoles légendaires de Sega (1986-1999)</p>
-
-        <div class="console-grid">
-            @foreach($sega as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name">
-                            <a href="/{{ $console->slug }}">{{ $console->name }}</a>
-                        </h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')">
-                        <span class="expand-icon">▶</span>
-                    </button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- Xbox Family --}}
-    @if($xbox->count() > 0)
-    <div class="console-family-section" id="xbox">
-        <h2 class="family-header">Famille Xbox</h2>
-        <p class="family-description">Les consoles Xbox de Microsoft (2001-2005)</p>
-        <div class="console-grid">
-            @foreach($xbox as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- Wii --}}
-    @if($wii->count() > 0)
-    <div class="console-family-section" id="wii">
-        <h2 class="family-header">Nintendo Wii</h2>
-        <p class="family-description">Console révolutionnaire avec détection de mouvement (2006)</p>
-        <div class="console-grid">
-            @foreach($wii as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- PSP Family --}}
-    @if($psp->count() > 0)
-    <div class="console-family-section" id="psp">
-        <h2 class="family-header">PlayStation Portable</h2>
-        <p class="family-description">Les consoles portables de Sony (2004-2009)</p>
-        <div class="console-grid">
-            @foreach($psp as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- PS Vita --}}
-    @if($vita->count() > 0)
-    <div class="console-family-section" id="vita">
-        <h2 class="family-header">PlayStation Vita</h2>
-        <p class="family-description">Console portable HD de Sony (2011-2013)</p>
-        <div class="console-grid">
-            @foreach($vita as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- Atari Family --}}
-    @if($atari->count() > 0)
-    <div class="console-family-section" id="atari">
-        <h2 class="family-header">Famille Atari</h2>
-        <p class="family-description">Les consoles pionnières d'Atari (1977-1993)</p>
-        <div class="console-grid">
-            @foreach($atari as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- Neo Geo Family --}}
-    @if($neoGeo->count() > 0)
-    <div class="console-family-section" id="neo-geo">
-        <h2 class="family-header">Famille Neo Geo</h2>
-        <p class="family-description">Les systèmes Neo Geo de SNK (1990-1999)</p>
-        <div class="console-grid">
-            @foreach($neoGeo as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- PC Engine --}}
-    @if($pcEngine->count() > 0)
-    <div class="console-family-section" id="pc-engine">
-        <h2 class="family-header">PC Engine / TurboGrafx</h2>
-        <p class="family-description">Console 16-bit de NEC (1987)</p>
-        <div class="console-grid">
-            @foreach($pcEngine as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- Game Boy Family --}}
-    @if($gameBoyFamily->count() > 0)
-    <div class="console-family-section" id="game-boy-family">
-        <h2 class="family-header">Famille Game Boy</h2>
-        <p class="family-description">Les consoles portables qui ont révolutionné le jeu nomade (1989-2008)</p>
-
-        <div class="console-grid">
-            @foreach($gameBoyFamily as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name">
-                            <a href="/{{ $console->slug }}">{{ $console->name }}</a>
-                        </h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')">
-                        <span class="expand-icon">▶</span>
-                    </button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @else
-                <div class="no-variants">
-                    <p>Console ajoutée récemment - données en cours de collecte</p>
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- DS Family --}}
-    @if($dsFamily->count() > 0)
-    <div class="console-family-section" id="ds-family">
-        <h2 class="family-header">Famille Nintendo DS</h2>
-        <p class="family-description">Les consoles à double écran tactile (2004-2013)</p>
-
-        <div class="console-grid">
-            @foreach($dsFamily as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name">
-                            <a href="/{{ $console->slug }}">{{ $console->name }}</a>
-                        </h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')">
-                        <span class="expand-icon">▶</span>
-                    </button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- 3DS Family --}}
-    @if($threeDsFamily->count() > 0)
-    <div class="console-family-section" id="3ds-family">
-        <h2 class="family-header">Famille Nintendo 3DS</h2>
-        <p class="family-description">Les consoles avec effet 3D sans lunettes (2011-2020)</p>
-
-        <div class="console-grid">
-            @foreach($threeDsFamily as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name">
-                            <a href="/{{ $console->slug }}">{{ $console->name }}</a>
-                        </h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')">
-                        <span class="expand-icon">▶</span>
-                    </button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    {{-- Other Consoles --}}
-    @if($otherConsoles->count() > 0)
-    <div class="console-family-section" id="other">
-        <h2 class="family-header">Autres Consoles</h2>
-        <p class="family-description">Consoles rares et collectors (1978-2000)</p>
-        <div class="console-grid">
-            @foreach($otherConsoles as $console)
-            <div class="console-card" data-console-slug="{{ $console->slug }}">
-                <div class="console-card-header">
-                    <div class="console-info">
-                        <h3 class="console-name"><a href="/{{ $console->slug }}">{{ $console->name }}</a></h3>
-                        <div class="console-meta">
-                            <span class="variant-count">{{ $console->variants->count() }} variant{{ $console->variants->count() > 1 ? 's' : 'e' }}</span>
-                            <span class="sales-count">{{ $console->variants->sum('listings_count') }} ventes</span>
-                        </div>
-                    </div>
-                    @if($console->variants->count() > 0)
-                    <button class="expand-toggle" onclick="toggleVariants('{{ $console->slug }}')"><span class="expand-icon">▶</span></button>
-                    @endif
-                </div>
-
-                @if($console->variants->count() > 0)
-                <div class="console-variants" id="variants-{{ $console->slug }}" style="display: none;">
-                    <div class="variants-table">
-                        @foreach($console->variants->sortByDesc('listings_count') as $variant)
-                        <a href="/{{ $console->slug }}/{{ $variant->slug }}" class="variant-row-compact">
-                            <span class="variant-name-compact">{{ $variant->short_name }}</span>
-                            <span class="variant-data-compact">
-                                @if($variant->listings_count > 0)
-                                    @php
-                                        $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
-                                            ->where('status', 'approved')
-                                            ->avg('price');
-                                    @endphp
-                                    <span class="price-compact">{{ number_format($avgPrice, 0) }}€</span>
-                                    <span class="sales-compact">{{ $variant->listings_count }} ventes</span>
-                                @else
-                                    <span class="no-data-compact">Pas de données</span>
-                                @endif
-                            </span>
-                        </a>
-                        @endforeach
-                    </div>
-
-                    @php
-                        $hasRanking = $console->variants->filter(fn($v) => $v->listings_count > 0)->count() >= 3;
-                    @endphp
-                    @if($hasRanking)
-                    <div class="ranking-link-compact">
-                        <a href="/{{ $console->slug }}/classement">🏆 Voir le classement</a>
-                    </div>
-                    @endif
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-</div>
-@endsection
-
-@section('scripts')
-<script>
-function toggleVariants(consoleSlug) {
-    const variantsDiv = document.getElementById('variants-' + consoleSlug);
-    const button = document.querySelector(`[data-console-slug="${consoleSlug}"] .expand-toggle`);
-    const icon = button.querySelector('.expand-icon');
-
-    if (variantsDiv.style.display === 'none') {
-        variantsDiv.style.display = 'block';
-        icon.textContent = '▼';
-        button.setAttribute('aria-expanded', 'true');
-    } else {
-        variantsDiv.style.display = 'none';
-        icon.textContent = '▶';
-        button.setAttribute('aria-expanded', 'false');
-    }
-}
-</script>
-@endsection
+</x-layout>

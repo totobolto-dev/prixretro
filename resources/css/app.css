@@ -8,4 +8,87 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* PrixRetro Dark Blue-Purple Theme */
+    --color-bg-primary: #0f0f1e;
+    --color-bg-secondary: #1a1a2e;
+    --color-bg-card: #16213e;
+    --color-bg-hover: #1e2a47;
+    --color-bg-darker: #0a0a14;
+    --color-nav: #12141f;
+
+    --color-accent-primary: #00d9ff;
+    --color-accent-cyan: #00d9ff;
+    --color-accent-blue: #4facfe;
+    --color-accent-success: #43b581;
+    --color-accent-green: #43b581;
+    --color-accent-warning: #faa61a;
+    --color-accent-orange: #faa61a;
+    --color-accent-danger: #ed4245;
+
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #b9bbbe;
+    --color-text-muted: #72767d;
+
+    --color-border: rgba(255, 255, 255, 0.1);
+
+    --radius: 0;
+}
+
+/* Custom utility classes */
+.shadow-box-list {
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.hoverable-box {
+    transition: all 0.15s ease;
+}
+
+.hoverable-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 0 rgba(255, 255, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Section headings with stylish underline */
+.section-heading {
+    position: relative;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.section-heading::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 3rem;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-accent-cyan), transparent);
+}
+
+/* Price variation badge */
+.badge-variation {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.badge-variation.positive {
+    color: var(--color-accent-success);
+    border-color: var(--color-accent-success);
+    background: rgba(67, 181, 129, 0.1);
+}
+
+.badge-variation.negative {
+    color: var(--color-accent-danger);
+    border-color: var(--color-accent-danger);
+    background: rgba(237, 66, 69, 0.1);
 }
