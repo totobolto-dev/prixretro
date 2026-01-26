@@ -13,7 +13,7 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
+# /public/build  # MUST be committed for Vite assets to deploy
 /public/hot
 /public/storage
 /storage/*.key
