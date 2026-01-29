@@ -47,15 +47,43 @@ class EbayFindingService
         ];
 
         try {
-            $response = Http::timeout(30)->get($this->apiUrl, $params);
+            // Retry logic for rate limit errors (eBay recommends up to 2 retries)
+            $maxRetries = 2;
+            $retryDelay = 2; // seconds
+            $response = null;
+
+            for ($attempt = 0; $attempt <= $maxRetries; $attempt++) {
+                if ($attempt > 0) {
+                    Log::info("eBay API retry attempt {$attempt}/{$maxRetries}", ['keywords' => $keywords]);
+                    sleep($retryDelay);
+                    $retryDelay *= 2; // Exponential backoff
+                }
+
+                $response = Http::timeout(30)->get($this->apiUrl, $params);
+
+                // Check if it's a rate limit error (Error 10001)
+                if ($response->status() === 500) {
+                    $body = $response->json();
+                    $errorId = $body['errorMessage'][0]['error'][0]['errorId'][0] ?? null;
+
+                    if ($errorId === '10001' && $attempt < $maxRetries) {
+                        Log::warning('eBay rate limit hit, retrying...', ['attempt' => $attempt + 1]);
+                        continue; // Retry
+                    }
+                }
+
+                // Success or non-retryable error
+                break;
+            }
 
             if ($response->failed()) {
                 $errorMsg = sprintf('API request failed: HTTP %d - %s', $response->status(), $response->body());
-                Log::error('eBay API request failed', [
+                Log::error('eBay API request failed after retries', [
                     'status' => $response->status(),
                     'body' => $response->body(),
                     'url' => $this->apiUrl,
                     'params' => $params,
+                    'retries' => $maxRetries,
                 ]);
                 return ['items' => [], 'error' => $errorMsg];
             }
