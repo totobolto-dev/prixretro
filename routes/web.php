@@ -7,13 +7,15 @@ use App\Http\Controllers\EbayWebhookController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\MarketTrendsController;
 use App\Http\Controllers\QuickClassifyController;
+use App\Http\Controllers\SitemapWebhookController;
 use App\Http\Controllers\VariantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ConsoleController::class, 'index'])->name('home');
 
-// eBay Marketplace Account Deletion Webhook
+// Webhooks (CSRF exempt)
 Route::post('/webhooks/ebay/account-deletion', [EbayWebhookController::class, 'handleAccountDeletion'])->name('webhooks.ebay.account-deletion');
+Route::post('/webhooks/sitemap/regenerate', [SitemapWebhookController::class, 'regenerate'])->name('webhooks.sitemap.regenerate');
 
 // Quick Classify Tool (admin only)
 Route::get('/admin/quick-classify', [QuickClassifyController::class, 'index'])->name('admin.quick-classify');

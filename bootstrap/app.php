@@ -13,9 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
 
-        // Exclude eBay webhooks from CSRF protection
+        // Exclude webhooks from CSRF protection
         $middleware->validateCsrfTokens(except: [
-            'webhooks/ebay/*',
+            'webhooks/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

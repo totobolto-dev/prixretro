@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Sitemap Webhook Token
+    |--------------------------------------------------------------------------
+    |
+    | This token is used to authenticate webhook requests for sitemap
+    | regeneration (triggered by GitHub Actions cron).
+    |
+    */
+
+    'sitemap_token' => env('SITEMAP_TOKEN'),
+
 ];

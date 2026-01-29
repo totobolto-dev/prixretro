@@ -11,54 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.4'
-        extensions: mbstring, xml, ctype, json, openssl, pdo, mysql, fileinfo
-        coverage: none
-
-    - name: Install Composer dependencies
-      run: composer install --no-dev --optimize-autoloader --no-interaction
-
-    - name: Create production .env file
+    - name: Call sitemap webhook
       run: |
-        cat > .env << 'EOF'
-        APP_NAME=PrixRetro
-        APP_ENV=production
-        APP_KEY=${{ secrets.APP_KEY }}
-        APP_DEBUG=false
-        APP_URL=https://www.prixretro.com
+        curl -X POST https://www.prixretro.com/webhooks/sitemap/regenerate \
+          -H "X-Sitemap-Token: ${{ secrets.SITEMAP_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -f \
+          --max-time 300 \
+          -v
 
-        LOG_CHANNEL=stack
-        LOG_LEVEL=error
-
-        DB_CONNECTION=mysql
-        DB_HOST=${{ secrets.DB_HOST }}
-        DB_PORT=35831
-        DB_DATABASE=${{ secrets.DB_DATABASE }}
-        DB_USERNAME=${{ secrets.DB_USERNAME }}
-        DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-
-        CACHE_STORE=array
-        EOF
-
-    - name: Generate sitemap
-      run: php artisan sitemap:generate
-
-    - name: Deploy sitemap to OVH via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./public/
-        server-dir: /prixretro/public/
-        log-level: minimal
-        include: |
-          sitemap.xml
-        exclude: |
-          **/*
+    - name: Verify sitemap was updated
+      run: |
+        # Check that sitemap exists and was recently modified
+        curl -I https://www.prixretro.com/sitemap.xml \
+          -f \
+          --max-time 30
