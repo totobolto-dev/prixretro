@@ -31,6 +31,17 @@ Thumbs.db
 # Scraper debug files
 scrapers/debug_*.html
 
+# Scraped image folders (legacy data, not needed in repo)
+/scraped_images/
+/scraped_images_webp/
+/scripts/scraped_images/
+/scripts/scraped_images_webp/
+scripts/scraped_images (copy)/
+
+# Google Console reports (analytics data, not code)
+*.xlsx
+prixretro.com-*.csv
+
 # Database backups
 /database/*.sqlite
 /database/*.sqlite-*
