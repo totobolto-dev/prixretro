@@ -42,6 +42,10 @@ scripts/scraped_images (copy)/
 *.xlsx
 prixretro.com-*.csv
 
+# Documentation and personal notes (keep local only, not in repo)
+*.md
+!README.md
+
 # Database backups
 /database/*.sqlite
 /database/*.sqlite-*

@@ -25,228 +25,177 @@
         </div>
         @endif
 
-        {{-- Main 3-Column Layout --}}
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+        {{-- Main 3-Column Unified Block --}}
+        <div class="bg-bg-card shadow-box-list overflow-hidden mb-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
 
-            {{-- Column 1: Image (3 cols) --}}
-            <div class="lg:col-span-3">
-                <div class="aspect-square bg-bg-card flex items-center justify-center overflow-hidden shadow-box-list">
-                    @if($variant->image_url)
-                        <img src="{{ $variant->image_url }}"
-                             alt="{{ $variant->display_name }}"
-                             class="w-full h-full object-contain">
-                    @else
-                        <span class="text-text-muted text-sm">Pas d'image</span>
-                    @endif
-                </div>
-            </div>
-
-            {{-- Column 2: À Propos (6 cols) --}}
-            <div class="lg:col-span-6">
-                <h1 class="text-3xl font-bold mb-6">{{ $variant->display_name }}</h1>
-
-                <div class="prose prose-invert max-w-none">
-                    {!! $autoDescription ?? '' !!}
-                </div>
-
-                {{-- Navigation --}}
-                @php
-                    $otherVariants = $variant->console->variants()
-                        ->where('id', '!=', $variant->id)
-                        ->withCount('listings')
-                        ->orderBy('name')
-                        ->get();
-
-                    $hasRanking = $variant->console->variants()
-                        ->whereHas('listings', function($q) {
-                            $q->where('status', 'approved');
-                        })
-                        ->count() >= 3;
-                @endphp
-
-                @if($hasRanking || $otherVariants->count() > 0)
-                <div class="mt-6 flex flex-wrap gap-3">
-                    @if($hasRanking)
-                    <a href="/{{ $variant->console->slug }}/classement"
-                       class="px-4 py-2 bg-bg-card hover:bg-bg-hover border border-accent-cyan/30 hover:border-accent-cyan transition text-sm flex items-center gap-2">
-                        <span>🏆</span> Classement des variantes
-                    </a>
-                    @endif
-
-                    @if($otherVariants->count() > 0)
-                    <select onchange="if(this.value) window.location.href=this.value"
-                            class="px-4 py-2 bg-bg-card border border-white/10 hover:border-accent-cyan transition text-sm cursor-pointer">
-                        <option value="">{{ $variant->name }} (actuelle)</option>
-                        @foreach($otherVariants as $other)
-                        <option value="/{{ $other->full_slug }}">
-                            {{ $other->name }} ({{ $other->listings_count }} ventes)
-                        </option>
-                        @endforeach
-                    </select>
-                    @endif
-                </div>
-                @endif
-            </div>
-
-            {{-- Column 3: Stats with Tabs (3 cols) --}}
-            <div class="lg:col-span-3">
-                @php
-                    $statsByCompleteness = [];
-                    if (isset($statistics) && $statistics['count'] >= 5) {
-                        $statsByCompleteness = [
-                            'loose' => [
-                                'count' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'loose')
-                                    ->count(),
-                                'avg' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'loose')
-                                    ->avg('price'),
-                                'min' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'loose')
-                                    ->min('price'),
-                                'max' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'loose')
-                                    ->max('price'),
-                            ],
-                            'cib' => [
-                                'count' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'cib')
-                                    ->count(),
-                                'avg' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'cib')
-                                    ->avg('price'),
-                                'min' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'cib')
-                                    ->min('price'),
-                                'max' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'cib')
-                                    ->max('price'),
-                            ],
-                            'sealed' => [
-                                'count' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'sealed')
-                                    ->count(),
-                                'avg' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'sealed')
-                                    ->avg('price'),
-                                'min' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'sealed')
-                                    ->min('price'),
-                                'max' => \App\Models\Listing::where('variant_id', $variant->id)
-                                    ->where('status', 'approved')
-                                    ->where('completeness', 'sealed')
-                                    ->max('price'),
-                            ],
-                        ];
-                    }
-
-                    // Default to loose if no specific data
-                    $defaultStats = $statistics['count'] >= 5 && $statsByCompleteness['loose']['count'] >= 5
-                        ? $statsByCompleteness['loose']
-                        : $statistics;
-                @endphp
-
-                <div class="bg-bg-card p-4 shadow-box-list">
-                    {{-- Tabs --}}
-                    @if($statistics['count'] >= 5 && ($statsByCompleteness['loose']['count'] >= 5 || $statsByCompleteness['cib']['count'] >= 5 || $statsByCompleteness['sealed']['count'] >= 5))
-                    <div class="flex gap-2 mb-4 border-b border-white/10 pb-2">
-                        @if($statsByCompleteness['loose']['count'] >= 5)
-                        <button onclick="showTab('loose')"
-                                class="tab-btn px-3 py-1 text-sm hover:text-accent-cyan transition"
-                                data-tab="loose">
-                            ⚪ Loose
-                        </button>
-                        @endif
-                        @if($statsByCompleteness['cib']['count'] >= 5)
-                        <button onclick="showTab('cib')"
-                                class="tab-btn px-3 py-1 text-sm hover:text-accent-cyan transition"
-                                data-tab="cib">
-                            📦 CIB
-                        </button>
-                        @endif
-                        @if($statsByCompleteness['sealed']['count'] >= 5)
-                        <button onclick="showTab('sealed')"
-                                class="tab-btn px-3 py-1 text-sm hover:text-accent-cyan transition"
-                                data-tab="sealed">
-                            🔒 Sealed
-                        </button>
-                        @endif
-                    </div>
-                    @endif
-
-                    {{-- Stats --}}
-                    <div class="space-y-4">
-                        @if($statistics['count'] >= 5)
-                            @foreach(['loose', 'cib', 'sealed'] as $completeness)
-                                @if($statsByCompleteness[$completeness]['count'] >= 5)
-                                <div class="tab-content {{ $loop->first ? 'block' : 'hidden' }}" data-tab="{{ $completeness }}">
-                                    <div class="space-y-3">
-                                        <div>
-                                            <div class="text-xs text-text-muted mb-1">Prix Moyen</div>
-                                            <div class="text-2xl font-bold text-accent-cyan">
-                                                {{ number_format($statsByCompleteness[$completeness]['avg'], 0) }}€
-                                            </div>
-                                        </div>
-
-                                        <div class="border-t border-white/10 pt-3 space-y-2">
-                                            <div class="flex justify-between text-sm">
-                                                <span class="text-text-muted">Prix Min</span>
-                                                <span class="font-semibold">{{ number_format($statsByCompleteness[$completeness]['min'], 0) }}€</span>
-                                            </div>
-                                            <div class="flex justify-between text-sm">
-                                                <span class="text-text-muted">Prix Max</span>
-                                                <span class="font-semibold">{{ number_format($statsByCompleteness[$completeness]['max'], 0) }}€</span>
-                                            </div>
-                                            <div class="flex justify-between text-sm">
-                                                <span class="text-text-muted">Ventes</span>
-                                                <span class="font-semibold">{{ $statsByCompleteness[$completeness]['count'] }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endif
-                            @endforeach
+                {{-- Column 1: Image (3 cols) --}}
+                <div class="lg:col-span-3 p-6">
+                    <div class="aspect-square bg-bg-darker flex items-center justify-center overflow-hidden">
+                        @if($variant->image_url)
+                            <img src="{{ $variant->image_url }}"
+                                 alt="{{ $variant->display_name }}"
+                                 class="w-full h-full object-contain">
                         @else
-                            {{-- Not enough data --}}
-                            <div class="text-center py-8 text-text-muted text-sm">
-                                Pas assez de données<br>pour afficher les stats
-                            </div>
+                            <span class="text-text-muted text-sm">Pas d'image</span>
                         @endif
                     </div>
                 </div>
 
-                <script>
-                    function showTab(tab) {
-                        // Hide all tab contents
-                        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-                        // Show selected tab
-                        document.querySelector(`.tab-content[data-tab="${tab}"]`).classList.remove('hidden');
-                        // Update button styles
-                        document.querySelectorAll('.tab-btn').forEach(btn => {
-                            if (btn.dataset.tab === tab) {
-                                btn.classList.add('text-accent-cyan', 'border-b-2', 'border-accent-cyan');
-                            } else {
-                                btn.classList.remove('text-accent-cyan', 'border-b-2', 'border-accent-cyan');
+                {{-- Separator Line --}}
+                <div class="hidden lg:block relative w-px">
+                    <div class="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-accent-cyan/20 to-transparent"></div>
+                </div>
+
+                {{-- Column 2: À Propos (6 cols) --}}
+                <div class="lg:col-span-6 p-6 border-l border-white/5 lg:border-l-0">
+                    <h1 class="text-3xl font-bold mb-6">{{ $variant->display_name }}</h1>
+
+                    <div class="prose prose-invert max-w-none text-sm">
+                        {!! $autoDescription ?? '' !!}
+                    </div>
+
+                    {{-- Navigation --}}
+                    @php
+                        $otherVariants = $variant->console->variants()
+                            ->where('id', '!=', $variant->id)
+                            ->withCount('listings')
+                            ->orderBy('name')
+                            ->get();
+
+                        $hasRanking = $variant->console->variants()
+                            ->whereHas('listings', function($q) {
+                                $q->where('status', 'approved');
+                            })
+                            ->count() >= 3;
+                    @endphp
+
+                    @if($hasRanking || $otherVariants->count() > 0)
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        @if($hasRanking)
+                        <a href="/{{ $variant->console->slug }}/classement"
+                           class="px-4 py-2 bg-bg-darker hover:bg-bg-hover border border-accent-cyan/30 hover:border-accent-cyan transition text-sm flex items-center gap-2">
+                            <span>🏆</span> Classement des variantes
+                        </a>
+                        @endif
+
+                        @if($otherVariants->count() > 0)
+                        <select onchange="if(this.value) window.location.href=this.value"
+                                class="px-4 py-2 bg-bg-darker border border-white/10 hover:border-accent-cyan transition text-sm cursor-pointer">
+                            <option value="">{{ $variant->name }} (actuelle)</option>
+                            @foreach($otherVariants as $other)
+                            <option value="/{{ $other->full_slug }}">
+                                {{ $other->name }} ({{ $other->listings_count }} ventes)
+                            </option>
+                            @endforeach
+                        </select>
+                        @endif
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Separator Line --}}
+                <div class="hidden lg:block relative w-px">
+                    <div class="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-accent-cyan/20 to-transparent"></div>
+                </div>
+
+                {{-- Column 3: Stats with Tabs (3 cols) --}}
+                <div class="lg:col-span-3 p-6 border-t border-white/5 lg:border-t-0 lg:border-l-0">
+                    @php
+                        $statsByCompleteness = [];
+                        if (isset($statistics) && $statistics['count'] >= 5) {
+                            foreach(['loose', 'cib', 'sealed'] as $comp) {
+                                $count = \App\Models\Listing::where('variant_id', $variant->id)
+                                    ->where('status', 'approved')
+                                    ->where('completeness', $comp)
+                                    ->count();
+                                if ($count >= 5) {
+                                    $statsByCompleteness[$comp] = [
+                                        'count' => $count,
+                                        'avg' => \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->where('completeness', $comp)
+                                            ->avg('price'),
+                                        'min' => \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->where('completeness', $comp)
+                                            ->min('price'),
+                                        'max' => \App\Models\Listing::where('variant_id', $variant->id)
+                                            ->where('status', 'approved')
+                                            ->where('completeness', $comp)
+                                            ->max('price'),
+                                    ];
+                                }
                             }
+                        }
+                    @endphp
+
+                    {{-- Tabs --}}
+                    @if(count($statsByCompleteness) > 0)
+                    <div class="flex gap-2 mb-4 border-b border-white/10 pb-2">
+                        @foreach($statsByCompleteness as $comp => $stats)
+                        <button onclick="showTab('{{ $comp }}')"
+                                class="tab-btn px-3 py-1 text-sm hover:text-accent-cyan transition"
+                                data-tab="{{ $comp }}">
+                            @if($comp === 'loose') ⚪ Loose
+                            @elseif($comp === 'cib') 📦 CIB
+                            @else 🔒 Sealed
+                            @endif
+                        </button>
+                        @endforeach
+                    </div>
+
+                    {{-- Stats Content --}}
+                    @foreach($statsByCompleteness as $comp => $stats)
+                    <div class="tab-content {{ $loop->first ? 'block' : 'hidden' }}" data-tab="{{ $comp }}">
+                        <div class="space-y-3">
+                            <div>
+                                <div class="text-xs text-text-muted mb-1">Prix Moyen</div>
+                                <div class="text-2xl font-bold text-accent-cyan">
+                                    {{ number_format($stats['avg'], 0) }}€
+                                </div>
+                            </div>
+                            <div class="border-t border-white/10 pt-3 space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-muted">Prix Min</span>
+                                    <span class="font-semibold">{{ number_format($stats['min'], 0) }}€</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-muted">Prix Max</span>
+                                    <span class="font-semibold">{{ number_format($stats['max'], 0) }}€</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-muted">Ventes</span>
+                                    <span class="font-semibold">{{ $stats['count'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+
+                    <script>
+                        function showTab(tab) {
+                            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+                            document.querySelector(`.tab-content[data-tab="${tab}"]`).classList.remove('hidden');
+                            document.querySelectorAll('.tab-btn').forEach(btn => {
+                                if (btn.dataset.tab === tab) {
+                                    btn.classList.add('text-accent-cyan', 'border-b-2', 'border-accent-cyan');
+                                } else {
+                                    btn.classList.remove('text-accent-cyan', 'border-b-2', 'border-accent-cyan');
+                                }
+                            });
+                        }
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const firstTab = document.querySelector('.tab-btn');
+                            if (firstTab) showTab(firstTab.dataset.tab);
                         });
-                    }
-                    // Activate first tab on load
-                    document.addEventListener('DOMContentLoaded', () => {
-                        const firstTab = document.querySelector('.tab-btn');
-                        if (firstTab) showTab(firstTab.dataset.tab);
-                    });
-                </script>
+                    </script>
+                    @else
+                    <div class="text-center py-8 text-text-muted text-sm">
+                        Pas assez de données<br>pour afficher les stats
+                    </div>
+                    @endif
+                </div>
             </div>
         </div>
 
@@ -256,24 +205,23 @@
 
             {{-- Price Chart --}}
             <div>
-                <h2 class="section-heading flex items-center gap-2">
-                    📈 Évolution du Prix
-                </h2>
-
-                @if($priceTrend && isset($priceTrend['percentage']))
-                <div class="mb-4 flex items-center gap-3 text-sm">
-                    <span class="text-text-muted">30 derniers jours:</span>
-                    <span class="font-semibold {{ $priceTrend['direction'] === 'down' ? 'text-green-500' : 'text-red-500' }}">
-                        {{ $priceTrend['direction'] === 'down' ? '↓' : '↑' }} {{ abs($priceTrend['percentage']) }}%
-                    </span>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="section-heading mb-0 flex items-center gap-2">
+                        📈 Évolution du Prix
+                    </h2>
+                    @if($priceTrend && isset($priceTrend['percentage']))
+                    <div class="flex items-center gap-2 px-3 py-1 {{ $priceTrend['direction'] === 'down' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400' }}">
+                        <span class="font-semibold">{{ $priceTrend['direction'] === 'down' ? '↓' : '↑' }} {{ abs($priceTrend['percentage']) }}%</span>
+                        <span class="text-xs opacity-75">30j</span>
+                    </div>
+                    @endif
                 </div>
-                @endif
 
                 <div class="bg-bg-card p-4 shadow-box-list">
                     <canvas id="priceChart" class="w-full" style="height: 280px;"></canvas>
                 </div>
 
-                @if($buyingInsight && $buyingInsight['recommendation'])
+                @if(isset($buyingInsight) && is_array($buyingInsight) && isset($buyingInsight['recommendation']))
                 <div class="mt-4 p-3 {{ $buyingInsight['is_good_time'] ? 'bg-green-500/10 border-green-500/30' : 'bg-orange-500/10 border-orange-500/30' }} border">
                     <p class="text-sm {{ $buyingInsight['is_good_time'] ? 'text-green-400' : 'text-orange-400' }}">
                         💡 {{ $buyingInsight['recommendation'] }}
@@ -286,7 +234,6 @@
             @if($guideUrl)
             <div>
                 <h2 class="section-heading">📚 Guide d'Achat</h2>
-
                 <div class="bg-bg-card p-6 shadow-box-list">
                     <h3 class="text-lg font-bold mb-3">Comment acheter ce modèle ?</h3>
                     <p class="text-sm text-text-secondary mb-4">
@@ -316,11 +263,11 @@
             @endphp
 
             <div>
-                <h2 class="section-heading">🛒 Annonces eBay</h2>
+                <h2 class="section-heading">🛒 Acheter sur eBay</h2>
 
                 @if($currentListings->count() > 0)
-                <div class="space-y-2">
-                    @foreach($currentListings as $listing)
+                <div class="space-y-2 mb-4">
+                    @foreach($currentListings->take(3) as $listing)
                     <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
                        target="_blank"
                        rel="nofollow noopener"
@@ -334,16 +281,19 @@
                     </a>
                     @endforeach
                 </div>
-                @else
-                <div class="bg-bg-card p-6 text-center text-text-muted shadow-box-list">
-                    Aucune annonce disponible actuellement
-                </div>
                 @endif
+
+                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+                   target="_blank"
+                   rel="nofollow noopener"
+                   class="block w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-semibold text-center transition">
+                    Voir toutes les offres eBay →
+                </a>
             </div>
 
             {{-- Amazon Accessories --}}
             <div>
-                <h2 class="section-heading">🛡️ Accessoires Recommandés</h2>
+                <h2 class="section-heading">🛡️ Accessoires Amazon</h2>
 
                 <div class="bg-bg-card p-6 shadow-box-list">
                     @php
@@ -353,9 +303,7 @@
                             'nintendo-ds', 'nintendo-ds-lite', 'nintendo-dsi', 'nintendo-dsi-xl',
                             'nintendo-3ds', 'nintendo-3ds-xl', 'new-nintendo-3ds', 'new-nintendo-3ds-xl',
                             'nintendo-2ds', 'new-nintendo-2ds-xl',
-                            'psp', 'psp-go', 'ps-vita', 'ps-vita-slim',
-                            'game-gear', 'atari-lynx', 'neo-geo-pocket', 'neo-geo-pocket-color',
-                            'wonderswan', 'wonderswan-color', 'virtual-boy'
+                            'psp', 'psp-go', 'ps-vita', 'ps-vita-slim'
                         ]);
                     @endphp
 
@@ -381,6 +329,58 @@
             </div>
         </div>
 
+        {{-- Sold Listings Table --}}
+        @if($statistics['count'] > 0)
+        <div class="mb-12">
+            <h2 class="section-heading">📊 Historique des Ventes</h2>
+            <div class="bg-bg-card shadow-box-list overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="border-b border-white/10">
+                        <tr class="text-left">
+                            <th class="p-3 text-text-muted font-semibold">Date</th>
+                            <th class="p-3 text-text-muted font-semibold">Prix</th>
+                            <th class="p-3 text-text-muted font-semibold">État</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($recentListings->take(20) as $listing)
+                        <tr class="border-b border-white/5 hover:bg-bg-hover transition">
+                            <td class="p-3 text-text-secondary">{{ $listing->sold_date->format('d/m/Y') }}</td>
+                            <td class="p-3 font-semibold text-accent-cyan">{{ number_format($listing->price, 0) }}€</td>
+                            <td class="p-3 text-xs">
+                                @if($listing->completeness === 'cib') <span class="px-2 py-1 bg-blue-500/20 text-blue-400">📦 CIB</span>
+                                @elseif($listing->completeness === 'sealed') <span class="px-2 py-1 bg-orange-500/20 text-orange-400">🔒 Sealed</span>
+                                @else <span class="px-2 py-1 bg-gray-500/20 text-gray-400">⚪ Loose</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
+
+        {{-- Other Variants Grid --}}
+        @if($otherVariants->count() > 0)
+        <div>
+            <h2 class="section-heading">🎮 Autres Variantes de {{ $variant->console->name }}</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                @foreach($otherVariants as $other)
+                <a href="/{{ $other->full_slug }}" class="block bg-bg-card hover:bg-bg-hover p-3 transition shadow-box-list group">
+                    @if($other->image_url)
+                    <div class="aspect-square bg-bg-darker mb-2 flex items-center justify-center overflow-hidden">
+                        <img src="{{ $other->image_url }}" alt="{{ $other->name }}" class="w-full h-full object-contain">
+                    </div>
+                    @endif
+                    <h4 class="text-sm font-semibold mb-1 line-clamp-2 group-hover:text-accent-cyan transition">{{ $other->name }}</h4>
+                    <p class="text-xs text-text-muted">{{ $other->listings_count }} ventes</p>
+                </a>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
     </div>
 
     {{-- Chart.js Script --}}
@@ -388,31 +388,69 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const ctx = document.getElementById('priceChart');
+        const chartData = @json($chartData);
+
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: @json($chartData['labels']),
+                labels: chartData.labels,
                 datasets: [{
-                    label: 'Prix (€)',
-                    data: @json($chartData['prices']),
+                    data: chartData.prices,
                     borderColor: '#00d9ff',
                     backgroundColor: 'rgba(0, 217, 255, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
                     tension: 0.3,
                     pointRadius: 4,
-                    pointHoverRadius: 6
+                    pointBackgroundColor: '#00d9ff',
+                    pointBorderColor: '#0f0f1e',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7,
+                    pointHoverBorderWidth: 3
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                },
+                onClick: (event, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const index = activeElements[0].index;
+                        const url = chartData.urls[index];
+                        if (url) {
+                            window.open(url + '?mkcid=1&mkrid=709-53476-19255-0&campid=5339134703', '_blank', 'noopener,noreferrer');
+                        }
+                    }
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
+                        enabled: true,
+                        mode: 'nearest',
+                        intersect: false,
                         backgroundColor: '#1a1a2e',
-                        titleColor: '#fff',
+                        titleColor: '#ffffff',
                         bodyColor: '#00d9ff',
                         borderColor: '#00d9ff',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            title: function(context) {
+                                const index = context[0].dataIndex;
+                                return chartData.titles ? chartData.titles[index] : '';
+                            },
+                            label: function(context) {
+                                return context.parsed.y + '€';
+                            },
+                            afterLabel: function() {
+                                return 'Cliquer pour voir sur eBay';
+                            }
+                        }
                     }
                 },
                 scales: {
