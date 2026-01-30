@@ -8,6 +8,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Filament\Actions\Action;
 
 class EbayApiStats extends BaseWidget
 {
@@ -15,16 +16,16 @@ class EbayApiStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $stats = Cache::remember('ebay_api_stats', 300, function () {
-            return $this->fetchApiStats();
-        });
+        // Get saved stats from cache (never expires, updated only after API operations)
+        $stats = Cache::get('ebay_api_usage');
+        $lastUpdated = Cache::get('ebay_api_usage_updated_at');
 
         if (!$stats) {
             return [
-                Stat::make('eBay API Status', 'Error')
-                    ->description('Unable to fetch API stats')
-                    ->descriptionIcon('heroicon-o-exclamation-triangle')
-                    ->color('danger'),
+                Stat::make('eBay API Calls', 'No data yet')
+                    ->description('Run "Fetch Current Listings" to see usage')
+                    ->descriptionIcon('heroicon-o-information-circle')
+                    ->color('gray'),
             ];
         }
 
@@ -40,9 +41,11 @@ class EbayApiStats extends BaseWidget
             $color = 'warning';
         }
 
+        $updatedText = $lastUpdated ? 'Updated ' . \Carbon\Carbon::parse($lastUpdated)->diffForHumans() : '';
+
         return [
             Stat::make('eBay API Calls Remaining', number_format($remainingCalls))
-                ->description("{$usedCalls} used of {$limitCalls} daily limit ({$percentageUsed}%)")
+                ->description("{$usedCalls} used of {$limitCalls} daily ({$percentageUsed}%) • {$updatedText}")
                 ->descriptionIcon('heroicon-o-arrow-trending-up')
                 ->color($color),
         ];

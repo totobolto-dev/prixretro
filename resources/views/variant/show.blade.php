@@ -249,95 +249,92 @@
         </div>
         @endif
 
-        {{-- eBay + Amazon Side by Side --}}
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        {{-- eBay Current Listings --}}
+        @php
+            $currentListings = \App\Models\CurrentListing::where('variant_id', $variant->id)
+                ->where('is_sold', false)
+                ->where('status', 'approved')
+                ->orderBy('price', 'asc')
+                ->take(5)
+                ->get();
+            $ebayAffiliateParams = 'mkcid=1&mkrid=709-53476-19255-0&campid=5339134703';
+        @endphp
 
-            {{-- eBay Current Listings --}}
-            @php
-                $currentListings = \App\Models\CurrentListing::where('variant_id', $variant->id)
-                    ->where('is_sold', false)
-                    ->where('status', 'approved')
-                    ->orderBy('price', 'asc')
-                    ->take(6)
-                    ->get();
-                $ebayAffiliateParams = 'mkcid=1&mkrid=709-53476-19255-0&campid=5339134703';
-            @endphp
+        @if($currentListings->count() > 0)
+        <div class="mb-12">
+            <h2 class="section-heading">🛒 Acheter sur eBay</h2>
 
-            <div>
-                <h2 class="section-heading">🛒 Acheter sur eBay</h2>
-
-                @if($currentListings->count() > 0)
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                    @foreach($currentListings->take(6) as $listing)
-                    <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
-                       target="_blank"
-                       rel="nofollow noopener"
-                       class="block bg-bg-card hover:bg-bg-hover transition shadow-box-list group overflow-hidden">
-                        @if($listing->thumbnail_url)
-                        <div class="aspect-square bg-bg-darker flex items-center justify-center overflow-hidden">
-                            <img src="{{ $listing->thumbnail_url }}"
-                                 alt="{{ $listing->title }}"
-                                 class="w-full h-full object-contain">
-                        </div>
-                        @endif
-                        <div class="p-3">
-                            <div class="text-sm line-clamp-2 mb-2 group-hover:text-accent-cyan transition min-h-[2.5rem]">
-                                {{ $listing->title }}
-                            </div>
-                            <div class="font-bold text-accent-cyan text-lg">
-                                {{ number_format($listing->price, 0) }}€
-                            </div>
-                        </div>
-                    </a>
-                    @endforeach
-                </div>
-                @endif
-
-                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+            <div class="grid grid-cols-5 gap-3 mb-4">
+                @foreach($currentListings as $listing)
+                <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
                    target="_blank"
                    rel="nofollow noopener"
-                   class="block w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-semibold text-center transition">
-                    Voir toutes les offres eBay →
+                   class="block bg-bg-card hover:bg-bg-hover transition shadow-box-list group overflow-hidden">
+                    @if($listing->thumbnail_url)
+                    <div class="bg-bg-darker flex items-center justify-center overflow-hidden" style="height: 150px;">
+                        <img src="{{ $listing->thumbnail_url }}"
+                             alt="{{ $listing->title }}"
+                             class="w-full h-full object-contain">
+                    </div>
+                    @endif
+                    <div class="p-2">
+                        <div class="text-xs line-clamp-2 mb-1 group-hover:text-accent-cyan transition min-h-[2rem]">
+                            {{ $listing->title }}
+                        </div>
+                        <div class="font-bold text-accent-cyan">
+                            {{ number_format($listing->price, 0) }}€
+                        </div>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+
+            <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+               target="_blank"
+               rel="nofollow noopener"
+               class="block w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-semibold text-center transition">
+                Voir toutes les offres eBay →
+            </a>
+        </div>
+        @endif
+
+        {{-- Amazon Accessories --}}
+        <div class="mb-12">
+            <h2 class="section-heading">🛡️ Accessoires Amazon</h2>
+
+            <div class="bg-bg-card p-6 shadow-box-list">
+                @php
+                    $isPortable = in_array($variant->console->slug, [
+                        'game-boy', 'game-boy-pocket', 'game-boy-light', 'game-boy-color',
+                        'game-boy-advance', 'game-boy-advance-sp', 'game-boy-micro',
+                        'nintendo-ds', 'nintendo-ds-lite', 'nintendo-dsi', 'nintendo-dsi-xl',
+                        'nintendo-3ds', 'nintendo-3ds-xl', 'new-nintendo-3ds', 'new-nintendo-3ds-xl',
+                        'nintendo-2ds', 'new-nintendo-2ds-xl',
+                        'psp', 'psp-go', 'ps-vita', 'ps-vita-slim'
+                    ]);
+                @endphp
+
+                @if($isPortable)
+                    <h3 class="font-bold mb-2">Housse de Protection</h3>
+                    <p class="text-sm text-text-secondary mb-4">
+                        Protégez votre console lors de vos déplacements
+                    </p>
+                @else
+                    <h3 class="font-bold mb-2">Adaptateur HDMI</h3>
+                    <p class="text-sm text-text-secondary mb-4">
+                        Branchez votre console sur TV moderne
+                    </p>
+                @endif
+
+                <a href="https://www.amazon.fr/s?tag=prixretro-21&keywords={{ urlencode($variant->console->name . ' ' . ($isPortable ? 'housse protection' : 'adaptateur HDMI')) }}"
+                   target="_blank"
+                   rel="nofollow noopener sponsored"
+                   class="inline-block w-full text-center px-6 py-3 bg-accent-cyan hover:bg-accent-cyan/90 text-bg-primary font-semibold transition">
+                    Voir sur Amazon →
                 </a>
             </div>
-
-            {{-- Amazon Accessories --}}
-            <div>
-                <h2 class="section-heading">🛡️ Accessoires Amazon</h2>
-
-                <div class="bg-bg-card p-6 shadow-box-list">
-                    @php
-                        $isPortable = in_array($variant->console->slug, [
-                            'game-boy', 'game-boy-pocket', 'game-boy-light', 'game-boy-color',
-                            'game-boy-advance', 'game-boy-advance-sp', 'game-boy-micro',
-                            'nintendo-ds', 'nintendo-ds-lite', 'nintendo-dsi', 'nintendo-dsi-xl',
-                            'nintendo-3ds', 'nintendo-3ds-xl', 'new-nintendo-3ds', 'new-nintendo-3ds-xl',
-                            'nintendo-2ds', 'new-nintendo-2ds-xl',
-                            'psp', 'psp-go', 'ps-vita', 'ps-vita-slim'
-                        ]);
-                    @endphp
-
-                    @if($isPortable)
-                        <h3 class="font-bold mb-2">Housse de Protection</h3>
-                        <p class="text-sm text-text-secondary mb-4">
-                            Protégez votre console lors de vos déplacements
-                        </p>
-                    @else
-                        <h3 class="font-bold mb-2">Adaptateur HDMI</h3>
-                        <p class="text-sm text-text-secondary mb-4">
-                            Branchez votre console sur TV moderne
-                        </p>
-                    @endif
-
-                    <a href="https://www.amazon.fr/s?tag=prixretro-21&keywords={{ urlencode($variant->console->name . ' ' . ($isPortable ? 'housse protection' : 'adaptateur HDMI')) }}"
-                       target="_blank"
-                       rel="nofollow noopener sponsored"
-                       class="inline-block w-full text-center px-6 py-3 bg-accent-cyan hover:bg-accent-cyan/90 text-bg-primary font-semibold transition">
-                        Voir sur Amazon →
-                    </a>
-                </div>
-            </div>
         </div>
+
 
         {{-- Sold Listings Table --}}
         @if($statistics['count'] > 0)
