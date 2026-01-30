@@ -256,6 +256,7 @@
             @php
                 $currentListings = \App\Models\CurrentListing::where('variant_id', $variant->id)
                     ->where('is_sold', false)
+                    ->where('status', 'approved')
                     ->orderBy('price', 'asc')
                     ->take(6)
                     ->get();

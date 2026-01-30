@@ -32,6 +32,11 @@ class EbayTestBrowseApi extends Command
         foreach ($result['items'] as $item) {
             $parsed = $ebayService->parseItem($item);
 
+            // Skip invalid items (0€ prices filtered in parseItem)
+            if ($parsed === null) {
+                continue;
+            }
+
             $this->line("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             $this->line("Title: {$parsed['title']}");
             $this->line("Price: {$parsed['price']}€");
@@ -57,6 +62,11 @@ class EbayTestBrowseApi extends Command
 
         foreach ($activeResult['items'] as $item) {
             $parsed = $ebayService->parseItem($item);
+
+            // Skip invalid items
+            if ($parsed === null) {
+                continue;
+            }
 
             $this->line("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             $this->line("Title: {$parsed['title']}");

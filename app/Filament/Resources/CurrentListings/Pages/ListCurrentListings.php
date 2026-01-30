@@ -18,6 +18,21 @@ class ListCurrentListings extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('fetch_listings')
+                ->label('Fetch Current Listings')
+                ->icon('heroicon-o-arrow-path')
+                ->color('success')
+                ->requiresConfirmation()
+                ->modalHeading('Fetch Current Listings from eBay')
+                ->modalDescription('This will fetch current listings for all variants using the eBay Browse API. This may take several minutes.')
+                ->action(function () {
+                    Artisan::call('fetch:current-listings');
+                    Notification::make()
+                        ->title('Listings fetched successfully')
+                        ->body(Artisan::output())
+                        ->success()
+                        ->send();
+                }),
             Action::make('import_scraped')
                 ->label('Import Scraped Data')
                 ->icon('heroicon-o-arrow-down-tray')

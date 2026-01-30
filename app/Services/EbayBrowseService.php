@@ -120,6 +120,13 @@ class EbayBrowseService
 
             $data = $response->json();
 
+            // Log first item for debugging
+            if (!empty($data['itemSummaries'])) {
+                Log::debug('Browse API First Item Sample', [
+                    'item' => $data['itemSummaries'][0] ?? null,
+                ]);
+            }
+
             // Extract items from response
             $items = $data['itemSummaries'] ?? [];
             $total = $data['total'] ?? 0;
@@ -200,9 +207,9 @@ class EbayBrowseService
      * Parse Browse API item into our Listing format
      *
      * @param array $item Raw eBay Browse API item
-     * @return array
+     * @return array|null Returns null for invalid items (0€ prices, etc.)
      */
-    public function parseItem(array $item): array
+    public function parseItem(array $item): ?array
     {
         $itemId = $item['itemId'] ?? null;
         $title = $item['title'] ?? 'Unknown';
@@ -213,7 +220,12 @@ class EbayBrowseService
         $priceCurrency = $item['price']['currency'] ?? 'EUR';
 
         // Convert to EUR if needed (most should already be EUR from EBAY_FR)
-        $price = $priceCurrency === 'EUR' ? $priceValue : $priceValue; // TODO: Add conversion if needed
+        $price = $priceCurrency === 'EUR' ? $priceValue : $priceValue;
+
+        // Skip 0€ items (invalid/incomplete data)
+        if ($price <= 0) {
+            return null;
+        }
 
         // Item end date (for sold items)
         $itemEndDate = $item['itemEndDate'] ?? null;
@@ -229,7 +241,10 @@ class EbayBrowseService
         // Item location (to identify EBAY_FR items)
         $itemLocation = $item['itemLocation']['country'] ?? null;
 
-        return [
+        // Thumbnail image
+        $thumbnailUrl = $item['image']['imageUrl'] ?? null;
+
+        $result = [
             'ebay_item_id' => $itemId,
             'title' => $title,
             'price' => $price,
@@ -241,5 +256,11 @@ class EbayBrowseService
             'shipping_cost' => $shippingCost,
             'status' => 'pending', // Will be classified later
         ];
+
+        if ($thumbnailUrl) {
+            $result['thumbnail_url'] = $thumbnailUrl;
+        }
+
+        return $result;
     }
 }

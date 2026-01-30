@@ -2,10 +2,8 @@
 
 namespace App\Filament\Resources\CurrentListings\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
@@ -16,22 +14,38 @@ class CurrentListingForm
         return $schema
             ->components([
                 Select::make('variant_id')
+                    ->label('Variant')
                     ->relationship('variant', 'name')
-                    ->required(),
+                    ->searchable()
+                    ->required()
+                    ->getOptionLabelFromRecordUsing(fn ($record) =>
+                        $record->console->name . ' - ' . $record->name
+                    ),
                 TextInput::make('item_id')
+                    ->label('eBay Item ID')
                     ->required(),
                 TextInput::make('title')
-                    ->required(),
+                    ->required()
+                    ->maxLength(255),
                 TextInput::make('price')
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
-                Textarea::make('url')
-                    ->required()
-                    ->columnSpanFull(),
-                Toggle::make('is_sold')
+                    ->prefix('€'),
+                TextInput::make('url')
+                    ->url()
                     ->required(),
-                DateTimePicker::make('last_seen_at'),
+                Select::make('status')
+                    ->options([
+                        'pending' => 'Pending',
+                        'approved' => 'Approved',
+                        'rejected' => 'Rejected',
+                        'blacklisted' => 'Blacklisted',
+                    ])
+                    ->default('pending')
+                    ->required(),
+                Toggle::make('is_sold')
+                    ->label('Is Sold')
+                    ->default(false),
             ]);
     }
 }
