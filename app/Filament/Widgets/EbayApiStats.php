@@ -8,7 +8,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 
 class EbayApiStats extends BaseWidget
 {
@@ -22,13 +22,13 @@ class EbayApiStats extends BaseWidget
 
         if (!$stats) {
             return [
-                Stat::make('eBay API Calls', 'Click to check')
-                    ->description('Click "Refresh API Stats" to fetch usage data')
+                Stat::make('eBay API Calls', 'Click to refresh')
+                    ->description('Click the card to fetch current API usage')
                     ->descriptionIcon('heroicon-o-information-circle')
                     ->color('gray')
                     ->extraAttributes([
                         'class' => 'cursor-pointer',
-                        'wire:click' => '$refresh',
+                        'wire:click' => 'refreshApiStats',
                     ]),
             ];
         }
@@ -49,40 +49,36 @@ class EbayApiStats extends BaseWidget
 
         return [
             Stat::make('eBay API Calls Remaining', number_format($remainingCalls))
-                ->description("{$usedCalls} used of {$limitCalls} daily ({$percentageUsed}%) • {$updatedText}")
+                ->description("{$usedCalls} used of {$limitCalls} daily ({$percentageUsed}%) • {$updatedText} • Click to refresh")
                 ->descriptionIcon('heroicon-o-arrow-trending-up')
-                ->color($color),
+                ->color($color)
+                ->extraAttributes([
+                    'class' => 'cursor-pointer',
+                    'wire:click' => 'refreshApiStats',
+                ]),
         ];
     }
 
-    protected function getHeaderActions(): array
+    public function refreshApiStats(): void
     {
-        return [
-            \Filament\Actions\Action::make('refresh_stats')
-                ->label('Refresh API Stats')
-                ->icon('heroicon-o-arrow-path')
-                ->color('info')
-                ->action(function () {
-                    $stats = $this->fetchApiStats();
+        $stats = $this->fetchApiStats();
 
-                    if ($stats) {
-                        Cache::forever('ebay_api_usage', $stats);
-                        Cache::forever('ebay_api_usage_updated_at', now());
+        if ($stats) {
+            Cache::forever('ebay_api_usage', $stats);
+            Cache::forever('ebay_api_usage_updated_at', now());
 
-                        \Filament\Notifications\Notification::make()
-                            ->title('API Stats Updated')
-                            ->body("Remaining: " . (($stats['limit'] ?? 0) - ($stats['used'] ?? 0)) . " / " . ($stats['limit'] ?? 5000))
-                            ->success()
-                            ->send();
-                    } else {
-                        \Filament\Notifications\Notification::make()
-                            ->title('Failed to fetch API stats')
-                            ->body('Check eBay credentials in .env')
-                            ->danger()
-                            ->send();
-                    }
-                }),
-        ];
+            Notification::make()
+                ->title('API Stats Updated')
+                ->body("Remaining: " . (($stats['limit'] ?? 0) - ($stats['used'] ?? 0)) . " / " . ($stats['limit'] ?? 5000))
+                ->success()
+                ->send();
+        } else {
+            Notification::make()
+                ->title('Failed to fetch API stats')
+                ->body('Check eBay credentials in .env')
+                ->danger()
+                ->send();
+        }
     }
 
     protected function fetchApiStats(): ?array

@@ -10,7 +10,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 use Illuminate\Support\Facades\Artisan;
 use Filament\Notifications\Notification;
 
@@ -65,7 +65,7 @@ class ManageCurrentListings extends Page implements HasTable
                         : 'Never fetched'
                     ),
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('fetch')
                     ->label('Fetch Now')
                     ->icon('heroicon-o-arrow-path')
