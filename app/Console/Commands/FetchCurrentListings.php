@@ -109,11 +109,21 @@ class FetchCurrentListings extends Command
                 }
 
                 // Blacklist non-console items (games, cartridges, cases, etc.)
+                // Use word boundaries to avoid false positives (e.g., "Game Boy" shouldn't match "game")
                 $titleLower = strtolower($parsed['title']);
-                $blacklist = ['jeu', 'jeux', 'game', 'cartouche', 'étui', 'housse', 'manette', 'controller', 'cable', 'chargeur', 'alimentation'];
+                $blacklist = [
+                    '\bjeu\b', '\bjeux\b',  // French: game/games
+                    '\bcartouche\b', '\bcartridge\b',  // Cartridge
+                    '\bétui\b', '\bhousse\b', '\bcase\b',  // Case/pouch (but not "showcase")
+                    '\bmanette\b', '\bcontroller\b',  // Controller
+                    '\bcable\b', '\bcâble\b', '\bchargeur\b', '\balimentation\b',  // Cables/chargers
+                    '\bjaquette\b', '\bboîte\b seule', '\bboite\b seule',  // Box only
+                    '\bpièce\b détachée', '\bpiece\b détachée',  // Spare parts
+                    '\blot\b.*\bjeux\b', '\bjeux\b.*\blot\b',  // Game lots
+                ];
                 $isBlacklisted = false;
-                foreach ($blacklist as $word) {
-                    if (str_contains($titleLower, $word)) {
+                foreach ($blacklist as $pattern) {
+                    if (preg_match('/' . $pattern . '/i', $titleLower)) {
                         $isBlacklisted = true;
                         break;
                     }
