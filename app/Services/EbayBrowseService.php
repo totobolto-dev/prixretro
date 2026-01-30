@@ -9,14 +9,21 @@ use Illuminate\Support\Facades\Cache;
 class EbayBrowseService
 {
     protected string $apiUrl;
-    protected string $appId;
-    protected string $certId;
+    protected ?string $appId;
+    protected ?string $certId;
 
     public function __construct()
     {
         $this->apiUrl = 'https://api.ebay.com/buy/browse/v1';
         $this->appId = config('services.ebay.app_id');
         $this->certId = config('services.ebay.cert_id');
+
+        if (!$this->appId || !$this->certId) {
+            Log::error('eBay API credentials not configured', [
+                'app_id' => $this->appId ? 'set' : 'missing',
+                'cert_id' => $this->certId ? 'set' : 'missing',
+            ]);
+        }
     }
 
     /**
@@ -40,6 +47,11 @@ class EbayBrowseService
      */
     protected function fetchOAuthToken(): ?string
     {
+        if (!$this->appId || !$this->certId) {
+            Log::error('Cannot fetch OAuth token: eBay credentials not configured');
+            return null;
+        }
+
         try {
             $credentials = base64_encode("{$this->appId}:{$this->certId}");
 
@@ -159,20 +171,33 @@ class EbayBrowseService
      * @param string $keywords
      * @param int $limit
      * @param int $offset
+     * @param float|null $minPrice Filter by minimum price
+     * @param float|null $maxPrice Filter by maximum price
      * @return array
      */
-    public function findActiveItems(string $keywords, int $limit = 100, int $offset = 0): array
+    public function findActiveItems(string $keywords, int $limit = 100, int $offset = 0, ?float $minPrice = null, ?float $maxPrice = null): array
     {
         $token = $this->getAccessToken();
         if (!$token) {
             return ['items' => [], 'error' => 'Failed to get OAuth token', 'total' => 0];
         }
 
+        $filters = [
+            'buyingOptions:{AUCTION|FIXED_PRICE}',
+            'conditions:{USED|NEW}',
+            'categoryIds:139973', // Video Game Consoles category
+        ];
+
+        // Add price range if specified
+        if ($minPrice !== null && $maxPrice !== null) {
+            $filters[] = "price:[{$minPrice}..{$maxPrice}],priceCurrency:EUR";
+        }
+
         $params = [
             'q' => $keywords,
             'limit' => min($limit, 200),
             'offset' => $offset,
-            'filter' => 'buyingOptions:{AUCTION|FIXED_PRICE},conditions:{USED|NEW}',
+            'filter' => implode(',', $filters),
             'sort' => 'price', // Lowest price first
         ];
 

@@ -13,6 +13,7 @@ class CurrentListing extends Model
         'title',
         'price',
         'url',
+        'thumbnail_url',
         'status',
         'is_sold',
         'last_seen_at',

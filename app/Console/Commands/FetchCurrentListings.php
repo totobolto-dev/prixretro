@@ -44,8 +44,25 @@ class FetchCurrentListings extends Command
             $searchTerm = "{$variant->console->name} {$variant->name}";
             $this->line("📦 {$variant->console->name} - {$variant->name}");
 
+            // Calculate price range (±20% of average loose price)
+            $avgLoosePrice = \App\Models\Listing::where('variant_id', $variant->id)
+                ->where('status', 'approved')
+                ->where('completeness', 'loose')
+                ->avg('price');
+
+            $minPrice = null;
+            $maxPrice = null;
+
+            if ($avgLoosePrice) {
+                $minPrice = $avgLoosePrice * 0.8;  // -20%
+                $maxPrice = $avgLoosePrice * 1.2;  // +20%
+                $this->line("  💰 Price range: {$minPrice}€ - {$maxPrice}€ (avg loose: {$avgLoosePrice}€)");
+            } else {
+                $this->line("  ⚠️  No loose price data, fetching without price filter");
+            }
+
             // Fetch active listings from eBay
-            $result = $ebayService->findActiveItems($searchTerm, $limit);
+            $result = $ebayService->findActiveItems($searchTerm, $limit, 0, $minPrice, $maxPrice);
 
             if ($result['error']) {
                 $this->error("  ❌ API Error: {$result['error']}");
@@ -75,7 +92,7 @@ class FetchCurrentListings extends Command
                     $updated++;
                 } else {
                     // Create new listing (pending approval)
-                    CurrentListing::create([
+                    $listingData = [
                         'variant_id' => $variant->id,
                         'item_id' => $parsed['ebay_item_id'],
                         'title' => $parsed['title'],
@@ -84,7 +101,13 @@ class FetchCurrentListings extends Command
                         'status' => 'pending',
                         'is_sold' => false,
                         'last_seen_at' => now(),
-                    ]);
+                    ];
+
+                    if (isset($parsed['thumbnail_url'])) {
+                        $listingData['thumbnail_url'] = $parsed['thumbnail_url'];
+                    }
+
+                    CurrentListing::create($listingData);
                     $new++;
                 }
 

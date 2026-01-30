@@ -32,7 +32,9 @@ class CurrentListingsTable
                     ->width('150px')
                     ->badge()
                     ->color('info')
-                    ->default('Not assigned'),
+                    ->default('Not assigned')
+                    ->url(fn ($record) => $record->variant ? url('/' . $record->variant->full_slug) : null)
+                    ->openUrlInNewTab(),
                 TextColumn::make('title')
                     ->searchable()
                     ->wrap()

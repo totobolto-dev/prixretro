@@ -267,18 +267,27 @@
                 <h2 class="section-heading">🛒 Acheter sur eBay</h2>
 
                 @if($currentListings->count() > 0)
-                <div class="space-y-2 mb-4">
-                    @foreach($currentListings->take(3) as $listing)
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    @foreach($currentListings->take(6) as $listing)
                     <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
                        target="_blank"
                        rel="nofollow noopener"
-                       class="flex items-center justify-between p-3 bg-bg-card hover:bg-bg-hover transition shadow-box-list group">
-                        <span class="text-sm flex-1 line-clamp-1 group-hover:text-accent-cyan transition">
-                            {{ $listing->title }}
-                        </span>
-                        <span class="font-bold text-accent-cyan ml-4">
-                            {{ number_format($listing->price, 0) }}€
-                        </span>
+                       class="block bg-bg-card hover:bg-bg-hover transition shadow-box-list group overflow-hidden">
+                        @if($listing->thumbnail_url)
+                        <div class="aspect-square bg-bg-darker flex items-center justify-center overflow-hidden">
+                            <img src="{{ $listing->thumbnail_url }}"
+                                 alt="{{ $listing->title }}"
+                                 class="w-full h-full object-contain">
+                        </div>
+                        @endif
+                        <div class="p-3">
+                            <div class="text-sm line-clamp-2 mb-2 group-hover:text-accent-cyan transition min-h-[2.5rem]">
+                                {{ $listing->title }}
+                            </div>
+                            <div class="font-bold text-accent-cyan text-lg">
+                                {{ number_format($listing->price, 0) }}€
+                            </div>
+                        </div>
                     </a>
                     @endforeach
                 </div>
