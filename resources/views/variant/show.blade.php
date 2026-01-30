@@ -27,10 +27,10 @@
 
         {{-- Main 3-Column Unified Block --}}
         <div class="bg-bg-card shadow-box-list overflow-hidden mb-12">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
 
-                {{-- Column 1: Image --}}
-                <div class="p-6 border-b lg:border-b-0 lg:border-r border-white/5">
+                {{-- Column 1: Image (3 cols) --}}
+                <div class="lg:col-span-3 p-6 border-b lg:border-b-0 lg:border-r border-white/5">
                     <div class="aspect-square bg-bg-darker flex items-center justify-center overflow-hidden">
                         @if($variant->image_url)
                             <img src="{{ $variant->image_url }}"
@@ -42,8 +42,8 @@
                     </div>
                 </div>
 
-                {{-- Column 2: À Propos --}}
-                <div class="p-6 border-b lg:border-b-0 lg:border-r border-white/5">
+                {{-- Column 2: À Propos (6 cols) --}}
+                <div class="lg:col-span-6 p-6 border-b lg:border-b-0 lg:border-r border-white/5">
                     <h1 class="text-3xl font-bold mb-6">{{ $variant->display_name }}</h1>
 
                     <div class="prose prose-invert max-w-none text-sm">
@@ -89,8 +89,8 @@
                     @endif
                 </div>
 
-                {{-- Column 3: Stats with Tabs --}}
-                <div class="p-6">
+                {{-- Column 3: Stats with Tabs (3 cols) --}}
+                <div class="lg:col-span-3 p-6">
                     @php
                         $statsByCompleteness = [];
                         if (isset($statistics) && $statistics['count'] >= 5) {
@@ -196,13 +196,7 @@
             {{-- Price Chart --}}
             <div>
                 <h2 class="section-heading">📈 Évolution du Prix</h2>
-                <div class="bg-bg-card p-4 shadow-box-list relative">
-                    @if($priceTrend && isset($priceTrend['percentage']))
-                    <div class="absolute top-4 right-4 z-10 flex items-center gap-2 px-3 py-1 {{ $priceTrend['direction'] === 'down' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400' }}">
-                        <span class="font-semibold text-sm">{{ $priceTrend['direction'] === 'down' ? '↓' : '↑' }} {{ abs($priceTrend['percentage']) }}%</span>
-                        <span class="text-xs opacity-75">30j</span>
-                    </div>
-                    @endif
+                <div class="bg-bg-card p-4 shadow-box-list">
                     <canvas id="priceChart" class="w-full" style="height: 280px;"></canvas>
                 </div>
 
@@ -261,7 +255,7 @@
         <div class="mb-12">
             <h2 class="section-heading">🛒 Acheter sur eBay et Amazon</h2>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
+            <div class="grid grid-cols-6 gap-3 mb-4">
                 @foreach($currentListings as $listing)
                 <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
                    target="_blank"
@@ -319,30 +313,40 @@
         @if($statistics['count'] > 0)
         <div class="mb-12">
             <h2 class="section-heading">📊 Historique des Ventes</h2>
-            <div class="bg-bg-card shadow-box-list overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead class="border-b border-white/10">
-                        <tr class="text-left">
-                            <th class="p-3 text-text-muted font-semibold">Date</th>
-                            <th class="p-3 text-text-muted font-semibold">Prix</th>
-                            <th class="p-3 text-text-muted font-semibold">État</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($recentListings->take(20) as $listing)
-                        <tr class="border-b border-white/5 hover:bg-bg-hover transition">
-                            <td class="p-3 text-text-secondary">{{ $listing->sold_date->format('d/m/Y') }}</td>
-                            <td class="p-3 font-semibold text-accent-cyan">{{ number_format($listing->price, 0) }}€</td>
-                            <td class="p-3 text-xs">
-                                @if($listing->completeness === 'cib') <span class="px-2 py-1 bg-blue-500/20 text-blue-400">📦 CIB</span>
-                                @elseif($listing->completeness === 'sealed') <span class="px-2 py-1 bg-orange-500/20 text-orange-400">🔒 Sealed</span>
-                                @else <span class="px-2 py-1 bg-gray-500/20 text-gray-400">⚪ Loose</span>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="bg-bg-card shadow-box-list overflow-hidden">
+                {{-- Header --}}
+                <div class="grid grid-cols-12 gap-3 p-3 border-b border-white/10 text-sm font-semibold text-text-muted">
+                    <div class="col-span-6">Article vendu</div>
+                    <div class="col-span-2">Prix</div>
+                    <div class="col-span-2">Date</div>
+                    <div class="col-span-2">État</div>
+                </div>
+                {{-- Rows --}}
+                @foreach($recentListings->take(20) as $listing)
+                <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
+                   target="_blank"
+                   rel="nofollow noopener"
+                   class="grid grid-cols-12 gap-3 p-3 border-b border-white/5 hover:bg-bg-hover transition text-sm group">
+                    <div class="col-span-6 text-text-secondary group-hover:text-accent-cyan transition line-clamp-1">
+                        {{ $listing->title }}
+                    </div>
+                    <div class="col-span-2 font-semibold text-accent-cyan">
+                        {{ number_format($listing->price, 0) }}€
+                    </div>
+                    <div class="col-span-2 text-text-secondary">
+                        {{ $listing->sold_date->format('d/m/Y') }}
+                    </div>
+                    <div class="col-span-2 text-xs">
+                        @if($listing->completeness === 'cib')
+                            <span class="px-2 py-1 bg-blue-500/20 text-blue-400 inline-block">📦 CIB</span>
+                        @elseif($listing->completeness === 'sealed')
+                            <span class="px-2 py-1 bg-orange-500/20 text-orange-400 inline-block">🔒 Sealed</span>
+                        @else
+                            <span class="px-2 py-1 bg-gray-500/20 text-gray-400 inline-block">⚪ Loose</span>
+                        @endif
+                    </div>
+                </a>
+                @endforeach
             </div>
         </div>
         @endif
@@ -383,6 +387,7 @@
                 datasets: chartData.datasets.map(dataset => ({
                     label: dataset.label,
                     data: dataset.data,
+                    titles: dataset.titles,
                     borderColor: dataset.borderColor,
                     backgroundColor: dataset.backgroundColor,
                     borderWidth: 2,
@@ -418,7 +423,7 @@
                     },
                     tooltip: {
                         enabled: true,
-                        mode: 'nearest',
+                        mode: 'index',
                         intersect: false,
                         backgroundColor: '#1a1a2e',
                         titleColor: '#ffffff',
@@ -428,7 +433,19 @@
                         padding: 12,
                         displayColors: true,
                         callbacks: {
+                            title: function(context) {
+                                // Show all titles for items on this date
+                                const titles = [];
+                                context.forEach(item => {
+                                    const title = item.dataset.titles ? item.dataset.titles[item.dataIndex] : null;
+                                    if (title) {
+                                        titles.push(title);
+                                    }
+                                });
+                                return titles.length > 0 ? titles : ['No item on this date'];
+                            },
                             label: function(context) {
+                                if (context.parsed.y === null) return null;
                                 const label = context.dataset.label || '';
                                 return label + ': ' + context.parsed.y + '€';
                             }

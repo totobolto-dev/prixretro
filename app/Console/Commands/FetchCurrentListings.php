@@ -76,6 +76,8 @@ class FetchCurrentListings extends Command
             $fetched = 0;
             $new = 0;
             $updated = 0;
+            $skippedRejected = 0;
+            $skippedBlacklist = 0;
 
             while ($new < $limit && $page <= $maxPages) {
                 // Fetch active listings from eBay
@@ -87,8 +89,11 @@ class FetchCurrentListings extends Command
                 }
 
                 if (empty($result['items'])) {
+                    $this->line("  ⚠️  No items returned (page {$page}, total: {$result['total']})");
                     break;
                 }
+
+                $this->line("  📄 Page {$page}: Found {$result['total']} total items, processing " . count($result['items']) . " items");
 
                 foreach ($result['items'] as $item) {
                 $parsed = $ebayService->parseItem($item);
@@ -99,6 +104,7 @@ class FetchCurrentListings extends Command
 
                 // Skip rejected item IDs (already marked as rejected in previous fetches)
                 if (in_array($parsed['ebay_item_id'], $rejectedItemIds)) {
+                    $skippedRejected++;
                     continue;
                 }
 
@@ -114,6 +120,7 @@ class FetchCurrentListings extends Command
                 }
 
                 if ($isBlacklisted) {
+                    $skippedBlacklist++;
                     continue;
                 }
 
@@ -176,6 +183,9 @@ class FetchCurrentListings extends Command
             $variant->update(['current_listings_fetched_at' => now()]);
 
             $this->line("  ✅ Fetched: {$fetched} | New: {$new} | Updated: {$updated}");
+            if ($skippedRejected > 0 || $skippedBlacklist > 0) {
+                $this->line("  ⏭️  Skipped: {$skippedRejected} rejected, {$skippedBlacklist} blacklisted");
+            }
 
             // Rate limiting (be nice to eBay)
             sleep(2);

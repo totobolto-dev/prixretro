@@ -212,14 +212,38 @@ class VariantController extends Controller
             // Only include if there's at least one listing
             if ($conditionListings->count() > 0) {
                 $data = [];
+                $titles = [];
                 foreach ($allDates as $date) {
                     $listing = $conditionListings->firstWhere('sold_date', $date);
                     $data[] = $listing ? (float) $listing->price : null;
+                    $titles[] = $listing ? $listing->title : null;
+                }
+
+                // Calculate trend for this condition (if >= 5 data points)
+                $label = $config['label'];
+                if ($conditionListings->count() >= 5) {
+                    $recentDate = now()->subDays(30);
+                    $olderDate = now()->subDays(60);
+
+                    $recentItems = $conditionListings->where('sold_date', '>=', $recentDate);
+                    $olderItems = $conditionListings->whereBetween('sold_date', [$olderDate, $recentDate]);
+
+                    if ($recentItems->count() > 0 && $olderItems->count() > 0) {
+                        $recentAvg = $recentItems->avg('price');
+                        $olderAvg = $olderItems->avg('price');
+
+                        if ($recentAvg && $olderAvg && $olderAvg > 0) {
+                            $percentage = round((($recentAvg - $olderAvg) / $olderAvg) * 100, 1);
+                            $arrow = $percentage > 0 ? '↑' : '↓';
+                            $label .= " {$arrow}" . abs($percentage) . '%';
+                        }
+                    }
                 }
 
                 $datasets[] = [
-                    'label' => $config['label'],
+                    'label' => $label,
                     'data' => $data,
+                    'titles' => $titles,
                     'borderColor' => $config['color'],
                     'backgroundColor' => $config['color'] . '20',
                     'spanGaps' => true,
