@@ -59,7 +59,24 @@ class CurrentListingsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'pending' => 'Pending',
+                        'approved' => 'Approved',
+                        'rejected' => 'Rejected',
+                    ])
+                    ->default('approved'),
+                \Filament\Tables\Filters\TernaryFilter::make('show_rejected')
+                    ->label('Show Rejected')
+                    ->placeholder('Hide rejected')
+                    ->trueLabel('Show rejected')
+                    ->falseLabel('Hide rejected')
+                    ->default(false)
+                    ->query(function ($query, $state) {
+                        if ($state === false) {
+                            $query->where('status', '!=', 'rejected');
+                        }
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

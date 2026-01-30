@@ -72,20 +72,31 @@ class ManageCurrentListings extends Page implements HasTable
                     ->color('info')
                     ->requiresConfirmation()
                     ->action(function ($record) {
-                        // Run artisan command in background
-                        Artisan::call('fetch:current-listings', [
+                        // Run artisan command synchronously to get output
+                        $exitCode = Artisan::call('fetch:current-listings', [
                             '--variant' => $record->id,
                             '--limit' => 5,
                         ]);
 
-                        Notification::make()
-                            ->title('Fetching current listings')
-                            ->body("Started fetching for {$record->name}")
-                            ->success()
-                            ->send();
+                        // Get command output
+                        $output = Artisan::output();
 
-                        // Refresh the page to show updated data
-                        $this->dispatch('$refresh');
+                        if ($exitCode === 0) {
+                            // Update variant timestamp manually to reflect in table
+                            $record->update(['current_listings_fetched_at' => now()]);
+
+                            Notification::make()
+                                ->title('Listings fetched successfully')
+                                ->body("Completed for {$record->name}")
+                                ->success()
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->title('Fetch failed')
+                                ->body("Error fetching listings for {$record->name}")
+                                ->danger()
+                                ->send();
+                        }
                     }),
             ])
             ->filters([

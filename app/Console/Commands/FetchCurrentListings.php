@@ -41,6 +41,11 @@ class FetchCurrentListings extends Command
         $totalNew = 0;
         $totalUpdated = 0;
 
+        // Get all rejected item_ids for this variant to blacklist them
+        $rejectedItemIds = CurrentListing::where('status', 'rejected')
+            ->pluck('item_id')
+            ->toArray();
+
         foreach ($variants as $variant) {
             $searchTerm = "{$variant->console->name} {$variant->name}";
             $this->line("📦 {$variant->console->name} - {$variant->name}");
@@ -89,6 +94,11 @@ class FetchCurrentListings extends Command
                 $parsed = $ebayService->parseItem($item);
 
                 if ($parsed === null) {
+                    continue;
+                }
+
+                // Skip rejected item IDs (already marked as rejected in previous fetches)
+                if (in_array($parsed['ebay_item_id'], $rejectedItemIds)) {
                     continue;
                 }
 

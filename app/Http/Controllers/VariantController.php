@@ -194,15 +194,42 @@ class VariantController extends Controller
         // Reverse to show oldest to newest on chart
         $sortedListings = $listings->sortBy('sold_date');
 
+        // Get all unique dates for x-axis
+        $allDates = $sortedListings->pluck('sold_date')->unique()->sort()->values();
+        $labels = $allDates->map(fn($date) => $date?->format('d M') ?? 'N/A');
+
+        // Prepare datasets for each condition
+        $datasets = [];
+        $conditions = [
+            'loose' => ['label' => 'Loose', 'color' => '#00d9ff'],
+            'cib' => ['label' => 'CIB', 'color' => '#3b82f6'],
+            'sealed' => ['label' => 'Sealed', 'color' => '#f59e0b'],
+        ];
+
+        foreach ($conditions as $conditionKey => $config) {
+            $conditionListings = $sortedListings->where('completeness', $conditionKey);
+
+            // Only include if there's at least one listing
+            if ($conditionListings->count() > 0) {
+                $data = [];
+                foreach ($allDates as $date) {
+                    $listing = $conditionListings->firstWhere('sold_date', $date);
+                    $data[] = $listing ? (float) $listing->price : null;
+                }
+
+                $datasets[] = [
+                    'label' => $config['label'],
+                    'data' => $data,
+                    'borderColor' => $config['color'],
+                    'backgroundColor' => $config['color'] . '20',
+                    'spanGaps' => true,
+                ];
+            }
+        }
+
         return [
-            'labels' => $sortedListings->map(function ($listing) {
-                return $listing->sold_date?->format('d M') ?? 'N/A';
-            })->values(),
-            'prices' => $sortedListings->map(function ($listing) {
-                return (float) $listing->price;
-            })->values(),
-            'urls' => $sortedListings->pluck('url')->values(),
-            'titles' => $sortedListings->pluck('title')->values(),
+            'labels' => $labels,
+            'datasets' => $datasets,
         ];
     }
 }

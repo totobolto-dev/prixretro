@@ -27,10 +27,10 @@
 
         {{-- Main 3-Column Unified Block --}}
         <div class="bg-bg-card shadow-box-list overflow-hidden mb-12">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
 
-                {{-- Column 1: Image (3 cols) --}}
-                <div class="lg:col-span-3 p-6">
+                {{-- Column 1: Image --}}
+                <div class="p-6 border-b lg:border-b-0 lg:border-r border-white/5">
                     <div class="aspect-square bg-bg-darker flex items-center justify-center overflow-hidden">
                         @if($variant->image_url)
                             <img src="{{ $variant->image_url }}"
@@ -42,13 +42,8 @@
                     </div>
                 </div>
 
-                {{-- Separator Line --}}
-                <div class="hidden lg:block relative w-px">
-                    <div class="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-accent-cyan/20 to-transparent"></div>
-                </div>
-
-                {{-- Column 2: À Propos (6 cols) --}}
-                <div class="lg:col-span-6 p-6 border-l border-white/5 lg:border-l-0">
+                {{-- Column 2: À Propos --}}
+                <div class="p-6 border-b lg:border-b-0 lg:border-r border-white/5">
                     <h1 class="text-3xl font-bold mb-6">{{ $variant->display_name }}</h1>
 
                     <div class="prose prose-invert max-w-none text-sm">
@@ -94,13 +89,8 @@
                     @endif
                 </div>
 
-                {{-- Separator Line --}}
-                <div class="hidden lg:block relative w-px">
-                    <div class="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-accent-cyan/20 to-transparent"></div>
-                </div>
-
-                {{-- Column 3: Stats with Tabs (3 cols) --}}
-                <div class="lg:col-span-3 p-6 border-t border-white/5 lg:border-t-0 lg:border-l-0">
+                {{-- Column 3: Stats with Tabs --}}
+                <div class="p-6">
                     @php
                         $statsByCompleteness = [];
                         if (isset($statistics) && $statistics['count'] >= 5) {
@@ -201,23 +191,18 @@
 
         {{-- Chart + Guide Side by Side --}}
         @if($statistics['count'] > 0)
-        <div class="grid grid-cols-1 {{ $guideUrl ? 'lg:grid-cols-2' : '' }} gap-8 mb-12">
+        <div class="grid grid-cols-1 {{ $guideUrl ? 'lg:grid-cols-2' : '' }} gap-8 mb-12 {{ $guideUrl ? 'lg:items-start' : '' }}">
 
             {{-- Price Chart --}}
             <div>
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="section-heading mb-0 flex items-center gap-2">
-                        📈 Évolution du Prix
-                    </h2>
+                <h2 class="section-heading">📈 Évolution du Prix</h2>
+                <div class="bg-bg-card p-4 shadow-box-list relative">
                     @if($priceTrend && isset($priceTrend['percentage']))
-                    <div class="flex items-center gap-2 px-3 py-1 {{ $priceTrend['direction'] === 'down' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400' }}">
-                        <span class="font-semibold">{{ $priceTrend['direction'] === 'down' ? '↓' : '↑' }} {{ abs($priceTrend['percentage']) }}%</span>
+                    <div class="absolute top-4 right-4 z-10 flex items-center gap-2 px-3 py-1 {{ $priceTrend['direction'] === 'down' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400' }}">
+                        <span class="font-semibold text-sm">{{ $priceTrend['direction'] === 'down' ? '↓' : '↑' }} {{ abs($priceTrend['percentage']) }}%</span>
                         <span class="text-xs opacity-75">30j</span>
                     </div>
                     @endif
-                </div>
-
-                <div class="bg-bg-card p-4 shadow-box-list">
                     <canvas id="priceChart" class="w-full" style="height: 280px;"></canvas>
                 </div>
 
@@ -276,7 +261,7 @@
         <div class="mb-12">
             <h2 class="section-heading">🛒 Acheter sur eBay et Amazon</h2>
 
-            <div class="grid grid-cols-6 gap-3 mb-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
                 @foreach($currentListings as $listing)
                 <a href="{{ $listing->url }}?{{ $ebayAffiliateParams }}"
                    target="_blank"
@@ -395,40 +380,42 @@
             type: 'line',
             data: {
                 labels: chartData.labels,
-                datasets: [{
-                    data: chartData.prices,
-                    borderColor: '#00d9ff',
-                    backgroundColor: 'rgba(0, 217, 255, 0.1)',
+                datasets: chartData.datasets.map(dataset => ({
+                    label: dataset.label,
+                    data: dataset.data,
+                    borderColor: dataset.borderColor,
+                    backgroundColor: dataset.backgroundColor,
                     borderWidth: 2,
-                    fill: true,
+                    fill: false,
                     tension: 0.3,
                     pointRadius: 4,
-                    pointBackgroundColor: '#00d9ff',
+                    pointBackgroundColor: dataset.borderColor,
                     pointBorderColor: '#0f0f1e',
                     pointBorderWidth: 2,
                     pointHoverRadius: 7,
-                    pointHoverBorderWidth: 3
-                }]
+                    pointHoverBorderWidth: 3,
+                    spanGaps: dataset.spanGaps
+                }))
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 interaction: {
-                    mode: 'nearest',
+                    mode: 'index',
                     axis: 'x',
                     intersect: false
                 },
-                onClick: (event, activeElements) => {
-                    if (activeElements.length > 0) {
-                        const index = activeElements[0].index;
-                        const url = chartData.urls[index];
-                        if (url) {
-                            window.open(url + '?mkcid=1&mkrid=709-53476-19255-0&campid=5339134703', '_blank', 'noopener,noreferrer');
-                        }
-                    }
-                },
                 plugins: {
-                    legend: { display: false },
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#9ca3af',
+                            font: { size: 12 },
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
                     tooltip: {
                         enabled: true,
                         mode: 'nearest',
@@ -439,17 +426,11 @@
                         borderColor: '#00d9ff',
                         borderWidth: 1,
                         padding: 12,
-                        displayColors: false,
+                        displayColors: true,
                         callbacks: {
-                            title: function(context) {
-                                const index = context[0].dataIndex;
-                                return chartData.titles ? chartData.titles[index] : '';
-                            },
                             label: function(context) {
-                                return context.parsed.y + '€';
-                            },
-                            afterLabel: function() {
-                                return 'Cliquer pour voir sur eBay';
+                                const label = context.dataset.label || '';
+                                return label + ': ' + context.parsed.y + '€';
                             }
                         }
                     }
