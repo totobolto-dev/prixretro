@@ -93,13 +93,13 @@
                 <div class="lg:col-span-3 p-6">
                     @php
                         $statsByCompleteness = [];
-                        if (isset($statistics) && $statistics['count'] >= 5) {
+                        if (isset($statistics) && $statistics['count'] >= 1) {
                             foreach(['loose', 'cib', 'sealed'] as $comp) {
                                 $count = \App\Models\Listing::where('variant_id', $variant->id)
                                     ->where('status', 'approved')
                                     ->where('completeness', $comp)
                                     ->count();
-                                if ($count >= 5) {
+                                if ($count >= 1) {
                                     $statsByCompleteness[$comp] = [
                                         'count' => $count,
                                         'avg' => \App\Models\Listing::where('variant_id', $variant->id)
@@ -388,6 +388,8 @@
                     label: dataset.label,
                     data: dataset.data,
                     titles: dataset.titles,
+                    urls: dataset.urls,
+                    trend: dataset.trend,
                     borderColor: dataset.borderColor,
                     backgroundColor: dataset.backgroundColor,
                     borderWidth: 2,
@@ -406,9 +408,19 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 interaction: {
-                    mode: 'index',
+                    mode: 'nearest',
                     axis: 'x',
                     intersect: false
+                },
+                onClick: (event, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const datasetIndex = activeElements[0].datasetIndex;
+                        const index = activeElements[0].index;
+                        const url = chartData.datasets[datasetIndex].urls[index];
+                        if (url) {
+                            window.open(url + '?mkcid=1&mkrid=709-53476-19255-0&campid=5339134703', '_blank', 'noopener,noreferrer');
+                        }
+                    }
                 },
                 plugins: {
                     legend: {
@@ -418,7 +430,25 @@
                             color: '#9ca3af',
                             font: { size: 12 },
                             padding: 15,
-                            usePointStyle: true
+                            usePointStyle: true,
+                            generateLabels: function(chart) {
+                                const datasets = chart.data.datasets;
+                                return datasets.map((dataset, i) => {
+                                    let text = dataset.label;
+                                    if (dataset.trend) {
+                                        text += ' ' + dataset.trend.arrow + Math.abs(dataset.trend.percentage) + '%';
+                                    }
+                                    return {
+                                        text: text,
+                                        fillStyle: dataset.borderColor,
+                                        strokeStyle: dataset.borderColor,
+                                        lineWidth: 2,
+                                        hidden: !chart.isDatasetVisible(i),
+                                        index: i,
+                                        fontColor: dataset.trend ? dataset.trend.color : '#9ca3af'
+                                    };
+                                })
+                            }
                         }
                     },
                     tooltip: {
@@ -432,22 +462,21 @@
                         borderWidth: 1,
                         padding: 12,
                         displayColors: true,
+                        bodySpacing: 8,
                         callbacks: {
                             title: function(context) {
-                                // Show all titles for items on this date
-                                const titles = [];
-                                context.forEach(item => {
-                                    const title = item.dataset.titles ? item.dataset.titles[item.dataIndex] : null;
-                                    if (title) {
-                                        titles.push(title);
-                                    }
-                                });
-                                return titles.length > 0 ? titles : ['No item on this date'];
+                                return chartData.labels[context[0].dataIndex];
                             },
                             label: function(context) {
                                 if (context.parsed.y === null) return null;
-                                const label = context.dataset.label || '';
-                                return label + ': ' + context.parsed.y + '€';
+
+                                const title = context.dataset.titles ? context.dataset.titles[context.dataIndex] : null;
+                                if (!title) return null;
+
+                                const lines = [];
+                                lines.push(title);
+                                lines.push(context.dataset.label + ': ' + context.parsed.y + '€');
+                                return lines;
                             }
                         }
                     }

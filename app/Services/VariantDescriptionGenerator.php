@@ -6,7 +6,7 @@ use App\Models\Variant;
 
 class VariantDescriptionGenerator
 {
-    public static function generate(Variant $variant, array $statistics): string
+    public static function generate(Variant $variant, array $statistics, array $statsByCompleteness = []): string
     {
         $console = $variant->console;
         $count = $statistics['count'] ?? 0;
@@ -26,7 +26,7 @@ class VariantDescriptionGenerator
         $priceRange = self::calculatePriceRange($avgPrice, $minPrice, $maxPrice);
 
         // Generate description
-        $desc = self::buildDescription($variant, $count, $avgPrice, $minPrice, $maxPrice, $rarity, $priceRange);
+        $desc = self::buildDescription($variant, $count, $avgPrice, $minPrice, $maxPrice, $rarity, $priceRange, $statsByCompleteness);
 
         return $desc;
     }
@@ -61,7 +61,8 @@ class VariantDescriptionGenerator
         float $minPrice,
         float $maxPrice,
         string $rarity,
-        string $priceRange
+        string $priceRange,
+        array $statsByCompleteness = []
     ): string {
         // Use display_name to avoid "Console Console" for default variants
         $fullName = $variant->display_name;
@@ -72,10 +73,30 @@ class VariantDescriptionGenerator
                    "les meilleures informations sur les prix.";
         }
 
-        $desc = "La {$fullName} a été vendue en moyenne à " .
-                number_format($avgPrice, 0) . "€ sur eBay, " .
-                "avec des prix variant de " . number_format($minPrice, 0) . "€ " .
-                "à " . number_format($maxPrice, 0) . "€ selon l'état. ";
+        // Build per-condition price text
+        $priceTexts = [];
+        $conditionLabels = [
+            'loose' => '<span class="underline decoration-dotted cursor-help" title="Console seule, sans boîte ni accessoires">loose</span>',
+            'cib' => '<span class="underline decoration-dotted cursor-help" title="Console complète en boîte avec accessoires et manuels (Complete In Box)">CIB</span>',
+            'sealed' => '<span class="underline decoration-dotted cursor-help" title="Console neuve, encore sous cellophane">scellée</span>',
+        ];
+
+        foreach (['loose', 'cib', 'sealed'] as $condition) {
+            if (isset($statsByCompleteness[$condition])) {
+                $price = number_format($statsByCompleteness[$condition]['avg_price'], 0);
+                $priceTexts[] = "{$price}€ en " . $conditionLabels[$condition];
+            }
+        }
+
+        if (count($priceTexts) > 0) {
+            $desc = "La {$fullName} a été vendue en moyenne " . implode(', ', $priceTexts) . " sur eBay. ";
+        } else {
+            // Fallback to overall average if no condition stats
+            $desc = "La {$fullName} a été vendue en moyenne à " .
+                    number_format($avgPrice, 0) . "€ sur eBay, " .
+                    "avec des prix variant de " . number_format($minPrice, 0) . "€ " .
+                    "à " . number_format($maxPrice, 0) . "€ selon l'état. ";
+        }
 
         // Rarity context
         $rarityText = match($rarity) {

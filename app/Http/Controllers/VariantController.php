@@ -90,7 +90,7 @@ class VariantController extends Controller
         }
 
         // Generate auto description
-        $autoDescription = VariantDescriptionGenerator::generate($variant, $statistics);
+        $autoDescription = VariantDescriptionGenerator::generate($variant, $statistics, $statsByCompleteness);
 
         // Build meta description
         $metaDescription = $statistics['count'] > 0
@@ -213,14 +213,16 @@ class VariantController extends Controller
             if ($conditionListings->count() > 0) {
                 $data = [];
                 $titles = [];
+                $urls = [];
                 foreach ($allDates as $date) {
                     $listing = $conditionListings->firstWhere('sold_date', $date);
                     $data[] = $listing ? (float) $listing->price : null;
                     $titles[] = $listing ? $listing->title : null;
+                    $urls[] = $listing ? $listing->url : null;
                 }
 
                 // Calculate trend for this condition (if >= 5 data points)
-                $label = $config['label'];
+                $trend = null;
                 if ($conditionListings->count() >= 5) {
                     $recentDate = now()->subDays(30);
                     $olderDate = now()->subDays(60);
@@ -234,16 +236,21 @@ class VariantController extends Controller
 
                         if ($recentAvg && $olderAvg && $olderAvg > 0) {
                             $percentage = round((($recentAvg - $olderAvg) / $olderAvg) * 100, 1);
-                            $arrow = $percentage > 0 ? '↑' : '↓';
-                            $label .= " {$arrow}" . abs($percentage) . '%';
+                            $trend = [
+                                'percentage' => $percentage,
+                                'arrow' => $percentage > 0 ? '↑' : '↓',
+                                'color' => $percentage > 0 ? '#ef4444' : '#10b981', // red for up, green for down
+                            ];
                         }
                     }
                 }
 
                 $datasets[] = [
-                    'label' => $label,
+                    'label' => $config['label'],
                     'data' => $data,
                     'titles' => $titles,
+                    'urls' => $urls,
+                    'trend' => $trend,
                     'borderColor' => $config['color'],
                     'backgroundColor' => $config['color'] . '20',
                     'spanGaps' => true,
