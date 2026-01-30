@@ -213,15 +213,29 @@
             @if($guideUrl)
             <div>
                 <h2 class="section-heading">📚 Guide d'Achat</h2>
-                <div class="bg-bg-card p-6 shadow-box-list">
+                <div class="bg-bg-card p-6 shadow-box-list relative overflow-hidden" style="height: 280px;">
                     <h3 class="text-lg font-bold mb-3">Comment acheter ce modèle ?</h3>
-                    <p class="text-sm text-text-secondary mb-4">
-                        Consultez notre guide complet avec conseils d'achat, points de vigilance et bonnes pratiques.
-                    </p>
-                    <a href="{{ $guideUrl }}"
-                       class="inline-block px-6 py-3 bg-accent-cyan hover:bg-accent-cyan/90 text-bg-primary font-semibold transition">
-                        Lire le guide →
-                    </a>
+                    <div class="text-sm text-text-secondary space-y-2 mb-4">
+                        <p>Notre guide complet vous aide à faire le bon choix et éviter les pièges lors de l'achat de cette console d'occasion.</p>
+                        <p class="font-semibold text-accent-cyan">Ce que vous découvrirez :</p>
+                        <ul class="list-disc list-inside space-y-1 text-xs">
+                            <li>Quelle variante choisir selon votre budget</li>
+                            <li>Les points de vigilance et contrôles à effectuer</li>
+                            <li>Comment reconnaître une vraie console d'une contrefaçon</li>
+                            <li>Les accessoires indispensables à prévoir</li>
+                            <li>Où acheter en toute sécurité</li>
+                            <li>Le bon prix à payer selon l'état</li>
+                        </ul>
+                    </div>
+                    {{-- Fade effect --}}
+                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-bg-card to-transparent pointer-events-none"></div>
+                    {{-- Button at bottom --}}
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <a href="{{ $guideUrl }}"
+                           class="block text-center px-6 py-3 bg-accent-cyan hover:bg-accent-cyan/90 text-bg-primary font-semibold transition shadow-lg">
+                            Lire le guide complet →
+                        </a>
+                    </div>
                 </div>
             </div>
             @endif
@@ -247,9 +261,8 @@
                 'psp', 'psp-go', 'ps-vita', 'ps-vita-slim'
             ]);
             $amazonProduct = $isPortable ? 'housse protection' : 'adaptateur HDMI';
-            $amazonImageUrl = $isPortable
-                ? 'https://m.media-amazon.com/images/I/71Y8QpXvZyL._AC_SL1500_.jpg'
-                : 'https://m.media-amazon.com/images/I/61g3o8B8xjL._AC_SL1500_.jpg';
+            // Use emoji/icon instead of external image (to avoid 404)
+            $amazonIcon = $isPortable ? '🎒' : '🔌';
         @endphp
 
         <div class="mb-12">
@@ -285,9 +298,7 @@
                    rel="nofollow noopener sponsored"
                    class="block bg-bg-card hover:bg-bg-hover transition shadow-box-list group overflow-hidden border-2 border-accent-cyan/30">
                     <div class="bg-bg-darker flex items-center justify-center overflow-hidden" style="height: 150px;">
-                        <img src="{{ $amazonImageUrl }}"
-                             alt="{{ $isPortable ? 'Housse de protection' : 'Adaptateur HDMI' }}"
-                             class="w-full h-full object-contain p-2">
+                        <span class="text-6xl">{{ $amazonIcon }}</span>
                     </div>
                     <div class="p-2">
                         <div class="text-xs line-clamp-2 mb-1 group-hover:text-accent-cyan transition min-h-[2rem]">
@@ -300,12 +311,14 @@
                 </a>
             </div>
 
-            <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
-               target="_blank"
-               rel="nofollow noopener"
-               class="block w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-semibold text-center transition">
-                Voir toutes les offres eBay →
-            </a>
+            <div class="text-center">
+                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+                   target="_blank"
+                   rel="nofollow noopener"
+                   class="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-semibold transition">
+                    Voir toutes les offres eBay →
+                </a>
+            </div>
         </div>
 
 
@@ -358,11 +371,13 @@
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 @foreach($otherVariants as $other)
                 <a href="/{{ $other->full_slug }}" class="block bg-bg-card hover:bg-bg-hover p-3 transition shadow-box-list group">
-                    @if($other->image_url)
                     <div class="aspect-square bg-bg-darker mb-2 flex items-center justify-center overflow-hidden">
-                        <img src="{{ $other->image_url }}" alt="{{ $other->name }}" class="w-full h-full object-contain">
+                        @if($other->image_url)
+                            <img src="{{ $other->image_url }}" alt="{{ $other->name }}" class="w-full h-full object-contain">
+                        @else
+                            <span class="text-text-muted text-xs">Pas d'image</span>
+                        @endif
                     </div>
-                    @endif
                     <h4 class="text-sm font-semibold mb-1 line-clamp-2 group-hover:text-accent-cyan transition">{{ $other->name }}</h4>
                     <p class="text-xs text-text-muted">{{ $other->listings_count }} ventes</p>
                 </a>
@@ -379,6 +394,41 @@
     <script>
         const ctx = document.getElementById('priceChart');
         const chartData = @json($chartData);
+
+        // Custom plugin to draw trend text at end of line
+        const trendPlugin = {
+            id: 'trendAtLineEnd',
+            afterDatasetsDraw(chart) {
+                const { ctx, chartArea, scales } = chart;
+
+                chart.data.datasets.forEach((dataset, datasetIndex) => {
+                    if (!dataset.trend) return;
+
+                    const meta = chart.getDatasetMeta(datasetIndex);
+                    if (!meta.visible) return;
+
+                    // Find last non-null point
+                    let lastPoint = null;
+                    for (let i = dataset.data.length - 1; i >= 0; i--) {
+                        if (dataset.data[i] !== null && meta.data[i]) {
+                            lastPoint = meta.data[i];
+                            break;
+                        }
+                    }
+
+                    if (!lastPoint) return;
+
+                    const trendText = dataset.trend.arrow + Math.abs(dataset.trend.percentage) + '%';
+                    ctx.save();
+                    ctx.font = 'bold 12px sans-serif';
+                    ctx.fillStyle = dataset.trend.color;
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(trendText, lastPoint.x + 8, lastPoint.y);
+                    ctx.restore();
+                });
+            }
+        };
 
         new Chart(ctx, {
             type: 'line',
@@ -408,17 +458,28 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 interaction: {
-                    mode: 'nearest',
+                    mode: 'index',
                     axis: 'x',
                     intersect: false
                 },
-                onClick: (event, activeElements) => {
+                onClick: (event, activeElements, chart) => {
                     if (activeElements.length > 0) {
-                        const datasetIndex = activeElements[0].datasetIndex;
-                        const index = activeElements[0].index;
-                        const url = chartData.datasets[datasetIndex].urls[index];
-                        if (url) {
-                            window.open(url + '?mkcid=1&mkrid=709-53476-19255-0&campid=5339134703', '_blank', 'noopener,noreferrer');
+                        // Handle multiple points on same date
+                        if (activeElements.length === 1) {
+                            // Single point - open directly
+                            const element = activeElements[0];
+                            const url = chart.data.datasets[element.datasetIndex].urls[element.index];
+                            if (url) {
+                                window.open(url + '?mkcid=1&mkrid=709-53476-19255-0&campid=5339134703', '_blank', 'noopener,noreferrer');
+                            }
+                        } else {
+                            // Multiple points - show menu or open first (for now, open all in tabs)
+                            activeElements.forEach(element => {
+                                const url = chart.data.datasets[element.datasetIndex].urls[element.index];
+                                if (url) {
+                                    window.open(url + '?mkcid=1&mkrid=709-53476-19255-0&campid=5339134703', '_blank', 'noopener,noreferrer');
+                                }
+                            });
                         }
                     }
                 },
@@ -430,25 +491,7 @@
                             color: '#9ca3af',
                             font: { size: 12 },
                             padding: 15,
-                            usePointStyle: true,
-                            generateLabels: function(chart) {
-                                const datasets = chart.data.datasets;
-                                return datasets.map((dataset, i) => {
-                                    let text = dataset.label;
-                                    if (dataset.trend) {
-                                        text += ' ' + dataset.trend.arrow + Math.abs(dataset.trend.percentage) + '%';
-                                    }
-                                    return {
-                                        text: text,
-                                        fillStyle: dataset.borderColor,
-                                        strokeStyle: dataset.borderColor,
-                                        lineWidth: 2,
-                                        hidden: !chart.isDatasetVisible(i),
-                                        index: i,
-                                        fontColor: dataset.trend ? dataset.trend.color : '#9ca3af'
-                                    };
-                                })
-                            }
+                            usePointStyle: true
                         }
                     },
                     tooltip: {
@@ -457,7 +500,6 @@
                         intersect: false,
                         backgroundColor: '#1a1a2e',
                         titleColor: '#ffffff',
-                        bodyColor: '#00d9ff',
                         borderColor: '#00d9ff',
                         borderWidth: 1,
                         padding: 12,
@@ -466,6 +508,10 @@
                         callbacks: {
                             title: function(context) {
                                 return chartData.labels[context[0].dataIndex];
+                            },
+                            labelTextColor: function(context) {
+                                // Color-code title by dataset color
+                                return context.dataset.borderColor;
                             },
                             label: function(context) {
                                 if (context.parsed.y === null) return null;
@@ -495,7 +541,8 @@
                         grid: { color: 'rgba(255, 255, 255, 0.05)' }
                     }
                 }
-            }
+            },
+            plugins: [trendPlugin]
         });
     </script>
     @endif
