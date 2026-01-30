@@ -62,19 +62,30 @@ class FetchCurrentListings extends Command
                 $this->line("  ⚠️  No loose price data, fetching without price filter");
             }
 
-            // Fetch active listings from eBay
-            $result = $ebayService->findActiveItems($searchTerm, $limit, 0, $minPrice, $maxPrice);
-
-            if ($result['error']) {
-                $this->error("  ❌ API Error: {$result['error']}");
-                continue;
-            }
+            // Keep fetching until we get the desired number of approved items
+            $offset = 0;
+            $pageSize = 50; // Fetch more per page to account for blacklist filtering
+            $maxPages = 5; // Don't fetch forever
+            $page = 1;
 
             $fetched = 0;
             $new = 0;
             $updated = 0;
 
-            foreach ($result['items'] as $item) {
+            while ($new < $limit && $page <= $maxPages) {
+                // Fetch active listings from eBay
+                $result = $ebayService->findActiveItems($searchTerm, $pageSize, $offset, $minPrice, $maxPrice);
+
+                if ($result['error']) {
+                    $this->error("  ❌ API Error: {$result['error']}");
+                    break;
+                }
+
+                if (empty($result['items'])) {
+                    break;
+                }
+
+                foreach ($result['items'] as $item) {
                 $parsed = $ebayService->parseItem($item);
 
                 if ($parsed === null) {
@@ -127,12 +138,32 @@ class FetchCurrentListings extends Command
                     $new++;
                 }
 
-                $fetched++;
+                    $fetched++;
+
+                    // Stop if we have enough new items
+                    if ($new >= $limit) {
+                        break;
+                    }
+                }
+
+                $offset += $pageSize;
+                $page++;
+
+                // Break if no more items in this page
+                if (count($result['items']) < $pageSize) {
+                    break;
+                }
+
+                // Rate limiting between pages
+                sleep(1);
             }
 
             $totalFetched += $fetched;
             $totalNew += $new;
             $totalUpdated += $updated;
+
+            // Update variant's last fetched timestamp
+            $variant->update(['current_listings_fetched_at' => now()]);
 
             $this->line("  ✅ Fetched: {$fetched} | New: {$new} | Updated: {$updated}");
 
@@ -152,101 +183,6 @@ class FetchCurrentListings extends Command
         $this->line("Updated: {$totalUpdated}");
         $this->line("Marked as sold: {$markedSold}");
 
-        // Update API usage stats (this costs 1 API call)
-        $this->updateApiUsageStats($ebayService);
-
         return Command::SUCCESS;
-    }
-
-    /**
-     * Fetch and cache API usage statistics
-     */
-    protected function updateApiUsageStats(EbayBrowseService $ebayService): void
-    {
-        $this->newLine();
-        $this->info("📊 Updating API usage stats...");
-
-        $stats = $this->fetchApiStats($ebayService);
-
-        if ($stats) {
-            Cache::forever('ebay_api_usage', $stats);
-            Cache::forever('ebay_api_usage_updated_at', now());
-
-            $remaining = ($stats['limit'] ?? 0) - ($stats['used'] ?? 0);
-            $this->line("  Remaining: {$remaining} / {$stats['limit']} calls");
-        } else {
-            $this->warn("  Failed to fetch API stats");
-        }
-    }
-
-    /**
-     * Fetch API usage statistics from eBay
-     */
-    protected function fetchApiStats(EbayBrowseService $ebayService): ?array
-    {
-        $appId = config('services.ebay.app_id');
-        $certId = config('services.ebay.cert_id');
-
-        if (!$appId || !$certId) {
-            return null;
-        }
-
-        try {
-            // Get OAuth token
-            $credentials = base64_encode("{$appId}:{$certId}");
-            $tokenResponse = \Illuminate\Support\Facades\Http::asForm()
-                ->withHeaders([
-                    'Authorization' => "Basic {$credentials}",
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                ])
-                ->post('https://api.ebay.com/identity/v1/oauth2/token', [
-                    'grant_type' => 'client_credentials',
-                    'scope' => 'https://api.ebay.com/oauth/api_scope',
-                ]);
-
-            if ($tokenResponse->failed()) {
-                return null;
-            }
-
-            $token = $tokenResponse->json()['access_token'] ?? null;
-            if (!$token) {
-                return null;
-            }
-
-            // Get rate limit status
-            $response = \Illuminate\Support\Facades\Http::withHeaders([
-                'Authorization' => "Bearer {$token}",
-                'Accept' => 'application/json',
-            ])->get('https://api.ebay.com/developer/analytics/v1/rate_limit/');
-
-            if ($response->failed()) {
-                return null;
-            }
-
-            $data = $response->json();
-
-            // Find Browse API stats
-            $resources = $data['rateLimits'] ?? [];
-            foreach ($resources as $resource) {
-                foreach ($resource['resources'] ?? [] as $res) {
-                    if (str_contains($res['name'] ?? '', 'buy.browse')) {
-                        $rates = $res['rates'] ?? [];
-                        foreach ($rates as $rate) {
-                            if ($rate['rateLimit'] ?? '' === 'per day') {
-                                return [
-                                    'used' => $rate['count'] ?? 0,
-                                    'limit' => $rate['limit'] ?? 5000,
-                                ];
-                            }
-                        }
-                    }
-                }
-            }
-
-            return ['used' => 0, 'limit' => 5000];
-
-        } catch (\Exception $e) {
-            return null;
-        }
     }
 }

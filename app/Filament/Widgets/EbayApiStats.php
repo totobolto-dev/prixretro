@@ -16,16 +16,20 @@ class EbayApiStats extends BaseWidget
 
     protected function getStats(): array
     {
-        // Get saved stats from cache (never expires, updated only after API operations)
+        // Get saved stats from cache (never expires, manual refresh only)
         $stats = Cache::get('ebay_api_usage');
         $lastUpdated = Cache::get('ebay_api_usage_updated_at');
 
         if (!$stats) {
             return [
-                Stat::make('eBay API Calls', 'No data yet')
-                    ->description('Run "Fetch Current Listings" to see usage')
+                Stat::make('eBay API Calls', 'Click to check')
+                    ->description('Click "Refresh API Stats" to fetch usage data')
                     ->descriptionIcon('heroicon-o-information-circle')
-                    ->color('gray'),
+                    ->color('gray')
+                    ->extraAttributes([
+                        'class' => 'cursor-pointer',
+                        'wire:click' => '$refresh',
+                    ]),
             ];
         }
 
@@ -48,6 +52,36 @@ class EbayApiStats extends BaseWidget
                 ->description("{$usedCalls} used of {$limitCalls} daily ({$percentageUsed}%) • {$updatedText}")
                 ->descriptionIcon('heroicon-o-arrow-trending-up')
                 ->color($color),
+        ];
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('refresh_stats')
+                ->label('Refresh API Stats')
+                ->icon('heroicon-o-arrow-path')
+                ->color('info')
+                ->action(function () {
+                    $stats = $this->fetchApiStats();
+
+                    if ($stats) {
+                        Cache::forever('ebay_api_usage', $stats);
+                        Cache::forever('ebay_api_usage_updated_at', now());
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('API Stats Updated')
+                            ->body("Remaining: " . (($stats['limit'] ?? 0) - ($stats['used'] ?? 0)) . " / " . ($stats['limit'] ?? 5000))
+                            ->success()
+                            ->send();
+                    } else {
+                        \Filament\Notifications\Notification::make()
+                            ->title('Failed to fetch API stats')
+                            ->body('Check eBay credentials in .env')
+                            ->danger()
+                            ->send();
+                    }
+                }),
         ];
     }
 

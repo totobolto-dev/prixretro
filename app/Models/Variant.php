@@ -24,6 +24,7 @@ class Variant extends Model
         'search_terms' => 'array',
         'is_special_edition' => 'boolean',
         'is_default' => 'boolean',
+        'current_listings_fetched_at' => 'datetime',
     ];
 
     public function console(): BelongsTo
