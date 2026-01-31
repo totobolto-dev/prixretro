@@ -6,6 +6,7 @@ use App\Models\Console;
 use App\Models\Variant;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
@@ -49,7 +50,11 @@ class VariantForm
                 TextInput::make('full_slug')
                     ->required()
                     ->helperText('Auto-generated. Edit manually if needed.'),
-                TextInput::make('search_terms'),
+                TagsInput::make('search_terms')
+                    ->label('Custom Search Terms')
+                    ->helperText('Optional: Custom eBay search terms (e.g., "Game Boy Color Rouge" for French color names). First term will be used for fetching listings.')
+                    ->placeholder('Add search term...')
+                    ->separator(','),
                 FileUpload::make('image_filename')
                     ->image(),
                 TextInput::make('rarity_level'),
