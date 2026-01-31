@@ -36,6 +36,8 @@ class CurrentListingsManager extends Page implements HasTable
 
     protected static ?int $navigationSort = 3;
 
+    protected static bool $shouldRegisterNavigation = false; // Hidden from nav
+
     // Stats - will be updated via Livewire
     public int $activeCount = 0;
     public int $pendingCount = 0;
