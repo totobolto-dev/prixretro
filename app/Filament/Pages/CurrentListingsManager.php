@@ -4,7 +4,9 @@ namespace App\Filament\Pages;
 
 use App\Models\CurrentListing;
 use App\Models\Variant;
+use BackedEnum;
 use Filament\Pages\Page;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
@@ -31,7 +33,7 @@ class CurrentListingsManager extends Page implements HasTable
 
     protected static ?string $navigationLabel = 'Current Listings Hub';
 
-    protected static ?string $navigationIcon = 'heroicon-o-photo';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
 
     protected static ?int $navigationSort = 3;
 
