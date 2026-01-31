@@ -63,21 +63,20 @@ class FetchCurrentListings extends Command
                 $this->line("📦 {$variant->console->name} - {$variant->name}");
             }
 
-            // Calculate price range (±20% of average loose price)
-            $avgLoosePrice = \App\Models\Listing::where('variant_id', $variant->id)
+            // Calculate price range (±50% of average price across all completeness types)
+            $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
                 ->where('status', 'approved')
-                ->where('completeness', 'loose')
                 ->avg('price');
 
             $minPrice = null;
             $maxPrice = null;
 
-            if ($avgLoosePrice) {
-                $minPrice = $avgLoosePrice * 0.8;  // -20%
-                $maxPrice = $avgLoosePrice * 1.2;  // +20%
-                $this->line("  💰 Price range: {$minPrice}€ - {$maxPrice}€ (avg loose: {$avgLoosePrice}€)");
+            if ($avgPrice) {
+                $minPrice = round($avgPrice * 0.5);  // -50%
+                $maxPrice = round($avgPrice * 1.5);  // +50%
+                $this->line("  💰 Price range: {$minPrice}€ - {$maxPrice}€ (avg: " . round($avgPrice, 2) . "€)");
             } else {
-                $this->line("  ⚠️  No loose price data, fetching without price filter");
+                $this->line("  ⚠️  No price data, fetching without price filter");
             }
 
             // Count existing approved current listings for this variant
@@ -118,7 +117,11 @@ class FetchCurrentListings extends Command
                 }
 
                 if (empty($result['items'])) {
-                    $this->line("  ⚠️  No items returned (page {$page}, total: {$result['total']})");
+                    if ($result['total'] === 0 && $minPrice !== null) {
+                        $this->line("  ⚠️  No items in price range {$minPrice}€-{$maxPrice}€. Try wider range or check search term.");
+                    } else {
+                        $this->line("  ⚠️  No items returned (page {$page}, total: {$result['total']})");
+                    }
                     break;
                 }
 

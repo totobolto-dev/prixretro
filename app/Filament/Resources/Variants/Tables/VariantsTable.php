@@ -28,9 +28,9 @@ class VariantsTable
                     ->badge()
                     ->formatStateUsing(fn ($state) => $state ? '🔍 ' . $state : '-')
                     ->toggleable(),
-                ImageColumn::make('image_url')
-                    ->label('Image')
-                    ->width('80px'),
+                TextColumn::make('image_url')
+                    ->label('Image Path')
+                    ->toggleable(),
                 TextColumn::make('rarity_level')
                     ->searchable()
                     ->width('100px')
