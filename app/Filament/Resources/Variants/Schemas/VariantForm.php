@@ -53,11 +53,10 @@ class VariantForm
                     ->label('Custom Search Terms')
                     ->helperText('Optional: Comma-separated search terms to try in order (e.g., "game boy color violet, gameboy color violet"). Will try each until it gets 5 results.')
                     ->placeholder('Leave empty to use console + variant name'),
-                TagsInput::make('blacklist_terms')
+                TextInput::make('blacklist_terms')
                     ->label('Variant Blacklist')
-                    ->helperText('Optional: Strings to filter out from eBay results (e.g., " sp " to exclude "Game Boy Advance SP" when fetching "Game Boy Advance"). Include spaces for exact matching.')
-                    ->placeholder('Add blacklist term...')
-                    ->separator(','),
+                    ->helperText('Optional: Comma-separated strings to filter out (e.g., " sp , advance sp"). Include spaces for exact matching.')
+                    ->placeholder('Leave empty for global blacklist only'),
                 TextInput::make('rarity_level'),
                 TextInput::make('region'),
                 Toggle::make('is_special_edition')

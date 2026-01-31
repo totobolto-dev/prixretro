@@ -175,7 +175,10 @@ class FetchCurrentListings extends Command
                 ];
 
                 // Variant-specific blacklist (exact substring matching with spaces)
-                $variantBlacklist = is_array($variant->blacklist_terms) ? $variant->blacklist_terms : [];
+                $variantBlacklist = [];
+                if ($variant->blacklist_terms) {
+                    $variantBlacklist = array_map('trim', explode(',', $variant->blacklist_terms));
+                }
 
                 $isBlacklisted = false;
                 $blacklistReason = null;

@@ -32,30 +32,6 @@ class Variant extends Model
         'image_url',
     ];
 
-    /**
-     * Custom accessor for blacklist_terms to handle empty strings
-     */
-    public function getBlacklistTermsAttribute($value): ?array
-    {
-        if (empty($value) || $value === '""' || $value === '[]') {
-            return null;
-        }
-        $decoded = json_decode($value, true);
-        return is_array($decoded) && count($decoded) > 0 ? $decoded : null;
-    }
-
-    /**
-     * Custom mutator for blacklist_terms to convert arrays to JSON
-     */
-    public function setBlacklistTermsAttribute($value): void
-    {
-        if (is_array($value) && count($value) > 0) {
-            $this->attributes['blacklist_terms'] = json_encode(array_values($value));
-        } else {
-            $this->attributes['blacklist_terms'] = null;
-        }
-    }
-
     public function console(): BelongsTo
     {
         return $this->belongsTo(Console::class);

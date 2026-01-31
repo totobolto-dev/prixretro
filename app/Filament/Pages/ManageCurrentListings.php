@@ -40,6 +40,7 @@ class ManageCurrentListings extends Page implements HasTable
                     }])
             )
             ->defaultSort('current_listings_fetched_at', 'asc')
+            ->groups([])
             ->columns([
                 TextColumn::make('id')
                     ->label('Variant ID')

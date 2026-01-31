@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('variants', function (Blueprint $table) {
-            $table->json('blacklist_terms')->nullable()->after('search_terms');
+            // Drop JSON column if exists
+            if (Schema::hasColumn('variants', 'blacklist_terms')) {
+                $table->dropColumn('blacklist_terms');
+            }
+        });
+
+        Schema::table('variants', function (Blueprint $table) {
+            // Add as string column
+            $table->string('blacklist_terms')->nullable()->after('search_term');
         });
     }
 

@@ -29,18 +29,13 @@ class VariantsTable
                     ->description(fn ($record) => $record->full_slug),
                 TextColumn::make('search_term')
                     ->label('Search Term')
-                    ->badge()
                     ->formatStateUsing(fn ($state) => $state ? '🔍 ' . $state : '-')
+                    ->wrap()
                     ->toggleable(),
                 TextColumn::make('blacklist_terms')
                     ->label('Blacklist')
-                    ->badge()
-                    ->formatStateUsing(function ($state) {
-                        if (!$state || !is_array($state) || count($state) === 0) {
-                            return '-';
-                        }
-                        return '🚫 ' . implode(', ', $state);
-                    })
+                    ->formatStateUsing(fn ($state) => $state ? '🚫 ' . $state : '-')
+                    ->wrap()
                     ->toggleable(),
                 TextColumn::make('image_url')
                     ->label('Image Path')
