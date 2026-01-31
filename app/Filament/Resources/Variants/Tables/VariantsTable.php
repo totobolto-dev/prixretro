@@ -19,29 +19,39 @@ class VariantsTable
                 TextColumn::make('id')
                     ->label('ID')
                     ->sortable()
+                    ->toggleable()
                     ->width('60px'),
                 TextColumn::make('console.name')
                     ->searchable()
+                    ->sortable()
+                    ->toggleable()
                     ->width('150px')
                     ->badge(),
                 TextColumn::make('name')
                     ->searchable()
+                    ->sortable()
+                    ->toggleable()
                     ->description(fn ($record) => $record->full_slug),
                 TextColumn::make('search_term')
                     ->label('Search Term')
                     ->formatStateUsing(fn ($state) => $state ? '🔍 ' . $state : '-')
                     ->wrap()
+                    ->sortable()
                     ->toggleable(),
                 TextColumn::make('blacklist_terms')
                     ->label('Blacklist')
                     ->formatStateUsing(fn ($state) => $state ? '🚫 ' . $state : '-')
                     ->wrap()
+                    ->sortable()
                     ->toggleable(),
                 TextColumn::make('image_url')
                     ->label('Image Path')
+                    ->sortable()
                     ->toggleable(),
                 TextColumn::make('rarity_level')
                     ->searchable()
+                    ->sortable()
+                    ->toggleable()
                     ->width('100px')
                     ->badge()
                     ->description(fn ($record) =>
@@ -49,10 +59,14 @@ class VariantsTable
                     ),
                 IconColumn::make('is_special_edition')
                     ->boolean()
+                    ->sortable()
+                    ->toggleable()
                     ->width('60px')
                     ->label('Special'),
                 IconColumn::make('is_default')
                     ->boolean()
+                    ->sortable()
+                    ->toggleable()
                     ->width('60px')
                     ->label('Default'),
                 TextColumn::make('created_at')
@@ -64,6 +78,10 @@ class VariantsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->persistSortInSession()
+            ->persistColumnSearchesInSession()
+            ->persistSearchInSession()
+            ->columnToggleFormColumns(2)
             ->filters([
                 //
             ])

@@ -45,27 +45,35 @@ class ManageCurrentListings extends Page implements HasTable
                 TextColumn::make('id')
                     ->label('Variant ID')
                     ->sortable()
+                    ->toggleable()
                     ->width('80px'),
                 TextColumn::make('console.name')
                     ->label('Console')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('name')
                     ->label('Variant')
                     ->searchable()
+                    ->sortable()
+                    ->toggleable()
                     ->url(fn ($record) => url('/' . $record->full_slug))
                     ->openUrlInNewTab()
                     ->description(fn ($record) =>
                         $record->search_term ? '🔍 ' . $record->search_term : null
-                    ),
+                    )
+                    ->wrap(),
                 TextColumn::make('current_listings_count')
                     ->label('Current Listings')
                     ->badge()
+                    ->sortable()
+                    ->toggleable()
                     ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
                 TextColumn::make('current_listings_fetched_at')
                     ->label('Last Fetched')
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
+                    ->toggleable()
                     ->placeholder('Never')
                     ->description(fn ($record) => $record->current_listings_fetched_at
                         ? $record->current_listings_fetched_at->diffForHumans()
@@ -142,9 +150,14 @@ class ManageCurrentListings extends Page implements HasTable
                         }
                     }),
             ])
-            ->poll('30s')
             ->filters([
                 //
-            ]);
+            ])
+            ->persistSortInSession()
+            ->persistColumnSearchesInSession()
+            ->persistFiltersInSession()
+            ->persistSearchInSession()
+            ->columnToggleFormColumns(2)
+            ->reorderable(false);
     }
 }
