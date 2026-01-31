@@ -55,6 +55,11 @@ class VariantForm
                     ->helperText('Optional: Custom eBay search terms (e.g., "Game Boy Color Rouge" for French color names). First term will be used for fetching listings.')
                     ->placeholder('Add search term...')
                     ->separator(','),
+                TagsInput::make('blacklist_terms')
+                    ->label('Variant Blacklist')
+                    ->helperText('Optional: Strings to filter out from eBay results (e.g., " sp " to exclude "Game Boy Advance SP" when fetching "Game Boy Advance"). Include spaces for exact matching.')
+                    ->placeholder('Add blacklist term...')
+                    ->separator(','),
                 FileUpload::make('image_filename')
                     ->image(),
                 TextInput::make('rarity_level'),

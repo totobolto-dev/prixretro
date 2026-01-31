@@ -42,6 +42,10 @@ class ManageCurrentListings extends Page implements HasTable
                     ->orderBy('current_listings_fetched_at', 'asc')
             )
             ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable()
+                    ->width('60px'),
                 TextColumn::make('console.name')
                     ->label('Console')
                     ->searchable()
@@ -50,7 +54,12 @@ class ManageCurrentListings extends Page implements HasTable
                     ->label('Variant')
                     ->searchable()
                     ->url(fn ($record) => url('/' . $record->full_slug))
-                    ->openUrlInNewTab(),
+                    ->openUrlInNewTab()
+                    ->description(fn ($record) =>
+                        $record->search_terms && count($record->search_terms) > 0
+                            ? '🔍 ' . implode(', ', $record->search_terms)
+                            : null
+                    ),
                 TextColumn::make('current_listings_count')
                     ->label('Current Listings')
                     ->badge()
@@ -99,13 +108,29 @@ class ManageCurrentListings extends Page implements HasTable
                             // Extract stats from output
                             preg_match('/New: (\d+)/', $output, $newMatches);
                             preg_match('/Updated: (\d+)/', $output, $updatedMatches);
+                            preg_match('/Total now: (\d+)/', $output, $totalMatches);
+                            preg_match('/Skipped: (\d+) rejected, (\d+) blacklisted/', $output, $skippedMatches);
+
                             $newCount = $newMatches[1] ?? 0;
                             $updatedCount = $updatedMatches[1] ?? 0;
+                            $totalCount = $totalMatches[1] ?? '?';
+                            $skippedRejected = $skippedMatches[1] ?? 0;
+                            $skippedBlacklist = $skippedMatches[2] ?? 0;
+
+                            $bodyText = "New: {$newCount} | Updated: {$updatedCount} | Total: {$totalCount}";
+
+                            if ($totalCount < 5) {
+                                $bodyText .= "\n⚠️ Only {$totalCount}/5 listings";
+                                if ($skippedRejected > 0 || $skippedBlacklist > 0) {
+                                    $bodyText .= " (Skipped: {$skippedRejected} rejected, {$skippedBlacklist} blacklisted)";
+                                }
+                            }
 
                             Notification::make()
                                 ->title('Fetch completed')
-                                ->body("New: {$newCount} | Updated: {$updatedCount}")
+                                ->body($bodyText)
                                 ->success()
+                                ->duration(8000)
                                 ->send();
 
                             // Trigger table refresh

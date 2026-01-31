@@ -140,10 +140,12 @@ class FetchCurrentListings extends Command
                 // Blacklist non-console items (games, cartridges, cases, etc.)
                 // Use word boundaries to avoid false positives (e.g., "Game Boy" shouldn't match "game")
                 $titleLower = strtolower($parsed['title']);
-                $blacklist = [
+
+                // Global blacklist
+                $globalBlacklist = [
                     '\bjeu\b', '\bjeux\b',  // French: game/games
                     '\bcartouche\b', '\bcartridge\b',  // Cartridge
-                    '\bétui\b', '\bhousse\b', '\bcase\b',  // Case/pouch (but not "showcase")
+                    '\bétui\b', '\bhousse\b', '\bcase\b', '\bsac\b',  // Case/pouch/bag
                     '\bmanette\b', '\bcontroller\b',  // Controller
                     '\bcable\b', '\bcâble\b', '\bchargeur\b', '\balimentation\b',  // Cables/chargers
                     '\bjaquette\b', '\bboîte\b seule', '\bboite\b seule',  // Box only
@@ -151,11 +153,30 @@ class FetchCurrentListings extends Command
                     '\blot\b.*\bjeux\b', '\bjeux\b.*\blot\b',  // Game lots
                     'pokemon\s+version\s+(jaune|rouge|bleu|vert|or|argent|cristal)',  // Pokemon games for GBC
                 ];
+
+                // Variant-specific blacklist (exact substring matching with spaces)
+                $variantBlacklist = $variant->blacklist_terms ?? [];
+
                 $isBlacklisted = false;
-                foreach ($blacklist as $pattern) {
+                $blacklistReason = null;
+
+                // Check global blacklist (regex patterns)
+                foreach ($globalBlacklist as $pattern) {
                     if (preg_match('/' . $pattern . '/i', $titleLower)) {
                         $isBlacklisted = true;
+                        $blacklistReason = "global pattern: {$pattern}";
                         break;
+                    }
+                }
+
+                // Check variant blacklist (exact substring matching)
+                if (!$isBlacklisted && count($variantBlacklist) > 0) {
+                    foreach ($variantBlacklist as $term) {
+                        if (str_contains($titleLower, strtolower($term))) {
+                            $isBlacklisted = true;
+                            $blacklistReason = "variant blacklist: '{$term}'";
+                            break;
+                        }
                     }
                 }
 

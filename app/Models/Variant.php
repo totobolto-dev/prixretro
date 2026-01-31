@@ -14,6 +14,7 @@ class Variant extends Model
         'name',
         'full_slug',
         'search_terms',
+        'blacklist_terms',
         'rarity_level',
         'region',
         'is_special_edition',
@@ -22,6 +23,7 @@ class Variant extends Model
 
     protected $casts = [
         'search_terms' => 'array',
+        'blacklist_terms' => 'array',
         'is_special_edition' => 'boolean',
         'is_default' => 'boolean',
         'current_listings_fetched_at' => 'datetime',
