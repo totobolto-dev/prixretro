@@ -55,11 +55,17 @@ class ManageCurrentListings extends Page implements HasTable
                     ->searchable()
                     ->url(fn ($record) => url('/' . $record->full_slug))
                     ->openUrlInNewTab()
-                    ->description(fn ($record) =>
-                        is_array($record->search_terms) && count($record->search_terms) > 0
-                            ? '🔍 ' . implode(', ', $record->search_terms)
-                            : null
-                    ),
+                    ->description(function ($record) {
+                        $searchTerms = $record->search_terms;
+                        // Defensive: handle raw JSON string
+                        if (is_string($searchTerms) && !empty($searchTerms)) {
+                            $decoded = json_decode($searchTerms, true);
+                            $searchTerms = is_array($decoded) ? $decoded : null;
+                        }
+                        return is_array($searchTerms) && count($searchTerms) > 0
+                            ? '🔍 ' . implode(', ', $searchTerms)
+                            : null;
+                    }),
                 TextColumn::make('current_listings_count')
                     ->label('Current Listings')
                     ->badge()

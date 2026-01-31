@@ -26,11 +26,16 @@ class VariantsTable
                 TextColumn::make('search_terms')
                     ->label('Search Terms')
                     ->badge()
-                    ->formatStateUsing(fn ($state) =>
-                        is_array($state) && count($state) > 0
+                    ->formatStateUsing(function ($state) {
+                        // Handle both raw JSON string and accessor array result
+                        if (is_string($state) && !empty($state)) {
+                            $decoded = json_decode($state, true);
+                            $state = is_array($decoded) ? $decoded : null;
+                        }
+                        return is_array($state) && count($state) > 0
                             ? '🔍 ' . implode(', ', $state)
-                            : '-'
-                    )
+                            : '-';
+                    })
                     ->toggleable(),
                 ImageColumn::make('image_url')
                     ->label('Image')
