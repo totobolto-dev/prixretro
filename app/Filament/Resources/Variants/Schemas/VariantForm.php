@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Variants\Schemas;
 use App\Models\Console;
 use App\Models\Variant;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
