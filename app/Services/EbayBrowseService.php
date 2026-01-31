@@ -209,7 +209,26 @@ class EbayBrowseService
             ])->get("{$this->apiUrl}/item_summary/search", $params);
 
             if ($response->failed()) {
-                return ['items' => [], 'error' => 'API request failed', 'total' => 0];
+                $errorData = $response->json();
+                $errorMessage = $errorData['errors'][0]['message'] ?? 'API request failed';
+
+                // Check for rate limiting
+                if ($response->status() === 429 || str_contains($errorMessage, 'rate limit')) {
+                    Log::warning('eBay API rate limit hit', [
+                        'status' => $response->status(),
+                        'headers' => $response->headers(),
+                        'error' => $errorMessage,
+                    ]);
+                    return ['items' => [], 'error' => 'Rate limit exceeded. Try again in a few minutes.', 'total' => 0, 'rate_limited' => true];
+                }
+
+                Log::error('eBay API request failed', [
+                    'status' => $response->status(),
+                    'error' => $errorMessage,
+                    'params' => $params,
+                ]);
+
+                return ['items' => [], 'error' => $errorMessage, 'total' => 0];
             }
 
             $data = $response->json();

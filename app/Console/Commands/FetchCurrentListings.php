@@ -222,9 +222,19 @@ class FetchCurrentListings extends Command
             // Update variant's last fetched timestamp
             $variant->update(['current_listings_fetched_at' => now()]);
 
-            $this->line("  ✅ Fetched: {$fetched} | New: {$new} | Updated: {$updated}");
+            // Count final total
+            $finalCount = CurrentListing::where('variant_id', $variant->id)
+                ->where('status', 'approved')
+                ->where('is_sold', false)
+                ->count();
+
+            $this->line("  ✅ Fetched: {$fetched} | New: {$new} | Updated: {$updated} | Total now: {$finalCount}");
             if ($skippedRejected > 0 || $skippedBlacklist > 0) {
                 $this->line("  ⏭️  Skipped: {$skippedRejected} rejected, {$skippedBlacklist} blacklisted");
+            }
+
+            if ($finalCount < $limit) {
+                $this->line("  ⚠️  Only {$finalCount}/{$limit} listings (not enough valid eBay results)");
             }
 
             // Rate limiting (be nice to eBay)

@@ -67,10 +67,9 @@ class ManageCurrentListings extends Page implements HasTable
             ])
             ->recordActions([
                 Action::make('fetch')
-                    ->label('Fetch Now')
+                    ->label('Fetch')
                     ->icon('heroicon-o-arrow-path')
                     ->color('info')
-                    ->requiresConfirmation()
                     ->action(function ($record) {
                         // Run artisan command synchronously to get output
                         $exitCode = Artisan::call('fetch:current-listings', [
@@ -81,15 +80,36 @@ class ManageCurrentListings extends Page implements HasTable
                         // Get command output
                         $output = Artisan::output();
 
+                        // Parse output to check for rate limiting
+                        if (str_contains($output, 'Rate limit exceeded') || str_contains($output, 'rate limit')) {
+                            Notification::make()
+                                ->title('Rate limit exceeded')
+                                ->body('eBay API rate limit hit. Wait a few minutes and try again.')
+                                ->warning()
+                                ->duration(8000)
+                                ->send();
+                            return;
+                        }
+
                         if ($exitCode === 0) {
                             // Update variant timestamp manually to reflect in table
+                            $record->refresh();
                             $record->update(['current_listings_fetched_at' => now()]);
 
+                            // Extract stats from output
+                            preg_match('/New: (\d+)/', $output, $newMatches);
+                            preg_match('/Updated: (\d+)/', $output, $updatedMatches);
+                            $newCount = $newMatches[1] ?? 0;
+                            $updatedCount = $updatedMatches[1] ?? 0;
+
                             Notification::make()
-                                ->title('Listings fetched successfully')
-                                ->body("Completed for {$record->name}")
+                                ->title('Fetch completed')
+                                ->body("New: {$newCount} | Updated: {$updatedCount}")
                                 ->success()
                                 ->send();
+
+                            // Trigger table refresh
+                            $this->dispatch('refreshTable');
                         } else {
                             Notification::make()
                                 ->title('Fetch failed')
@@ -99,6 +119,7 @@ class ManageCurrentListings extends Page implements HasTable
                         }
                     }),
             ])
+            ->poll('30s')
             ->filters([
                 //
             ]);
