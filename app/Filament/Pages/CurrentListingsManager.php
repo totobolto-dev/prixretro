@@ -15,8 +15,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
-use Filament\Actions\Action as HeaderAction;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\Select;
@@ -267,7 +266,7 @@ class CurrentListingsManager extends Page implements HasTable
     protected function getHeaderActions(): array
     {
         return [
-            HeaderAction::make('fetch_all')
+            Action::make('fetch_all')
                 ->label('Fetch All Variants')
                 ->icon('heroicon-o-arrow-path')
                 ->color('success')
