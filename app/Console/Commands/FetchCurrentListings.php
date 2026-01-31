@@ -54,9 +54,9 @@ class FetchCurrentListings extends Command
             ->toArray();
 
         foreach ($variants as $variant) {
-            // Use custom search_terms if available, otherwise use console + variant name
-            if ($variant->search_terms && count($variant->search_terms) > 0) {
-                $searchTerm = $variant->search_terms[0]; // Use first search term
+            // Use custom search_term if available, otherwise use console + variant name
+            if ($variant->search_term) {
+                $searchTerm = $variant->search_term;
                 $this->line("📦 {$variant->console->name} - {$variant->name} (search: {$searchTerm})");
             } else {
                 $searchTerm = "{$variant->console->name} {$variant->name}";

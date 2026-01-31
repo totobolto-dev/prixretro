@@ -49,11 +49,10 @@ class VariantForm
                 TextInput::make('full_slug')
                     ->required()
                     ->helperText('Auto-generated. Edit manually if needed.'),
-                TagsInput::make('search_terms')
-                    ->label('Custom Search Terms')
-                    ->helperText('Optional: Custom eBay search terms (e.g., "Game Boy Color Rouge" for French color names). First term will be used for fetching listings.')
-                    ->placeholder('Add search term...')
-                    ->separator(','),
+                TextInput::make('search_term')
+                    ->label('Custom Search Term')
+                    ->helperText('Optional: Custom eBay search term (e.g., "Game Boy Color Violet Transparent" for French color names). Will be used for fetching listings.')
+                    ->placeholder('Leave empty to use console + variant name'),
                 TagsInput::make('blacklist_terms')
                     ->label('Variant Blacklist')
                     ->helperText('Optional: Strings to filter out from eBay results (e.g., " sp " to exclude "Game Boy Advance SP" when fetching "Game Boy Advance"). Include spaces for exact matching.')

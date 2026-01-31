@@ -23,24 +23,14 @@ class VariantsTable
                 TextColumn::make('name')
                     ->searchable()
                     ->description(fn ($record) => $record->full_slug),
-                TextColumn::make('search_terms')
-                    ->label('Search Terms')
+                TextColumn::make('search_term')
+                    ->label('Search Term')
                     ->badge()
-                    ->formatStateUsing(function ($state) {
-                        // Handle both raw JSON string and accessor array result
-                        if (is_string($state) && !empty($state)) {
-                            $decoded = json_decode($state, true);
-                            $state = is_array($decoded) ? $decoded : null;
-                        }
-                        return is_array($state) && count($state) > 0
-                            ? '🔍 ' . implode(', ', $state)
-                            : '-';
-                    })
+                    ->formatStateUsing(fn ($state) => $state ? '🔍 ' . $state : '-')
                     ->toggleable(),
                 ImageColumn::make('image_url')
                     ->label('Image')
-                    ->width('80px')
-                    ->defaultImageUrl('/images/placeholder-console.png'),
+                    ->width('80px'),
                 TextColumn::make('rarity_level')
                     ->searchable()
                     ->width('100px')

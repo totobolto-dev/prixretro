@@ -13,7 +13,7 @@ class Variant extends Model
         'slug',
         'name',
         'full_slug',
-        'search_terms',
+        'search_term',
         'blacklist_terms',
         'rarity_level',
         'region',
@@ -32,18 +32,6 @@ class Variant extends Model
     ];
 
     /**
-     * Custom accessor for search_terms to handle empty strings
-     */
-    public function getSearchTermsAttribute($value): ?array
-    {
-        if (empty($value) || $value === '""' || $value === '[]') {
-            return null;
-        }
-        $decoded = json_decode($value, true);
-        return is_array($decoded) && count($decoded) > 0 ? $decoded : null;
-    }
-
-    /**
      * Custom accessor for blacklist_terms to handle empty strings
      */
     public function getBlacklistTermsAttribute($value): ?array
@@ -53,18 +41,6 @@ class Variant extends Model
         }
         $decoded = json_decode($value, true);
         return is_array($decoded) && count($decoded) > 0 ? $decoded : null;
-    }
-
-    /**
-     * Custom mutator for search_terms to convert arrays to JSON
-     */
-    public function setSearchTermsAttribute($value): void
-    {
-        if (is_array($value) && count($value) > 0) {
-            $this->attributes['search_terms'] = json_encode(array_values($value));
-        } else {
-            $this->attributes['search_terms'] = null;
-        }
     }
 
     /**

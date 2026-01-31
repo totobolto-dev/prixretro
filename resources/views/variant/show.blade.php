@@ -313,15 +313,9 @@
 
             <div class="text-center">
                 @php
-                    // Use custom search terms if available, otherwise console + variant name
-                    $searchTerms = $variant->search_terms;
-                    // Defensive: handle raw JSON string
-                    if (is_string($searchTerms) && !empty($searchTerms)) {
-                        $decoded = json_decode($searchTerms, true);
-                        $searchTerms = is_array($decoded) ? $decoded : null;
-                    }
-                    $ebaySearchQuery = (is_array($searchTerms) && count($searchTerms) > 0)
-                        ? $searchTerms[0]
+                    // Use custom search_term if available, otherwise console + variant name
+                    $ebaySearchQuery = $variant->search_term
+                        ? $variant->search_term
                         : $variant->console->name . ' ' . $variant->name;
                 @endphp
                 <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($ebaySearchQuery) }}&{{ $ebayAffiliateParams }}"
