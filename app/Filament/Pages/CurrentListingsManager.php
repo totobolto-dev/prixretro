@@ -29,7 +29,7 @@ class CurrentListingsManager extends Page implements HasTable
 {
     use InteractsWithTable;
 
-    protected static string $view = 'filament.pages.current-listings-manager';
+    protected string $view = 'filament.pages.current-listings-manager';
 
     protected static ?string $navigationLabel = 'Current Listings Hub';
 
