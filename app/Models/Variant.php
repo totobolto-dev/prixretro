@@ -22,12 +22,34 @@ class Variant extends Model
     ];
 
     protected $casts = [
-        'search_terms' => 'array',
-        'blacklist_terms' => 'array',
         'is_special_edition' => 'boolean',
         'is_default' => 'boolean',
         'current_listings_fetched_at' => 'datetime',
     ];
+
+    /**
+     * Custom accessor for search_terms to handle empty strings
+     */
+    public function getSearchTermsAttribute($value): ?array
+    {
+        if (empty($value) || $value === '""' || $value === '[]') {
+            return null;
+        }
+        $decoded = json_decode($value, true);
+        return is_array($decoded) && count($decoded) > 0 ? $decoded : null;
+    }
+
+    /**
+     * Custom accessor for blacklist_terms to handle empty strings
+     */
+    public function getBlacklistTermsAttribute($value): ?array
+    {
+        if (empty($value) || $value === '""' || $value === '[]') {
+            return null;
+        }
+        $decoded = json_decode($value, true);
+        return is_array($decoded) && count($decoded) > 0 ? $decoded : null;
+    }
 
     public function console(): BelongsTo
     {
