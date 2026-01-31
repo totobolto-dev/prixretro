@@ -7,6 +7,7 @@ use App\Models\CurrentListing;
 use App\Services\EbayBrowseService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class FetchCurrentListings extends Command
 {
@@ -63,20 +64,21 @@ class FetchCurrentListings extends Command
                 $this->line("📦 {$variant->console->name} - {$variant->name}");
             }
 
-            // Calculate price range (±20% of average price across all completeness types)
-            $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
+            // Calculate price range (±20% of average loose price)
+            $avgLoosePrice = \App\Models\Listing::where('variant_id', $variant->id)
                 ->where('status', 'approved')
+                ->where('completeness', 'loose')
                 ->avg('price');
 
             $minPrice = null;
             $maxPrice = null;
 
-            if ($avgPrice) {
-                $minPrice = round($avgPrice * 0.8);  // -20%
-                $maxPrice = round($avgPrice * 1.2);  // +20%
-                $this->line("  💰 Price range: {$minPrice}€ - {$maxPrice}€ (avg: " . round($avgPrice, 2) . "€)");
+            if ($avgLoosePrice) {
+                $minPrice = round($avgLoosePrice * 0.8);  // -20%
+                $maxPrice = round($avgLoosePrice * 1.2);  // +20%
+                $this->line("  💰 Price range: {$minPrice}€ - {$maxPrice}€ (avg loose: " . round($avgLoosePrice, 2) . "€)");
             } else {
-                $this->line("  ⚠️  No price data, fetching without price filter");
+                $this->line("  ⚠️  No loose price data, fetching without price filter");
             }
 
             // Count existing approved current listings for this variant
@@ -98,7 +100,7 @@ class FetchCurrentListings extends Command
             // Keep fetching until we get the desired number of approved items
             $offset = 0;
             $pageSize = 50; // Fetch more per page to account for blacklist filtering
-            $maxPages = 5; // Don't fetch forever
+            $maxPages = 10; // Don't fetch forever
             $page = 1;
 
             $fetched = 0;
@@ -134,9 +136,17 @@ class FetchCurrentListings extends Command
                     continue;
                 }
 
+                Log::info("Fetch {$variant->id}: {$parsed['title']}", [
+                    'variant_id' => $variant->id,
+                    'item_id' => $parsed['ebay_item_id'],
+                    'price' => $parsed['price'],
+                    'title' => $parsed['title'],
+                ]);
+
                 // Skip rejected item IDs (already marked as rejected in previous fetches)
                 if (in_array($parsed['ebay_item_id'], $rejectedItemIds)) {
                     $skippedRejected++;
+                    Log::info("  → SKIPPED: Previously rejected", ['item_id' => $parsed['ebay_item_id']]);
                     continue;
                 }
 
@@ -185,6 +195,10 @@ class FetchCurrentListings extends Command
 
                 if ($isBlacklisted) {
                     $skippedBlacklist++;
+                    Log::info("  → BLACKLISTED: {$blacklistReason}", [
+                        'item_id' => $parsed['ebay_item_id'],
+                        'title' => $parsed['title'],
+                    ]);
                     continue;
                 }
 
@@ -198,6 +212,7 @@ class FetchCurrentListings extends Command
                         'last_seen_at' => now(),
                     ]);
                     $updated++;
+                    Log::info("  → UPDATED: {$parsed['price']}€", ['item_id' => $parsed['ebay_item_id']]);
                 } else {
                     // Create new listing (auto-approved after blacklist filtering)
                     $listingData = [
@@ -217,6 +232,7 @@ class FetchCurrentListings extends Command
 
                     CurrentListing::create($listingData);
                     $new++;
+                    Log::info("  → CREATED: {$parsed['price']}€", ['item_id' => $parsed['ebay_item_id']]);
                 }
 
                     $fetched++;
