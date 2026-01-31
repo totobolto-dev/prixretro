@@ -30,6 +30,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
 
                 {{-- Column 1: Image (3 cols) --}}
+                {{-- DEBUG: image_url = {{ $variant->image_url ?? 'NULL' }} --}}
                 <div class="lg:col-span-3 p-6 border-b lg:border-b-0 lg:border-r border-white/5">
                     <div class="aspect-square bg-bg-darker flex items-center justify-center overflow-hidden">
                         @if($variant->image_url)
@@ -37,7 +38,10 @@
                                  alt="{{ $variant->display_name }}"
                                  class="w-full h-full object-contain">
                         @else
-                            <span class="text-text-muted text-sm">Pas d'image</span>
+                            <div class="text-text-muted text-sm text-center px-4">
+                                <p>Pas d'image</p>
+                                <p class="text-xs mt-2 break-all">Expected: {{ $variant->console->slug }}_{{ $variant->slug }}.webp/avif/png/jpg</p>
+                            </div>
                         @endif
                     </div>
                 </div>
