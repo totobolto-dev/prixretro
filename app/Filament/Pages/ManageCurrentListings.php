@@ -26,6 +26,8 @@ class ManageCurrentListings extends Page implements HasTable
 
     protected static ?int $navigationSort = 4;
 
+    protected static bool $shouldRegisterNavigation = false; // Hidden - use Current Listings Hub instead
+
     public function table(Table $table): Table
     {
         return $table

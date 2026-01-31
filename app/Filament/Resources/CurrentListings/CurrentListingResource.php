@@ -20,6 +20,8 @@ class CurrentListingResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static bool $shouldRegisterNavigation = false; // Hidden - use Current Listings Hub instead
+
     public static function form(Schema $schema): Schema
     {
         return CurrentListingForm::configure($schema);
