@@ -314,9 +314,13 @@
             <div class="text-center">
                 @php
                     // Use custom search_term if available, otherwise console + variant name
-                    $ebaySearchQuery = $variant->search_term
-                        ? $variant->search_term
-                        : $variant->console->name . ' ' . $variant->name;
+                    // If multiple comma-separated terms, use the first one
+                    if ($variant->search_term) {
+                        $searchTerms = array_map('trim', explode(',', $variant->search_term));
+                        $ebaySearchQuery = $searchTerms[0];
+                    } else {
+                        $ebaySearchQuery = $variant->console->name . ' ' . $variant->name;
+                    }
                 @endphp
                 <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($ebaySearchQuery) }}&{{ $ebayAffiliateParams }}"
                    target="_blank"

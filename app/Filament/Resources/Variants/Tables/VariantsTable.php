@@ -32,6 +32,16 @@ class VariantsTable
                     ->badge()
                     ->formatStateUsing(fn ($state) => $state ? '🔍 ' . $state : '-')
                     ->toggleable(),
+                TextColumn::make('blacklist_terms')
+                    ->label('Blacklist')
+                    ->badge()
+                    ->formatStateUsing(function ($state) {
+                        if (!$state || !is_array($state) || count($state) === 0) {
+                            return '-';
+                        }
+                        return '🚫 ' . implode(', ', $state);
+                    })
+                    ->toggleable(),
                 TextColumn::make('image_url')
                     ->label('Image Path')
                     ->toggleable(),

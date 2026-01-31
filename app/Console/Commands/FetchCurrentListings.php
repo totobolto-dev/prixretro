@@ -55,11 +55,13 @@ class FetchCurrentListings extends Command
 
         foreach ($variants as $variant) {
             // Use custom search_term if available, otherwise use console + variant name
+            // Support multiple search terms separated by comma
+            $searchTerms = [];
             if ($variant->search_term) {
-                $searchTerm = $variant->search_term;
-                $this->line("📦 {$variant->console->name} - {$variant->name} (search: {$searchTerm})");
+                $searchTerms = array_map('trim', explode(',', $variant->search_term));
+                $this->line("📦 {$variant->console->name} - {$variant->name} (search terms: " . implode(', ', $searchTerms) . ")");
             } else {
-                $searchTerm = "{$variant->console->name} {$variant->name}";
+                $searchTerms = ["{$variant->console->name} {$variant->name}"];
                 $this->line("📦 {$variant->console->name} - {$variant->name}");
             }
 
@@ -96,21 +98,31 @@ class FetchCurrentListings extends Command
 
             $this->line("  📊 Current: {$existingCount} | Need: {$needed} more");
 
-            // Keep fetching until we get the desired number of approved items
-            $offset = 0;
-            $pageSize = 50; // Fetch more per page to account for blacklist filtering
-            $maxPages = 10; // Don't fetch forever
-            $page = 1;
-
             $fetched = 0;
             $new = 0;
             $updated = 0;
             $skippedRejected = 0;
             $skippedBlacklist = 0;
 
-            while ($new < $needed && $page <= $maxPages) {
-                // Fetch active listings from eBay
-                $result = $ebayService->findActiveItems($searchTerm, $pageSize, $offset, $minPrice, $maxPrice);
+            // Try each search term until we get enough results
+            foreach ($searchTerms as $searchTermIndex => $searchTerm) {
+                if ($new >= $needed) {
+                    break; // We have enough, stop trying other search terms
+                }
+
+                if (count($searchTerms) > 1) {
+                    $this->line("  🔍 Trying search term " . ($searchTermIndex + 1) . "/" . count($searchTerms) . ": '{$searchTerm}'");
+                }
+
+                // Keep fetching until we get the desired number of approved items
+                $offset = 0;
+                $pageSize = 50; // Fetch more per page to account for blacklist filtering
+                $maxPages = 10; // Don't fetch forever
+                $page = 1;
+
+                while ($new < $needed && $page <= $maxPages) {
+                    // Fetch active listings from eBay
+                    $result = $ebayService->findActiveItems($searchTerm, $pageSize, $offset, $minPrice, $maxPrice);
 
                 if ($result['error']) {
                     $this->error("  ❌ API Error: {$result['error']}");
@@ -246,6 +258,7 @@ class FetchCurrentListings extends Command
                 // Rate limiting between pages
                 sleep(1);
             }
+            } // End foreach search terms
 
             $totalFetched += $fetched;
             $totalNew += $new;

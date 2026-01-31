@@ -50,8 +50,8 @@ class VariantForm
                     ->required()
                     ->helperText('Auto-generated. Edit manually if needed.'),
                 TextInput::make('search_term')
-                    ->label('Custom Search Term')
-                    ->helperText('Optional: Custom eBay search term (e.g., "Game Boy Color Violet Transparent" for French color names). Will be used for fetching listings.')
+                    ->label('Custom Search Terms')
+                    ->helperText('Optional: Comma-separated search terms to try in order (e.g., "game boy color violet, gameboy color violet"). Will try each until it gets 5 results.')
                     ->placeholder('Leave empty to use console + variant name'),
                 TagsInput::make('blacklist_terms')
                     ->label('Variant Blacklist')

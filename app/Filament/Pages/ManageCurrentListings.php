@@ -38,9 +38,8 @@ class ManageCurrentListings extends Page implements HasTable
                         $q->where('status', 'approved')
                           ->where('is_sold', false);
                     }])
-                    ->orderByRaw('current_listings_fetched_at IS NULL DESC')
-                    ->orderBy('current_listings_fetched_at', 'asc')
             )
+            ->defaultSort('current_listings_fetched_at', 'asc')
             ->columns([
                 TextColumn::make('id')
                     ->label('Variant ID')

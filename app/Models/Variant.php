@@ -19,6 +19,7 @@ class Variant extends Model
         'region',
         'is_special_edition',
         'is_default',
+        'current_listings_fetched_at',
     ];
 
     protected $casts = [
