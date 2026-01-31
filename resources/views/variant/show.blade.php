@@ -312,7 +312,13 @@
             </div>
 
             <div class="text-center">
-                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($variant->console->name . ' ' . $variant->name) }}&{{ $ebayAffiliateParams }}"
+                @php
+                    // Use custom search terms if available, otherwise console + variant name
+                    $ebaySearchQuery = (is_array($variant->search_terms) && count($variant->search_terms) > 0)
+                        ? $variant->search_terms[0]
+                        : $variant->console->name . ' ' . $variant->name;
+                @endphp
+                <a href="https://www.ebay.fr/sch/i.html?_nkw={{ urlencode($ebaySearchQuery) }}&{{ $ebayAffiliateParams }}"
                    target="_blank"
                    rel="nofollow noopener"
                    class="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white font-semibold transition">
