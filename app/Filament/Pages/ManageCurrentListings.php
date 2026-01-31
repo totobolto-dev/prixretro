@@ -56,7 +56,7 @@ class ManageCurrentListings extends Page implements HasTable
                     ->url(fn ($record) => url('/' . $record->full_slug))
                     ->openUrlInNewTab()
                     ->description(fn ($record) =>
-                        $record->search_terms && count($record->search_terms) > 0
+                        is_array($record->search_terms) && count($record->search_terms) > 0
                             ? '🔍 ' . implode(', ', $record->search_terms)
                             : null
                     ),
