@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Variants\Schemas;
 
 use App\Models\Console;
 use App\Models\Variant;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
@@ -60,8 +59,6 @@ class VariantForm
                     ->helperText('Optional: Strings to filter out from eBay results (e.g., " sp " to exclude "Game Boy Advance SP" when fetching "Game Boy Advance"). Include spaces for exact matching.')
                     ->placeholder('Add blacklist term...')
                     ->separator(','),
-                FileUpload::make('image_filename')
-                    ->image(),
                 TextInput::make('rarity_level'),
                 TextInput::make('region'),
                 Toggle::make('is_special_edition')

@@ -23,8 +23,19 @@ class VariantsTable
                 TextColumn::make('name')
                     ->searchable()
                     ->description(fn ($record) => $record->full_slug),
-                ImageColumn::make('image_filename')
-                    ->width('80px'),
+                TextColumn::make('search_terms')
+                    ->label('Search Terms')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) =>
+                        is_array($state) && count($state) > 0
+                            ? '🔍 ' . implode(', ', $state)
+                            : '-'
+                    )
+                    ->toggleable(),
+                ImageColumn::make('image_url')
+                    ->label('Image')
+                    ->width('80px')
+                    ->defaultImageUrl('/images/placeholder-console.png'),
                 TextColumn::make('rarity_level')
                     ->searchable()
                     ->width('100px')
