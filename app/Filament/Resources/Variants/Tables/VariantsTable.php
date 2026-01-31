@@ -16,6 +16,10 @@ class VariantsTable
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable()
+                    ->width('60px'),
                 TextColumn::make('console.name')
                     ->searchable()
                     ->width('150px')

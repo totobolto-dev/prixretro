@@ -7,13 +7,12 @@ use App\Models\CurrentListing;
 use App\Services\EbayBrowseService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class FetchCurrentListings extends Command
 {
     protected $signature = 'fetch:current-listings
                             {--variant= : Specific variant ID to fetch}
-                            {--limit=10 : Max items per variant (default: 10)}';
+                            {--limit=5 : Max items per variant (default: 5)}';
 
     protected $description = 'Fetch current eBay listings for all variants using Browse API';
 
@@ -133,20 +132,16 @@ class FetchCurrentListings extends Command
                 $parsed = $ebayService->parseItem($item);
 
                 if ($parsed === null) {
+                    $this->line("    ⚠️  Failed to parse item");
                     continue;
                 }
 
-                Log::info("Fetch {$variant->id}: {$parsed['title']}", [
-                    'variant_id' => $variant->id,
-                    'item_id' => $parsed['ebay_item_id'],
-                    'price' => $parsed['price'],
-                    'title' => $parsed['title'],
-                ]);
+                $this->line("    📦 {$parsed['price']}€ - {$parsed['title']}");
 
                 // Skip rejected item IDs (already marked as rejected in previous fetches)
                 if (in_array($parsed['ebay_item_id'], $rejectedItemIds)) {
                     $skippedRejected++;
-                    Log::info("  → SKIPPED: Previously rejected", ['item_id' => $parsed['ebay_item_id']]);
+                    $this->line("       ❌ SKIPPED: Previously rejected");
                     continue;
                 }
 
@@ -195,10 +190,7 @@ class FetchCurrentListings extends Command
 
                 if ($isBlacklisted) {
                     $skippedBlacklist++;
-                    Log::info("  → BLACKLISTED: {$blacklistReason}", [
-                        'item_id' => $parsed['ebay_item_id'],
-                        'title' => $parsed['title'],
-                    ]);
+                    $this->line("       ❌ BLACKLISTED: {$blacklistReason}");
                     continue;
                 }
 
@@ -212,7 +204,7 @@ class FetchCurrentListings extends Command
                         'last_seen_at' => now(),
                     ]);
                     $updated++;
-                    Log::info("  → UPDATED: {$parsed['price']}€", ['item_id' => $parsed['ebay_item_id']]);
+                    $this->line("       ✏️  UPDATED (already had this one)");
                 } else {
                     // Create new listing (auto-approved after blacklist filtering)
                     $listingData = [
@@ -232,7 +224,7 @@ class FetchCurrentListings extends Command
 
                     CurrentListing::create($listingData);
                     $new++;
-                    Log::info("  → CREATED: {$parsed['price']}€", ['item_id' => $parsed['ebay_item_id']]);
+                    $this->line("       ✅ ADDED ({$new}/{$needed})");
                 }
 
                     $fetched++;

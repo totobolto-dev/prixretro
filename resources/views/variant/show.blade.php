@@ -30,19 +30,15 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
 
                 {{-- Column 1: Image (3 cols) --}}
-                {{-- DEBUG: image_url = {{ url($variant->image_url ?? '/images/placeholder.png') }} --}}
                 <div class="lg:col-span-3 p-6 border-b lg:border-b-0 lg:border-r border-white/5">
                     <div class="aspect-square bg-bg-darker flex items-center justify-center overflow-hidden">
-                        @if($variant->image_url)
-                            <img src="{{ url($variant->image_url) }}"
-                                 alt="{{ $variant->display_name }}"
-                                 class="w-full h-full object-contain">
-                        @else
-                            <div class="text-text-muted text-sm text-center px-4">
-                                <p>Pas d'image</p>
-                                <p class="text-xs mt-2 break-all">Expected: {{ url('/storage/variants/' . $variant->console->slug . '_' . $variant->slug . '.webp') }}</p>
-                            </div>
-                        @endif
+                        <img src="{{ url($variant->image_url ?? '/storage/variants/' . $variant->console->slug . '_' . $variant->slug . '.webp') }}"
+                             alt="{{ $variant->display_name }}"
+                             class="w-full h-full object-contain"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="text-text-muted text-sm text-center px-4" style="display:none;">
+                            <p>Image introuvable</p>
+                        </div>
                     </div>
                 </div>
 
@@ -382,11 +378,11 @@
                 @foreach($otherVariants as $other)
                 <a href="/{{ $other->full_slug }}" class="block bg-bg-card hover:bg-bg-hover p-3 transition shadow-box-list group">
                     <div class="aspect-square bg-bg-darker mb-2 flex items-center justify-center overflow-hidden">
-                        @if($other->image_url)
-                            <img src="{{ url($other->image_url) }}" alt="{{ $other->name }}" class="w-full h-full object-contain">
-                        @else
-                            <span class="text-text-muted text-xs">Pas d'image</span>
-                        @endif
+                        <img src="{{ url($other->image_url ?? '/storage/variants/' . $other->console->slug . '_' . $other->slug . '.webp') }}"
+                             alt="{{ $other->name }}"
+                             class="w-full h-full object-contain"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                        <span class="text-text-muted text-xs" style="display:none;">Pas d'image</span>
                     </div>
                     <h4 class="text-sm font-semibold mb-1 line-clamp-2 group-hover:text-accent-cyan transition">{{ $other->name }}</h4>
                     <p class="text-xs text-text-muted">{{ $other->listings_count }} ventes</p>

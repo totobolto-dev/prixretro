@@ -43,9 +43,9 @@ class ManageCurrentListings extends Page implements HasTable
             )
             ->columns([
                 TextColumn::make('id')
-                    ->label('ID')
+                    ->label('Variant ID')
                     ->sortable()
-                    ->width('60px'),
+                    ->width('80px'),
                 TextColumn::make('console.name')
                     ->label('Console')
                     ->searchable()
