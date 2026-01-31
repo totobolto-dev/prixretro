@@ -24,9 +24,16 @@ class FetchCurrentListings extends Command
         if ($variantId) {
             $variants = Variant::where('id', $variantId)->get();
         } else {
+            // Skip variants that already have 5+ approved current listings
             $variants = Variant::whereHas('listings', function($q) {
                 $q->where('status', 'approved');
-            })->get();
+            })
+            ->withCount(['currentListings' => function($q) {
+                $q->where('status', 'approved')
+                  ->where('is_sold', false);
+            }])
+            ->having('current_listings_count', '<', 5)
+            ->get();
         }
 
         if ($variants->isEmpty()) {
@@ -47,8 +54,14 @@ class FetchCurrentListings extends Command
             ->toArray();
 
         foreach ($variants as $variant) {
-            $searchTerm = "{$variant->console->name} {$variant->name}";
-            $this->line("📦 {$variant->console->name} - {$variant->name}");
+            // Use custom search_terms if available, otherwise use console + variant name
+            if ($variant->search_terms && count($variant->search_terms) > 0) {
+                $searchTerm = $variant->search_terms[0]; // Use first search term
+                $this->line("📦 {$variant->console->name} - {$variant->name} (search: {$searchTerm})");
+            } else {
+                $searchTerm = "{$variant->console->name} {$variant->name}";
+                $this->line("📦 {$variant->console->name} - {$variant->name}");
+            }
 
             // Calculate price range (±20% of average loose price)
             $avgLoosePrice = \App\Models\Listing::where('variant_id', $variant->id)
@@ -67,6 +80,22 @@ class FetchCurrentListings extends Command
                 $this->line("  ⚠️  No loose price data, fetching without price filter");
             }
 
+            // Count existing approved current listings for this variant
+            $existingCount = CurrentListing::where('variant_id', $variant->id)
+                ->where('status', 'approved')
+                ->where('is_sold', false)
+                ->count();
+
+            // Calculate how many more we need
+            $needed = max(0, $limit - $existingCount);
+
+            if ($needed === 0) {
+                $this->line("  ✅ Already has {$limit} listings, skipping");
+                continue;
+            }
+
+            $this->line("  📊 Current: {$existingCount} | Need: {$needed} more");
+
             // Keep fetching until we get the desired number of approved items
             $offset = 0;
             $pageSize = 50; // Fetch more per page to account for blacklist filtering
@@ -79,7 +108,7 @@ class FetchCurrentListings extends Command
             $skippedRejected = 0;
             $skippedBlacklist = 0;
 
-            while ($new < $limit && $page <= $maxPages) {
+            while ($new < $needed && $page <= $maxPages) {
                 // Fetch active listings from eBay
                 $result = $ebayService->findActiveItems($searchTerm, $pageSize, $offset, $minPrice, $maxPrice);
 
@@ -120,6 +149,7 @@ class FetchCurrentListings extends Command
                     '\bjaquette\b', '\bboîte\b seule', '\bboite\b seule',  // Box only
                     '\bpièce\b détachée', '\bpiece\b détachée',  // Spare parts
                     '\blot\b.*\bjeux\b', '\bjeux\b.*\blot\b',  // Game lots
+                    'pokemon\s+version\s+(jaune|rouge|bleu|vert|or|argent|cristal)',  // Pokemon games for GBC
                 ];
                 $isBlacklisted = false;
                 foreach ($blacklist as $pattern) {
@@ -168,7 +198,7 @@ class FetchCurrentListings extends Command
                     $fetched++;
 
                     // Stop if we have enough new items
-                    if ($new >= $limit) {
+                    if ($new >= $needed) {
                         break;
                     }
                 }

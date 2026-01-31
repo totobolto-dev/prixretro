@@ -18,6 +18,39 @@ class CurrentListingsTable
     {
         return $table
             ->columns([
+                TextColumn::make('variant.console.name')
+                    ->label('Console')
+                    ->searchable()
+                    ->sortable()
+                    ->badge()
+                    ->color('warning')
+                    ->width('120px')
+                    ->default('Not assigned'),
+                TextColumn::make('variant.name')
+                    ->label('Variant')
+                    ->searchable()
+                    ->sortable()
+                    ->width('120px')
+                    ->badge()
+                    ->color('info')
+                    ->default('Not assigned')
+                    ->url(fn ($record) => $record->variant ? url('/' . $record->variant->full_slug) : null)
+                    ->openUrlInNewTab(),
+                \Filament\Tables\Columns\ImageColumn::make('thumbnail_url')
+                    ->label('Img')
+                    ->width('60px')
+                    ->height('60px')
+                    ->defaultImageUrl(asset('images/no-image.png')),
+                TextColumn::make('title')
+                    ->searchable()
+                    ->limit(50)
+                    ->tooltip(fn ($record) => $record->title)
+                    ->description(fn ($record) =>
+                        ($record->price ? number_format($record->price, 2) . '€' : 'N/A') .
+                        ' • ' . $record->item_id
+                    )
+                    ->url(fn ($record) => $record->url)
+                    ->openUrlInNewTab(),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -27,37 +60,19 @@ class CurrentListingsTable
                     })
                     ->sortable()
                     ->width('100px'),
-                TextColumn::make('variant.name')
-                    ->searchable()
-                    ->width('150px')
-                    ->badge()
-                    ->color('info')
-                    ->default('Not assigned')
-                    ->url(fn ($record) => $record->variant ? url('/' . $record->variant->full_slug) : null)
-                    ->openUrlInNewTab(),
-                TextColumn::make('title')
-                    ->searchable()
-                    ->wrap()
-                    ->description(fn ($record) =>
-                        ($record->price ? number_format($record->price, 2) . '€' : '') .
-                        ' • ID: ' . $record->item_id
-                    ),
                 IconColumn::make('is_sold')
                     ->boolean()
-                    ->width('60px'),
+                    ->label('Sold')
+                    ->width('50px'),
                 TextColumn::make('last_seen_at')
-                    ->dateTime()
+                    ->label('Last Seen')
+                    ->dateTime('d/m H:i')
                     ->sortable()
-                    ->width('150px'),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->description(fn ($record) => $record->last_seen_at ? $record->last_seen_at->diffForHumans() : 'Never')
+                    ->width('110px'),
             ])
+            ->defaultSort('last_seen_at', 'desc')
+            ->defaultGroup('variant.console.name')
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('status')
                     ->options([
@@ -66,17 +81,20 @@ class CurrentListingsTable
                         'rejected' => 'Rejected',
                     ])
                     ->default('approved'),
-                \Filament\Tables\Filters\TernaryFilter::make('show_rejected')
-                    ->label('Show Rejected')
-                    ->placeholder('Hide rejected')
-                    ->trueLabel('Show rejected')
-                    ->falseLabel('Hide rejected')
-                    ->default(false)
-                    ->query(function ($query, $state) {
-                        if ($state === false) {
-                            $query->where('status', '!=', 'rejected');
-                        }
-                    }),
+                \Filament\Tables\Filters\SelectFilter::make('console')
+                    ->relationship('variant.console', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->label('Console'),
+                \Filament\Tables\Filters\SelectFilter::make('variant')
+                    ->relationship('variant', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->label('Variant'),
+                \Filament\Tables\Filters\Filter::make('is_sold')
+                    ->label('Hide Sold')
+                    ->default()
+                    ->query(fn ($query) => $query->where('is_sold', false)),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
