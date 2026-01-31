@@ -27,6 +27,10 @@ class Variant extends Model
         'current_listings_fetched_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
     /**
      * Custom accessor for search_terms to handle empty strings
      */
@@ -49,6 +53,30 @@ class Variant extends Model
         }
         $decoded = json_decode($value, true);
         return is_array($decoded) && count($decoded) > 0 ? $decoded : null;
+    }
+
+    /**
+     * Custom mutator for search_terms to convert arrays to JSON
+     */
+    public function setSearchTermsAttribute($value): void
+    {
+        if (is_array($value) && count($value) > 0) {
+            $this->attributes['search_terms'] = json_encode(array_values($value));
+        } else {
+            $this->attributes['search_terms'] = null;
+        }
+    }
+
+    /**
+     * Custom mutator for blacklist_terms to convert arrays to JSON
+     */
+    public function setBlacklistTermsAttribute($value): void
+    {
+        if (is_array($value) && count($value) > 0) {
+            $this->attributes['blacklist_terms'] = json_encode(array_values($value));
+        } else {
+            $this->attributes['blacklist_terms'] = null;
+        }
     }
 
     public function console(): BelongsTo
