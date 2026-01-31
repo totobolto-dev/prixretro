@@ -63,7 +63,7 @@ class FetchCurrentListings extends Command
                 $this->line("📦 {$variant->console->name} - {$variant->name}");
             }
 
-            // Calculate price range (±50% of average price across all completeness types)
+            // Calculate price range (±20% of average price across all completeness types)
             $avgPrice = \App\Models\Listing::where('variant_id', $variant->id)
                 ->where('status', 'approved')
                 ->avg('price');
@@ -72,8 +72,8 @@ class FetchCurrentListings extends Command
             $maxPrice = null;
 
             if ($avgPrice) {
-                $minPrice = round($avgPrice * 0.5);  // -50%
-                $maxPrice = round($avgPrice * 1.5);  // +50%
+                $minPrice = round($avgPrice * 0.8);  // -20%
+                $maxPrice = round($avgPrice * 1.2);  // +20%
                 $this->line("  💰 Price range: {$minPrice}€ - {$maxPrice}€ (avg: " . round($avgPrice, 2) . "€)");
             } else {
                 $this->line("  ⚠️  No price data, fetching without price filter");
