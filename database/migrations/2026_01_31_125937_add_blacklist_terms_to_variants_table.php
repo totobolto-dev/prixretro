@@ -32,12 +32,12 @@ return new class extends Migration
                 }
             }
 
-            // Change column type to string
-            \DB::statement('ALTER TABLE variants MODIFY blacklist_terms VARCHAR(255) NULL');
+            // Change column type to TEXT (no length limit)
+            \DB::statement('ALTER TABLE variants MODIFY blacklist_terms TEXT NULL');
         } else {
-            // Add as string column
+            // Add as TEXT column (no length limit)
             Schema::table('variants', function (Blueprint $table) {
-                $table->string('blacklist_terms')->nullable()->after('search_term');
+                $table->text('blacklist_terms')->nullable()->after('search_term');
             });
         }
     }

@@ -13,6 +13,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Artisan;
 use Filament\Notifications\Notification;
 use App\Filament\Resources\Variants\Schemas\VariantForm;
@@ -115,13 +117,13 @@ class ManageVariants extends Page implements HasTable
                     ->label('Default'),
             ])
             ->recordActions([
-                \Filament\Tables\Actions\EditAction::make()
+                EditAction::make()
                     ->form(fn ($form) => VariantForm::configure($form)->getComponents())
                     ->mutateFormDataUsing(function (array $data): array {
                         return $data;
                     })
                     ->successRedirectUrl(route('filament.admin.pages.manage-variants')),
-                \Filament\Tables\Actions\Action::make('fetch')
+                Action::make('fetch')
                     ->label('Fetch')
                     ->icon('heroicon-o-arrow-path')
                     ->color('info')
@@ -180,7 +182,7 @@ class ManageVariants extends Page implements HasTable
                                 ->send();
                         }
                     }),
-                \Filament\Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
             ->filters([])
             ->persistSortInSession()
